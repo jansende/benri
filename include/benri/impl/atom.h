@@ -28,6 +28,8 @@ struct has_type
 
     static constexpr auto value = test<T>(0);
 };
+template <class T>
+constexpr auto has_type_v = has_type<T>::value;
 //The has_type function checks if a type has the ::power attribute
 //using SFINAE.
 template <class T>
@@ -40,18 +42,22 @@ struct has_power
 
     static constexpr auto value = test<T>(0);
 };
+template <class T>
+constexpr auto has_power_v = has_power<T>::value;
 //The is_atom function checks if a type has a ::type and a ::power
 //attribute. This does not mean, we have an atom type, but we do not
 //care, as we can do the necessary calculations.
 template <class T>
-struct is_atom : std::integral_constant<bool, has_type<T>::value && has_power<T>::value>
+struct is_atom : std::integral_constant<bool, has_type_v<T> && has_power_v<T>>
 {
 };
+template <class T>
+constexpr auto is_atom_v = is_atom<T>::value;
 //TODO: - Put this into a unit test folder.
 auto test_is_atom()
 {
-    static_assert(!is_atom<int>::value, "");
-    static_assert(is_atom<atom<double>>::value, "");
+    static_assert(!is_atom_v<int>, "");
+    static_assert(is_atom_v<atom<double>>, "");
 }
 #pragma endregion
 } // namespace impl
