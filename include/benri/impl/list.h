@@ -419,4 +419,8 @@ auto test_make_list()
 }
 #pragma endregion
 } // namespace impl
+//Pull the list type and its generators into the benri namespace,
+//because we need it for constructing units.
+using impl::list;
+using impl::make_fraction_list_t;
 } // namespace benri

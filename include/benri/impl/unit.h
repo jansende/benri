@@ -111,7 +111,7 @@ auto test_is_unit()
 {
     static_assert(!is_unit_v<int>, "");
     static_assert(!is_unit_v<unit<double, double>>, "");
-    static_assert(is_unit_v<unit<impl::list<>, impl::list<>>>, "");
+    static_assert(is_unit_v<unit<list<>, list<>>>, "");
 }
 #pragma endregion
 #pragma region back substitution

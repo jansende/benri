@@ -91,4 +91,7 @@ auto test_is_atom()
 }
 #pragma endregion
 } // namespace impl
+//Pull the atom type into the benri namespace, because we need
+//it for constructing units.
+using impl::atom;
 } // namespace benri
