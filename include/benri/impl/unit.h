@@ -25,6 +25,35 @@ struct has_dimensions
 };
 template <class T>
 constexpr auto has_dimensions_v = has_dimensions<T>::value;
+//The dimension_is_list function checks if a given type has a ::dimensions
+//attribute which is a list. The check is only done, when the given
+//bool is true.
+template <bool, class T>
+struct dimensions_is_list_impl;
+template <class T>
+struct dimensions_is_list_impl<true, T>
+{
+    static constexpr auto value = impl::is_list_v<typename T::dimensions>;
+};
+template <class T>
+struct dimensions_is_list_impl<false, T>
+{
+    static constexpr auto value = false;
+};
+template <bool Check, class T>
+struct dimensions_is_list : std::integral_constant<bool, dimensions_is_list_impl<Check, T>::value>
+{
+};
+template <bool Check, class T>
+constexpr auto dimensions_is_list_v = dimensions_is_list<Check, T>::value;
+//The has_valid_dimensions function checks if a given type has a ::dimensions
+//attribute which is a list.
+template <class T>
+struct has_valid_dimensions : std::integral_constant<bool, dimensions_is_list_v<has_dimensions_v<T>, T>>
+{
+};
+template <class T>
+constexpr auto has_valid_dimensions_v = has_valid_dimensions<T>::value;
 //The has_type function checks if a type has the ::prefix attribute
 //using SFINAE.
 template <class T>
@@ -39,11 +68,40 @@ struct has_prefix
 };
 template <class T>
 constexpr auto has_prefix_v = has_prefix<T>::value;
+//The prefix_is_list function checks if a given type has a ::prefix
+//attribute which is a list. The check is only done, when the given
+//bool is true.
+template <bool, class T>
+struct prefix_is_list_impl;
+template <class T>
+struct prefix_is_list_impl<true, T>
+{
+    static constexpr auto value = impl::is_list_v<typename T::prefix>;
+};
+template <class T>
+struct prefix_is_list_impl<false, T>
+{
+    static constexpr auto value = false;
+};
+template <bool Check, class T>
+struct prefix_is_list : std::integral_constant<bool, prefix_is_list_impl<Check, T>::value>
+{
+};
+template <bool Check, class T>
+constexpr auto prefix_is_list_v = prefix_is_list<Check, T>::value;
+//The has_valid_prefix function checks if a given type has a ::prefix
+//attribute which is a list.
+template <class T>
+struct has_valid_prefix : std::integral_constant<bool, prefix_is_list_v<has_prefix_v<T>, T>>
+{
+};
+template <class T>
+constexpr auto has_valid_prefix_v = has_valid_prefix<T>::value;
 //The is_unit function checks if a type has a ::dimensions and a ::prefix
 //attribute. This does not mean, we have an unit type, but we do not
 //care, as we can do the necessary calculations.
 template <class T>
-struct is_unit : std::integral_constant<bool, has_dimensions_v<T> && has_prefix_v<T>>
+struct is_unit : std::integral_constant<bool, has_valid_dimensions_v<T> && has_valid_prefix_v<T>> //TODO: - check if Power is a ratio
 {
 };
 template <class T>
@@ -52,7 +110,8 @@ constexpr auto is_unit_v = is_unit<T>::value;
 auto test_is_unit()
 {
     static_assert(!is_unit_v<int>, "");
-    static_assert(is_unit_v<unit<double, double>>, "");
+    static_assert(!is_unit_v<unit<double, double>>, "");
+    static_assert(is_unit_v<unit<impl::list<>, impl::list<>>>, "");
 }
 #pragma endregion
 #pragma region back substitution

@@ -1,6 +1,7 @@
 #pragma once
 #include <ratio>
 #include <utility>
+#include <benri/impl/type_traits.h>
 
 namespace benri
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include <ratio>
+#include <benri/impl/meta_math.h>
 
 namespace benri
 {
@@ -44,11 +45,40 @@ struct has_power
 };
 template <class T>
 constexpr auto has_power_v = has_power<T>::value;
+//The power_is_ratio function checks if a given type has a ::power
+//attribute which is a ratio. The check is only done, when the given
+//bool is true.
+template <bool, class T>
+struct power_is_ratio_impl;
+template <class T>
+struct power_is_ratio_impl<true, T>
+{
+    static constexpr auto value = is_ratio_v<typename T::power>;
+};
+template <class T>
+struct power_is_ratio_impl<false, T>
+{
+    static constexpr auto value = false;
+};
+template <bool Check, class T>
+struct power_is_ratio : std::integral_constant<bool, power_is_ratio_impl<Check, T>::value>
+{
+};
+template <bool Check, class T>
+constexpr auto power_is_ratio_v = power_is_ratio<Check, T>::value;
+//The has_valid_power function checks if a given type has a ::power
+//attribute which is a ratio.
+template <class T>
+struct has_valid_power : std::integral_constant<bool, power_is_ratio_v<has_power_v<T>, T>>
+{
+};
+template <class T>
+constexpr auto has_valid_power_v = has_valid_power<T>::value;
 //The is_atom function checks if a type has a ::type and a ::power
 //attribute. This does not mean, we have an atom type, but we do not
 //care, as we can do the necessary calculations.
 template <class T>
-struct is_atom : std::integral_constant<bool, has_type_v<T> && has_power_v<T>>
+struct is_atom : std::integral_constant<bool, has_type_v<T> && has_valid_power_v<T>>
 {
 };
 template <class T>
