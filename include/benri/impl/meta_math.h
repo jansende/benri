@@ -24,20 +24,32 @@ auto test_is_integer_sequence()
     static_assert(is_integer_sequence_v<std::integer_sequence<intmax_t>>, "std::integer_sequence<intmax_t> should be a integer_sequence.");
     static_assert(!is_integer_sequence_v<int>, "int should not be a integer_sequence.");
 }
-//The concat function lets you concatenate two integer_sequences.
-template <class L, class R>
+//The concat function lets you concatenate two or more integer_sequences.
+template <class... Ts>
 struct concat
 {
-    static_assert(is_integer_sequence_v<L> && is_integer_sequence_v<R>, "concat takes two std::integer_sequences, but your lhs and/or rhs are not an std::integer_sequence.");
+    static_assert(all_true_v<is_integer_sequence_v<Ts>...>, "concat only works on std::integer_sequences, but one of your types is not an std::integer_sequence.");
     using type = void;
 };
-template <class T, T... R, T... L>
-struct concat<std::integer_sequence<T, R...>, std::integer_sequence<T, L...>>
+template <class T, T... L, class U, U... R>
+struct concat<std::integer_sequence<T, L...>, std::integer_sequence<U, R...>>
 {
-    using type = std::integer_sequence<T, R..., L...>;
+    static_assert(std::is_same_v<U, T>, "all std::integer_sequences have to have the same value_type.");
+    using type = void;
 };
-template <class L, class R>
-using concat_t = typename concat<L, R>::type;
+template <class T, T... L, T... R>
+struct concat<std::integer_sequence<T, L...>, std::integer_sequence<T, R...>>
+{
+    using type = std::integer_sequence<T, L..., R...>;
+};
+template <class L, class R, class... Ts>
+struct concat<L, R, Ts...>
+{
+    static_assert(is_integer_sequence_v<L> && is_integer_sequence_v<R> && all_true_v<is_integer_sequence_v<Ts>...>, "concat only works on std::integer_sequences, but one of your types is not an std::integer_sequence.");
+    using type = typename concat<typename concat<L, R>::type, Ts...>::type;
+};
+template <class... Ts>
+using concat_t = typename concat<Ts...>::type;
 //TODO: - Put this into a unit test folder.
 auto test_concat()
 {
