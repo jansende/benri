@@ -1,9 +1,24 @@
 #pragma once
+#include <ratio>
+#include <utility>
 
 namespace benri
 {
 namespace impl
 {
+#pragma region ratio helper
+//The is_ratio checks if a given type is an integer_sequence.
+template <class T>
+struct is_ratio : std::false_type
+{
+};
+template <intmax_t num, intmax_t den>
+struct is_ratio<std::ratio<num, den>> : std::true_type
+{
+};
+template <class T>
+constexpr auto is_ratio_v = is_ratio<T>::value;
+#pragma endregion
 #pragma region integer_sequence helpers
 //The is_integer_sequence checks if a given type is an integer_sequence.
 template <class T>
@@ -228,5 +243,6 @@ auto test_factorization()
     static_assert(std::is_same_v<factorization_t<int, 8>, std::integer_sequence<int, 2, 2, 2>>, "factorization<8> should be <2, 2, 2>.");
     static_assert(std::is_same_v<factorization_t<int, 30>, std::integer_sequence<int, 5, 3, 2>>, "factorization<30> should be <5, 3, 2>.");
 }
+#pragma endregion
 } // namespace impl
 } // namespace benri
