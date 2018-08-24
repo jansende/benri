@@ -1,7 +1,10 @@
 #pragma once
+#include <cmath>
 #include <benri/impl/atom.h>
 #include <benri/impl/type_traits.h>
 #include <benri/impl/meta_math.h>
+#include <benri/impl/array.h>
+#include <benri/impl/algorithm.h>
 
 namespace benri
 {
@@ -400,12 +403,12 @@ template <intmax_t Value>
 using make_factorial_list_t = typename make_factorial_list<Value>::type;
 //The make_fraction_list function generates a list by
 //factorizing a given numerator and denominater.
-template <intmax_t num, intmax_t den = 1>
+template <intmax_t num = 1, intmax_t den = 1>
 struct make_fraction_list
 {
     using type = divide_lists_t<make_factorial_list_t<num>, make_factorial_list_t<den>>;
 };
-template <intmax_t num, intmax_t den = 1>
+template <intmax_t num = 1, intmax_t den = 1>
 using make_fraction_list_t = typename make_fraction_list<num, den>::type;
 //TODO: - Put this into a unit test folder.
 auto test_make_list()
@@ -417,6 +420,40 @@ auto test_make_list()
     static_assert(std::is_same_v<make_fraction_list_t<4, 8>, list<atom<std::ratio<2>, std::ratio<-1>>>>, "");
     static_assert(std::is_same_v<make_fraction_list_t<5, 3>, list<atom<std::ratio<5>>, atom<std::ratio<3>, std::ratio<-1>>>>, "");
 }
+#pragma endregion
+#pragma region expansion
+//The expand_list function calculates the factor given by expanding
+//and multiplying all atoms in the list.
+template <class T, class List>
+struct expand_list
+{
+    static_assert(is_list_v<List>, "expand_list takes a value type and a list, but your List is not a list.");
+    static constexpr auto value = T{1};
+};
+template <class T, class... Atoms>
+struct expand_list<T, list<Atoms...>>
+{
+    static_assert(all_true_v<!is_root_v<Atoms>...>, "expand_list cannot handle roots in the atoms at the moment. Sorry!");
+    static constexpr auto value = product(std::initializer_list<T>{expand_atom_v<T, Atoms>...});
+};
+template <class T, class List>
+constexpr auto expand_list_v = expand_list<T, List>::value;
+//TODO: - Put this into a unit test folder.
+auto test_expand_list()
+{
+    static_assert(expand_list_v<intmax_t, make_fraction_list_t<8>> == 8, "");
+    static_assert(expand_list_v<double, make_fraction_list_t<1, 8>> == 1. / 8., "");
+}
+//The runtime_expand_list function calculates the factor given by expan-
+//ding and multiplying all atoms in the list. However, this is done at
+//runtime rather than compile time. The reason being, that std::pow is
+//not constexpr. Still, the whole function is marked constexpr to be for-
+//ward compatible with a constexpr std::pow implementation.
+template <class T, class... Atoms>
+constexpr auto runtime_expand_list(list<Atoms...>)
+{
+    return product(std::initializer_list<T>{runtime_expand_atom<T, Atoms>()...});
+};
 #pragma endregion
 } // namespace impl
 //Pull the list type and its generators into the benri namespace,

@@ -90,6 +90,58 @@ auto test_is_atom()
     static_assert(is_atom_v<atom<double>>, "");
 }
 #pragma endregion
+#pragma region expansion
+//The is_root function checks if a given atom has a root power.
+template <class T>
+struct is_root : std::false_type
+{
+    static_assert(is_atom_v<T>, "is_root takes an atom, but your T is not an atom.");
+};
+template <template <class, class> class Atom, class T, intmax_t num, intmax_t den>
+struct is_root<Atom<T, std::ratio<num, den>>> : std::integral_constant<bool, den != 1>
+{
+};
+template <class T>
+constexpr auto is_root_v = is_root<T>::value;
+//TODO: - Put this into a unit test folder.
+auto test_is_root()
+{
+    static_assert(!is_root_v<atom<std::ratio<2>, std::ratio<2>>>, "");
+    static_assert(!is_root_v<atom<std::ratio<2>, std::ratio<-2>>>, "");
+    static_assert(is_root_v<atom<std::ratio<2>, std::ratio<3, 5>>>, "");
+    static_assert(!is_root_v<atom<std::ratio<2>, std::ratio_multiply<std::ratio<2>, std::ratio<1, 2>>>>, "");
+    static_assert(!is_root_v<atom<std::ratio<2>, std::ratio_multiply<std::ratio<16>, std::ratio<1, 2>>>>, "");
+    static_assert(is_root_v<atom<std::ratio<2>, std::ratio_multiply<std::ratio<16>, std::ratio<1, 3>>>>, "");
+}
+//The expand_atom function takes an atom with a std::ratio type
+//and calculates its value to the power given in the atom.
+template <class T, class Atom>
+struct expand_atom
+{
+    static_assert(is_atom_v<Atom>, "expand_atom takes a value type and an atom, but your Atom is not an atom.");
+    static_assert(!is_root_v<Atom>, "expand_atom cannot handle roots in the atoms at the moment. Sorry!");
+    static constexpr auto value = power_v<T, typename Atom::type, typename Atom::power>;
+};
+template <class T, class Atom>
+constexpr auto expand_atom_v = expand_atom<T, Atom>::value;
+//TODO: - Put this into a unit test folder.
+auto test_expand_atom()
+{
+    static_assert(expand_atom_v<intmax_t, atom<std::ratio<2>, std::ratio<2>>> == 4, "");
+    static_assert(expand_atom_v<double, atom<std::ratio<2>, std::ratio<-2>>> == 1. / 4., "");
+}
+//The runtime_expand_atom function takes an atom with a std::ratio type
+//and calculates its value to the power given in the atom. However, this
+//is done at runtime rather than compile time. The reason being, that
+//std::pow is not constexpr. Still, the whole function is marked constexpr
+//to be forward compatible with a constexpr std::pow implementation.
+template <class T, class Atom>
+constexpr auto runtime_expand_atom()
+{
+    static_assert(is_atom_v<Atom>, "runtime_expand_atom takes a value type and an atom, but your Atom is not an atom.");
+    return std::pow(T(Atom::type::num) / T(Atom::type::den), T(Atom::power::num) / T(Atom::power::den));
+};
+#pragma endregion
 } // namespace impl
 //Pull the atom type into the benri namespace, because we need
 //it for constructing units.

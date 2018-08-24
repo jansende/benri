@@ -20,6 +20,30 @@ struct is_ratio<std::ratio<num, den>> : std::true_type
 template <class T>
 constexpr auto is_ratio_v = is_ratio<T>::value;
 #pragma endregion
+#pragma region compile time pow
+template <class T, class Base, class Exponent>
+constexpr auto power_impl()
+{
+    static_assert(is_ratio_v<Base> && is_ratio_v<Exponent>, "power takes a value type and two std::ratios, but either Base or Exponent is not a std::ratio");
+    static_assert(Exponent::den == 1, "power is only able to calculate integer powers, roots are not supported.");
+    auto num = T(Base::num);
+    auto den = T(Base::den);
+    auto exponent = Exponent::num >= 0 ? Exponent::num : -Exponent::num;
+    for (; exponent > 1; --exponent)
+    {
+        num *= T(Base::num);
+        den *= T(Base::den);
+    }
+    return Exponent::num >= 0 ? (num / den) : (den / num);
+}
+template <class T, class Base, class Exponent>
+struct power
+{
+    static constexpr auto value = power_impl<T, Base, Exponent>();
+};
+template <class T, class Base, class Exponent>
+constexpr auto power_v = power<T, Base, Exponent>::value;
+#pragma endregion
 #pragma region integer_sequence helpers
 //The is_integer_sequence checks if a given type is an integer_sequence.
 template <class T>
@@ -169,6 +193,7 @@ auto test_is_prime()
     static_assert(is_prime_v<2>, "2 is prime.");
     static_assert(!is_prime_v<1>, "1 is not prime.");
     static_assert(!is_prime_v<9>, "9 is not prime.");
+    static_assert(is_prime_v<293339>, "293339 is prime.");
 }
 //The next_prime function calculates the next prime number after
 //the given number. The given number does no have to be prime.
@@ -202,7 +227,8 @@ auto test_next_prime()
 template <template <bool, class T, T...> class Func, class T, T One, T Value, T Prime, T... PrimeFactors>
 struct factorization_advance
 {
-    using type = typename Func<(Value % Prime) == 0, T, One, Value, Prime, PrimeFactors...>::type;
+    //In addition to the usual algorithm, provide an is_prime_check for early recursion canceling.
+    using type = typename Func<is_prime_v<Value> || (Value % Prime) == 0, T, One, Value, is_prime_v<Value> ? Value : Prime, PrimeFactors...>::type;
 };
 //Stop searching for prime factors.
 template <template <bool, class T, T...> class Func, class T, T One, T Prime, T... PrimeFactors>
