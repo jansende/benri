@@ -1,6 +1,6 @@
 #pragma once
-#include <benri/impl/quantity.h>
-#include <benri/impl/unit.h>
+#include <benri/quantity.h>
+#include <benri/unit.h>
 #include <benri/impl/list.h>
 namespace benri
 {

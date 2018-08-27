@@ -1,6 +1,6 @@
 #pragma once
 #include <cmath>
-#include <benri/impl/unit.h>
+#include <benri/unit.h>
 #include <benri/config.h>
 
 namespace benri

@@ -2,15 +2,15 @@
 #include <benri/units/macros.h>
 #include <benri/units/dimensions.h>
 #include <benri/units/prefix.h>
-#include <benri/impl/quantity.h>
 #include <benri/units/systems.h>
+#include <benri/quantity.h>
 
 namespace benri
 {
 namespace si
 {
 implement_unit(si, si, metre, _m, dim::length_t, prefix::one);
-implement_unit(si, si, astronomical_unit, _au, dim::length_t, make_fraction_list_t<149597870700>);
+
 implement_unit(si, si, kilometre, _km, dim::length_t, prefix::kilo);
 // implement_unit(si, si, millisecond_m, dim::length_t, prefix::one);
 implement_unit(si, si, square_metre, _sq_m, dim::area_t, prefix::one);

@@ -1,5 +1,5 @@
 #pragma once
-#include <benri/impl/quantity.h>
+#include <benri/quantity.h>
 
 namespace benri
 {
