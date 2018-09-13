@@ -7,6 +7,22 @@ namespace benri
 {
 namespace impl
 {
+#pragma region ::value helper
+//The has_static_constexpr_value function checks if a type has a
+//static constexpr ::value attribute using SFINAE.
+template <class T>
+struct has_static_constexpr_value
+{
+    template <class U>
+    static constexpr auto test(decltype(U::value) *) { return true; };
+    template <class U>
+    static constexpr auto test(...) { return false; };
+
+    static constexpr auto value = test<T>(0);
+};
+template <class T>
+constexpr auto has_static_constexpr_value_v = has_static_constexpr_value<T>::value;
+#pragma endregion
 #pragma region ratio helper
 //The is_ratio checks if a given type is an integer_sequence.
 template <class T>
@@ -21,10 +37,29 @@ template <class T>
 constexpr auto is_ratio_v = is_ratio<T>::value;
 #pragma endregion
 #pragma region compile time pow
+//The power_impl function implements the actual power calculation for
+//the power function. It handles two cases: the case of std::ratio as
+//the Base type, and a Base with a static constexpr ::value for it.
 template <class T, class Base, class Exponent>
-constexpr auto power_impl()
+constexpr auto power_impl() -> std::enable_if_t<!is_ratio_v<Base>, T>
 {
-    static_assert(is_ratio_v<Base> && is_ratio_v<Exponent>, "power takes a value type and two std::ratios, but either Base or Exponent is not a std::ratio");
+    //handle constants
+    static_assert(has_static_constexpr_value_v<Base>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Base is neither a std::ratio nor a static constexpr ::value type");
+    static_assert(is_ratio_v<Exponent>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
+    static_assert(Exponent::den == 1, "power is only able to calculate integer powers, roots are not supported.");
+    auto val = T(Base::value);
+    auto exponent = Exponent::num >= 0 ? Exponent::num : -Exponent::num;
+    for (; exponent > 1; --exponent)
+    {
+        val *= T(Base::value);
+    }
+    return Exponent::num >= 0 ? (val) : (1 / val);
+}
+template <class T, class Base, class Exponent>
+constexpr auto power_impl() -> std::enable_if_t<is_ratio_v<Base>, T>
+{
+    //handle ratios
+    static_assert(is_ratio_v<Exponent>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
     static_assert(Exponent::den == 1, "power is only able to calculate integer powers, roots are not supported.");
     auto num = T(Base::num);
     auto den = T(Base::den);

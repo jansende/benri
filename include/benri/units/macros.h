@@ -29,13 +29,36 @@
     _register_unit(NAMESPACE, NAME);                                           \
     namespace NAMESPACE                                                        \
     {
+#define _create_and_register_subunit(SYSTEM, NAMESPACE, SUBSPACE, NAME, DIMENSIONS, PREFIX) \
+    _create_unit(SYSTEM, NAME, fix(DIMENSIONS), fix(PREFIX));                               \
+    }                                                                                       \
+    }                                                                                       \
+    _register_unit(NAMESPACE::SUBSPACE, NAME);                                              \
+    namespace NAMESPACE                                                                     \
+    {                                                                                       \
+    namespace SUBSPACE                                                                      \
+    {
 #define _create_and_register_unit_with_literal(SYSTEM, NAMESPACE, NAME, LITERAL, DIMENSIONS, PREFIX) \
     _create_and_register_unit(SYSTEM, NAMESPACE, NAME, fix(DIMENSIONS), fix(PREFIX));                \
     _create_literal(NAME, LITERAL);
+#define _create_and_register_subunit_with_literal(SYSTEM, NAMESPACE, SUBSPACE, NAME, LITERAL, DIMENSIONS, PREFIX) \
+    _create_and_register_subunit(SYSTEM, NAMESPACE, SUBSPACE, NAME, fix(DIMENSIONS), fix(PREFIX));                \
+    _create_literal(NAME, LITERAL);
 #define implement_unit(SYSTEM, NAMESPACE, NAME, LITERAL, DIMENSIONS, PREFIX) \
     _create_and_register_unit_with_literal(SYSTEM, NAMESPACE, NAME, LITERAL, fix(DIMENSIONS), fix(PREFIX));
-#define create_constant(SYSTEM, NAME, DIMENSIONS, PREFIX) \
+#define implement_subunit(SYSTEM, NAMESPACE, SUBSPACE, NAME, LITERAL, DIMENSIONS, PREFIX) \
+    _create_and_register_subunit_with_literal(SYSTEM, NAMESPACE, SUBSPACE, NAME, LITERAL, fix(DIMENSIONS), fix(PREFIX));
+
+#define _create_link_with_literal(NAME, LITERAL, ALIAS) \
+    using NAME = ALIAS;                                 \
+    _create_literal(ALIAS, LITERAL);
+#define link_unit(NAME, LITERAL, ALIAS) \
+    _create_link_with_literal(NAME, LITERAL, ALIAS);
+
+#define create_symbol(SYSTEM, NAME, DIMENSIONS, PREFIX) \
     constexpr auto NAME = quantity<unit<SYSTEM, DIMENSIONS, PREFIX>>{Precision(1)};
+#define create_constant(NAME, VALUE, UNIT) \
+    constexpr auto NAME = quantity<UNIT>{impl::expand_list_v<Precision, VALUE>};
 
 #define _create_dimension(NAME, ...)    \
     struct NAME                         \

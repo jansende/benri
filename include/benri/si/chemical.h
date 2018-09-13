@@ -8,9 +8,9 @@ namespace benri
 {
 namespace si
 {
-namespace imperial
+namespace chemical
 {
 
-} // namespace imperial
+} // namespace chemical
 } // namespace si
 } // namespace benri

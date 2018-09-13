@@ -8,9 +8,9 @@ namespace benri
 {
 namespace si
 {
-namespace imperial
+namespace extra
 {
 
-} // namespace imperial
+} // namespace extra
 } // namespace si
 } // namespace benri
