@@ -201,6 +201,7 @@ implement_subunit(si, si, base, sievert_per_gray, _sievert_per_gray, dim::radiat
 implement_subunit(si, si, base, one, _one, dim::dimensionless_t, prefix::one);
 implement_subunit(si, si, base, percent, _percent, dim::dimensionless_t, prefix::centi);
 implement_subunit(si, si, base, permille, _permille, dim::dimensionless_t, prefix::milli);
+implement_subunit(si, si, base, parts_per_million, _parts_per_million, dim::dimensionless_t, prefix::micro);
 #pragma endregion
 } // namespace base
 #pragma region constants

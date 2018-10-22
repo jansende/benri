@@ -11,27 +11,27 @@ namespace benri
 namespace prefix
 {
 #pragma region si prefixes
-using yocto = impl::multiply_lists_t<make_fraction_list_t<1, 1000000000000000>, make_fraction_list_t<1, 1000000000>>;
-using zepto = impl::multiply_lists_t<make_fraction_list_t<1, 1000000000000000>, make_fraction_list_t<1, 1000000>>;
-using atto = impl::multiply_lists_t<make_fraction_list_t<1, 1000000000000000>, make_fraction_list_t<1, 1000>>;
-using femto = make_fraction_list_t<1, 1000000000000000>;
-using pico = make_fraction_list_t<1, 1000000000000>;
-using nano = make_fraction_list_t<1, 1000000000>;
-using micro = make_fraction_list_t<1, 1000000>;
-using milli = make_fraction_list_t<1, 1000>;
-using centi = make_fraction_list_t<1, 100>;
-using deci = make_fraction_list_t<1, 10>;
-using one = make_fraction_list_t<>;
-using deca = make_fraction_list_t<10>;
-using hecto = make_fraction_list_t<100>;
-using kilo = make_fraction_list_t<1000>;
-using mega = make_fraction_list_t<1000000>;
-using giga = make_fraction_list_t<1000000000>;
-using tera = make_fraction_list_t<1000000000000>;
-using peta = make_fraction_list_t<1000000000000000>;
-using exa = impl::multiply_lists_t<make_fraction_list_t<1000000000000000>, make_fraction_list_t<1000>>;
-using zetta = impl::multiply_lists_t<make_fraction_list_t<1000000000000000>, make_fraction_list_t<1000000>>;
-using yotta = impl::multiply_lists_t<make_fraction_list_t<1000000000000000>, make_fraction_list_t<1000000000>>;
+using yocto = make_power_list_t<-24>;
+using zepto = make_power_list_t<-21>;
+using atto = make_power_list_t<-18>;
+using femto = make_power_list_t<-15>;
+using pico = make_power_list_t<-12>;
+using nano = make_power_list_t<-9>;
+using micro = make_power_list_t<-6>;
+using milli = make_power_list_t<-3>;
+using centi = make_power_list_t<-2>;
+using deci = make_power_list_t<-1>;
+using one = make_power_list_t<0>;
+using deca = make_power_list_t<1>;
+using hecto = make_power_list_t<2>;
+using kilo = make_power_list_t<3>;
+using mega = make_power_list_t<6>;
+using giga = make_power_list_t<9>;
+using tera = make_power_list_t<12>;
+using peta = make_power_list_t<15>;
+using exa = make_power_list_t<18>;
+using zetta = make_power_list_t<21>;
+using yotta = make_power_list_t<24>;
 #pragma endregion
 #pragma region data prefixes
 using kibi = make_fraction_list_t<1024>;
@@ -51,6 +51,20 @@ using day = impl::multiply_lists_t<hour, make_fraction_list_t<24>>;
 using week = impl::multiply_lists_t<day, make_fraction_list_t<7>>;
 using month = impl::multiply_lists_t<day, make_fraction_list_t<30>>;
 using year = impl::multiply_lists_t<day, make_fraction_list_t<36525, 100>>;
+//sidereal year in s
+struct sidereal_year
+{
+    static constexpr Precision value = 3.155815e7;
+};
+using sidereal_year_t = list<atom<sidereal_year>>;
+using sidereal_year_v = list<atom<sidereal_year>>;
+//tropical year in s
+struct tropical_year
+{
+    static constexpr Precision value = 3.155693e7;
+};
+using tropical_year_t = list<atom<tropical_year>>;
+using tropical_year_v = list<atom<tropical_year>>;
 #pragma endregion
 #pragma region mathematical constants
 struct pi
@@ -248,7 +262,7 @@ using von_klitzing_constant_v = impl::divide_lists_t<planck_constant_v, impl::mu
 //atomic mass unit in kg
 struct atomic_mass_unit
 {
-    static constexpr Precision value = 1.66053904020e-27;
+    static constexpr Precision value = 1.6605388628e-27;
 };
 using atomic_mass_unit_t = list<atom<atomic_mass_unit>>;
 using atomic_mass_unit_v = list<atom<atomic_mass_unit>>;
@@ -268,7 +282,7 @@ using vacuum_impedance_v = impl::multiply_lists_t<magnetic_constant_v,speed_of_l
 using nuclear_magneton_t = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_t, reduced_planck_constant_t>, impl::multiply_lists_t<make_fraction_list_t<2>, proton_mass_t>>;
 using nuclear_magneton_v = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_v, reduced_planck_constant_v>, impl::multiply_lists_t<make_fraction_list_t<2>, proton_mass_v>>;
 #pragma endregion
-#pragma region constant values
+#pragma region conversion values
 //astronomical unit in m
 struct astronomical_unit
 {
@@ -300,6 +314,65 @@ struct earth_mass
 };
 using earth_mass_t = list<atom<earth_mass>>;
 using earth_mass_v = list<atom<earth_mass>>;
+//angstroem in m
+using angstroem_t = impl::multiply_lists_t<nano,deci>;
+using angstroem_v = impl::multiply_lists_t<nano,deci>;
+//bohr in m
+struct bohr
+{
+    static constexpr Precision value = 0.529177210818e-10;
+};
+using bohr_t = list<atom<bohr>>;
+using bohr_v = list<atom<bohr>>;
+//nautical mile in m
+struct nautical_mile
+{
+    static constexpr Precision value = 1852;
+};
+using nautical_mile_t = list<atom<nautical_mile>>;
+using nautical_mile_v = list<atom<nautical_mile>>;
+//international mile in m
+struct international_mile
+{
+    static constexpr Precision value = 1609.344;
+};
+using international_mile_t = list<atom<international_mile>>;
+using international_mile_v = list<atom<international_mile>>;
+//yard in m
+struct yard
+{
+    static constexpr Precision value = 0.9144;
+};
+using yard_t = list<atom<yard>>;
+using yard_v = list<atom<yard>>;
+//international foot in m
+struct international_foot
+{
+    static constexpr Precision value = 0.3048;
+};
+using international_foot_t = list<atom<international_foot>>;
+using international_foot_v = list<atom<international_foot>>;
+//inch in m
+struct inch
+{
+    static constexpr Precision value = (1./39.37);
+};
+using inch_t = list<atom<inch>>;
+using inch_v = list<atom<inch>>;
+//pound in kg
+struct pound
+{
+    static constexpr Precision value = 4.5359237e-1;
+};
+using pound_t = list<atom<pound>>;
+using pound_v = list<atom<pound>>;
+//ounce in kg
+struct ounce
+{
+    static constexpr Precision value = 2.834952e-2;
+};
+using ounce_t = list<atom<ounce>>;
+using ounce_v = list<atom<ounce>>;
 #pragma endregion
 } // namespace prefix
 } // namespace benri

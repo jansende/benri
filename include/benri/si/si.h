@@ -9,16 +9,42 @@ namespace si
 {
 using namespace benri::si::base;
 #pragma region units
+implement_unit(si, si, natural_unit_of_speed, _natural_unit_of_speed, dim::velocity_t, prefix::speed_of_light_t);
+implement_unit(si, si, knot, _knot, dim::velocity_t, fix(impl::divide_lists_t<prefix::nautical_mile_t,prefix::hour>));
+#pragma region angström, ...(length)
+implement_unit(si, si, angstroem, _angstroem, dim::length_t, prefix::angstroem_t);
+implement_unit(si, si, bohr, _bohr, dim::length_t, prefix::bohr_t);
+implement_unit(si, si, nautical_mile, _nautical_mile, dim::length_t, prefix::nautical_mile_t);
+implement_unit(si, si, international_mile, _international_mile, dim::length_t, prefix::international_mile_t);
+implement_unit(si, si, yard, _yard, dim::length_t, prefix::yard_t);
+implement_unit(si, si, international_foot, _international_foot, dim::length_t, prefix::international_foot_t);
+implement_unit(si, si, inch, _inch, dim::length_t, prefix::inch_t);
+#pragma endregion
+#pragma region dalton, ...(mass)
+implement_unit(si, si, dalton, _dalton, dim::mass_t, prefix::atomic_mass_unit_t);
+link_unit(atomic_mass_unit,_atomic_mass_unit,dalton);
+implement_unit(si, si, natural_unit_of_mass, _natural_unit_of_mass, dim::mass_t, prefix::electron_mass_t);
+implement_unit(si, si, carat, _carat, dim::mass_t, fix(impl::multiply_lists_t<make_fraction_list_t<2>,make_power_list_t<-4>>));
+implement_unit(si, si, pound, _pound, dim::mass_t, prefix::pound_t);
+implement_unit(si, si, ounce, _ounce, dim::mass_t, prefix::ounce_t);
+#pragma endregion
 #pragma region minute, hour, ...(time)
 implement_unit(si, si, minute, _minute, dim::time_t, prefix::minute);
 implement_unit(si, si, hour, _hour, dim::time_t, prefix::hour);
 implement_unit(si, si, day, _day, dim::time_t, prefix::day);
+implement_unit(si, si, week, _week, dim::time_t, prefix::week);
+implement_unit(si, si, month, _month, dim::time_t, prefix::month);
 implement_unit(si, si, year, _year, dim::time_t, prefix::year);
 implement_unit(si, si, kiloyear, _kiloyear, dim::time_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::year>));
 implement_unit(si, si, megayear, _megayear, dim::time_t, fix(impl::multiply_lists_t<prefix::mega, prefix::year>));
 implement_unit(si, si, gigayear, _gigayear, dim::time_t, fix(impl::multiply_lists_t<prefix::giga, prefix::year>));
+implement_unit(si, si, sidereal_year, _sidereal_year, dim::time_t, prefix::sidereal_year);
+implement_unit(si, si, tropical_year, _tropical_year, dim::time_t, prefix::tropical_year);
+implement_unit(si, si, natural_unit_of_time, _natural_unit_of_time, dim::time_t, fix(impl::divide_lists_t<prefix::reduced_planck_constant_t,impl::multiply_lists_t<prefix::electron_mass_t,impl::pow_list_t<prefix::speed_of_light_t,std::ratio<2>>>>));
+implement_unit(si, si, atomic_unit_of_time, _atomic_unit_of_time, dim::time_t, fix(impl::divide_lists_t<prefix::reduced_planck_constant_t,prefix::hartree_energy_t>));
 #pragma endregion
 #pragma region square metre(area)
+implement_unit(si, si, barn, _barn, dim::area_t, make_power_list_t<-28>);
 implement_unit(si, si, square_picometre, _square_picometre, dim::area_t, prefix::yocto);
 implement_unit(si, si, square_nanometre, _square_nanometre, dim::area_t, prefix::atto);
 implement_unit(si, si, square_micrometre, _square_micrometre, dim::area_t, prefix::pico);
@@ -132,50 +158,50 @@ implement_unit(si, si, zettametre_per_square_second, _zettametre_per_square_seco
 implement_unit(si, si, yottametre_per_square_second, _yottametre_per_square_second, dim::acceleration_t, prefix::yotta);
 #pragma endregion
 #pragma region metre per square minute(acceleration)
-implement_unit(si, si, yoctometre_per_square_minute, _yoctometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::yocto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, zeptometre_per_square_minute, _zeptometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::zepto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, attometre_per_square_minute, _attometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::atto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, femtometre_per_square_minute, _femtometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::femto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, picometre_per_square_minute, _picometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::pico, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, nanometre_per_square_minute, _nanometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::nano, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, micrometre_per_square_minute, _micrometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::micro, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, millimetre_per_square_minute, _millimetre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::milli, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, centimetre_per_square_minute, _centimetre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::centi, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, decimetre_per_square_minute, _decimetre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::deci, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, metre_per_square_minute, _metre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::one, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, decametre_per_square_minute, _decametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::deca, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, hectometre_per_square_minute, _hectometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::hecto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, kilometre_per_square_minute, _kilometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::kilo, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, megametre_per_square_minute, _megametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::mega, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, gigametre_per_square_minute, _gigametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::giga, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, terametre_per_square_minute, _terametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::tera, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, petametre_per_square_minute, _petametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::peta, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, exametre_per_square_minute, _exametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::exa, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, zettametre_per_square_minute, _zettametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::zetta, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, yottametre_per_square_minute, _yottametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::yotta, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
+implement_unit(si, si, yoctometre_per_square_minute, _yoctometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::yocto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, zeptometre_per_square_minute, _zeptometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::zepto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, attometre_per_square_minute, _attometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::atto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, femtometre_per_square_minute, _femtometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::femto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, picometre_per_square_minute, _picometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::pico, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, nanometre_per_square_minute, _nanometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::nano, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, micrometre_per_square_minute, _micrometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::micro, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, millimetre_per_square_minute, _millimetre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::milli, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, centimetre_per_square_minute, _centimetre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::centi, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, decimetre_per_square_minute, _decimetre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::deci, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, metre_per_square_minute, _metre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::one, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, decametre_per_square_minute, _decametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::deca, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, hectometre_per_square_minute, _hectometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::hecto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, kilometre_per_square_minute, _kilometre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::kilo, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, megametre_per_square_minute, _megametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::mega, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, gigametre_per_square_minute, _gigametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::giga, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, terametre_per_square_minute, _terametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::tera, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, petametre_per_square_minute, _petametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::peta, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, exametre_per_square_minute, _exametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::exa, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, zettametre_per_square_minute, _zettametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::zetta, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, yottametre_per_square_minute, _yottametre_per_square_minute, dim::acceleration_t, fix(impl::divide_lists_t<prefix::yotta, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
 #pragma endregion
 #pragma region metre per square hour(acceleration)
-implement_unit(si, si, yoctometre_per_square_hour, _yoctometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::yocto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, zeptometre_per_square_hour, _zeptometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::zepto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, attometre_per_square_hour, _attometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::atto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, femtometre_per_square_hour, _femtometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::femto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, picometre_per_square_hour, _picometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::pico, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, nanometre_per_square_hour, _nanometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::nano, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, micrometre_per_square_hour, _micrometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::micro, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, millimetre_per_square_hour, _millimetre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::milli, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, centimetre_per_square_hour, _centimetre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::centi, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, decimetre_per_square_hour, _decimetre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::deci, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, metre_per_square_hour, _metre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::one, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, decametre_per_square_hour, _decametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::deca, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, hectometre_per_square_hour, _hectometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::hecto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, kilometre_per_square_hour, _kilometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::kilo, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, megametre_per_square_hour, _megametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::mega, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, gigametre_per_square_hour, _gigametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::giga, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, terametre_per_square_hour, _terametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::tera, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, petametre_per_square_hour, _petametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::peta, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, exametre_per_square_hour, _exametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::exa, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, zettametre_per_square_hour, _zettametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::zetta, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, yottametre_per_square_hour, _yottametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::yotta, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
+implement_unit(si, si, yoctometre_per_square_hour, _yoctometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::yocto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, zeptometre_per_square_hour, _zeptometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::zepto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, attometre_per_square_hour, _attometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::atto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, femtometre_per_square_hour, _femtometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::femto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, picometre_per_square_hour, _picometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::pico, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, nanometre_per_square_hour, _nanometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::nano, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, micrometre_per_square_hour, _micrometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::micro, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, millimetre_per_square_hour, _millimetre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::milli, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, centimetre_per_square_hour, _centimetre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::centi, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, decimetre_per_square_hour, _decimetre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::deci, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, metre_per_square_hour, _metre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::one, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, decametre_per_square_hour, _decametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::deca, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, hectometre_per_square_hour, _hectometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::hecto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, kilometre_per_square_hour, _kilometre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::kilo, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, megametre_per_square_hour, _megametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::mega, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, gigametre_per_square_hour, _gigametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::giga, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, terametre_per_square_hour, _terametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::tera, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, petametre_per_square_hour, _petametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::peta, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, exametre_per_square_hour, _exametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::exa, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, zettametre_per_square_hour, _zettametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::zetta, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, yottametre_per_square_hour, _yottametre_per_square_hour, dim::acceleration_t, fix(impl::divide_lists_t<prefix::yotta, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
 #pragma endregion
 #pragma region one per metre(wavenumber)
 implement_unit(si, si, one_per_yoctometre, _one_per_yoctometre, dim::wavenumber_t, fix(impl::divide_lists_t<prefix::one, prefix::yocto>));
@@ -527,6 +553,33 @@ implement_unit(si, si, exapascal, _exapascal, dim::pressure_t, prefix::exa);
 implement_unit(si, si, zettapascal, _zettapascal, dim::pressure_t, prefix::zetta);
 implement_unit(si, si, yottapascal, _yottapascal, dim::pressure_t, prefix::yotta);
 #pragma endregion
+#pragma region bar, mmHg, ...(pressure)
+implement_unit(si, si, yoctobar, _yoctobar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::yocto, make_power_list_t<5>>));
+implement_unit(si, si, zeptobar, _zeptobar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::zepto, make_power_list_t<5>>));
+implement_unit(si, si, attobar, _attobar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::atto, make_power_list_t<5>>));
+implement_unit(si, si, femtobar, _femtobar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::femto, make_power_list_t<5>>));
+implement_unit(si, si, picobar, _picobar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::pico, make_power_list_t<5>>));
+implement_unit(si, si, nanobar, _nanobar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::nano, make_power_list_t<5>>));
+link_unit(microbar,_microbar,decipascal);
+link_unit(millibar,_millibar,hectopascal);
+link_unit(centibar,_centibar,kilopascal);
+implement_unit(si, si, decibar, _decibar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::deci, make_power_list_t<5>>));
+implement_unit(si, si, bar, _bar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::one, make_power_list_t<5>>));
+link_unit(decabar,_decabar,megapascal);
+implement_unit(si, si, hectobar, _hectobar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::hecto, make_power_list_t<5>>));
+implement_unit(si, si, kilobar, _kilobar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::kilo, make_power_list_t<5>>));
+implement_unit(si, si, megabar, _megabar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::mega, make_power_list_t<5>>));
+implement_unit(si, si, gigabar, _gigabar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::giga, make_power_list_t<5>>));
+implement_unit(si, si, terabar, _terabar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::tera, make_power_list_t<5>>));
+implement_unit(si, si, petabar, _petabar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::peta, make_power_list_t<5>>));
+implement_unit(si, si, exabar, _exabar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::exa, make_power_list_t<5>>));
+implement_unit(si, si, zettabar, _zettabar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::zetta, make_power_list_t<5>>));
+implement_unit(si, si, yottabar, _yottabar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::yotta, make_power_list_t<5>>));
+
+implement_unit(si, si, millimeter_of_mercury, _millimeter_of_mercury, dim::pressure_t, fix(make_fraction_list_t<133322,1000>));
+implement_unit(si, si, atmosphere, _atmosphere, dim::pressure_t, make_fraction_list_t<101325>);
+implement_unit(si, si, torr, _torr, dim::pressure_t, fix(make_fraction_list_t<101325,760>));
+#pragma endregion
 #pragma region joule(energy)
 implement_unit(si, si, yoctojoule, _yoctojoule, dim::energy_t, prefix::yocto);
 implement_unit(si, si, zeptojoule, _zeptojoule, dim::energy_t, prefix::zepto);
@@ -549,6 +602,51 @@ implement_unit(si, si, petajoule, _petajoule, dim::energy_t, prefix::peta);
 implement_unit(si, si, exajoule, _exajoule, dim::energy_t, prefix::exa);
 implement_unit(si, si, zettajoule, _zettajoule, dim::energy_t, prefix::zetta);
 implement_unit(si, si, yottajoule, _yottajoule, dim::energy_t, prefix::yotta);
+#pragma endregion
+#pragma region electron volt, hartree(energy)
+implement_unit(si, si, yoctoelectron_volt, _yoctoelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::yocto,prefix::elementary_charge_t>));
+implement_unit(si, si, zeptoelectron_volt, _zeptoelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::zepto,prefix::elementary_charge_t>));
+implement_unit(si, si, attoelectron_volt, _attoelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::atto,prefix::elementary_charge_t>));
+implement_unit(si, si, femtoelectron_volt, _femtoelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::femto,prefix::elementary_charge_t>));
+implement_unit(si, si, picoelectron_volt, _picoelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::pico,prefix::elementary_charge_t>));
+implement_unit(si, si, nanoelectron_volt, _nanoelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::nano,prefix::elementary_charge_t>));
+implement_unit(si, si, microelectron_volt, _microelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::micro,prefix::elementary_charge_t>));
+implement_unit(si, si, millielectron_volt, _millielectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::milli,prefix::elementary_charge_t>));
+implement_unit(si, si, centielectron_volt, _centielectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::centi,prefix::elementary_charge_t>));
+implement_unit(si, si, decielectron_volt, _decielectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::deci,prefix::elementary_charge_t>));
+implement_unit(si, si, electron_volt, _electron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::one,prefix::elementary_charge_t>));
+implement_unit(si, si, decaelectron_volt, _decaelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::deca,prefix::elementary_charge_t>));
+implement_unit(si, si, hectoelectron_volt, _hectoelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::hecto,prefix::elementary_charge_t>));
+implement_unit(si, si, kiloelectron_volt, _kiloelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::kilo,prefix::elementary_charge_t>));
+implement_unit(si, si, megaelectron_volt, _megaelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::mega,prefix::elementary_charge_t>));
+implement_unit(si, si, gigaelectron_volt, _gigaelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::giga,prefix::elementary_charge_t>));
+implement_unit(si, si, teraelectron_volt, _teraelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::tera,prefix::elementary_charge_t>));
+implement_unit(si, si, petaelectron_volt, _petaelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::peta,prefix::elementary_charge_t>));
+implement_unit(si, si, exaelectron_volt, _exaelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::exa,prefix::elementary_charge_t>));
+implement_unit(si, si, zettaelectron_volt, _zettaelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::zetta,prefix::elementary_charge_t>));
+implement_unit(si, si, yottaelectron_volt, _yottaelectron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::yotta,prefix::elementary_charge_t>));
+
+implement_unit(si, si, yoctohartree, _yoctohartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::yocto,prefix::hartree_energy_t>));
+implement_unit(si, si, zeptohartree, _zeptohartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::zepto,prefix::hartree_energy_t>));
+implement_unit(si, si, attohartree, _attohartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::atto,prefix::hartree_energy_t>));
+implement_unit(si, si, femtohartree, _femtohartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::femto,prefix::hartree_energy_t>));
+implement_unit(si, si, picohartree, _picohartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::pico,prefix::hartree_energy_t>));
+implement_unit(si, si, nanohartree, _nanohartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::nano,prefix::hartree_energy_t>));
+implement_unit(si, si, microhartree, _microhartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::micro,prefix::hartree_energy_t>));
+implement_unit(si, si, millihartree, _millihartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::milli,prefix::hartree_energy_t>));
+implement_unit(si, si, centihartree, _centihartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::centi,prefix::hartree_energy_t>));
+implement_unit(si, si, decihartree, _decihartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::deci,prefix::hartree_energy_t>));
+implement_unit(si, si, hartree, _hartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::one,prefix::hartree_energy_t>));
+implement_unit(si, si, decahartree, _decahartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::deca,prefix::hartree_energy_t>));
+implement_unit(si, si, hectohartree, _hectohartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::hecto,prefix::hartree_energy_t>));
+implement_unit(si, si, kilohartree, _kilohartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::kilo,prefix::hartree_energy_t>));
+implement_unit(si, si, megahartree, _megahartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::mega,prefix::hartree_energy_t>));
+implement_unit(si, si, gigahartree, _gigahartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::giga,prefix::hartree_energy_t>));
+implement_unit(si, si, terahartree, _terahartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::tera,prefix::hartree_energy_t>));
+implement_unit(si, si, petahartree, _petahartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::peta,prefix::hartree_energy_t>));
+implement_unit(si, si, exahartree, _exahartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::exa,prefix::hartree_energy_t>));
+implement_unit(si, si, zettahartree, _zettahartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::zetta,prefix::hartree_energy_t>));
+implement_unit(si, si, yottahartree, _yottahartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::yotta,prefix::hartree_energy_t>));
 #pragma endregion
 #pragma region watt minute(energy)
 implement_unit(si, si, yoctowatt_minute, _yoctowatt_minute, dim::energy_t, fix(impl::multiply_lists_t<prefix::minute, prefix::yocto>));
@@ -687,6 +785,29 @@ implement_unit(si, si, petaampere_hour, _petaampere_hour, dim::electric_charge_t
 implement_unit(si, si, exaampere_hour, _exaampere_hour, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::hour, prefix::exa>));
 implement_unit(si, si, zettaampere_hour, _zettaampere_hour, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::hour, prefix::zetta>));
 implement_unit(si, si, yottaampere_hour, _yottaampere_hour, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::hour, prefix::yotta>));
+#pragma endregion
+#pragma region electron/elementary charge(electric charge)
+implement_unit(si, si, yoctoelectron, _yoctoelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::yocto,prefix::elementary_charge_t>));
+implement_unit(si, si, zeptoelectron, _zeptoelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::zepto,prefix::elementary_charge_t>));
+implement_unit(si, si, attoelectron, _attoelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::atto,prefix::elementary_charge_t>));
+implement_unit(si, si, femtoelectron, _femtoelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::femto,prefix::elementary_charge_t>));
+implement_unit(si, si, picoelectron, _picoelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::pico,prefix::elementary_charge_t>));
+implement_unit(si, si, nanoelectron, _nanoelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::nano,prefix::elementary_charge_t>));
+implement_unit(si, si, microelectron, _microelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::micro,prefix::elementary_charge_t>));
+implement_unit(si, si, millielectron, _millielectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::milli,prefix::elementary_charge_t>));
+implement_unit(si, si, centielectron, _centielectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::centi,prefix::elementary_charge_t>));
+implement_unit(si, si, decielectron, _decielectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::deci,prefix::elementary_charge_t>));
+implement_unit(si, si, electron, _electron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::one,prefix::elementary_charge_t>));
+implement_unit(si, si, decaelectron, _decaelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::deca,prefix::elementary_charge_t>));
+implement_unit(si, si, hectoelectron, _hectoelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::hecto,prefix::elementary_charge_t>));
+implement_unit(si, si, kiloelectron, _kiloelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::kilo,prefix::elementary_charge_t>));
+implement_unit(si, si, megaelectron, _megaelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::mega,prefix::elementary_charge_t>));
+implement_unit(si, si, gigaelectron, _gigaelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::giga,prefix::elementary_charge_t>));
+implement_unit(si, si, teraelectron, _teraelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::tera,prefix::elementary_charge_t>));
+implement_unit(si, si, petaelectron, _petaelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::peta,prefix::elementary_charge_t>));
+implement_unit(si, si, exaelectron, _exaelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::exa,prefix::elementary_charge_t>));
+implement_unit(si, si, zettaelectron, _zettaelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::zetta,prefix::elementary_charge_t>));
+implement_unit(si, si, yottaelectron, _yottaelectron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::yotta,prefix::elementary_charge_t>));
 #pragma endregion
 #pragma region volt(electric potential)
 implement_unit(si, si, yoctovolt, _yoctovolt, dim::electric_potential_t, prefix::yocto);
@@ -1172,36 +1293,36 @@ implement_unit(si, si, arcminute_per_square_second, _arcminute_per_square_second
 implement_unit(si, si, arcsecond_per_square_second, _arcsecond_per_square_second, dim::angular_acceleration_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 648000>>));
 #pragma endregion
 #pragma region radian per square minute(angular acceleration)
-implement_unit(si, si, yoctoradian_per_square_minute, _yoctoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::yocto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, zeptoradian_per_square_minute, _zeptoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::zepto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, attoradian_per_square_minute, _attoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::atto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, femtoradian_per_square_minute, _femtoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::femto, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, picoradian_per_square_minute, _picoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::pico, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, nanoradian_per_square_minute, _nanoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::nano, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, microradian_per_square_minute, _microradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::micro, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, milliradian_per_square_minute, _milliradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::milli, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, centiradian_per_square_minute, _centiradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::centi, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, deciradian_per_square_minute, _deciradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::deci, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, radian_per_square_minute, _radian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::one, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
+implement_unit(si, si, yoctoradian_per_square_minute, _yoctoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::yocto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, zeptoradian_per_square_minute, _zeptoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::zepto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, attoradian_per_square_minute, _attoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::atto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, femtoradian_per_square_minute, _femtoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::femto, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, picoradian_per_square_minute, _picoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::pico, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, nanoradian_per_square_minute, _nanoradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::nano, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, microradian_per_square_minute, _microradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::micro, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, milliradian_per_square_minute, _milliradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::milli, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, centiradian_per_square_minute, _centiradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::centi, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, deciradian_per_square_minute, _deciradian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::deci, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, radian_per_square_minute, _radian_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::one, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
 link_unit(degree_per_square_minute, _degree_per_square_minute, arcsecond_per_square_second);
-implement_unit(si, si, arcminute_per_square_minute, _arcminute_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 648000>>, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
-implement_unit(si, si, arcsecond_per_square_minute, _arcsecond_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 10800>>, impl::multiply_lists_t<prefix::minute, prefix::minute>>));
+implement_unit(si, si, arcminute_per_square_minute, _arcminute_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 648000>>, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
+implement_unit(si, si, arcsecond_per_square_minute, _arcsecond_per_square_minute, dim::angular_acceleration_t, fix(impl::divide_lists_t<impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 10800>>, impl::pow_list_t<prefix::minute, std::ratio<2>>>));
 #pragma endregion
 #pragma region radian per hour(angular acceleration)
-implement_unit(si, si, yoctoradian_per_square_hour, _yoctoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::yocto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, zeptoradian_per_square_hour, _zeptoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::zepto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, attoradian_per_square_hour, _attoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::atto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, femtoradian_per_square_hour, _femtoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::femto, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, picoradian_per_square_hour, _picoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::pico, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, nanoradian_per_square_hour, _nanoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::nano, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, microradian_per_square_hour, _microradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::micro, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, milliradian_per_square_hour, _milliradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::milli, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, centiradian_per_square_hour, _centiradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::centi, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, deciradian_per_square_hour, _deciradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::deci, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, radian_per_square_hour, _radian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::one, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
+implement_unit(si, si, yoctoradian_per_square_hour, _yoctoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::yocto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, zeptoradian_per_square_hour, _zeptoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::zepto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, attoradian_per_square_hour, _attoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::atto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, femtoradian_per_square_hour, _femtoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::femto, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, picoradian_per_square_hour, _picoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::pico, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, nanoradian_per_square_hour, _nanoradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::nano, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, microradian_per_square_hour, _microradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::micro, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, milliradian_per_square_hour, _milliradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::milli, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, centiradian_per_square_hour, _centiradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::centi, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, deciradian_per_square_hour, _deciradian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::deci, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, radian_per_square_hour, _radian_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<prefix::one, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
 link_unit(degree_per_square_hour, _degree_per_square_hour, arcminute_per_square_minute);
-implement_unit(si, si, arcminute_per_square_hour, _arcminute_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 648000>>, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
-implement_unit(si, si, arcsecond_per_square_hour, _arcsecond_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 10800>>, impl::multiply_lists_t<prefix::hour, prefix::hour>>));
+implement_unit(si, si, arcminute_per_square_hour, _arcminute_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 648000>>, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
+implement_unit(si, si, arcsecond_per_square_hour, _arcsecond_per_square_hour, dim::angular_acceleration_t, fix(impl::divide_lists_t<impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 10800>>, impl::pow_list_t<prefix::hour, std::ratio<2>>>));
 #pragma endregion
 #pragma region watt per square metre(heat flux density)
 implement_unit(si, si, yoctowatt_per_square_metre, _yoctowatt_per_square_metre, dim::heat_flux_density_t, prefix::yocto);

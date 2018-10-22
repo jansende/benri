@@ -420,6 +420,43 @@ auto test_make_list()
     static_assert(std::is_same_v<make_fraction_list_t<4, 8>, list<atom<std::ratio<2>, std::ratio<-1>>>>, "");
     static_assert(std::is_same_v<make_fraction_list_t<5, 3>, list<atom<std::ratio<5>>, atom<std::ratio<3>, std::ratio<-1>>>>, "");
 }
+//The make_power_list function generates a list which
+//represents 10^Power.
+template <bool Positive, intmax_t Power>
+struct make_power_list_impl {
+    using type = list<>;
+};
+template <>
+struct make_power_list_impl<true,0> {
+    using type = make_fraction_list_t<1>;
+};
+template <>
+struct make_power_list_impl<false,0> {
+    using type = make_fraction_list_t<1>;
+};
+template <intmax_t Power>
+struct make_power_list_impl<true,Power> {
+    using type = multiply_lists_t<make_fraction_list_t<10>,typename make_power_list_impl<true,Power-1>::type>;
+};
+template <intmax_t Power>
+struct make_power_list_impl<false,Power> {
+    using type = multiply_lists_t<make_fraction_list_t<1,10>,typename make_power_list_impl<false,Power+1>::type>;
+};
+template <intmax_t Power>
+struct make_power_list
+{
+    using type = typename make_power_list_impl<(Power>=0),Power>::type;
+};
+template <intmax_t Power>
+using make_power_list_t = typename make_power_list<Power>::type;
+//TODO: - Put this into a unit test folder.
+auto test_make_power_list()
+{
+    static_assert(std::is_same_v<make_power_list_t<2>, make_fraction_list_t<100>>, "");
+    static_assert(std::is_same_v<make_power_list_t<0>, make_fraction_list_t<1>>, "");
+    static_assert(std::is_same_v<make_power_list_t<-2>, make_fraction_list_t<1,100>>, "");
+    static_assert(std::is_same_v<make_power_list_t<1>, make_fraction_list_t<10>>, "");
+}
 #pragma endregion
 #pragma region expansion
 //The expand_list function calculates the factor given by expanding
@@ -460,4 +497,5 @@ constexpr auto runtime_expand_list(list<Atoms...>)
 //because we need it for constructing units.
 using impl::list;
 using impl::make_fraction_list_t;
+using impl::make_power_list_t;
 } // namespace benri
