@@ -107,10 +107,10 @@ create_and_register_dimension(momentum, helper<L>, helper<M>, helper<T, -1>);
 create_and_register_dimension(angular_momentum, helper<L, 2>, helper<M>);
 create_and_register_dimension(moment_of_inertia, helper<L, 2>, helper<M>, helper<T, -1>, helper<A>);
 create_and_register_dimension(absement, helper<L>, helper<T>);
-create_and_register_dimension(jerk, helper<L>, helper<T,-3>);
-create_and_register_dimension(snap, helper<L>, helper<T,-4>);
-create_and_register_dimension(crackle, helper<L>, helper<T,-5>);
-create_and_register_dimension(pop, helper<L>, helper<T,-6>);
+create_and_register_dimension(jerk, helper<L>, helper<T, -3>);
+create_and_register_dimension(snap, helper<L>, helper<T, -4>);
+create_and_register_dimension(crackle, helper<L>, helper<T, -5>);
+create_and_register_dimension(pop, helper<L>, helper<T, -6>);
 #pragma endregion
 } // namespace dim
 } // namespace benri

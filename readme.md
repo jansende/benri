@@ -2,17 +2,24 @@
 **benri** is a header-only c++ library for compile time checking of physical quantities. **benri** supports dimensional analysis and conversions of physical units at compile time.
 
 # TODO
-- [ ] Implement a point type.
+- [ ] Implement affine types.
 - [ ] Implement units.
 - [x] Use backsubstitution on dimensions?
-- [ ] Allow normal math for dimensionless quantities.
+- [x] Allow normal math for dimensionless quantities.
 - [ ] Write unit tests.
 - [ ] Write cmath functions.
-- [ ] Support dimensionless to radian/steradian conversions.
+- [ ] Write c++17 cmath functions.
+- [ ] Write log<Unit>(Unit) functions.
+- [ ] Write the sinc function.
+- ~~[ ] Support dimensionless to radian/steradian conversions.~~
 - [ ] Implement special math, like log and exp.
 - [ ] Implement to_string for dimensions.
 - [ ] Implement to_string for units.
 - [ ] Implement a binary representation of the units.
+- [ ] Implement operator overloading for unit composition.
+- [ ] std::chrono support
+- [ ] std::common_type support
+- [ ] write a warning about using integral types
 
 ## Table of units
 
