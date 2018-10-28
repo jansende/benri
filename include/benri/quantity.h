@@ -47,6 +47,8 @@ class quantity
 #pragma region casting
     //Friend declaration for the casting functions.
     template <class L, class R>
+    friend constexpr auto value_type_cast(R rhs) -> quantity<typename R::unit_type, L>;
+    template <class L, class R>
     friend constexpr auto simple_cast(R rhs) -> quantity<L, typename R::value_type>;
     template <class L, class R>
     friend constexpr auto unit_cast(R rhs) -> quantity<L, typename R::value_type>;
@@ -459,6 +461,16 @@ class quantity
 #pragma endregion
 #pragma endregion
 };
+//The value_type_cast function lets you cast the value_type of a quantity
+//to another value_type.
+template <class L, class R>
+constexpr auto value_type_cast(R rhs) -> quantity<typename R::unit_type, L>
+{
+    //type checking
+    static_assert(is_quantity_v<R>, "rhs has to be a quantity.");
+    //conversion
+    return quantity<typename R::unit_type, L>{static_cast<L>(rhs._value)};
+}
 //The simple_cast function lets you cast one quantity to another unit.
 //This is done by multiplying the value of the quantity with the right
 //conversion constant. The simple_cast function relies on a custom imple-

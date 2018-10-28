@@ -7,19 +7,22 @@
 - [x] Use backsubstitution on dimensions?
 - [x] Allow normal math for dimensionless quantities.
 - [ ] Write unit tests.
-- [ ] Write cmath functions.
+- [x] Write cmath functions.
+- [x] Write log<Unit>(Unit) functions.
 - [ ] Write c++17 cmath functions.
-- [ ] Write log<Unit>(Unit) functions.
 - [ ] Write the sinc function.
 - ~~[ ] Support dimensionless to radian/steradian conversions.~~
-- [ ] Implement special math, like log and exp.
-- [ ] Implement to_string for dimensions.
-- [ ] Implement to_string for units.
-- [ ] Implement a binary representation of the units.
+- [ ] Implement compile time special math, like log and exp?
+- ~~[ ] Implement to_string for dimensions.~~
+- ~~[ ] Implement to_string for units.~~
+- ~~[ ] Implement a binary representation of the units.~~
 - [ ] Implement operator overloading for unit composition.
 - [ ] std::chrono support
 - [ ] std::common_type support
 - [ ] write a warning about using integral types
+
+## Quantities using Integral Types
+
 
 ## Table of units
 
