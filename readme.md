@@ -2,7 +2,7 @@
 **benri** is a header-only c++ library for compile time checking of physical quantities. **benri** supports dimensional analysis and conversions of physical units at compile time.
 
 # TODO
-- [ ] Implement affine types.
+- [x] Implement affine types.
 - [ ] Implement units.
 - [x] Use backsubstitution on dimensions?
 - [x] Allow normal math for dimensionless quantities.
@@ -16,10 +16,13 @@
 - ~~[ ] Implement to_string for dimensions.~~
 - ~~[ ] Implement to_string for units.~~
 - ~~[ ] Implement a binary representation of the units.~~
-- [ ] Implement operator overloading for unit composition.
+- ~~[ ] Implement operator overloading for unit composition.~~
 - [ ] std::chrono support
 - [ ] std::common_type support
 - [ ] write a warning about using integral types
+- [ ] write an explanation for affine types
+- [ ] document the is_compatible trickery
+- [ ] do some cleaning up
 
 ## Quantities using Integral Types
 
@@ -63,9 +66,9 @@ i|                                                                      | extra 
 i|                                                                      | extra           |                  | atomic unit of time                 | ħ/Eh      | 1 ħ/Eh = 2.418 884 326 505(16)×10⁻¹⁷ s         |
 i| electric current                                                     | SI, base        | I                | ampere                              | A         | (base unit)                                    |
 i| thermodynamic temperature                                            | SI, base        | Θ                | kelvin                              | K         | (base unit)                                    |
- |                                                                      | SI              |                  | degree Celsius                      | °C        | T/K = t/°C + 273.15                            |
- |                                                                      | imperial        |                  | degree Fahrenheit                   | °F        | T/K = (t/°F - 459.67)/1.8                      |
- |                                                                      | imperial        |                  | degree Rankine                      | °R        | T/K = (t/°R)/1.8                               |
+i|                                                                      | SI              |                  | degree Celsius                      | °C        | T/K = t/°C + 273.15                            |
+i|                                                                      | imperial        |                  | degree Fahrenheit                   | °F        | T/K = (t/°F - 459.67)/1.8                      |
+i|                                                                      | imperial        |                  | degree Rankine                      | °R        | T/K = (t/°R)/1.8, T/°F = t/°R + 459.67         |
 i| amount of substance                                                  | SI, base        | N                | mole                                | mol       | (base unit)                                    |
 i| luminous intensity                                                   | SI, base        | J                | candela                             | cd        | (base unit)                                    |
 i| area                                                                 | SI              | L²               | square metre                        |           | 1 m²                                           |

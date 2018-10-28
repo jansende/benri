@@ -129,6 +129,564 @@ implement_subunit(si, si, base, exakelvin, _exakelvin, dim::thermodynamic_temper
 implement_subunit(si, si, base, zettakelvin, _zettakelvin, dim::thermodynamic_temperature_t, prefix::zetta);
 implement_subunit(si, si, base, yottakelvin, _yottakelvin, dim::thermodynamic_temperature_t, prefix::yotta);
 #pragma endregion
+#pragma region celsius(thermodynamic temperature)
+implement_subunit(si, si, base, yoctocelsius, _yoctocelsius, dim::celsius_temperature_t, prefix::yocto);
+implement_subunit(si, si, base, zeptocelsius, _zeptocelsius, dim::celsius_temperature_t, prefix::zepto);
+implement_subunit(si, si, base, attocelsius, _attocelsius, dim::celsius_temperature_t, prefix::atto);
+implement_subunit(si, si, base, femtocelsius, _femtocelsius, dim::celsius_temperature_t, prefix::femto);
+implement_subunit(si, si, base, picocelsius, _picocelsius, dim::celsius_temperature_t, prefix::pico);
+implement_subunit(si, si, base, nanocelsius, _nanocelsius, dim::celsius_temperature_t, prefix::nano);
+implement_subunit(si, si, base, microcelsius, _microcelsius, dim::celsius_temperature_t, prefix::micro);
+implement_subunit(si, si, base, millicelsius, _millicelsius, dim::celsius_temperature_t, prefix::milli);
+implement_subunit(si, si, base, centicelsius, _centicelsius, dim::celsius_temperature_t, prefix::centi);
+implement_subunit(si, si, base, decicelsius, _decicelsius, dim::celsius_temperature_t, prefix::deci);
+implement_subunit(si, si, base, celsius, _celsius, dim::celsius_temperature_t, prefix::one);
+implement_subunit(si, si, base, decacelsius, _decacelsius, dim::celsius_temperature_t, prefix::deca);
+implement_subunit(si, si, base, hectocelsius, _hectocelsius, dim::celsius_temperature_t, prefix::hecto);
+implement_subunit(si, si, base, kilocelsius, _kilocelsius, dim::celsius_temperature_t, prefix::kilo);
+implement_subunit(si, si, base, megacelsius, _megacelsius, dim::celsius_temperature_t, prefix::mega);
+implement_subunit(si, si, base, gigacelsius, _gigacelsius, dim::celsius_temperature_t, prefix::giga);
+implement_subunit(si, si, base, teracelsius, _teracelsius, dim::celsius_temperature_t, prefix::tera);
+implement_subunit(si, si, base, petacelsius, _petacelsius, dim::celsius_temperature_t, prefix::peta);
+implement_subunit(si, si, base, exacelsius, _exacelsius, dim::celsius_temperature_t, prefix::exa);
+implement_subunit(si, si, base, zettacelsius, _zettacelsius, dim::celsius_temperature_t, prefix::zetta);
+implement_subunit(si, si, base, yottacelsius, _yottacelsius, dim::celsius_temperature_t, prefix::yotta);
+} // namespace base
+} // namespace si
+template <>
+struct is_compatible<si::base::yoctokelvin, si::base::yoctocelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::zeptokelvin, si::base::zeptocelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::attokelvin, si::base::attocelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::femtokelvin, si::base::femtocelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::picokelvin, si::base::picocelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::nanokelvin, si::base::nanocelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::microkelvin, si::base::microcelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::millikelvin, si::base::millicelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::centikelvin, si::base::centicelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::decikelvin, si::base::decicelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::kelvin, si::base::celsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::decakelvin, si::base::decacelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::hectokelvin, si::base::hectocelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::kilokelvin, si::base::kilocelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::megakelvin, si::base::megacelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::gigakelvin, si::base::gigacelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::terakelvin, si::base::teracelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::petakelvin, si::base::petacelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::exakelvin, si::base::exacelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::zettakelvin, si::base::zettacelsius> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::yottakelvin, si::base::yottacelsius> : std::true_type
+{
+};
+
+template <>
+struct is_compatible<si::base::yoctocelsius, si::base::yoctokelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::zeptocelsius, si::base::zeptokelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::attocelsius, si::base::attokelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::femtocelsius, si::base::femtokelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::picocelsius, si::base::picokelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::nanocelsius, si::base::nanokelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::microcelsius, si::base::microkelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::millicelsius, si::base::millikelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::centicelsius, si::base::centikelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::decicelsius, si::base::decikelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::celsius, si::base::kelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::decacelsius, si::base::decakelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::hectocelsius, si::base::hectokelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::kilocelsius, si::base::kilokelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::megacelsius, si::base::megakelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::gigacelsius, si::base::gigakelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::teracelsius, si::base::terakelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::petacelsius, si::base::petakelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::exacelsius, si::base::exakelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::zettacelsius, si::base::zettakelvin> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::yottacelsius, si::base::yottakelvin> : std::true_type
+{
+};
+
+namespace si
+{
+namespace base
+{
+#pragma endregion
+#pragma region rankine(thermodynamic temperature)
+implement_subunit(si, si, base, yoctorankine, _yoctorankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::yocto, prefix::rankine_t>));
+implement_subunit(si, si, base, zeptorankine, _zeptorankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::zepto, prefix::rankine_t>));
+implement_subunit(si, si, base, attorankine, _attorankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::atto, prefix::rankine_t>));
+implement_subunit(si, si, base, femtorankine, _femtorankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::femto, prefix::rankine_t>));
+implement_subunit(si, si, base, picorankine, _picorankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::pico, prefix::rankine_t>));
+implement_subunit(si, si, base, nanorankine, _nanorankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::nano, prefix::rankine_t>));
+implement_subunit(si, si, base, microrankine, _microrankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::micro, prefix::rankine_t>));
+implement_subunit(si, si, base, millirankine, _millirankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::milli, prefix::rankine_t>));
+implement_subunit(si, si, base, centirankine, _centirankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::centi, prefix::rankine_t>));
+implement_subunit(si, si, base, decirankine, _decirankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::deci, prefix::rankine_t>));
+implement_subunit(si, si, base, rankine, _rankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::one, prefix::rankine_t>));
+implement_subunit(si, si, base, decarankine, _decarankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::deca, prefix::rankine_t>));
+implement_subunit(si, si, base, hectorankine, _hectorankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::hecto, prefix::rankine_t>));
+implement_subunit(si, si, base, kilorankine, _kilorankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::rankine_t>));
+implement_subunit(si, si, base, megarankine, _megarankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::mega, prefix::rankine_t>));
+implement_subunit(si, si, base, gigarankine, _gigarankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::giga, prefix::rankine_t>));
+implement_subunit(si, si, base, terarankine, _terarankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::tera, prefix::rankine_t>));
+implement_subunit(si, si, base, petarankine, _petarankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::peta, prefix::rankine_t>));
+implement_subunit(si, si, base, exarankine, _exarankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::exa, prefix::rankine_t>));
+implement_subunit(si, si, base, zettarankine, _zettarankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::zetta, prefix::rankine_t>));
+implement_subunit(si, si, base, yottarankine, _yottarankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::yotta, prefix::rankine_t>));
+#pragma endregion
+#pragma region fahrenheit(thermodynamic temperature)
+implement_subunit(si, si, base, yoctofahrenheit, _yoctofahrenheit, dim::fahrenheit_temperature_t, prefix::yocto);
+implement_subunit(si, si, base, zeptofahrenheit, _zeptofahrenheit, dim::fahrenheit_temperature_t, prefix::zepto);
+implement_subunit(si, si, base, attofahrenheit, _attofahrenheit, dim::fahrenheit_temperature_t, prefix::atto);
+implement_subunit(si, si, base, femtofahrenheit, _femtofahrenheit, dim::fahrenheit_temperature_t, prefix::femto);
+implement_subunit(si, si, base, picofahrenheit, _picofahrenheit, dim::fahrenheit_temperature_t, prefix::pico);
+implement_subunit(si, si, base, nanofahrenheit, _nanofahrenheit, dim::fahrenheit_temperature_t, prefix::nano);
+implement_subunit(si, si, base, microfahrenheit, _microfahrenheit, dim::fahrenheit_temperature_t, prefix::micro);
+implement_subunit(si, si, base, millifahrenheit, _millifahrenheit, dim::fahrenheit_temperature_t, prefix::milli);
+implement_subunit(si, si, base, centifahrenheit, _centifahrenheit, dim::fahrenheit_temperature_t, prefix::centi);
+implement_subunit(si, si, base, decifahrenheit, _decifahrenheit, dim::fahrenheit_temperature_t, prefix::deci);
+implement_subunit(si, si, base, fahrenheit, _fahrenheit, dim::fahrenheit_temperature_t, prefix::one);
+implement_subunit(si, si, base, decafahrenheit, _decafahrenheit, dim::fahrenheit_temperature_t, prefix::deca);
+implement_subunit(si, si, base, hectofahrenheit, _hectofahrenheit, dim::fahrenheit_temperature_t, prefix::hecto);
+implement_subunit(si, si, base, kilofahrenheit, _kilofahrenheit, dim::fahrenheit_temperature_t, prefix::kilo);
+implement_subunit(si, si, base, megafahrenheit, _megafahrenheit, dim::fahrenheit_temperature_t, prefix::mega);
+implement_subunit(si, si, base, gigafahrenheit, _gigafahrenheit, dim::fahrenheit_temperature_t, prefix::giga);
+implement_subunit(si, si, base, terafahrenheit, _terafahrenheit, dim::fahrenheit_temperature_t, prefix::tera);
+implement_subunit(si, si, base, petafahrenheit, _petafahrenheit, dim::fahrenheit_temperature_t, prefix::peta);
+implement_subunit(si, si, base, exafahrenheit, _exafahrenheit, dim::fahrenheit_temperature_t, prefix::exa);
+implement_subunit(si, si, base, zettafahrenheit, _zettafahrenheit, dim::fahrenheit_temperature_t, prefix::zetta);
+implement_subunit(si, si, base, yottafahrenheit, _yottafahrenheit, dim::fahrenheit_temperature_t, prefix::yotta);
+} // namespace base
+} // namespace si
+template <>
+struct is_compatible<si::base::yoctorankine, si::base::yoctofahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::zeptorankine, si::base::zeptofahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::attorankine, si::base::attofahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::femtorankine, si::base::femtofahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::picorankine, si::base::picofahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::nanorankine, si::base::nanofahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::microrankine, si::base::microfahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::millirankine, si::base::millifahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::centirankine, si::base::centifahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::decirankine, si::base::decifahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::rankine, si::base::fahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::decarankine, si::base::decafahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::hectorankine, si::base::hectofahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::kilorankine, si::base::kilofahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::megarankine, si::base::megafahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::gigarankine, si::base::gigafahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::terarankine, si::base::terafahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::petarankine, si::base::petafahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::exarankine, si::base::exafahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::zettarankine, si::base::zettafahrenheit> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::yottarankine, si::base::yottafahrenheit> : std::true_type
+{
+};
+
+template <>
+struct is_compatible<si::base::yoctofahrenheit, si::base::yoctorankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::zeptofahrenheit, si::base::zeptorankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::attofahrenheit, si::base::attorankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::femtofahrenheit, si::base::femtorankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::picofahrenheit, si::base::picorankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::nanofahrenheit, si::base::nanorankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::microfahrenheit, si::base::microrankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::millifahrenheit, si::base::millirankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::centifahrenheit, si::base::centirankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::decifahrenheit, si::base::decirankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::fahrenheit, si::base::rankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::decafahrenheit, si::base::decarankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::hectofahrenheit, si::base::hectorankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::kilofahrenheit, si::base::kilorankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::megafahrenheit, si::base::megarankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::gigafahrenheit, si::base::gigarankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::terafahrenheit, si::base::terarankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::petafahrenheit, si::base::petarankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::exafahrenheit, si::base::exarankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::zettafahrenheit, si::base::zettarankine> : std::true_type
+{
+};
+template <>
+struct is_compatible<si::base::yottafahrenheit, si::base::yottarankine> : std::true_type
+{
+};
+
+namespace si
+{
+namespace base
+{
+#pragma endregion
+#pragma region degree_kelvin(thermodynamic temperature)
+link_unit_point(degree_kelvin, _degree_kelvin, kelvin);
+#pragma endregion
+#pragma region degree celsius(thermodynamic temperature)
+link_unit_point(degree_celsius, _degree_celsius, celsius);
+//conversion overload (we need an actual overload, because partial function template specialization is not allowed)
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_kelvin, ValueType>{rhs.value() + static_cast<ValueType>(prefix::absolute_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_celsius, ValueType>{rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_kelvin, ValueType>{rhs.value() + static_cast<ValueType>(prefix::absolute_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_celsius, ValueType>{rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
+}
+#pragma endregion
+#pragma region degree_rankine(thermodynamic temperature)
+link_unit_point(degree_rankine, _degree_rankine, rankine);
+#pragma endregion
+#pragma region degree fahrenheit(thermodynamic temperature)
+link_unit_point(degree_fahrenheit, _degree_fahrenheit, fahrenheit);
+//conversion overload (we need an actual overload, because partial function template specialization is not allowed)
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_kelvin, ValueType>{(rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)) / static_cast<ValueType>(prefix::rankine::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() * static_cast<ValueType>(prefix::rankine::value) + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_kelvin, ValueType>{(rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)) / static_cast<ValueType>(prefix::rankine::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() * static_cast<ValueType>(prefix::rankine::value) + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    //calculation
+    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    //calculation
+    return simple_cast<degree_fahrenheit>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    //calculation
+    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    //calculation
+    return simple_cast<degree_fahrenheit>(simple_cast<degree_kelvin>(rhs));
+}
+#pragma endregion
+#pragma region degree_rankine(thermodynamic temperature)
+//conversion overload (we need an actual overload, because partial function template specialization is not allowed)
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_rankine, ValueType>{rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_rankine, ValueType>{rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    //calculation
+    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    //calculation
+    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
+{
+    //calculation
+    return simple_cast<degree_rankine>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    //calculation
+    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
+{
+    //calculation
+    return simple_cast<degree_rankine>(simple_cast<degree_kelvin>(rhs));
+}
+#pragma endregion
 #pragma region mole(amount of substance)
 implement_subunit(si, si, base, yoctomole, _yoctomole, dim::amount_of_substance_t, prefix::yocto);
 implement_subunit(si, si, base, zeptomole, _zeptomole, dim::amount_of_substance_t, prefix::zepto);

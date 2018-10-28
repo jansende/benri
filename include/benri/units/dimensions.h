@@ -17,11 +17,13 @@ struct H; //thermodynamic temperature (actually this should be a Θ, but H looks
 struct N; //amount of substance
 struct J; //luminous intensity
 //special symbols
-struct A; //angle
-struct C; //number of events (count)
-struct S; //helper for Sievert based units
-struct B; //amount of data
-struct X; //screen position
+struct A;    //angle
+struct C;    //number of events (count)
+struct S;    //helper for Sievert based units
+struct B;    //amount of data
+struct X;    //screen position
+struct degC; //absolute degree celsius
+struct degF; //absolute degree fahrenheit
 #pragma endregion
 #pragma region atom helper
 template <class Dimension, intmax_t Power = 1>
@@ -33,6 +35,8 @@ create_and_register_dimension(mass, helper<M>);
 create_and_register_dimension(time, helper<T>);
 create_and_register_dimension(electric_current, helper<I>);
 create_and_register_dimension(thermodynamic_temperature, helper<H>);
+create_and_register_dimension(celsius_temperature, helper<degC>);
+create_and_register_dimension(fahrenheit_temperature, helper<degF>);
 create_and_register_dimension(amount_of_substance, helper<N>);
 create_and_register_dimension(luminous_intensity, helper<J>);
 create_and_register_dimension(plane_angle, helper<A>);

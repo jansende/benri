@@ -23,6 +23,15 @@
     {                                                               \
         return quantity<NAME>{Precision(value)};                    \
     }
+#define _create_literal_point(NAME, LITERAL)                        \
+    constexpr auto operator"" LITERAL(long double value)            \
+    {                                                               \
+        return quantity_point<NAME>{Precision(value)};              \
+    }                                                               \
+    constexpr auto operator"" LITERAL(unsigned long long int value) \
+    {                                                               \
+        return quantity_point<NAME>{Precision(value)};              \
+    }
 #define _create_and_register_unit(SYSTEM, NAMESPACE, NAME, DIMENSIONS, PREFIX) \
     _create_unit(SYSTEM, NAME, fix(DIMENSIONS), fix(PREFIX));                  \
     }                                                                          \
@@ -52,8 +61,13 @@
 #define _create_link_with_literal(NAME, LITERAL, ALIAS) \
     using NAME = ALIAS;                                 \
     _create_literal(ALIAS, LITERAL);
+#define _create_link_with_literal_point(NAME, LITERAL, ALIAS) \
+    using NAME = ALIAS;                                       \
+    _create_literal_point(ALIAS, LITERAL);
 #define link_unit(NAME, LITERAL, ALIAS) \
     _create_link_with_literal(NAME, LITERAL, ALIAS);
+#define link_unit_point(NAME, LITERAL, ALIAS) \
+    _create_link_with_literal_point(NAME, LITERAL, ALIAS);
 
 #define create_symbol(SYSTEM, NAME, DIMENSIONS, PREFIX) \
     constexpr auto NAME = quantity<unit<SYSTEM, DIMENSIONS, PREFIX>>{Precision(1)};

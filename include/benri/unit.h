@@ -129,11 +129,17 @@ auto test_is_unit()
     static_assert(is_unit_v<unit<double, list<>, list<>>>, "");
 }
 template <class T>
-struct is_dimensionless : std::integral_constant<bool, std::is_same_v<typename T::dimensions, list<>> && std::is_same_v<typename T::prefix, list<>>>
+struct is_dimensionless : std::integral_constant<bool, std::is_same_v<typename T::dimensions, list<>>>
 {
 };
 template <class T>
 constexpr auto is_dimensionless_v = is_dimensionless<T>::value;
+template <class T>
+struct is_one : std::integral_constant<bool, std::is_same_v<typename T::dimensions, list<>> && std::is_same_v<typename T::prefix, list<>>>
+{
+};
+template <class T>
+constexpr auto is_one_v = is_one<T>::value;
 #pragma endregion
 #pragma region back substitution
 //The back_substituion function provides overloads to simplify
@@ -232,5 +238,30 @@ struct is_equivalent : std::integral_constant<bool, impl::is_equivalent_list_v<t
 };
 template <class L, class R>
 constexpr auto is_equivalent_v = is_equivalent<L, R>::value;
+#pragma endregion
+#pragma region unit compatibility checker
+//The is_compatible function checks if two units should be handled
+//as if they are equivalent, even if they are not.
+template <class L, class R>
+struct is_compatible : std::false_type
+{
+};
+template <class L, class R>
+constexpr auto is_compatible_v = is_compatible<L, R>::value;
+#pragma endregion
+#pragma region remove prefix
+template <class T>
+struct no_prefix_unit
+{
+    static_assert(is_unit_v<T>, "no_prefix_unit takes a unit, but your T is not a unit.");
+    using type = void;
+};
+template <class System, class Dimensions, class Prefix>
+struct no_prefix_unit<unit<System, Dimensions, Prefix>>
+{
+    using type = back_substitution_t<unit<System, Dimensions, list<>>>;
+};
+template <class T>
+using no_prefix_unit_t = typename no_prefix_unit<T>::type;
 #pragma endregion
 } // namespace benri

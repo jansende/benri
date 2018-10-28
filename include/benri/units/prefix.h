@@ -1,6 +1,7 @@
 #pragma once
 #include <benri/config.h>
 #include <benri/quantity.h>
+#include <benri/quantity_point.h>
 #include <benri/unit.h>
 #include <benri/impl/list.h>
 #define _USE_MATH_DEFINES
@@ -186,7 +187,7 @@ using tau_mass_v = list<atom<tau_mass>>;
 //neutron mass in kg
 struct neutron_mass
 {
-    static constexpr Precision value = 1.67492747121-27;
+    static constexpr Precision value = 1.67492747121 - 27;
 };
 using neutron_mass_t = list<atom<neutron_mass>>;
 using neutron_mass_v = list<atom<neutron_mass>>;
@@ -270,14 +271,14 @@ using atomic_mass_unit_v = list<atom<atomic_mass_unit>>;
 using hartree_energy_t = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_t, elementary_charge_t>, impl::multiply_lists_t<impl::multiply_lists_t<make_fraction_list_t<4>, pi_t>, impl::multiply_lists_t<electric_constant_t, bohr_radius_t>>>;
 using hartree_energy_v = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_v, elementary_charge_v>, impl::multiply_lists_t<impl::multiply_lists_t<make_fraction_list_t<4>, pi_v>, impl::multiply_lists_t<electric_constant_v, bohr_radius_v>>>;
 //conductance quantum in S
-using conductance_quantum_t = impl::divide_lists_t<impl::multiply_lists_t<make_fraction_list_t<2>,impl::multiply_lists_t<elementary_charge_t, elementary_charge_t>>, planck_constant_t>;
-using conductance_quantum_v = impl::divide_lists_t<impl::multiply_lists_t<make_fraction_list_t<2>,impl::multiply_lists_t<elementary_charge_v, elementary_charge_v>>, planck_constant_v>;
+using conductance_quantum_t = impl::divide_lists_t<impl::multiply_lists_t<make_fraction_list_t<2>, impl::multiply_lists_t<elementary_charge_t, elementary_charge_t>>, planck_constant_t>;
+using conductance_quantum_v = impl::divide_lists_t<impl::multiply_lists_t<make_fraction_list_t<2>, impl::multiply_lists_t<elementary_charge_v, elementary_charge_v>>, planck_constant_v>;
 //inverse conductance quantum in Ω
-using inverse_conductance_quantum_t = impl::divide_lists_t<make_fraction_list_t<1>,conductance_quantum_t>;
-using inverse_conductance_quantum_v = impl::divide_lists_t<make_fraction_list_t<1>,conductance_quantum_v>;
+using inverse_conductance_quantum_t = impl::divide_lists_t<make_fraction_list_t<1>, conductance_quantum_t>;
+using inverse_conductance_quantum_v = impl::divide_lists_t<make_fraction_list_t<1>, conductance_quantum_v>;
 //vacuum impedance in Ω
-using vacuum_impedance_t = impl::multiply_lists_t<magnetic_constant_t,speed_of_light_t>;
-using vacuum_impedance_v = impl::multiply_lists_t<magnetic_constant_v,speed_of_light_v>;
+using vacuum_impedance_t = impl::multiply_lists_t<magnetic_constant_t, speed_of_light_t>;
+using vacuum_impedance_v = impl::multiply_lists_t<magnetic_constant_v, speed_of_light_v>;
 //nuclear magneton in J/T
 using nuclear_magneton_t = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_t, reduced_planck_constant_t>, impl::multiply_lists_t<make_fraction_list_t<2>, proton_mass_t>>;
 using nuclear_magneton_v = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_v, reduced_planck_constant_v>, impl::multiply_lists_t<make_fraction_list_t<2>, proton_mass_v>>;
@@ -315,8 +316,8 @@ struct earth_mass
 using earth_mass_t = list<atom<earth_mass>>;
 using earth_mass_v = list<atom<earth_mass>>;
 //angstroem in m
-using angstroem_t = impl::multiply_lists_t<nano,deci>;
-using angstroem_v = impl::multiply_lists_t<nano,deci>;
+using angstroem_t = impl::multiply_lists_t<nano, deci>;
+using angstroem_v = impl::multiply_lists_t<nano, deci>;
 //bohr in m
 struct bohr
 {
@@ -355,7 +356,7 @@ using international_foot_v = list<atom<international_foot>>;
 //inch in m
 struct inch
 {
-    static constexpr Precision value = (1./39.37);
+    static constexpr Precision value = (1. / 39.37);
 };
 using inch_t = list<atom<inch>>;
 using inch_v = list<atom<inch>>;
@@ -373,6 +374,27 @@ struct ounce
 };
 using ounce_t = list<atom<ounce>>;
 using ounce_v = list<atom<ounce>>;
+//rankine in kelvin
+struct rankine
+{
+    static constexpr Precision value = 1.8;
+};
+using rankine_t = list<atom<rankine>>;
+using rankine_v = list<atom<rankine>>;
+//fahrenheit zero in 1.8*kelvin
+struct fahrenheit_zero
+{
+    static constexpr Precision value = 459.67;
+};
+using fahrenheit_zero_t = list<atom<fahrenheit_zero>>;
+using fahrenheit_zero_v = list<atom<fahrenheit_zero>>;
+//absolute zero in kelvin
+struct absolute_zero
+{
+    static constexpr Precision value = 273.15;
+};
+using absolute_zero_t = list<atom<absolute_zero>>;
+using absolute_zero_v = list<atom<absolute_zero>>;
 #pragma endregion
 } // namespace prefix
 } // namespace benri
