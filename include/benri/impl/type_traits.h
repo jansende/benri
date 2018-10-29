@@ -11,5 +11,5 @@ struct all_true : std::integral_constant<bool, std::is_same_v<bool_pack<bs..., t
 {
 };
 template <bool... bs>
-constexpr auto all_true_v = all_true<bs...>::value;
+constexpr bool all_true_v = all_true<bs...>::value;
 #pragma endregion

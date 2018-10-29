@@ -52,7 +52,7 @@ struct make_integer_array
     static constexpr auto value = impl::array<T, sizeof...(nums)>{nums...};
 };
 template <class T, T... nums>
-constexpr auto make_integer_array_v = make_integer_array<T, nums...>::value;
+constexpr impl::array<T, sizeof...(nums)> make_integer_array_v = make_integer_array<T, nums...>::value;
 //TODO: - Put this into a unit test folder.
 auto test_make_integer_array()
 {

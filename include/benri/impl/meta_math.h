@@ -21,7 +21,7 @@ struct has_static_constexpr_value
     static constexpr auto value = test<T>(0);
 };
 template <class T>
-constexpr auto has_static_constexpr_value_v = has_static_constexpr_value<T>::value;
+constexpr bool has_static_constexpr_value_v = has_static_constexpr_value<T>::value;
 #pragma endregion
 #pragma region ratio helper
 //The is_ratio checks if a given type is an integer_sequence.
@@ -34,7 +34,7 @@ struct is_ratio<std::ratio<num, den>> : std::true_type
 {
 };
 template <class T>
-constexpr auto is_ratio_v = is_ratio<T>::value;
+constexpr bool is_ratio_v = is_ratio<T>::value;
 #pragma endregion
 #pragma region compile time pow
 //The power_impl function implements the actual power calculation for
@@ -77,7 +77,7 @@ struct power
     static constexpr auto value = power_impl<T, Base, Exponent>();
 };
 template <class T, class Base, class Exponent>
-constexpr auto power_v = power<T, Base, Exponent>::value;
+constexpr T power_v = power<T, Base, Exponent>::value;
 #pragma endregion
 #pragma region integer_sequence helpers
 //The is_integer_sequence checks if a given type is an integer_sequence.
@@ -90,7 +90,7 @@ struct is_integer_sequence<std::integer_sequence<T, Ints...>> : std::true_type
 {
 };
 template <class T>
-constexpr auto is_integer_sequence_v = is_integer_sequence<T>::value;
+constexpr bool is_integer_sequence_v = is_integer_sequence<T>::value;
 //TODO: - Put this into a unit test folder.
 auto test_is_integer_sequence()
 {
@@ -218,7 +218,7 @@ struct is_prime : std::integral_constant<bool, is_prime_impl(Num)>
 {
 };
 template <intmax_t Num>
-constexpr auto is_prime_v = is_prime<Num>::value;
+constexpr bool is_prime_v = is_prime<Num>::value;
 //TODO: - Put this into a unit test folder.
 auto test_is_prime()
 {
@@ -244,7 +244,7 @@ struct next_prime : std::integral_constant<intmax_t, next_prime_impl(Num)>
 {
 };
 template <intmax_t Num>
-constexpr auto next_prime_v = next_prime<Num>::value;
+constexpr intmax_t next_prime_v = next_prime<Num>::value;
 //TODO: - Put this into a unit test folder.
 auto test_next_prime()
 {

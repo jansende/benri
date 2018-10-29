@@ -30,7 +30,7 @@ struct has_type
     static constexpr auto value = test<T>(0);
 };
 template <class T>
-constexpr auto has_type_v = has_type<T>::value;
+constexpr bool has_type_v = has_type<T>::value;
 //The value_is_arithmetic function checks if a given type has a ::value
 //attribute which is arithmetic. The check is only done, when the given
 //bool is true.
@@ -51,7 +51,7 @@ struct value_is_arithmetic : std::integral_constant<bool, value_is_arithmetic_im
 {
 };
 template <bool Check, class T>
-constexpr auto value_is_arithmetic_v = value_is_arithmetic<Check, T>::value;
+constexpr bool value_is_arithmetic_v = value_is_arithmetic<Check, T>::value;
 //The has_valid_value function checks if a given type has a ::value
 //attribute which is arithmetic.
 template <class T>
@@ -59,7 +59,7 @@ struct has_valid_value : std::integral_constant<bool, value_is_arithmetic_v<has_
 {
 };
 template <class T>
-constexpr auto has_valid_value_v = has_valid_value<T>::value;
+constexpr bool has_valid_value_v = has_valid_value<T>::value;
 //The type_is_valid function checks if a given type has a ::type
 //attribute which is either a std::ratio, or which has a static
 //constexpr arithmetic ::value. The check is only done, when the
@@ -81,7 +81,7 @@ struct type_is_valid : std::integral_constant<bool, type_is_valid_impl<Check, T>
 {
 };
 template <bool Check, class T>
-constexpr auto type_is_valid_v = type_is_valid<Check, T>::value;
+constexpr bool type_is_valid_v = type_is_valid<Check, T>::value;
 //The has_valid_type function checks if a given type has a ::type
 //attribute which is a ratio or has a ::value argument which is an
 //arithmetic type.
@@ -90,7 +90,7 @@ struct has_valid_type : std::integral_constant<bool, type_is_valid_v<has_type_v<
 {
 };
 template <class T>
-constexpr auto has_valid_type_v = has_valid_type<T>::value;
+constexpr bool has_valid_type_v = has_valid_type<T>::value;
 //The has_power function checks if a type has the ::power attribute
 //using SFINAE.
 template <class T>
@@ -104,7 +104,7 @@ struct has_power
     static constexpr auto value = test<T>(0);
 };
 template <class T>
-constexpr auto has_power_v = has_power<T>::value;
+constexpr bool has_power_v = has_power<T>::value;
 //The power_is_ratio function checks if a given type has a ::power
 //attribute which is a ratio. The check is only done, when the given
 //bool is true.
@@ -125,7 +125,7 @@ struct power_is_ratio : std::integral_constant<bool, power_is_ratio_impl<Check, 
 {
 };
 template <bool Check, class T>
-constexpr auto power_is_ratio_v = power_is_ratio<Check, T>::value;
+constexpr bool power_is_ratio_v = power_is_ratio<Check, T>::value;
 //The has_valid_power function checks if a given type has a ::power
 //attribute which is a ratio.
 template <class T>
@@ -133,7 +133,7 @@ struct has_valid_power : std::integral_constant<bool, power_is_ratio_v<has_power
 {
 };
 template <class T>
-constexpr auto has_valid_power_v = has_valid_power<T>::value;
+constexpr bool has_valid_power_v = has_valid_power<T>::value;
 //The is_atom function checks if a type has a ::type and a ::power
 //attribute. This does not mean, we have an atom type, but we do not
 //care, as we can do the necessary calculations.
@@ -142,7 +142,7 @@ struct is_atom : std::integral_constant<bool, has_type_v<T> && has_valid_power_v
 {
 };
 template <class T>
-constexpr auto is_atom_v = is_atom<T>::value;
+constexpr bool is_atom_v = is_atom<T>::value;
 //TODO: - Put this into a unit test folder.
 auto test_is_atom()
 {
@@ -163,7 +163,7 @@ struct is_root<Atom<T, std::ratio<num, den>>> : std::integral_constant<bool, den
 {
 };
 template <class T>
-constexpr auto is_root_v = is_root<T>::value;
+constexpr bool is_root_v = is_root<T>::value;
 //TODO: - Put this into a unit test folder.
 auto test_is_root()
 {
@@ -186,7 +186,7 @@ struct expand_atom
     static constexpr auto value = power_v<T, typename Atom::type, typename Atom::power>;
 };
 template <class T, class Atom>
-constexpr auto expand_atom_v = expand_atom<T, Atom>::value;
+constexpr T expand_atom_v = expand_atom<T, Atom>::value;
 //TODO: - Put this into a unit test folder.
 auto test_expand_atom()
 {

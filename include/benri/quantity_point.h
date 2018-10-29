@@ -22,7 +22,7 @@ struct is_quantity_point<quantity_point<Unit, ValueType>> : std::true_type
 {
 };
 template <class T>
-constexpr auto is_quantity_point_v = is_quantity_point<T>::value;
+constexpr bool is_quantity_point_v = is_quantity_point<T>::value;
 #pragma endregion
 #pragma region quantity_point class
 //The quantity_point type handles physical quantities. It checks the units

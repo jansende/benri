@@ -25,7 +25,7 @@ struct has_dimensions
     static constexpr auto value = test<T>(0);
 };
 template <class T>
-constexpr auto has_dimensions_v = has_dimensions<T>::value;
+constexpr bool has_dimensions_v = has_dimensions<T>::value;
 //The dimension_is_list function checks if a given type has a ::dimensions
 //attribute which is a list. The check is only done, when the given
 //bool is true.
@@ -46,7 +46,7 @@ struct dimensions_is_list : std::integral_constant<bool, dimensions_is_list_impl
 {
 };
 template <bool Check, class T>
-constexpr auto dimensions_is_list_v = dimensions_is_list<Check, T>::value;
+constexpr bool dimensions_is_list_v = dimensions_is_list<Check, T>::value;
 //The has_valid_dimensions function checks if a given type has a ::dimensions
 //attribute which is a list.
 template <class T>
@@ -54,7 +54,7 @@ struct has_valid_dimensions : std::integral_constant<bool, dimensions_is_list_v<
 {
 };
 template <class T>
-constexpr auto has_valid_dimensions_v = has_valid_dimensions<T>::value;
+constexpr bool has_valid_dimensions_v = has_valid_dimensions<T>::value;
 //The has_type function checks if a type has the ::prefix attribute
 //using SFINAE.
 template <class T>
@@ -68,7 +68,7 @@ struct has_prefix
     static constexpr auto value = test<T>(0);
 };
 template <class T>
-constexpr auto has_prefix_v = has_prefix<T>::value;
+constexpr bool has_prefix_v = has_prefix<T>::value;
 //The prefix_is_list function checks if a given type has a ::prefix
 //attribute which is a list. The check is only done, when the given
 //bool is true.
@@ -89,7 +89,7 @@ struct prefix_is_list : std::integral_constant<bool, prefix_is_list_impl<Check, 
 {
 };
 template <bool Check, class T>
-constexpr auto prefix_is_list_v = prefix_is_list<Check, T>::value;
+constexpr bool prefix_is_list_v = prefix_is_list<Check, T>::value;
 //The has_valid_prefix function checks if a given type has a ::prefix
 //attribute which is a list.
 template <class T>
@@ -97,7 +97,7 @@ struct has_valid_prefix : std::integral_constant<bool, prefix_is_list_v<has_pref
 {
 };
 template <class T>
-constexpr auto has_valid_prefix_v = has_valid_prefix<T>::value;
+constexpr bool has_valid_prefix_v = has_valid_prefix<T>::value;
 //The has_system function checks if a type has the ::system attribute
 //using SFINAE.
 template <class T>
@@ -111,7 +111,7 @@ struct has_system
     static constexpr auto value = test<T>(0);
 };
 template <class T>
-constexpr auto has_system_v = has_system<T>::value;
+constexpr bool has_system_v = has_system<T>::value;
 //The is_unit function checks if a type has a ::dimensions and a ::prefix
 //attribute. This does not mean, we have an unit type, but we do not
 //care, as we can do the necessary calculations.
@@ -120,7 +120,7 @@ struct is_unit : std::integral_constant<bool, has_valid_dimensions_v<T> && has_v
 {
 };
 template <class T>
-constexpr auto is_unit_v = is_unit<T>::value;
+constexpr bool is_unit_v = is_unit<T>::value;
 //TODO: - Put this into a unit test folder.
 auto test_is_unit()
 {
@@ -133,13 +133,13 @@ struct is_dimensionless : std::integral_constant<bool, std::is_same_v<typename T
 {
 };
 template <class T>
-constexpr auto is_dimensionless_v = is_dimensionless<T>::value;
+constexpr bool is_dimensionless_v = is_dimensionless<T>::value;
 template <class T>
 struct is_one : std::integral_constant<bool, std::is_same_v<typename T::dimensions, list<>> && std::is_same_v<typename T::prefix, list<>>>
 {
 };
 template <class T>
-constexpr auto is_one_v = is_one<T>::value;
+constexpr bool is_one_v = is_one<T>::value;
 #pragma endregion
 #pragma region back substitution
 //The back_substituion function provides overloads to simplify
@@ -237,7 +237,7 @@ struct is_equivalent : std::integral_constant<bool, impl::is_equivalent_list_v<t
 {
 };
 template <class L, class R>
-constexpr auto is_equivalent_v = is_equivalent<L, R>::value;
+constexpr bool is_equivalent_v = is_equivalent<L, R>::value;
 #pragma endregion
 #pragma region unit compatibility checker
 //The is_compatible function checks if two units should be handled
@@ -251,7 +251,7 @@ struct is_compatible : std::integral_constant<bool, is_compatible_impl<typename 
 {
 };
 template <class L, class R>
-constexpr auto is_compatible_v = is_compatible<L, R>::value;
+constexpr bool is_compatible_v = is_compatible<L, R>::value;
 #pragma endregion
 #pragma region remove prefix
 template <class T>

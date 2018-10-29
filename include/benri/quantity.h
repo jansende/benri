@@ -21,7 +21,7 @@ struct is_quantity<quantity<Unit, ValueType>> : std::true_type
 {
 };
 template <class T>
-constexpr auto is_quantity_v = is_quantity<T>::value;
+constexpr bool is_quantity_v = is_quantity<T>::value;
 #pragma endregion
 #pragma region quantity class
 //quantity_point forward declaration

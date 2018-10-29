@@ -27,7 +27,7 @@ struct is_list<list<Ts...>> : std::true_type
 {
 };
 template <class T>
-constexpr auto is_list_v = is_list<T>::value;
+constexpr bool is_list_v = is_list<T>::value;
 #pragma endregion
 #pragma region list functions
 #pragma region concat
@@ -126,7 +126,7 @@ struct is_equivalent_list : std::integral_constant<bool, is_equivalent_list_impl
 {
 };
 template <class L, class R>
-constexpr auto is_equivalent_list_v = is_equivalent_list<L, R>::value;
+constexpr bool is_equivalent_list_v = is_equivalent_list<L, R>::value;
 //TODO: - Put this into a unit test folder.
 auto test_equivalent()
 {
@@ -474,7 +474,7 @@ struct expand_list<T, list<Atoms...>>
     static constexpr auto value = product(std::initializer_list<T>{expand_atom_v<T, Atoms>...});
 };
 template <class T, class List>
-constexpr auto expand_list_v = expand_list<T, List>::value;
+constexpr T expand_list_v = expand_list<T, List>::value;
 //TODO: - Put this into a unit test folder.
 auto test_expand_list()
 {
