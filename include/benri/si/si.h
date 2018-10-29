@@ -11,7 +11,7 @@ using namespace benri::si::base;
 #pragma region units
 implement_unit(si, si, natural_unit_of_speed, _natural_unit_of_speed, dim::velocity_t, prefix::speed_of_light_t);
 implement_unit(si, si, knot, _knot, dim::velocity_t, fix(impl::divide_lists_t<prefix::nautical_mile_t,prefix::hour>));
-#pragma region angström, ...(length)
+#pragma region angstroem, ...(length)
 implement_unit(si, si, angstroem, _angstroem, dim::length_t, prefix::angstroem_t);
 implement_unit(si, si, bohr, _bohr, dim::length_t, prefix::bohr_t);
 implement_unit(si, si, nautical_mile, _nautical_mile, dim::length_t, prefix::nautical_mile_t);

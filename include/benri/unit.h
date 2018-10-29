@@ -258,7 +258,7 @@ template <class T>
 struct no_prefix_unit
 {
     static_assert(is_unit_v<T>, "no_prefix_unit takes a unit, but your T is not a unit.");
-    using type = void;
+    using type = back_substitution_t<unit<typename T::system, typename T::dimensions, list<>>>;
 };
 template <class System, class Dimensions, class Prefix>
 struct no_prefix_unit<unit<System, Dimensions, Prefix>>

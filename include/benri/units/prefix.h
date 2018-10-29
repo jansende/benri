@@ -1,7 +1,5 @@
 #pragma once
 #include <benri/config.h>
-#include <benri/quantity.h>
-#include <benri/quantity_point.h>
 #include <benri/unit.h>
 #include <benri/impl/list.h>
 #define _USE_MATH_DEFINES
