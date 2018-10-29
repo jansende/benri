@@ -200,7 +200,7 @@ constexpr auto remquo(xValueType x, quantity<yUnit, yValueType> y, int *quo) -> 
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType, class zUnit, class zValueType>
 constexpr auto fma(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y, quantity<zUnit, zValueType> z) -> quantity<zUnit, decltype(std::fma(x.value(), y.value(), z.value()))>
 {
-    static_assert(std::is_same_v<multiply_units_t<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(is_equivalent_v<multiply_units_t<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units_t<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the fma of quantities with the same value_type.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -211,7 +211,7 @@ constexpr auto fma(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y,
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType, class zUnit, class zValueType>
 constexpr auto fma(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y, quantity_point<zUnit, zValueType> z) -> quantity_point<zUnit, decltype(std::fma(x.value(), y.value(), z.value()))>
 {
-    static_assert(std::is_same_v<multiply_units_t<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(is_equivalent_v<multiply_units_t<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units_t<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the fma of quantities with the same value_type.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -222,7 +222,7 @@ constexpr auto fma(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y,
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType, class zUnit, class zValueType>
 constexpr auto fma(xValueType x, quantity<yUnit, yValueType> y, quantity<zUnit, zValueType> z) -> quantity<zUnit, decltype(std::fma(x, y.value(), z.value()))>
 {
-    static_assert(std::is_same_v<yUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(is_equivalent_v<yUnit, zUnit> || is_compatible_v<yUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the fma of quantities with the same value_type.");
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -233,7 +233,7 @@ constexpr auto fma(xValueType x, quantity<yUnit, yValueType> y, quantity<zUnit, 
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType, class zUnit, class zValueType>
 constexpr auto fma(xValueType x, quantity<yUnit, yValueType> y, quantity_point<zUnit, zValueType> z) -> quantity_point<zUnit, decltype(std::fma(x, y.value(), z.value()))>
 {
-    static_assert(std::is_same_v<yUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(is_equivalent_v<yUnit, zUnit> || is_compatible_v<yUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the fma of quantities with the same value_type.");
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -244,7 +244,7 @@ constexpr auto fma(xValueType x, quantity<yUnit, yValueType> y, quantity_point<z
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType, class zUnit, class zValueType>
 constexpr auto fma(quantity<xUnit, xValueType> x, yValueType y, quantity<zUnit, zValueType> z) -> quantity<zUnit, decltype(std::fma(x.value(), y, z.value()))>
 {
-    static_assert(std::is_same_v<xUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(is_equivalent_v<xUnit, zUnit> || is_compatible_v<xUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the fma of quantities with the same value_type.");
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -255,7 +255,7 @@ constexpr auto fma(quantity<xUnit, xValueType> x, yValueType y, quantity<zUnit, 
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType, class zUnit, class zValueType>
 constexpr auto fma(quantity<xUnit, xValueType> x, yValueType y, quantity_point<zUnit, zValueType> z) -> quantity_point<zUnit, decltype(std::fma(x.value(), y, z.value()))>
 {
-    static_assert(std::is_same_v<xUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(is_equivalent_v<xUnit, zUnit> || is_compatible_v<xUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the fma of quantities with the same value_type.");
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -266,7 +266,7 @@ constexpr auto fma(quantity<xUnit, xValueType> x, yValueType y, quantity_point<z
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType, class zValueType>
 constexpr auto fma(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y, zValueType z) -> quantity<make_one_t<xUnit>, decltype(std::fma(x.value(), y.value(), z))>
 {
-    static_assert(std::is_same_v<multiply_units_t<xUnit, yUnit>, make_one_t<xUnit>>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(is_equivalent_v<multiply_units_t<xUnit, yUnit>, make_one_t<xUnit>>, "You can only calculate the fma of quantities with the units being x*y == z.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the fma of quantities with the same value_type.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -279,7 +279,7 @@ constexpr auto fma(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y,
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto fmax(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> quantity<xUnit, decltype(std::fmax(x.value(), y.value()))>
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the fmax of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the fmax of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmax of quantities with the same value_type.");
     using ResultType = decltype(std::fmax(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -290,7 +290,7 @@ constexpr auto fmax(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto fmax(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> quantity_point<xUnit, decltype(std::fmax(x.value(), y.value()))>
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the fmax of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the fmax of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmax of quantities with the same value_type.");
     using ResultType = decltype(std::fmax(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -301,7 +301,7 @@ constexpr auto fmax(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, y
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
 constexpr auto fmax(xValueType x, quantity<yUnit, yValueType> y) -> quantity<make_one_t<yUnit>, decltype(std::fmax(x, y.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fmax of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fmax of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmax of quantities with the same value_type.");
     using ResultType = decltype(std::fmax(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -312,7 +312,7 @@ constexpr auto fmax(xValueType x, quantity<yUnit, yValueType> y) -> quantity<mak
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
 constexpr auto fmax(xValueType x, quantity_point<yUnit, yValueType> y) -> quantity_point<make_one_t<yUnit>, decltype(std::fmax(x, y.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fmax of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fmax of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmax of quantities with the same value_type.");
     using ResultType = decltype(std::fmax(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -323,7 +323,7 @@ constexpr auto fmax(xValueType x, quantity_point<yUnit, yValueType> y) -> quanti
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
 constexpr auto fmax(quantity<xUnit, xValueType> x, yValueType y) -> quantity<make_one_t<xUnit>, decltype(std::fmax(x.value(), y))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fmax of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fmax of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmax of quantities with the same value_type.");
     using ResultType = decltype(std::fmax(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -334,7 +334,7 @@ constexpr auto fmax(quantity<xUnit, xValueType> x, yValueType y) -> quantity<mak
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
 constexpr auto fmax(quantity_point<xUnit, xValueType> x, yValueType y) -> quantity_point<make_one_t<xUnit>, decltype(std::fmax(x.value(), y))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fmax of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fmax of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmax of quantities with the same value_type.");
     using ResultType = decltype(std::fmax(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -345,7 +345,7 @@ constexpr auto fmax(quantity_point<xUnit, xValueType> x, yValueType y) -> quanti
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto fmin(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> quantity<xUnit, decltype(std::fmin(x.value(), y.value()))>
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the fmin of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the fmin of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmin of quantities with the same value_type.");
     using ResultType = decltype(std::fmin(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -356,7 +356,7 @@ constexpr auto fmin(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto fmin(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> quantity_point<xUnit, decltype(std::fmin(x.value(), y.value()))>
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the fmin of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the fmin of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmin of quantities with the same value_type.");
     using ResultType = decltype(std::fmin(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -367,7 +367,7 @@ constexpr auto fmin(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, y
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
 constexpr auto fmin(xValueType x, quantity<yUnit, yValueType> y) -> quantity<make_one_t<yUnit>, decltype(std::fmin(x, y.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fmin of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fmin of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmin of quantities with the same value_type.");
     using ResultType = decltype(std::fmin(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -378,7 +378,7 @@ constexpr auto fmin(xValueType x, quantity<yUnit, yValueType> y) -> quantity<mak
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
 constexpr auto fmin(xValueType x, quantity_point<yUnit, yValueType> y) -> quantity_point<make_one_t<yUnit>, decltype(std::fmin(x, y.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fmin of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fmin of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmin of quantities with the same value_type.");
     using ResultType = decltype(std::fmin(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -389,7 +389,7 @@ constexpr auto fmin(xValueType x, quantity_point<yUnit, yValueType> y) -> quanti
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
 constexpr auto fmin(quantity<xUnit, xValueType> x, yValueType y) -> quantity<make_one_t<xUnit>, decltype(std::fmin(x.value(), y))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fmin of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fmin of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmin of quantities with the same value_type.");
     using ResultType = decltype(std::fmin(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -400,7 +400,7 @@ constexpr auto fmin(quantity<xUnit, xValueType> x, yValueType y) -> quantity<mak
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
 constexpr auto fmin(quantity_point<xUnit, xValueType> x, yValueType y) -> quantity_point<make_one_t<xUnit>, decltype(std::fmin(x.value(), y))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fmin of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fmin of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fmin of quantities with the same value_type.");
     using ResultType = decltype(std::fmin(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -413,7 +413,7 @@ constexpr auto fmin(quantity_point<xUnit, xValueType> x, yValueType y) -> quanti
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto fdim(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> quantity<xUnit, decltype(std::fdim(x.value(), y.value()))>
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the fdim of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the fdim of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fdim of quantities with the same value_type.");
     using ResultType = decltype(std::fdim(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -424,7 +424,7 @@ constexpr auto fdim(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto fdim(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> quantity<xUnit, decltype(std::fdim(x.value(), y.value()))>
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the fdim of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit>, "You can only calculate the fdim of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fdim of quantities with the same value_type.");
     using ResultType = decltype(std::fdim(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -435,7 +435,7 @@ constexpr auto fdim(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, y
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
 constexpr auto fdim(xValueType x, quantity<yUnit, yValueType> y) -> quantity<make_one_t<yUnit>, decltype(std::fdim(x, y.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fdim of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fdim of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fdim of quantities with the same value_type.");
     using ResultType = decltype(std::fdim(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -446,7 +446,7 @@ constexpr auto fdim(xValueType x, quantity<yUnit, yValueType> y) -> quantity<mak
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
 constexpr auto fdim(xValueType x, quantity_point<yUnit, yValueType> y) -> quantity<make_one_t<yUnit>, decltype(std::fdim(x, y.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fdim of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the fdim of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fdim of quantities with the same value_type.");
     using ResultType = decltype(std::fdim(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -457,7 +457,7 @@ constexpr auto fdim(xValueType x, quantity_point<yUnit, yValueType> y) -> quanti
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
 constexpr auto fdim(quantity<xUnit, xValueType> x, yValueType y) -> quantity<make_one_t<xUnit>, decltype(std::fdim(x.value(), y))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fdim of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fdim of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fdim of quantities with the same value_type.");
     using ResultType = decltype(std::fdim(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -468,7 +468,7 @@ constexpr auto fdim(quantity<xUnit, xValueType> x, yValueType y) -> quantity<mak
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
 constexpr auto fdim(quantity_point<xUnit, xValueType> x, yValueType y) -> quantity<make_one_t<xUnit>, decltype(std::fdim(x.value(), y))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fdim of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the fdim of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the fdim of quantities with the same value_type.");
     using ResultType = decltype(std::fdim(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -644,7 +644,7 @@ constexpr auto cbrt(quantity<Unit, ValueType> val) -> quantity<back_substitution
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto hypot(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> quantity<xUnit, decltype(std::hypot(x.value(), y.value()))>
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -655,7 +655,7 @@ constexpr auto hypot(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> 
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
 constexpr auto hypot(xValueType x, quantity<yUnit, yValueType> y) -> quantity<make_one_t<yUnit>, decltype(std::hypot(x, y.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -666,7 +666,7 @@ constexpr auto hypot(xValueType x, quantity<yUnit, yValueType> y) -> quantity<ma
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
 constexpr auto hypot(quantity<xUnit, xValueType> x, yValueType y) -> quantity<make_one_t<xUnit>, decltype(std::hypot(x.value(), y))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -678,7 +678,7 @@ constexpr auto hypot(quantity<xUnit, xValueType> x, yValueType y) -> quantity<ma
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType, class zUnit, class zValueType>
 constexpr auto hypot(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y, quantity<zUnit, zValueType> z) -> quantity<xUnit, decltype(std::hypot(x.value(), y.value(), z.value()))>
 {
-    static_assert(std::is_same_v<xUnit, yUnit> && std::is_same_v<yUnit, zUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert((is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>)&&(is_equivalent_v<yUnit, zUnit> || is_compatible_v<yUnit, zUnit>), "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x.value(), y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -689,7 +689,7 @@ constexpr auto hypot(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> 
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType, class zUnit, class zValueType>
 constexpr auto hypot(xValueType x, quantity<yUnit, yValueType> y, quantity<zUnit, zValueType> z) -> quantity<make_one_t<yUnit>, decltype(std::hypot(x, y.value(), z.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit> && std::is_same_v<yUnit, zUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit> && is_equivalent_v<yUnit, zUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x, y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -700,7 +700,7 @@ constexpr auto hypot(xValueType x, quantity<yUnit, yValueType> y, quantity<zUnit
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType, class zUnit, class zValueType>
 constexpr auto hypot(quantity<xUnit, xValueType> x, yValueType y, quantity<zUnit, zValueType> z) -> quantity<make_one_t<xUnit>, decltype(std::hypot(x.value(), y, z.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit> && std::is_same_v<xUnit, zUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit> && is_equivalent_v<xUnit, zUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x.value(), y, z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -711,7 +711,7 @@ constexpr auto hypot(quantity<xUnit, xValueType> x, yValueType y, quantity<zUnit
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType, class zValueType>
 constexpr auto hypot(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y, zValueType z) -> quantity<make_one_t<xUnit>, decltype(std::hypot(x.value(), y.value(), z))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit> && std::is_same_v<xUnit, yUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit> && is_equivalent_v<xUnit, yUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x.value(), y.value(), z));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -722,7 +722,7 @@ constexpr auto hypot(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> 
 template <bool AllowImplicitConversion = false, class xValueType, class yValueType, class zUnit, class zValueType>
 constexpr auto hypot(xValueType x, yValueType y, quantity<zUnit, zValueType> z) -> quantity<make_one_t<zUnit>, decltype(std::hypot(x, y, z.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<zUnit>, zUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<zUnit>, zUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x, y, z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -733,7 +733,7 @@ constexpr auto hypot(xValueType x, yValueType y, quantity<zUnit, zValueType> z) 
 template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType, class zValueType>
 constexpr auto hypot(xValueType x, quantity<yUnit, yValueType> y, zValueType z) -> quantity<make_one_t<yUnit>, decltype(std::hypot(x, y.value(), z))>
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x, y.value(), z));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -744,7 +744,7 @@ constexpr auto hypot(xValueType x, quantity<yUnit, yValueType> y, zValueType z) 
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType, class zValueType>
 constexpr auto hypot(quantity<xUnit, xValueType> x, yValueType y, zValueType z) -> quantity<make_one_t<xUnit>, decltype(std::hypot(x.value(), y, z))>
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the hypot of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the hypot of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType> && std::is_same_v<yValueType, zValueType>, "You can only calculate the hypot of quantities with the same value_type.");
     using ResultType = decltype(std::hypot(x.value(), y, z));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1247,7 +1247,7 @@ constexpr auto logb(quantity_point<Unit, ValueType> val)
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toUnit, class toValueType>
 constexpr auto nextafter(quantity<fromUnit, fromValueType> from, quantity<toUnit, toValueType> to) -> quantity<fromUnit, decltype(std::nextafter(from.value(), to.value()))>
 {
-    static_assert(std::is_same_v<fromUnit, toUnit>, "You can only calculate the nextafter of quantities with the same unit.");
+    static_assert(is_equivalent_v<fromUnit, toUnit> || is_compatible_v<fromUnit, toUnit>, "You can only calculate the nextafter of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nextafter of quantities with the same value_type.");
     using ResultType = decltype(std::nextafter(from.value(), to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1258,7 +1258,7 @@ constexpr auto nextafter(quantity<fromUnit, fromValueType> from, quantity<toUnit
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toUnit, class toValueType>
 constexpr auto nextafter(quantity_point<fromUnit, fromValueType> from, quantity_point<toUnit, toValueType> to) -> quantity_point<fromUnit, decltype(std::nextafter(from.value(), to.value()))>
 {
-    static_assert(std::is_same_v<fromUnit, toUnit>, "You can only calculate the nextafter of quantities with the same unit.");
+    static_assert(is_equivalent_v<fromUnit, toUnit>, "You can only calculate the nextafter of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nextafter of quantities with the same value_type.");
     using ResultType = decltype(std::nextafter(from.value(), to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1269,7 +1269,7 @@ constexpr auto nextafter(quantity_point<fromUnit, fromValueType> from, quantity_
 template <bool AllowImplicitConversion = false, class fromValueType, class toUnit, class toValueType>
 constexpr auto nextafter(fromValueType from, quantity<toUnit, toValueType> to) -> quantity<make_one_t<toUnit>, decltype(std::nextafter(from, to.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<toUnit>, toUnit>, "You can only calculate the nextafter of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<toUnit>, toUnit>, "You can only calculate the nextafter of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nextafter of quantities with the same value_type.");
     using ResultType = decltype(std::nextafter(from, to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1280,7 +1280,7 @@ constexpr auto nextafter(fromValueType from, quantity<toUnit, toValueType> to) -
 template <bool AllowImplicitConversion = false, class fromValueType, class toUnit, class toValueType>
 constexpr auto nextafter(fromValueType from, quantity_point<toUnit, toValueType> to) -> quantity_point<make_one_t<toUnit>, decltype(std::nextafter(from, to.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<toUnit>, toUnit>, "You can only calculate the nextafter of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<toUnit>, toUnit>, "You can only calculate the nextafter of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nextafter of quantities with the same value_type.");
     using ResultType = decltype(std::nextafter(from, to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1291,7 +1291,7 @@ constexpr auto nextafter(fromValueType from, quantity_point<toUnit, toValueType>
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toValueType>
 constexpr auto nextafter(quantity<fromUnit, fromValueType> from, toValueType to) -> quantity<make_one_t<fromUnit>, decltype(std::nextafter(from.value(), to))>
 {
-    static_assert(std::is_same_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the nextafter of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the nextafter of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nextafter of quantities with the same value_type.");
     using ResultType = decltype(std::nextafter(from.value(), to));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1302,7 +1302,7 @@ constexpr auto nextafter(quantity<fromUnit, fromValueType> from, toValueType to)
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toValueType>
 constexpr auto nextafter(quantity_point<fromUnit, fromValueType> from, toValueType to) -> quantity_point<make_one_t<fromUnit>, decltype(std::nextafter(from.value(), to))>
 {
-    static_assert(std::is_same_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the nextafter of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the nextafter of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nextafter of quantities with the same value_type.");
     using ResultType = decltype(std::nextafter(from.value(), to));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1313,7 +1313,7 @@ constexpr auto nextafter(quantity_point<fromUnit, fromValueType> from, toValueTy
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toUnit, class toValueType>
 constexpr auto nexttoward(quantity<fromUnit, fromValueType> from, quantity<toUnit, toValueType> to) -> quantity<fromUnit, decltype(std::nexttoward(from.value(), to.value()))>
 {
-    static_assert(std::is_same_v<fromUnit, toUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
+    static_assert(is_equivalent_v<fromUnit, toUnit> || is_compatible_v<fromUnit, toUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nexttoward of quantities with the same value_type.");
     using ResultType = decltype(std::nexttoward(from.value(), to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1324,7 +1324,7 @@ constexpr auto nexttoward(quantity<fromUnit, fromValueType> from, quantity<toUni
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toUnit, class toValueType>
 constexpr auto nexttoward(quantity_point<fromUnit, fromValueType> from, quantity_point<toUnit, toValueType> to) -> quantity_point<fromUnit, decltype(std::nexttoward(from.value(), to.value()))>
 {
-    static_assert(std::is_same_v<fromUnit, toUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
+    static_assert(is_equivalent_v<fromUnit, toUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nexttoward of quantities with the same value_type.");
     using ResultType = decltype(std::nexttoward(from.value(), to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1335,7 +1335,7 @@ constexpr auto nexttoward(quantity_point<fromUnit, fromValueType> from, quantity
 template <bool AllowImplicitConversion = false, class fromValueType, class toUnit, class toValueType>
 constexpr auto nexttoward(fromValueType from, quantity<toUnit, toValueType> to) -> quantity<make_one_t<toUnit>, decltype(std::nexttoward(from, to.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<toUnit>, toUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<toUnit>, toUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nexttoward of quantities with the same value_type.");
     using ResultType = decltype(std::nexttoward(from, to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1346,7 +1346,7 @@ constexpr auto nexttoward(fromValueType from, quantity<toUnit, toValueType> to) 
 template <bool AllowImplicitConversion = false, class fromValueType, class toUnit, class toValueType>
 constexpr auto nexttoward(fromValueType from, quantity_point<toUnit, toValueType> to) -> quantity_point<make_one_t<toUnit>, decltype(std::nexttoward(from, to.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<toUnit>, toUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<toUnit>, toUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nexttoward of quantities with the same value_type.");
     using ResultType = decltype(std::nexttoward(from, to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1357,7 +1357,7 @@ constexpr auto nexttoward(fromValueType from, quantity_point<toUnit, toValueType
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toValueType>
 constexpr auto nexttoward(quantity<fromUnit, fromValueType> from, toValueType to) -> quantity<make_one_t<fromUnit>, decltype(std::nexttoward(from.value(), to))>
 {
-    static_assert(std::is_same_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nexttoward of quantities with the same value_type.");
     using ResultType = decltype(std::nexttoward(from.value(), to));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1368,7 +1368,7 @@ constexpr auto nexttoward(quantity<fromUnit, fromValueType> from, toValueType to
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toValueType>
 constexpr auto nexttoward(quantity_point<fromUnit, fromValueType> from, toValueType to) -> quantity_point<make_one_t<fromUnit>, decltype(std::nexttoward(from.value(), to))>
 {
-    static_assert(std::is_same_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the nexttoward of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the nexttoward of quantities with the same value_type.");
     using ResultType = decltype(std::nexttoward(from.value(), to));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1379,7 +1379,7 @@ constexpr auto nexttoward(quantity_point<fromUnit, fromValueType> from, toValueT
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toUnit, class toValueType>
 constexpr auto copysign(quantity<fromUnit, fromValueType> from, quantity<toUnit, toValueType> to) -> quantity<fromUnit, decltype(std::copysign(from.value(), to.value()))>
 {
-    static_assert(std::is_same_v<fromUnit, toUnit>, "You can only calculate the copysign of quantities with the same unit.");
+    static_assert(is_equivalent_v<fromUnit, toUnit> || is_compatible_v<fromUnit, toUnit>, "You can only calculate the copysign of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the copysign of quantities with the same value_type.");
     using ResultType = decltype(std::copysign(from.value(), to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1390,7 +1390,7 @@ constexpr auto copysign(quantity<fromUnit, fromValueType> from, quantity<toUnit,
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toUnit, class toValueType>
 constexpr auto copysign(quantity_point<fromUnit, fromValueType> from, quantity_point<toUnit, toValueType> to) -> quantity_point<fromUnit, decltype(std::copysign(from.value(), to.value()))>
 {
-    static_assert(std::is_same_v<fromUnit, toUnit>, "You can only calculate the copysign of quantities with the same unit.");
+    static_assert(is_equivalent_v<fromUnit, toUnit>, "You can only calculate the copysign of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the copysign of quantities with the same value_type.");
     using ResultType = decltype(std::copysign(from.value(), to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1401,7 +1401,7 @@ constexpr auto copysign(quantity_point<fromUnit, fromValueType> from, quantity_p
 template <bool AllowImplicitConversion = false, class fromValueType, class toUnit, class toValueType>
 constexpr auto copysign(fromValueType from, quantity<toUnit, toValueType> to) -> quantity<make_one_t<toUnit>, decltype(std::copysign(from, to.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<toUnit>, toUnit>, "You can only calculate the copysign of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<toUnit>, toUnit>, "You can only calculate the copysign of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the copysign of quantities with the same value_type.");
     using ResultType = decltype(std::copysign(from, to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1412,7 +1412,7 @@ constexpr auto copysign(fromValueType from, quantity<toUnit, toValueType> to) ->
 template <bool AllowImplicitConversion = false, class fromValueType, class toUnit, class toValueType>
 constexpr auto copysign(fromValueType from, quantity_point<toUnit, toValueType> to) -> quantity_point<make_one_t<toUnit>, decltype(std::copysign(from, to.value()))>
 {
-    static_assert(std::is_same_v<make_one_t<toUnit>, toUnit>, "You can only calculate the copysign of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<toUnit>, toUnit>, "You can only calculate the copysign of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the copysign of quantities with the same value_type.");
     using ResultType = decltype(std::copysign(from, to.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1423,7 +1423,7 @@ constexpr auto copysign(fromValueType from, quantity_point<toUnit, toValueType> 
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toValueType>
 constexpr auto copysign(quantity<fromUnit, fromValueType> from, toValueType to) -> quantity<make_one_t<fromUnit>, decltype(std::copysign(from.value(), to))>
 {
-    static_assert(std::is_same_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the copysign of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the copysign of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the copysign of quantities with the same value_type.");
     using ResultType = decltype(std::copysign(from.value(), to));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1434,7 +1434,7 @@ constexpr auto copysign(quantity<fromUnit, fromValueType> from, toValueType to) 
 template <bool AllowImplicitConversion = false, class fromUnit, class fromValueType, class toValueType>
 constexpr auto copysign(quantity_point<fromUnit, fromValueType> from, toValueType to) -> quantity_point<make_one_t<fromUnit>, decltype(std::copysign(from.value(), to))>
 {
-    static_assert(std::is_same_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the copysign of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<fromUnit>, fromUnit>, "You can only calculate the copysign of quantities with the same unit.");
     static_assert(std::is_same_v<fromValueType, toValueType>, "You can only calculate the copysign of quantities with the same value_type.");
     using ResultType = decltype(std::copysign(from.value(), to));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1511,252 +1511,252 @@ constexpr auto signbit(quantity_point<Unit, ValueType> val) -> decltype(std::sig
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto isgreater(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> decltype(std::isgreater(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the isgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the isgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreater of quantities with the same value_type.");
     return std::isgreater(x.value(), y.value());
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto isgreater(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> decltype(std::isgreater(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the isgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit>, "You can only calculate the isgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreater of quantities with the same value_type.");
     return std::isgreater(x.value(), y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto isgreater(xValueType x, quantity<yUnit, yValueType> y) -> decltype(std::isgreater(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreater of quantities with the same value_type.");
     return std::isgreater(x, y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto isgreater(xValueType x, quantity_point<yUnit, yValueType> y) -> decltype(std::isgreater(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreater of quantities with the same value_type.");
     return std::isgreater(x, y.value());
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto isgreater(quantity<xUnit, xValueType> x, yValueType y) -> decltype(std::isgreater(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreater of quantities with the same value_type.");
     return std::isgreater(x.value(), y);
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto isgreater(quantity_point<xUnit, xValueType> x, yValueType y) -> decltype(std::isgreater(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreater of quantities with the same value_type.");
     return std::isgreater(x.value(), y);
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto isgreaterequal(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> decltype(std::isgreaterequal(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreaterequal of quantities with the same value_type.");
     return std::isgreaterequal(x.value(), y.value());
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto isgreaterequal(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> decltype(std::isgreaterequal(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreaterequal of quantities with the same value_type.");
     return std::isgreaterequal(x.value(), y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto isgreaterequal(xValueType x, quantity<yUnit, yValueType> y) -> decltype(std::isgreaterequal(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreaterequal of quantities with the same value_type.");
     return std::isgreaterequal(x, y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto isgreaterequal(xValueType x, quantity_point<yUnit, yValueType> y) -> decltype(std::isgreaterequal(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreaterequal of quantities with the same value_type.");
     return std::isgreaterequal(x, y.value());
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto isgreaterequal(quantity<xUnit, xValueType> x, yValueType y) -> decltype(std::isgreaterequal(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreaterequal of quantities with the same value_type.");
     return std::isgreaterequal(x.value(), y);
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto isgreaterequal(quantity_point<xUnit, xValueType> x, yValueType y) -> decltype(std::isgreaterequal(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isgreaterequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isgreaterequal of quantities with the same value_type.");
     return std::isgreaterequal(x.value(), y);
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto isless(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> decltype(std::isless(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the isless of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the isless of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isless of quantities with the same value_type.");
     return std::isless(x.value(), y.value());
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto isless(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> decltype(std::isless(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the isless of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit>, "You can only calculate the isless of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isless of quantities with the same value_type.");
     return std::isless(x.value(), y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto isless(xValueType x, quantity<yUnit, yValueType> y) -> decltype(std::isless(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isless of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isless of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isless of quantities with the same value_type.");
     return std::isless(x, y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto isless(xValueType x, quantity_point<yUnit, yValueType> y) -> decltype(std::isless(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isless of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isless of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isless of quantities with the same value_type.");
     return std::isless(x, y.value());
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto isless(quantity<xUnit, xValueType> x, yValueType y) -> decltype(std::isless(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isless of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isless of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isless of quantities with the same value_type.");
     return std::isless(x.value(), y);
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto isless(quantity_point<xUnit, xValueType> x, yValueType y) -> decltype(std::isless(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isless of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isless of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isless of quantities with the same value_type.");
     return std::isless(x.value(), y);
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto islessequal(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> decltype(std::islessequal(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the islessequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the islessequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessequal of quantities with the same value_type.");
     return std::islessequal(x.value(), y.value());
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto islessequal(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> decltype(std::islessequal(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the islessequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit>, "You can only calculate the islessequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessequal of quantities with the same value_type.");
     return std::islessequal(x.value(), y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto islessequal(xValueType x, quantity<yUnit, yValueType> y) -> decltype(std::islessequal(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the islessequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the islessequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessequal of quantities with the same value_type.");
     return std::islessequal(x, y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto islessequal(xValueType x, quantity_point<yUnit, yValueType> y) -> decltype(std::islessequal(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the islessequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the islessequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessequal of quantities with the same value_type.");
     return std::islessequal(x, y.value());
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto islessequal(quantity<xUnit, xValueType> x, yValueType y) -> decltype(std::islessequal(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the islessequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the islessequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessequal of quantities with the same value_type.");
     return std::islessequal(x.value(), y);
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto islessequal(quantity_point<xUnit, xValueType> x, yValueType y) -> decltype(std::islessequal(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the islessequal of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the islessequal of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessequal of quantities with the same value_type.");
     return std::islessequal(x.value(), y);
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto islessgreater(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> decltype(std::islessgreater(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessgreater of quantities with the same value_type.");
     return std::islessgreater(x.value(), y.value());
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto islessgreater(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> decltype(std::islessgreater(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessgreater of quantities with the same value_type.");
     return std::islessgreater(x.value(), y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto islessgreater(xValueType x, quantity<yUnit, yValueType> y) -> decltype(std::islessgreater(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessgreater of quantities with the same value_type.");
     return std::islessgreater(x, y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto islessgreater(xValueType x, quantity_point<yUnit, yValueType> y) -> decltype(std::islessgreater(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessgreater of quantities with the same value_type.");
     return std::islessgreater(x, y.value());
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto islessgreater(quantity<xUnit, xValueType> x, yValueType y) -> decltype(std::islessgreater(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessgreater of quantities with the same value_type.");
     return std::islessgreater(x.value(), y);
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto islessgreater(quantity_point<xUnit, xValueType> x, yValueType y) -> decltype(std::islessgreater(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the islessgreater of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the islessgreater of quantities with the same value_type.");
     return std::islessgreater(x.value(), y);
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto isunordered(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> decltype(std::isunordered(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the isunordered of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the isunordered of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isunordered of quantities with the same value_type.");
     return std::isunordered(x.value(), y.value());
 }
 template <class xUnit, class xValueType, class yUnit, class yValueType>
 constexpr auto isunordered(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> decltype(std::isunordered(x.value(), y.value()))
 {
-    static_assert(std::is_same_v<xUnit, yUnit>, "You can only calculate the isunordered of quantities with the same unit.");
+    static_assert(is_equivalent_v<xUnit, yUnit>, "You can only calculate the isunordered of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isunordered of quantities with the same value_type.");
     return std::isunordered(x.value(), y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto isunordered(xValueType x, quantity<yUnit, yValueType> y) -> decltype(std::isunordered(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isunordered of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isunordered of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isunordered of quantities with the same value_type.");
     return std::isunordered(x, y.value());
 }
 template <class xValueType, class yUnit, class yValueType>
 constexpr auto isunordered(xValueType x, quantity_point<yUnit, yValueType> y) -> decltype(std::isunordered(x, y.value()))
 {
-    static_assert(std::is_same_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isunordered of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the isunordered of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isunordered of quantities with the same value_type.");
     return std::isunordered(x, y.value());
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto isunordered(quantity<xUnit, xValueType> x, yValueType y) -> decltype(std::isunordered(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isunordered of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isunordered of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isunordered of quantities with the same value_type.");
     return std::isunordered(x.value(), y);
 }
 template <class xUnit, class xValueType, class yValueType>
 constexpr auto isunordered(quantity_point<xUnit, xValueType> x, yValueType y) -> decltype(std::isunordered(x.value(), y))
 {
-    static_assert(std::is_same_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isunordered of quantities with the same unit.");
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the isunordered of quantities with the same unit.");
     static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the isunordered of quantities with the same value_type.");
     return std::isunordered(x.value(), y);
 }

@@ -242,8 +242,12 @@ constexpr auto is_equivalent_v = is_equivalent<L, R>::value;
 #pragma region unit compatibility checker
 //The is_compatible function checks if two units should be handled
 //as if they are equivalent, even if they are not.
+template <class LSystem, class LDimensions, class LPrefix, class RSystem, class RDimensions, class RPrefix, class Enable = void>
+struct is_compatible_impl : std::false_type
+{
+};
 template <class L, class R>
-struct is_compatible : std::false_type
+struct is_compatible : std::integral_constant<bool, is_compatible_impl<typename L::system, typename L::dimensions, typename L::prefix, typename R::system, typename R::dimensions, typename R::prefix>::value>
 {
 };
 template <class L, class R>

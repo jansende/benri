@@ -153,176 +153,10 @@ implement_subunit(si, si, base, zettacelsius, _zettacelsius, dim::celsius_temper
 implement_subunit(si, si, base, yottacelsius, _yottacelsius, dim::celsius_temperature_t, prefix::yotta);
 } // namespace base
 } // namespace si
-template <>
-struct is_compatible<si::base::yoctokelvin, si::base::yoctocelsius> : std::true_type
+template <class System, class lhsDimensions, class rhsDimensions, class Prefix>
+struct is_compatible_impl<System, lhsDimensions, Prefix, System, rhsDimensions, Prefix, std::enable_if_t<(impl::is_equivalent_list_v<lhsDimensions, dim::celsius_temperature_t> && impl::is_equivalent_list_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (impl::is_equivalent_list_v<lhsDimensions, dim::thermodynamic_temperature_t> && impl::is_equivalent_list_v<rhsDimensions, dim::celsius_temperature_t>)>> : std::true_type
 {
 };
-template <>
-struct is_compatible<si::base::zeptokelvin, si::base::zeptocelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::attokelvin, si::base::attocelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::femtokelvin, si::base::femtocelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::picokelvin, si::base::picocelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::nanokelvin, si::base::nanocelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::microkelvin, si::base::microcelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::millikelvin, si::base::millicelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::centikelvin, si::base::centicelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::decikelvin, si::base::decicelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::kelvin, si::base::celsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::decakelvin, si::base::decacelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::hectokelvin, si::base::hectocelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::kilokelvin, si::base::kilocelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::megakelvin, si::base::megacelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::gigakelvin, si::base::gigacelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::terakelvin, si::base::teracelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::petakelvin, si::base::petacelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::exakelvin, si::base::exacelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::zettakelvin, si::base::zettacelsius> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::yottakelvin, si::base::yottacelsius> : std::true_type
-{
-};
-
-template <>
-struct is_compatible<si::base::yoctocelsius, si::base::yoctokelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::zeptocelsius, si::base::zeptokelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::attocelsius, si::base::attokelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::femtocelsius, si::base::femtokelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::picocelsius, si::base::picokelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::nanocelsius, si::base::nanokelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::microcelsius, si::base::microkelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::millicelsius, si::base::millikelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::centicelsius, si::base::centikelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::decicelsius, si::base::decikelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::celsius, si::base::kelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::decacelsius, si::base::decakelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::hectocelsius, si::base::hectokelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::kilocelsius, si::base::kilokelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::megacelsius, si::base::megakelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::gigacelsius, si::base::gigakelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::teracelsius, si::base::terakelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::petacelsius, si::base::petakelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::exacelsius, si::base::exakelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::zettacelsius, si::base::zettakelvin> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::yottacelsius, si::base::yottakelvin> : std::true_type
-{
-};
-
 namespace si
 {
 namespace base
@@ -375,176 +209,10 @@ implement_subunit(si, si, base, zettafahrenheit, _zettafahrenheit, dim::fahrenhe
 implement_subunit(si, si, base, yottafahrenheit, _yottafahrenheit, dim::fahrenheit_temperature_t, prefix::yotta);
 } // namespace base
 } // namespace si
-template <>
-struct is_compatible<si::base::yoctorankine, si::base::yoctofahrenheit> : std::true_type
+template <class System, class lhsDimensions, class lhsPrefix, class rhsDimensions, class rhsPrefix>
+struct is_compatible_impl<System, lhsDimensions, lhsPrefix, System, rhsDimensions, rhsPrefix, std::enable_if_t<((impl::is_equivalent_list_v<lhsDimensions, dim::fahrenheit_temperature_t> && impl::is_equivalent_list_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (impl::is_equivalent_list_v<lhsDimensions, dim::thermodynamic_temperature_t> && impl::is_equivalent_list_v<rhsDimensions, dim::fahrenheit_temperature_t>)) && ((impl::is_equivalent_list_v<lhsPrefix, impl::multiply_lists_t<rhsPrefix, prefix::rankine_t>>) || (impl::is_equivalent_list_v<impl::multiply_lists_t<lhsPrefix, prefix::rankine_t>, rhsPrefix>))>> : std::true_type
 {
 };
-template <>
-struct is_compatible<si::base::zeptorankine, si::base::zeptofahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::attorankine, si::base::attofahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::femtorankine, si::base::femtofahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::picorankine, si::base::picofahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::nanorankine, si::base::nanofahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::microrankine, si::base::microfahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::millirankine, si::base::millifahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::centirankine, si::base::centifahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::decirankine, si::base::decifahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::rankine, si::base::fahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::decarankine, si::base::decafahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::hectorankine, si::base::hectofahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::kilorankine, si::base::kilofahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::megarankine, si::base::megafahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::gigarankine, si::base::gigafahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::terarankine, si::base::terafahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::petarankine, si::base::petafahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::exarankine, si::base::exafahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::zettarankine, si::base::zettafahrenheit> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::yottarankine, si::base::yottafahrenheit> : std::true_type
-{
-};
-
-template <>
-struct is_compatible<si::base::yoctofahrenheit, si::base::yoctorankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::zeptofahrenheit, si::base::zeptorankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::attofahrenheit, si::base::attorankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::femtofahrenheit, si::base::femtorankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::picofahrenheit, si::base::picorankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::nanofahrenheit, si::base::nanorankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::microfahrenheit, si::base::microrankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::millifahrenheit, si::base::millirankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::centifahrenheit, si::base::centirankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::decifahrenheit, si::base::decirankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::fahrenheit, si::base::rankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::decafahrenheit, si::base::decarankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::hectofahrenheit, si::base::hectorankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::kilofahrenheit, si::base::kilorankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::megafahrenheit, si::base::megarankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::gigafahrenheit, si::base::gigarankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::terafahrenheit, si::base::terarankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::petafahrenheit, si::base::petarankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::exafahrenheit, si::base::exarankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::zettafahrenheit, si::base::zettarankine> : std::true_type
-{
-};
-template <>
-struct is_compatible<si::base::yottafahrenheit, si::base::yottarankine> : std::true_type
-{
-};
-
 namespace si
 {
 namespace base
@@ -555,136 +223,123 @@ link_unit_point(degree_kelvin, _degree_kelvin, kelvin);
 #pragma endregion
 #pragma region degree celsius(thermodynamic temperature)
 link_unit_point(degree_celsius, _degree_celsius, celsius);
+#pragma endregion
+#pragma region degree_rankine(thermodynamic temperature)
+link_unit_point(degree_rankine, _degree_rankine, rankine);
+#pragma region degree fahrenheit(thermodynamic temperature)
+link_unit_point(degree_fahrenheit, _degree_fahrenheit, fahrenheit);
+#pragma endregion
+#pragma region simple_cast / unit_cast overloads
 //conversion overload (we need an actual overload, because partial function template specialization is not allowed)
+//celsius to kelvin
 template <class ResultUnit, class ValueType>
 constexpr auto simple_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
 {
-    //calculation
     return quantity_point<degree_kelvin, ValueType>{rhs.value() + static_cast<ValueType>(prefix::absolute_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_celsius, ValueType>{rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto unit_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
 {
-    //calculation
-    return quantity_point<degree_kelvin, ValueType>{rhs.value() + static_cast<ValueType>(prefix::absolute_zero::value)};
+    return simple_cast<degree_kelvin>(rhs);
+}
+//kelvin to celsius
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    return quantity_point<degree_celsius, ValueType>{rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto unit_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
 {
-    //calculation
-    return quantity_point<degree_celsius, ValueType>{rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
+    return simple_cast<degree_celsius>(rhs);
 }
-#pragma endregion
-#pragma region degree_rankine(thermodynamic temperature)
-link_unit_point(degree_rankine, _degree_rankine, rankine);
-#pragma endregion
-#pragma region degree fahrenheit(thermodynamic temperature)
-link_unit_point(degree_fahrenheit, _degree_fahrenheit, fahrenheit);
-//conversion overload (we need an actual overload, because partial function template specialization is not allowed)
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_kelvin, ValueType>{(rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)) / static_cast<ValueType>(prefix::rankine::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() * static_cast<ValueType>(prefix::rankine::value) + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_kelvin, ValueType>{(rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)) / static_cast<ValueType>(prefix::rankine::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() * static_cast<ValueType>(prefix::rankine::value) + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
-{
-    //calculation
-    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
-{
-    //calculation
-    return simple_cast<degree_fahrenheit>(simple_cast<degree_kelvin>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
-{
-    //calculation
-    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
-{
-    //calculation
-    return simple_cast<degree_fahrenheit>(simple_cast<degree_kelvin>(rhs));
-}
-#pragma endregion
-#pragma region degree_rankine(thermodynamic temperature)
-//conversion overload (we need an actual overload, because partial function template specialization is not allowed)
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_rankine, ValueType>{rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_rankine, ValueType>{rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
-{
-    //calculation
-    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
-{
-    //calculation
-    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
-}
+//celsius to rankine
 template <class ResultUnit, class ValueType>
 constexpr auto simple_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
 {
-    //calculation
     return simple_cast<degree_rankine>(simple_cast<degree_kelvin>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
-{
-    //calculation
-    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
 }
 template <class ResultUnit, class ValueType>
 constexpr auto unit_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
 {
-    //calculation
+    return simple_cast<degree_rankine>(rhs);
+}
+//rankine to celsius
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    return simple_cast<degree_celsius>(rhs);
+}
+//fahrenheit to kelvin
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
+{
+    return quantity_point<degree_kelvin, ValueType>{(rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)) / static_cast<ValueType>(prefix::rankine::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin>, quantity_point<degree_kelvin, ValueType>>
+{
+    return simple_cast<degree_kelvin>(rhs);
+}
+//kelvin to fahrenheit
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    return quantity_point<degree_fahrenheit, ValueType>{rhs.value() * static_cast<ValueType>(prefix::rankine::value) + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_kelvin, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    return simple_cast<degree_fahrenheit>(rhs);
+}
+//fahrenheit to celsius
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    return simple_cast<degree_celsius>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius>, quantity_point<degree_celsius, ValueType>>
+{
+    return simple_cast<degree_celsius>(rhs);
+}
+//celsius to fahrenheit
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    return simple_cast<degree_fahrenheit>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_celsius, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    return simple_cast<degree_fahrenheit>(rhs);
+}
+//fahrenheit to rankine
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
+{
     return simple_cast<degree_rankine>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_fahrenheit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine>, quantity_point<degree_rankine, ValueType>>
+{
+    return simple_cast<degree_rankine>(rhs);
+}
+//rankine to fahrenheit
+template <class ResultUnit, class ValueType>
+constexpr auto simple_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    return simple_cast<degree_fahrenheit>(simple_cast<degree_kelvin>(rhs));
+}
+template <class ResultUnit, class ValueType>
+constexpr auto unit_cast(const quantity_point<degree_rankine, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit>, quantity_point<degree_fahrenheit, ValueType>>
+{
+    return simple_cast<degree_fahrenheit>(rhs);
 }
 #pragma endregion
 #pragma region mole(amount of substance)
