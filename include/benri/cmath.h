@@ -7,6 +7,7 @@
 #include <benri/impl/list.h>
 #include <cstdlib>
 #include <cmath>
+#include <algorithm>
 
 namespace benri
 {
@@ -64,6 +65,142 @@ using make_plane_angle_t = back_substitution_t<unit<typename Unit::system, typen
 //input. Thus, only an error message for the faulty input is shown, and none
 //for the code which depends on the result of the atan2 call. (Which might be
 //deduced wrongly from the input.)
+#pragma region standard min/max
+//The max, and min functions return the max/min of two quantities with
+//the same unit.
+template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
+constexpr auto max(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> quantity<xUnit, decltype(std::max(x.value(), y.value()))>
+{
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the max of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the max of quantities with the same value_type.");
+    using ResultType = decltype(std::max(x.value(), y.value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<xUnit, ResultType>{std::max(x.value(), y.value())};
+}
+template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
+constexpr auto max(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> quantity_point<xUnit, decltype(std::max(x.value(), y.value()))>
+{
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the max of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the max of quantities with the same value_type.");
+    using ResultType = decltype(std::max(x.value(), y.value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity_point<xUnit, ResultType>{std::max(x.value(), y.value())};
+}
+template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
+constexpr auto max(xValueType x, quantity<yUnit, yValueType> y) -> quantity<make_one_t<yUnit>, decltype(std::max(x, y.value()))>
+{
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the max of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the max of quantities with the same value_type.");
+    using ResultType = decltype(std::max(x, y.value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<make_one_t<yUnit>, ResultType>{std::max(x, y.value())};
+}
+template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
+constexpr auto max(xValueType x, quantity_point<yUnit, yValueType> y) -> quantity_point<make_one_t<yUnit>, decltype(std::max(x, y.value()))>
+{
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the max of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the max of quantities with the same value_type.");
+    using ResultType = decltype(std::max(x, y.value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity_point<make_one_t<yUnit>, ResultType>{std::max(x, y.value())};
+}
+template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
+constexpr auto max(quantity<xUnit, xValueType> x, yValueType y) -> quantity<make_one_t<xUnit>, decltype(std::max(x.value(), y))>
+{
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the max of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the max of quantities with the same value_type.");
+    using ResultType = decltype(std::max(x.value(), y));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<make_one_t<xUnit>, ResultType>{std::max(x.value(), y)};
+}
+template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
+constexpr auto max(quantity_point<xUnit, xValueType> x, yValueType y) -> quantity_point<make_one_t<xUnit>, decltype(std::max(x.value(), y))>
+{
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the max of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the max of quantities with the same value_type.");
+    using ResultType = decltype(std::max(x.value(), y));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity_point<make_one_t<xUnit>, ResultType>{std::max(x.value(), y)};
+}
+template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
+constexpr auto min(quantity<xUnit, xValueType> x, quantity<yUnit, yValueType> y) -> quantity<xUnit, decltype(std::min(x.value(), y.value()))>
+{
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the min of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the min of quantities with the same value_type.");
+    using ResultType = decltype(std::min(x.value(), y.value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<xUnit, ResultType>{std::min(x.value(), y.value())};
+}
+template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
+constexpr auto min(quantity_point<xUnit, xValueType> x, quantity_point<yUnit, yValueType> y) -> quantity_point<xUnit, decltype(std::min(x.value(), y.value()))>
+{
+    static_assert(is_equivalent_v<xUnit, yUnit> || is_compatible_v<xUnit, yUnit>, "You can only calculate the min of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the min of quantities with the same value_type.");
+    using ResultType = decltype(std::min(x.value(), y.value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity_point<xUnit, ResultType>{std::min(x.value(), y.value())};
+}
+template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
+constexpr auto min(xValueType x, quantity<yUnit, yValueType> y) -> quantity<make_one_t<yUnit>, decltype(std::min(x, y.value()))>
+{
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the min of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the min of quantities with the same value_type.");
+    using ResultType = decltype(std::min(x, y.value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<make_one_t<yUnit>, ResultType>{std::min(x, y.value())};
+}
+template <bool AllowImplicitConversion = false, class xValueType, class yUnit, class yValueType>
+constexpr auto min(xValueType x, quantity_point<yUnit, yValueType> y) -> quantity_point<make_one_t<yUnit>, decltype(std::min(x, y.value()))>
+{
+    static_assert(is_equivalent_v<make_one_t<yUnit>, yUnit>, "You can only calculate the min of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the min of quantities with the same value_type.");
+    using ResultType = decltype(std::min(x, y.value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity_point<make_one_t<yUnit>, ResultType>{std::min(x, y.value())};
+}
+template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
+constexpr auto min(quantity<xUnit, xValueType> x, yValueType y) -> quantity<make_one_t<xUnit>, decltype(std::min(x.value(), y))>
+{
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the min of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the min of quantities with the same value_type.");
+    using ResultType = decltype(std::min(x.value(), y));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<make_one_t<xUnit>, ResultType>{std::min(x.value(), y)};
+}
+template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yValueType>
+constexpr auto min(quantity_point<xUnit, xValueType> x, yValueType y) -> quantity_point<make_one_t<xUnit>, decltype(std::min(x.value(), y))>
+{
+    static_assert(is_equivalent_v<make_one_t<xUnit>, xUnit>, "You can only calculate the min of quantities with the same unit.");
+    static_assert(std::is_same_v<xValueType, yValueType>, "You can only calculate the min of quantities with the same value_type.");
+    using ResultType = decltype(std::min(x.value(), y));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<xValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity_point<make_one_t<xUnit>, ResultType>{std::min(x.value(), y)};
+}
+#pragma endregion
 #pragma region basic operations
 //The abs, and fabs functions calculate the absolute value of quantities
 //without looking at the underlying unit.
