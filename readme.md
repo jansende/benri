@@ -3,3 +3,6 @@
 
 # Note
 At the moment, only the current state of my work is published. Documentation, etc. will follow, as soon as I get around writing it.
+
+# Known Bugs
+The unit pascal might conflict with the `pascal` macro set in the windows headers.

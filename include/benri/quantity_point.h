@@ -1,4 +1,12 @@
 #pragma once
+//Windows headers might define the pascal macro. This conflicts with
+//our pascal unit. Therefore, we save the content in BENRI_PASCAL and
+//remove the macro.
+#ifdef pascal
+#define BENRI_PASCAL pascal
+#undef pascal
+#endif
+
 #include <cmath>
 #include <benri/units/dimensions.h>
 #include <benri/unit.h>
@@ -391,3 +399,9 @@ constexpr auto remove_prefix(const quantity_point<Unit, ValueType> &rhs)
 }
 #pragma endregion
 } // namespace benri
+
+//Restore the value of the pascal macro, if necessary.
+#ifdef BENRI_PASCAL
+#define pascal BENRI_PASCAL
+#undef BENRI_PASCAL
+#endif
