@@ -62,9 +62,8 @@ class quantity
     friend constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<no_prefix_unit_t<Unit>, ResultValueType>;
 #pragma endregion
 #pragma region rule of three
-    //The default constructor is disabled to force users to give useful data for the
-    //quantity every time.
-    quantity() = delete;
+    //default constructor
+    quantity() = default;
     //copy constructor
     constexpr quantity(const quantity &) = default;
     //move constructor
