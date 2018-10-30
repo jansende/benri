@@ -63,7 +63,7 @@ class quantity
 #pragma endregion
 #pragma region rule of three
     //default constructor
-    quantity() = default;
+    constexpr quantity() = default;
     //copy constructor
     constexpr quantity(const quantity &) = default;
     //move constructor

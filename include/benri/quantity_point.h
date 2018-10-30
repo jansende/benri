@@ -67,7 +67,7 @@ class quantity_point
 #pragma endregion
 #pragma region rule of three
     //default constructor
-    quantity_point() = default;
+    constexpr quantity_point() = default;
     //copy constructor
     constexpr quantity_point(const quantity_point &) = default;
     //move constructor
