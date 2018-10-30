@@ -34,6 +34,14 @@ implement_subunit(si, si, astronomic, solar_mass, _solar_mass, dim::mass_t, pref
 implement_subunit(si, si, astronomic, jupiter_mass, _jupiter_mass, dim::mass_t, prefix::jupiter_mass_t);
 implement_subunit(si, si, astronomic, earth_mass, _earth_mass, dim::mass_t, prefix::earth_mass_t);
 #pragma endregion
+#pragma region solar mass per year, ...(massloss)
+implement_subunit(si, si, astronomic, solar_mass_per_year, _solar_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::solar_mass_t, prefix::year>));
+implement_subunit(si, si, astronomic, jupiter_mass_per_year, _jupiter_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::jupiter_mass_t, prefix::year>));
+implement_subunit(si, si, astronomic, earth_mass_per_year, _earth_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::earth_mass_t, prefix::year>));
+#pragma endregion
+#pragma region solar luminosity (luminosity)
+implement_subunit(si, si, astronomic, solar_luminosity, _solar_luminosity, dim::luminosity_t, prefix::solar_luminosity_t);
+#pragma endregion
 } // namespace astronomic
 #pragma region constants
 namespace constant

@@ -115,6 +115,7 @@ create_and_register_dimension(jerk, helper<L>, helper<T, -3>);
 create_and_register_dimension(snap, helper<L>, helper<T, -4>);
 create_and_register_dimension(crackle, helper<L>, helper<T, -5>);
 create_and_register_dimension(pop, helper<L>, helper<T, -6>);
+create_and_register_dimension(massloss, helper<M>, helper<T, -1>);
 #pragma endregion
 } // namespace dim
 } // namespace benri

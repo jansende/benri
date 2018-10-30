@@ -299,6 +299,13 @@ struct solar_mass
 };
 using solar_mass_t = list<atom<solar_mass>>;
 using solar_mass_v = list<atom<solar_mass>>;
+//solar luminosity in W/sr
+struct solar_luminosity
+{
+    static constexpr Precision value = 3.828e26;
+};
+using solar_luminosity_t = list<atom<solar_luminosity>>;
+using solar_luminosity_v = list<atom<solar_luminosity>>;
 //jupiter mass in kg
 struct jupiter_mass
 {

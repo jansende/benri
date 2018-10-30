@@ -20,6 +20,7 @@
 - [ ] write an explanation for affine types
 - [ ] document the is_compatible trickery
 - [ ] do some cleaning up
+- [ ] get the right value for the solar luminosity
 
 ## Quantities using Integral Types
 
