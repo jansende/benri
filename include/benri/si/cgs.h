@@ -125,6 +125,29 @@ implement_subunit(si, si, cgs, exaerg, _exaerg, dim::energy_t, fix(impl::multipl
 implement_subunit(si, si, cgs, zettaerg, _zettaerg, dim::energy_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::hecto>,prefix::zetta>));
 implement_subunit(si, si, cgs, yottaerg, _yottaerg, dim::energy_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::hecto>,prefix::yotta>));
 #pragma endregion
+#pragma region erg/g(specific energy)
+implement_subunit(si, si, cgs, yoctoerg_per_gram, _yoctoerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::yocto>));
+implement_subunit(si, si, cgs, zeptoerg_per_gram, _zeptoerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::zepto>));
+implement_subunit(si, si, cgs, attoerg_per_gram, _attoerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::atto>));
+implement_subunit(si, si, cgs, femtoerg_per_gram, _femtoerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::femto>));
+implement_subunit(si, si, cgs, picoerg_per_gram, _picoerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::pico>));
+implement_subunit(si, si, cgs, nanoerg_per_gram, _nanoerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::nano>));
+implement_subunit(si, si, cgs, microerg_per_gram, _microerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::micro>));
+implement_subunit(si, si, cgs, millierg_per_gram, _millierg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::milli>));
+link_unit(centierg_per_gram, _centierg_per_gram, picogray);
+implement_subunit(si, si, cgs, decierg_per_gram, _decierg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::deci>));
+implement_subunit(si, si, cgs, erg_per_gram, _erg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::one>));
+link_unit(decaerg_per_gram, _decaerg_per_gram, decigray);
+implement_subunit(si, si, cgs, hectoerg_per_gram, _hectoerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::hecto>));
+implement_subunit(si, si, cgs, kiloerg_per_gram, _kiloerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::kilo>));
+implement_subunit(si, si, cgs, megaerg_per_gram, _megaerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::mega>));
+link_unit(gigaerg_per_gram, _gigaerg_per_gram, decigray);
+link_unit(teraerg_per_gram, _teraerg_per_gram, nanogray);
+implement_subunit(si, si, cgs, petaerg_per_gram, _petaerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::peta>));
+implement_subunit(si, si, cgs, exaerg_per_gram, _exaerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::exa>));
+implement_subunit(si, si, cgs, zettaerg_per_gram, _zettaerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::zetta>));
+implement_subunit(si, si, cgs, yottaerg_per_gram, _yottaerg_per_gram, dim::absorbed_dose_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano,prefix::deci>,prefix::yotta>));
+#pragma endregion
 #pragma region dyne(force)
 implement_subunit(si, si, cgs, yoctodyne, _yoctodyne, dim::force_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::micro,prefix::deca>,prefix::yocto>));
 implement_subunit(si, si, cgs, zeptodyne, _zeptodyne, dim::force_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::micro,prefix::deca>,prefix::zepto>));
