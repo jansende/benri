@@ -65,7 +65,7 @@ using make_plane_angle_t = back_substitution_t<unit<typename Unit::system, typen
 //input. Thus, only an error message for the faulty input is shown, and none
 //for the code which depends on the result of the atan2 call. (Which might be
 //deduced wrongly from the input.)
-#pragma region standard min/max
+#pragma region standard min / max
 //The max, and min functions return the max/min of two quantities with
 //the same unit.
 template <bool AllowImplicitConversion = false, class xUnit, class xValueType, class yUnit, class yValueType>
@@ -730,50 +730,80 @@ constexpr auto log1p(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>
 }
 #pragma endregion
 #pragma region power functions
-//The pow function calculates the power of a given quantity, changing the unit.
+//The pow<> function calculates the power of a given quantity, changing the unit.
 //Three overloads are provided. You can either provide the power as a std::ratio:
 //pow<std::ratio<1,2>> or using integers pow<1,2>. With the denominator being
 //optional: pow<std::ratio<2>> = pow<2>.
 template <class Exponent, bool AllowImplicitConversion = false, class baseUnit, class baseValueType>
-constexpr auto pow(quantity<baseUnit, baseValueType> base) -> quantity<back_substitution_t<pow_unit_t<baseUnit, Exponent>>, decltype(std::pow(base.value(), baseValueType(Exponent::num) / baseValueType(Exponent::den)))>
+constexpr auto pow(quantity<baseUnit, baseValueType> base) -> quantity<pow_unit_t<baseUnit, Exponent>, decltype(std::pow(base.value(), baseValueType(Exponent::num) / baseValueType(Exponent::den)))>
 {
     static_assert(impl::is_ratio_v<Exponent>, "The Exponent needs to be a std::ratio.");
     using ResultType = decltype(std::pow(base.value(), baseValueType(Exponent::num) / baseValueType(Exponent::den)));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<baseValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
 #endif
-    return quantity<back_substitution_t<pow_unit_t<baseUnit, Exponent>>, ResultType>{std::pow(base.value(), baseValueType(Exponent::num) / baseValueType(Exponent::den))};
+    return quantity<pow_unit_t<baseUnit, Exponent>, ResultType>{std::pow(base.value(), baseValueType(Exponent::num) / baseValueType(Exponent::den))};
 }
-template <intmax_t num, bool AllowImplicitConversion = false, class baseUnit, class baseValueType>
-constexpr auto pow(quantity<baseUnit, baseValueType> base)
-{
-    return pow<std::ratio<num>, AllowImplicitConversion>(base);
-}
-template <intmax_t num, intmax_t den, bool AllowImplicitConversion = false, class baseUnit, class baseValueType>
+template <intmax_t num, intmax_t den = 1, bool AllowImplicitConversion = false, class baseUnit, class baseValueType>
 constexpr auto pow(quantity<baseUnit, baseValueType> base)
 {
     return pow<std::ratio<num, den>, AllowImplicitConversion>(base);
+}
+//The pow function calculates the power of a given dimensionless quantity, without
+//changing the unit.
+template <bool AllowImplicitConversion = false, class baseUnit, class baseValueType, class exponentUnit, class exponentValueType>
+constexpr auto pow(quantity<baseUnit, baseValueType> y, quantity<exponentUnit, exponentValueType> x) -> quantity<make_one_t<baseUnit>, decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()))>
+{
+    static_assert(is_equivalent_v<make_one_t<baseUnit>, baseUnit> && is_equivalent_v<baseUnit, exponentUnit>, "You can only calculate the pow of dimensionless quantities.");
+    static_assert(std::is_same_v<baseValueType, exponentValueType>, "You can only calculate the pow of quantities with the same value_type.");
+    using ResultType = decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<baseValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<make_one_t<baseUnit>, ResultType>{std::pow(remove_prefix(y).value(), remove_prefix(x).value())};
+}
+template <bool AllowImplicitConversion = false, class baseValueType, class exponentUnit, class exponentValueType>
+constexpr auto pow(baseValueType y, quantity<exponentUnit, exponentValueType> x) -> quantity<make_one_t<exponentUnit>, decltype(std::pow(y, remove_prefix(x).value()))>
+{
+    static_assert(is_equivalent_v<make_one_t<exponentUnit>, exponentUnit>, "You can only calculate the pow of dimensionless quantities.");
+    static_assert(std::is_same_v<baseValueType, exponentValueType>, "You can only calculate the pow of quantities with the same value_type.");
+    using ResultType = decltype(std::pow(y, remove_prefix(x).value()));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<baseValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<make_one_t<exponentUnit>, ResultType>{std::pow(y, remove_prefix(x).value())};
+}
+template <bool AllowImplicitConversion = false, class baseUnit, class baseValueType, class exponentValueType>
+constexpr auto pow(quantity<baseUnit, baseValueType> y, exponentValueType x) -> quantity<make_one_t<baseUnit>, decltype(std::pow(remove_prefix(y).value(), x))>
+{
+    static_assert(is_equivalent_v<make_one_t<baseUnit>, baseUnit>, "You can only calculate the pow of dimensionless quantities.");
+    static_assert(std::is_same_v<baseValueType, exponentValueType>, "You can only calculate the pow of quantities with the same value_type.");
+    using ResultType = decltype(std::pow(remove_prefix(y).value(), x));
+#ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
+    static_assert(std::is_same_v<baseValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
+#endif
+    return quantity<make_one_t<baseUnit>, ResultType>{std::pow(remove_prefix(y).value(), x)};
 }
 //The sqrt, and cbrt functions calculate roots of given quantities, changing the
 //unit. While the pow function could be used as well, the sqrt and cbrt functions
 //directly access the std equivalents instead of using std::pow.
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto sqrt(quantity<Unit, ValueType> val) -> quantity<back_substitution_t<pow_unit_t<Unit, std::ratio<1, 2>>>, decltype(std::sqrt(val.value()))>
+constexpr auto sqrt(quantity<Unit, ValueType> val) -> quantity<pow_unit_t<Unit, std::ratio<1, 2>>, decltype(std::sqrt(val.value()))>
 {
     using ResultType = decltype(std::sqrt(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
 #endif
-    return quantity<back_substitution_t<pow_unit_t<Unit, std::ratio<1, 2>>>, ResultType>{std::sqrt(val.value())};
+    return quantity<pow_unit_t<Unit, std::ratio<1, 2>>, ResultType>{std::sqrt(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto cbrt(quantity<Unit, ValueType> val) -> quantity<back_substitution_t<pow_unit_t<Unit, std::ratio<1, 3>>>, decltype(std::cbrt(val.value()))>
+constexpr auto cbrt(quantity<Unit, ValueType> val) -> quantity<pow_unit_t<Unit, std::ratio<1, 3>>, decltype(std::cbrt(val.value()))>
 {
     using ResultType = decltype(std::cbrt(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
 #endif
-    return quantity<back_substitution_t<pow_unit_t<Unit, std::ratio<1, 3>>>, ResultType>{std::cbrt(val.value())};
+    return quantity<pow_unit_t<Unit, std::ratio<1, 3>>, ResultType>{std::cbrt(val.value())};
 }
 //The hypot function returns the norm of two quantities x, and y with the same unit.
 //(hypot(x,y) = sqrt(x^2+y^2))

@@ -75,7 +75,12 @@ class quantity_point
     //default constructor
     ~quantity_point() = default;
     //copy assignment
-    constexpr quantity_point &operator=(const quantity_point &) = default;
+    template <class rhsUnit, class ValueType>
+    constexpr auto operator=(const quantity_point<rhsUnit, ValueType> &rhs) -> std::enable_if_t<is_equivalent_v<unit_type, rhsUnit>, quantity_point &>
+    {
+        _value = rhs._value;
+        return *this;
+    }
     constexpr auto operator=(const value_type &rhs) noexcept
     {
         static_assert(is_one_v<unit_type>, "You can only assign value_types to dimensionless quantities without prefix.");
@@ -83,7 +88,12 @@ class quantity_point
         return *this;
     }
     //move assignment
-    constexpr quantity_point &operator=(quantity_point &&) = default;
+    template <class rhsUnit, class ValueType>
+    constexpr auto operator=(quantity_point<rhsUnit, ValueType> &&rhs) -> std::enable_if_t<is_equivalent_v<unit_type, rhsUnit>, quantity_point &>
+    {
+        _value = std::move(rhs._value);
+        return *this;
+    }
     constexpr auto operator=(value_type &&rhs) noexcept
     {
         static_assert(is_one_v<unit_type>, "You can only assign value_types to dimensionless quantities without prefix.");

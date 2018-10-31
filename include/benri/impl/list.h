@@ -371,10 +371,30 @@ template <template <class, class> class Atom, class T, class Power, class... Res
 struct pow_list<list<Atom<T, Power>, Rest...>, R>
 {
     static_assert(is_ratio_v<R>, "divide_lists takes a list and a std::ratio, but your R is not a std::ratio.");
-    using type = concat_lists_t<list<Atom<T, std::ratio_multiply<Power, R>>>, typename pow_list<list<Rest...>, Power>::type>;
+    using type = concat_lists_t<list<Atom<T, std::ratio_multiply<Power, R>>>, typename pow_list<list<Rest...>, R>::type>;
 };
 template <class L, class R>
 using pow_list_t = typename pow_list<L, R>::type;
+//TODO: - Put this into a unit test folder.
+auto test_pow_list()
+{
+    static_assert(std::is_same_v<pow_list_t<list<>, std::ratio<2>>, list<>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<>, std::ratio<-2>>, list<>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<>, std::ratio<1, 3>>, list<>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<>, std::ratio<-1, 3>>, list<>>, "");
+
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>>, std::ratio<1>>, list<atom<std::ratio<5>>>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>>, std::ratio<2>>, list<atom<std::ratio<5>, std::ratio<2>>>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>>, std::ratio<-2>>, list<atom<std::ratio<5>, std::ratio<-2>>>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>>, std::ratio<1, 3>>, list<atom<std::ratio<5>, std::ratio<1, 3>>>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>>, std::ratio<-1, 3>>, list<atom<std::ratio<5>, std::ratio<-1, 3>>>>, "");
+
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<1>>, list<atom<std::ratio<5>>, atom<std::ratio<3>>>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<2>>, list<atom<std::ratio<5>, std::ratio<2>>, atom<std::ratio<3>, std::ratio<2>>>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<-2>>, list<atom<std::ratio<5>, std::ratio<-2>>, atom<std::ratio<3>, std::ratio<-2>>>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<1, 3>>, list<atom<std::ratio<5>, std::ratio<1, 3>>, atom<std::ratio<3>, std::ratio<1, 3>>>>, "");
+    static_assert(std::is_same_v<pow_list_t<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<-1, 3>>, list<atom<std::ratio<5>, std::ratio<-1, 3>>, atom<std::ratio<3>, std::ratio<-1, 3>>>>, "");
+}
 #pragma endregion
 #pragma endregion
 #pragma region list generators
@@ -423,29 +443,34 @@ auto test_make_list()
 //The make_power_list function generates a list which
 //represents 10^Power.
 template <bool Positive, intmax_t Power>
-struct make_power_list_impl {
+struct make_power_list_impl
+{
     using type = list<>;
 };
 template <>
-struct make_power_list_impl<true,0> {
+struct make_power_list_impl<true, 0>
+{
     using type = make_fraction_list_t<1>;
 };
 template <>
-struct make_power_list_impl<false,0> {
+struct make_power_list_impl<false, 0>
+{
     using type = make_fraction_list_t<1>;
 };
 template <intmax_t Power>
-struct make_power_list_impl<true,Power> {
-    using type = multiply_lists_t<make_fraction_list_t<10>,typename make_power_list_impl<true,Power-1>::type>;
+struct make_power_list_impl<true, Power>
+{
+    using type = multiply_lists_t<make_fraction_list_t<10>, typename make_power_list_impl<true, Power - 1>::type>;
 };
 template <intmax_t Power>
-struct make_power_list_impl<false,Power> {
-    using type = multiply_lists_t<make_fraction_list_t<1,10>,typename make_power_list_impl<false,Power+1>::type>;
+struct make_power_list_impl<false, Power>
+{
+    using type = multiply_lists_t<make_fraction_list_t<1, 10>, typename make_power_list_impl<false, Power + 1>::type>;
 };
 template <intmax_t Power>
 struct make_power_list
 {
-    using type = typename make_power_list_impl<(Power>=0),Power>::type;
+    using type = typename make_power_list_impl<(Power >= 0), Power>::type;
 };
 template <intmax_t Power>
 using make_power_list_t = typename make_power_list<Power>::type;
@@ -454,7 +479,7 @@ auto test_make_power_list()
 {
     static_assert(std::is_same_v<make_power_list_t<2>, make_fraction_list_t<100>>, "");
     static_assert(std::is_same_v<make_power_list_t<0>, make_fraction_list_t<1>>, "");
-    static_assert(std::is_same_v<make_power_list_t<-2>, make_fraction_list_t<1,100>>, "");
+    static_assert(std::is_same_v<make_power_list_t<-2>, make_fraction_list_t<1, 100>>, "");
     static_assert(std::is_same_v<make_power_list_t<1>, make_fraction_list_t<10>>, "");
 }
 #pragma endregion
