@@ -37,6 +37,8 @@ class quantity
 {
   public:
     template <class Unit, class ValueType>
+    friend class quantity;
+    template <class Unit, class ValueType>
     friend class quantity_point;
     constexpr quantity(ValueType value) : _value(value) {}
     using value_type = ValueType;
@@ -71,6 +73,7 @@ class quantity
     //default constructor
     ~quantity() = default;
     //copy assignment
+    constexpr quantity& operator=(const quantity&) = default;
     template <class rhsUnit, class ValueType>
     constexpr auto operator=(const quantity<rhsUnit, ValueType> &rhs) -> std::enable_if_t<is_equivalent_v<unit_type, rhsUnit> || is_compatible_v<unit_type, rhsUnit>, quantity &>
     {
@@ -84,6 +87,7 @@ class quantity
         return *this;
     }
     //move assignment
+    constexpr quantity& operator=(quantity&&) = default;
     template <class rhsUnit, class ValueType>
     constexpr auto operator=(quantity<rhsUnit, ValueType> &&rhs) -> std::enable_if_t<is_equivalent_v<unit_type, rhsUnit> || is_compatible_v<unit_type, rhsUnit>, quantity &>
     {

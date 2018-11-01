@@ -42,6 +42,8 @@ template <class Unit, class ValueType = Precision>
 class quantity_point
 {
   public:
+    template <class Unit, class ValueType>
+    friend class quantity_point;
     constexpr quantity_point(ValueType value) : _value(value) {}
     using value_type = ValueType;
     using unit_type = Unit;
@@ -75,6 +77,7 @@ class quantity_point
     //default constructor
     ~quantity_point() = default;
     //copy assignment
+    constexpr quantity_point& operator=(const quantity_point&) = default;
     template <class rhsUnit, class ValueType>
     constexpr auto operator=(const quantity_point<rhsUnit, ValueType> &rhs) -> std::enable_if_t<is_equivalent_v<unit_type, rhsUnit>, quantity_point &>
     {
@@ -88,6 +91,7 @@ class quantity_point
         return *this;
     }
     //move assignment
+    constexpr quantity_point& operator=(quantity_point&&) = default;
     template <class rhsUnit, class ValueType>
     constexpr auto operator=(quantity_point<rhsUnit, ValueType> &&rhs) -> std::enable_if_t<is_equivalent_v<unit_type, rhsUnit>, quantity_point &>
     {
