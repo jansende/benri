@@ -349,6 +349,17 @@ auto test_divide_lists()
     static_assert(std::is_same_v<divide_lists_t<list<atom<int>>, list<atom<int>, atom<bool>>>, list<atom<bool, std::ratio<-1>>>>, "");
     static_assert(std::is_same_v<divide_lists_t<list<atom<int>>, list<atom<bool>, atom<int>>>, list<atom<bool, std::ratio<-1>>>>, "");
     static_assert(std::is_same_v<divide_lists_t<list<atom<int>, atom<bool>>, list<atom<int>>>, list<atom<bool>>>, "");
+
+    static_assert(std::is_same_v<divide_lists_t<list<>, list<atom<std::ratio<3>>>>, list<atom<std::ratio<3>, std::ratio<-1>>>>, "");
+    static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<>>, list<atom<std::ratio<3>>>>, "");
+    static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<7>>>>, list<atom<std::ratio<3>>, atom<std::ratio<7>, std::ratio<-1>>>>, "");
+    static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>>>>, list<>>, "");
+    static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>>, atom<std::ratio<7>>>>, list<atom<std::ratio<7>, std::ratio<-1>>>>, "");
+    static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<7>>, atom<std::ratio<3>>>>, list<atom<std::ratio<7>, std::ratio<-1>>>>, "");
+    static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>, atom<std::ratio<7>>>, list<atom<std::ratio<3>>>>, list<atom<std::ratio<7>>>>, "");
+    
+    static_assert(std::is_same_v<divide_lists_t<list<>, list<atom<std::ratio<3>,std::ratio<2>>>>, list<atom<std::ratio<3>, std::ratio<-2>>>>, "");
+    static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>,std::ratio<2>>>>, list<atom<std::ratio<3>, std::ratio<-1>>>>, "");
 }
 #pragma endregion
 #pragma region power
