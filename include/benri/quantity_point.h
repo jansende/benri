@@ -403,7 +403,8 @@ template <class ResultValueType, class Unit, class ValueType>
 constexpr auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) -> quantity_point<no_prefix_unit_t<Unit>, ResultValueType>
 {
     //calculation
-    return quantity_point<no_prefix_unit_t<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_expand_list<ResultValueType>((typename Unit::prefix){})};
+    using PrefixType = typename Unit::prefix;
+    return quantity_point<no_prefix_unit_t<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_expand_list<ResultValueType>(PrefixType{})};
 }
 template <class Unit, class ValueType>
 constexpr auto remove_prefix(const quantity_point<Unit, ValueType> &rhs)
