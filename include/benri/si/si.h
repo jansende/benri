@@ -2281,27 +2281,27 @@ implement_unit(si, si, zettahertz_per_volt, _zettahertz_per_volt, fix(impl::divi
 implement_unit(si, si, yottahertz_per_volt, _yottahertz_per_volt, fix(impl::divide_lists_t<dim::dimensionless_t, dim::magnetic_flux_t>), prefix::yotta);
 #pragma endregion
 #pragma region newton per square metre kilogram(gravitational constant)
-implement_unit(si, si, yoctonewton_per_square_metre_kilogram, _yoctonewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::yocto);
-implement_unit(si, si, zeptonewton_per_square_metre_kilogram, _zeptonewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::zepto);
-implement_unit(si, si, attonewton_per_square_metre_kilogram, _attonewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::atto);
-implement_unit(si, si, femtonewton_per_square_metre_kilogram, _femtonewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::femto);
-implement_unit(si, si, piconewton_per_square_metre_kilogram, _piconewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::pico);
-implement_unit(si, si, nanonewton_per_square_metre_kilogram, _nanonewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::nano);
-implement_unit(si, si, micronewton_per_square_metre_kilogram, _micronewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::micro);
-implement_unit(si, si, millinewton_per_square_metre_kilogram, _millinewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::milli);
-implement_unit(si, si, centinewton_per_square_metre_kilogram, _centinewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::centi);
-implement_unit(si, si, decinewton_per_square_metre_kilogram, _decinewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::deci);
-implement_unit(si, si, newton_per_square_metre_kilogram, _newton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::one);
-implement_unit(si, si, decanewton_per_square_metre_kilogram, _decanewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::deca);
-implement_unit(si, si, hectonewton_per_square_metre_kilogram, _hectonewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::hecto);
-implement_unit(si, si, kilonewton_per_square_metre_kilogram, _kilonewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::kilo);
-implement_unit(si, si, meganewton_per_square_metre_kilogram, _meganewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::mega);
-implement_unit(si, si, giganewton_per_square_metre_kilogram, _giganewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::giga);
-implement_unit(si, si, teranewton_per_square_metre_kilogram, _teranewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::tera);
-implement_unit(si, si, petanewton_per_square_metre_kilogram, _petanewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::peta);
-implement_unit(si, si, exanewton_per_square_metre_kilogram, _exanewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::exa);
-implement_unit(si, si, zettanewton_per_square_metre_kilogram, _zettanewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::zetta);
-implement_unit(si, si, yottanewton_per_square_metre_kilogram, _yottanewton_per_square_metre_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::yotta);
+implement_unit(si, si, yoctonewton_square_metre_per_square_kilogram, _yoctonewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::yocto);
+implement_unit(si, si, zeptonewton_square_metre_per_square_kilogram, _zeptonewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::zepto);
+implement_unit(si, si, attonewton_square_metre_per_square_kilogram, _attonewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::atto);
+implement_unit(si, si, femtonewton_square_metre_per_square_kilogram, _femtonewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::femto);
+implement_unit(si, si, piconewton_square_metre_per_square_kilogram, _piconewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::pico);
+implement_unit(si, si, nanonewton_square_metre_per_square_kilogram, _nanonewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::nano);
+implement_unit(si, si, micronewton_square_metre_per_square_kilogram, _micronewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::micro);
+implement_unit(si, si, millinewton_square_metre_per_square_kilogram, _millinewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::milli);
+implement_unit(si, si, centinewton_square_metre_per_square_kilogram, _centinewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::centi);
+implement_unit(si, si, decinewton_square_metre_per_square_kilogram, _decinewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::deci);
+implement_unit(si, si, newton_square_metre_per_square_kilogram, _newton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::one);
+implement_unit(si, si, decanewton_square_metre_per_square_kilogram, _decanewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::deca);
+implement_unit(si, si, hectonewton_square_metre_per_square_kilogram, _hectonewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::hecto);
+implement_unit(si, si, kilonewton_square_metre_per_square_kilogram, _kilonewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::kilo);
+implement_unit(si, si, meganewton_square_metre_per_square_kilogram, _meganewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::mega);
+implement_unit(si, si, giganewton_square_metre_per_square_kilogram, _giganewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::giga);
+implement_unit(si, si, teranewton_square_metre_per_square_kilogram, _teranewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::tera);
+implement_unit(si, si, petanewton_square_metre_per_square_kilogram, _petanewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::peta);
+implement_unit(si, si, exanewton_square_metre_per_square_kilogram, _exanewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::exa);
+implement_unit(si, si, zettanewton_square_metre_per_square_kilogram, _zettanewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::zetta);
+implement_unit(si, si, yottanewton_square_metre_per_square_kilogram, _yottanewton_square_metre_per_square_kilogram, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::yotta);
 #pragma endregion
 #pragma region watt per square metre quartic kelvin steradian(stefan - boltzmann constant)
 implement_unit(si, si, yoctowatt_per_square_metre_quartic_kelvin_steradian, _yoctowatt_per_square_metre_quartic_kelvin_steradian, fix(impl::divide_lists_t<dim::power_t, impl::multiply_lists_t<dim::area_t, impl::multiply_lists_t<impl::multiply_lists_t<impl::multiply_lists_t<dim::thermodynamic_temperature_t, dim::thermodynamic_temperature_t>, impl::multiply_lists_t<dim::thermodynamic_temperature_t, dim::thermodynamic_temperature_t>>, dim::solid_angle_t>>>), prefix::yocto);
@@ -2335,7 +2335,7 @@ using namespace benri::si::base;
 create_constant(speed_of_light, prefix::speed_of_light_v, metre_per_second);
 create_constant(magnetic_constant, prefix::magnetic_constant_v, henry_per_metre);
 create_constant(electric_constant, prefix::electric_constant_v, farad_per_metre);
-create_constant(gravitational_constant, prefix::gravitational_constant_v, newton_per_square_metre_kilogram);
+create_constant(gravitational_constant, prefix::gravitational_constant_v, newton_square_metre_per_square_kilogram);
 create_constant(planck_constant, prefix::planck_constant_v, joule_second);
 create_constant(reduced_planck_constant, prefix::reduced_planck_constant_v, joule_second);
 create_constant(elementary_charge, prefix::elementary_charge_v, coulomb);
@@ -2377,7 +2377,7 @@ namespace symbol
 create_symbol(si, speed_of_light, dim::velocity_t, prefix::speed_of_light_t);
 create_symbol(si, magnetic_constant, dim::permeability_t, prefix::magnetic_constant_t);
 create_symbol(si, electric_constant, dim::permittivity_t, prefix::electric_constant_t);
-create_symbol(si, gravitational_constant, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, dim::mass_t>>), prefix::gravitational_constant_t);
+create_symbol(si, gravitational_constant, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::gravitational_constant_t);
 create_symbol(si, planck_constant, dim::action_t, prefix::planck_constant_t);
 create_symbol(si, reduced_planck_constant, dim::action_t, prefix::reduced_planck_constant_t);
 create_symbol(si, elementary_charge, dim::electric_charge_t, prefix::elementary_charge_t);
