@@ -74,6 +74,12 @@ struct pi
 };
 using pi_t = list<atom<pi>>;
 using pi_v = list<atom<pi>>;
+//quarter pi
+using quarter_pi_t = impl::multiply_lists_t<make_fraction_list_t<1, 4>, pi_t>;
+using quarter_pi_v = impl::multiply_lists_t<make_fraction_list_t<1, 4>, pi_v>;
+//half pi
+using half_pi_t = impl::multiply_lists_t<make_fraction_list_t<1, 2>, pi_t>;
+using half_pi_v = impl::multiply_lists_t<make_fraction_list_t<1, 2>, pi_v>;
 //two pi
 using two_pi_t = impl::multiply_lists_t<make_fraction_list_t<2>, pi_t>;
 using two_pi_v = impl::multiply_lists_t<make_fraction_list_t<2>, pi_v>;

@@ -422,6 +422,8 @@ namespace constant
 {
 using namespace benri::si::base;
 #pragma region mathematical constants
+create_constant(quarter_pi, prefix::quarter_pi_v, one);
+create_constant(half_pi, prefix::half_pi_v, one);
 create_constant(pi, prefix::pi_v, one);
 create_constant(two_pi, prefix::two_pi_v, one);
 create_constant(e, prefix::e_v, one);
@@ -457,6 +459,8 @@ create_symbol(si, zetta, dim::dimensionless_t, prefix::zetta);
 create_symbol(si, yotta, dim::dimensionless_t, prefix::yotta);
 #pragma endregion
 #pragma region mathematical constants
+create_symbol(si, quarter_pi, dim::dimensionless_t, prefix::quarter_pi_t);
+create_symbol(si, half_pi, dim::dimensionless_t, prefix::half_pi_t);
 create_symbol(si, pi, dim::dimensionless_t, prefix::pi_t);
 create_symbol(si, two_pi, dim::dimensionless_t, prefix::two_pi_t);
 create_symbol(si, e, dim::dimensionless_t, prefix::e_t);

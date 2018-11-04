@@ -48,6 +48,7 @@ namespace constant
 {
 using namespace benri::si::base;
 #pragma region astronomical constants
+create_constant(solar_luminosity, prefix::solar_luminosity_v, watt_per_steradian);
 create_constant(solar_mass, prefix::solar_mass_v, kilogram);
 create_constant(jupiter_mass, prefix::jupiter_mass_v, kilogram);
 create_constant(earth_mass, prefix::earth_mass_v, kilogram);
@@ -58,6 +59,7 @@ create_constant(earth_mass, prefix::earth_mass_v, kilogram);
 namespace symbol
 {
 #pragma region astronomical constants
+create_symbol(si, solar_luminosity, dim::luminosity_t, prefix::solar_luminosity_t);
 create_symbol(si, solar_mass, dim::mass_t, prefix::solar_mass_t);
 create_symbol(si, jupiter_mass, dim::mass_t, prefix::jupiter_mass_t);
 create_symbol(si, earth_mass, dim::mass_t, prefix::earth_mass_t);
