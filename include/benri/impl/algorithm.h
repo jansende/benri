@@ -43,7 +43,7 @@ auto test_accumulate()
 #pragma endregion
 #pragma region custom swap
 template <class T>
-constexpr auto swap(T &lhs, T &rhs)
+constexpr auto constexpr_swap(T &lhs, T &rhs)
 {
     auto temp = lhs;
     lhs = rhs;
@@ -82,7 +82,7 @@ constexpr auto bubble_sort(impl::array<T, N> val, bool reverse = false)
     for (auto i = size_t{0}; i < N - 1; ++i)
         for (auto j = size_t{0}; j < N - i - 1; ++j)
             if (reverse ? val[j] < val[j + 1] : val[j] > val[j + 1])
-                impl::swap(val[j], val[j + 1]);
+                impl::constexpr_swap(val[j], val[j + 1]);
     return val;
 }
 //TODO: - Put this into a unit test folder.
