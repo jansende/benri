@@ -45,7 +45,7 @@ using make_plane_angle_t = back_substitution_t<unit<typename Unit::system, typen
 //output value_type are statically compared, and the code will not compile,
 //if they differ.
 //There are four possibilities to make the code compile again:
-//1. value_cast the quantity to the right type:
+//1. value_type_cast the quantity to the right type:
 //   fabs(value_type_cast<double>(quantity<one,int>{-1}))
 //
 //   This approach still results in a quantity<one,double>{1.0}, but the
@@ -635,7 +635,7 @@ constexpr auto fdim(quantity_point<xUnit, xValueType> x, yValueType y) -> quanti
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto exp(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::exp(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the exp of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the exp of a dimensionless quantity.");
     using ResultType = decltype(std::exp(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -645,7 +645,7 @@ constexpr auto exp(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, 
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto exp2(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::exp2(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the exp2 of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the exp2 of a dimensionless quantity.");
     using ResultType = decltype(std::exp2(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -655,7 +655,7 @@ constexpr auto exp2(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>,
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto expm1(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::expm1(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the expm1 of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the expm1 of a dimensionless quantity.");
     using ResultType = decltype(std::expm1(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -671,7 +671,7 @@ constexpr auto expm1(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto log(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::log(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log of a dimensionless quantity.");
     using ResultType = decltype(std::log(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -691,7 +691,7 @@ constexpr auto log(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, 
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto log10(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::log10(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log10 of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log10 of a dimensionless quantity.");
     using ResultType = decltype(std::log10(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -711,7 +711,7 @@ constexpr auto log10(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto log2(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::log2(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log2 of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log2 of a dimensionless quantity.");
     using ResultType = decltype(std::log2(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -731,7 +731,7 @@ constexpr auto log2(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>,
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto log1p(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::log1p(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log1p of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log1p of a dimensionless quantity.");
     using ResultType = decltype(std::log1p(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -764,7 +764,8 @@ constexpr auto pow(quantity<baseUnit, baseValueType> base)
 template <bool AllowImplicitConversion = false, class baseUnit, class baseValueType, class exponentUnit, class exponentValueType>
 constexpr auto pow(quantity<baseUnit, baseValueType> y, quantity<exponentUnit, exponentValueType> x) -> quantity<make_one_t<baseUnit>, decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()))>
 {
-    static_assert(is_equivalent_v<make_one_t<baseUnit>, baseUnit> && is_equivalent_v<baseUnit, exponentUnit>, "You can only calculate the pow of dimensionless quantities.");
+    static_assert(std::is_same_v<typename baseUnit::system, typename exponentUnit::system>, "You can only calculate the pow of quantities from the same unit system.");
+    static_assert(impl::is_equivalent_list_v<typename baseUnit::dimensions, dim::dimensionless_t> && impl::is_equivalent_list_v<typename exponentUnit::dimensions, dim::dimensionless_t>, "You can only calculate the pow of dimensionless quantities.");
     static_assert(std::is_same_v<baseValueType, exponentValueType>, "You can only calculate the pow of quantities with the same value_type.");
     using ResultType = decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -775,7 +776,7 @@ constexpr auto pow(quantity<baseUnit, baseValueType> y, quantity<exponentUnit, e
 template <bool AllowImplicitConversion = false, class baseValueType, class exponentUnit, class exponentValueType>
 constexpr auto pow(baseValueType y, quantity<exponentUnit, exponentValueType> x) -> quantity<make_one_t<exponentUnit>, decltype(std::pow(y, remove_prefix(x).value()))>
 {
-    static_assert(is_equivalent_v<make_one_t<exponentUnit>, exponentUnit>, "You can only calculate the pow of dimensionless quantities.");
+    static_assert(impl::is_equivalent_list_v<typename exponentUnit::dimensions, dim::dimensionless_t>, "You can only calculate the pow of dimensionless quantities.");
     static_assert(std::is_same_v<baseValueType, exponentValueType>, "You can only calculate the pow of quantities with the same value_type.");
     using ResultType = decltype(std::pow(y, remove_prefix(x).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -786,7 +787,7 @@ constexpr auto pow(baseValueType y, quantity<exponentUnit, exponentValueType> x)
 template <bool AllowImplicitConversion = false, class baseUnit, class baseValueType, class exponentValueType>
 constexpr auto pow(quantity<baseUnit, baseValueType> y, exponentValueType x) -> quantity<make_one_t<baseUnit>, decltype(std::pow(remove_prefix(y).value(), x))>
 {
-    static_assert(is_equivalent_v<make_one_t<baseUnit>, baseUnit>, "You can only calculate the pow of dimensionless quantities.");
+    static_assert(impl::is_equivalent_list_v<typename baseUnit::dimensions, dim::dimensionless_t>, "You can only calculate the pow of dimensionless quantities.");
     static_assert(std::is_same_v<baseValueType, exponentValueType>, "You can only calculate the pow of quantities with the same value_type.");
     using ResultType = decltype(std::pow(remove_prefix(y).value(), x));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -938,7 +939,7 @@ constexpr auto hypot(quantity<xUnit, xValueType> x, yValueType y, zValueType z) 
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto sin(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::sin(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the sin of a dimensionless quantity or an angle.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t> || impl::is_equivalent_list_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the sin of a dimensionless quantity or an angle.");
     using ResultType = decltype(std::sin(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -948,7 +949,7 @@ constexpr auto sin(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, 
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto cos(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::cos(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the cos of a dimensionless quantity or an angle.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t> || impl::is_equivalent_list_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the cos of a dimensionless quantity or an angle.");
     using ResultType = decltype(std::cos(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -958,7 +959,7 @@ constexpr auto cos(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, 
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto tan(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::tan(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the tan of a dimensionless quantity or an angle.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t> || impl::is_equivalent_list_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the tan of a dimensionless quantity or an angle.");
     using ResultType = decltype(std::tan(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -972,7 +973,7 @@ constexpr auto tan(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, 
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto asin(quantity<Unit, ValueType> val) -> quantity<make_plane_angle_t<Unit>, decltype(std::asin(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the asin of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the asin of a dimensionless quantity.");
     using ResultType = decltype(std::asin(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -982,7 +983,7 @@ constexpr auto asin(quantity<Unit, ValueType> val) -> quantity<make_plane_angle_
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto acos(quantity<Unit, ValueType> val) -> quantity<make_plane_angle_t<Unit>, decltype(std::acos(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the acos of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the acos of a dimensionless quantity.");
     using ResultType = decltype(std::acos(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -992,7 +993,7 @@ constexpr auto acos(quantity<Unit, ValueType> val) -> quantity<make_plane_angle_
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto atan(quantity<Unit, ValueType> val) -> quantity<make_plane_angle_t<Unit>, decltype(std::atan(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the atan of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the atan of a dimensionless quantity.");
     using ResultType = decltype(std::atan(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1007,7 +1008,7 @@ template <bool AllowImplicitConversion = false, class yUnit, class yValueType, c
 constexpr auto atan2(quantity<yUnit, yValueType> y, quantity<xUnit, xValueType> x) -> quantity<make_plane_angle_t<yUnit>, decltype(std::atan2(remove_prefix(y).value(), remove_prefix(x).value()))>
 {
     static_assert(std::is_same_v<typename yUnit::system, typename xUnit::system>, "You can only calculate the atan2 of quantities from the same unit system.");
-    static_assert(std::is_same_v<typename yUnit::dimensions, typename xUnit::dimensions>, "You can only calculate the atan2 of quantities with the same dimensions.");
+    static_assert(impl::is_equivalent_list_v<typename yUnit::dimensions, typename xUnit::dimensions>, "You can only calculate the atan2 of quantities with the same dimensions.");
     static_assert(std::is_same_v<yValueType, xValueType>, "You can only calculate the atan2 of quantities with the same value_type.");
     using ResultType = decltype(std::atan2(remove_prefix(y).value(), remove_prefix(x).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1018,7 +1019,7 @@ constexpr auto atan2(quantity<yUnit, yValueType> y, quantity<xUnit, xValueType> 
 template <bool AllowImplicitConversion = false, class yValueType, class xUnit, class xValueType>
 constexpr auto atan2(yValueType y, quantity<xUnit, xValueType> x) -> quantity<make_plane_angle_t<xUnit>, decltype(std::atan2(y, remove_prefix(x).value()))>
 {
-    static_assert(std::is_same_v<typename xUnit::dimensions, typename make_one_t<xUnit>::dimensions>, "You can only calculate the atan2 of quantities with the same dimensions.");
+    static_assert(impl::is_equivalent_list_v<typename xUnit::dimensions, dim::dimensionless_t>, "You can only calculate the atan2 of quantities with the same dimensions.");
     static_assert(std::is_same_v<yValueType, xValueType>, "You can only calculate the atan2 of quantities with the same value_type.");
     using ResultType = decltype(std::atan2(y, remove_prefix(x).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1029,7 +1030,7 @@ constexpr auto atan2(yValueType y, quantity<xUnit, xValueType> x) -> quantity<ma
 template <bool AllowImplicitConversion = false, class yUnit, class yValueType, class xValueType>
 constexpr auto atan2(quantity<yUnit, yValueType> y, xValueType x) -> quantity<make_plane_angle_t<yUnit>, decltype(std::atan2(remove_prefix(y).value(), x))>
 {
-    static_assert(std::is_same_v<typename yUnit::dimensions, typename make_one_t<yUnit>::dimensions>, "You can only calculate the atan2 of quantities with the same dimensions.");
+    static_assert(impl::is_equivalent_list_v<typename yUnit::dimensions, dim::dimensionless_t>, "You can only calculate the atan2 of quantities with the same dimensions.");
     static_assert(std::is_same_v<yValueType, xValueType>, "You can only calculate the atan2 of quantities with the same value_type.");
     using ResultType = decltype(std::atan2(remove_prefix(y).value(), x));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1045,7 +1046,7 @@ constexpr auto atan2(quantity<yUnit, yValueType> y, xValueType x) -> quantity<ma
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto sinh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::sinh(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the sinh of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the sinh of a dimensionless quantity.");
     using ResultType = decltype(std::sinh(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1055,7 +1056,7 @@ constexpr auto sinh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>,
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto cosh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::cosh(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the cosh of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the cosh of a dimensionless quantity.");
     using ResultType = decltype(std::cosh(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1065,7 +1066,7 @@ constexpr auto cosh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>,
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto tanh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::tanh(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the tanh of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the tanh of a dimensionless quantity.");
     using ResultType = decltype(std::tanh(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1075,7 +1076,7 @@ constexpr auto tanh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>,
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto asinh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::asinh(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the asinh of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the asinh of a dimensionless quantity.");
     using ResultType = decltype(std::asinh(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1085,7 +1086,7 @@ constexpr auto asinh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto acosh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::acosh(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the acosh of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the acosh of a dimensionless quantity.");
     using ResultType = decltype(std::acosh(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1095,7 +1096,7 @@ constexpr auto acosh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto atanh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::atanh(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the atanh of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the atanh of a dimensionless quantity.");
     using ResultType = decltype(std::atanh(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1110,7 +1111,7 @@ constexpr auto atanh(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto erf(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::erf(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the erf of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the erf of a dimensionless quantity.");
     using ResultType = decltype(std::erf(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1120,7 +1121,7 @@ constexpr auto erf(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, 
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto erfc(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::erfc(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the erfc of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the erfc of a dimensionless quantity.");
     using ResultType = decltype(std::erfc(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1133,7 +1134,7 @@ constexpr auto erfc(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>,
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto tgamma(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::tgamma(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the tgamma of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the tgamma of a dimensionless quantity.");
     using ResultType = decltype(std::tgamma(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -1143,7 +1144,7 @@ constexpr auto tgamma(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
 constexpr auto lgamma(quantity<Unit, ValueType> val) -> quantity<make_one_t<Unit>, decltype(std::lgamma(remove_prefix(val).value()))>
 {
-    static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the lgamma of a dimensionless quantity.");
+    static_assert(impl::is_equivalent_list_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the lgamma of a dimensionless quantity.");
     using ResultType = decltype(std::lgamma(remove_prefix(val).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
