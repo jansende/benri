@@ -141,16 +141,16 @@ struct is_one : std::integral_constant<bool, std::is_same_v<typename T::dimensio
 template <class T>
 constexpr bool is_one_v = is_one<T>::value;
 #pragma endregion
-#pragma region back substitution
-//The back_substituion function provides overloads to simplify
-//complicated units by returning their shortcuts.
+#pragma region name resolution
+//The resolve_name function provides overloads to get the
+//name of complicated units.
 template <class T>
-struct back_substitution
+struct resolve_name
 {
-    using type = T;
+    static constexpr auto name = "unknown";
 };
 template <class T>
-using back_substitution_t = typename back_substitution<T>::type;
+constexpr auto resolve_name_v = resolve_name<T>::name;
 #pragma endregion
 #pragma region unit functions
 #pragma region multiplication
@@ -178,7 +178,7 @@ template <template <class, class, class> class LUnit, class LSystem, class LDime
 struct multiply_units<LUnit<LSystem, LDimensions, LPrefix>, RUnit<RSystem, RDimensions, RPrefix>>
 {
     static_assert(std::is_same_v<LSystem, RSystem>, "Both L and R have to have the same unit system.");
-    using type = back_substitution_t<unit<LSystem, impl::multiply_lists_t<LDimensions, RDimensions>, impl::multiply_lists_t<LPrefix, RPrefix>>>;
+    using type = unit<LSystem, impl::multiply_lists_t<LDimensions, RDimensions>, impl::multiply_lists_t<LPrefix, RPrefix>>;
 };
 template <class L, class R>
 using multiply_units_t = typename multiply_units<L, R>::type;
@@ -206,7 +206,7 @@ template <template <class, class, class> class LUnit, class LSystem, class LDime
 struct divide_units<LUnit<LSystem, LDimensions, LPrefix>, RUnit<RSystem, RDimensions, RPrefix>>
 {
     static_assert(std::is_same_v<LSystem, RSystem>, "Both L and R have to have the same unit system.");
-    using type = back_substitution_t<unit<LSystem, impl::divide_lists_t<LDimensions, RDimensions>, impl::divide_lists_t<LPrefix, RPrefix>>>;
+    using type = unit<LSystem, impl::divide_lists_t<LDimensions, RDimensions>, impl::divide_lists_t<LPrefix, RPrefix>>;
 };
 template <class L, class R>
 using divide_units_t = typename divide_units<L, R>::type;
@@ -223,7 +223,7 @@ struct pow_unit
 template <template <class, class, class> class Unit, class System, class Dimensions, class Prefix, intmax_t num, intmax_t den>
 struct pow_unit<Unit<System, Dimensions, Prefix>, std::ratio<num, den>>
 {
-    using type = back_substitution_t<unit<System, impl::pow_list_t<Dimensions, std::ratio<num, den>>, impl::pow_list_t<Prefix, std::ratio<num, den>>>>;
+    using type = unit<System, impl::pow_list_t<Dimensions, std::ratio<num, den>>, impl::pow_list_t<Prefix, std::ratio<num, den>>>;
 };
 template <class L, class R>
 using pow_unit_t = typename pow_unit<L, R>::type;
@@ -258,12 +258,12 @@ template <class T>
 struct no_prefix_unit
 {
     static_assert(is_unit_v<T>, "no_prefix_unit takes a unit, but your T is not a unit.");
-    using type = back_substitution_t<unit<typename T::system, typename T::dimensions, list<>>>;
+    using type = unit<typename T::system, typename T::dimensions, list<>>;
 };
 template <class System, class Dimensions, class Prefix>
 struct no_prefix_unit<unit<System, Dimensions, Prefix>>
 {
-    using type = back_substitution_t<unit<System, Dimensions, list<>>>;
+    using type = unit<System, Dimensions, list<>>;
 };
 template <class T>
 using no_prefix_unit_t = typename no_prefix_unit<T>::type;

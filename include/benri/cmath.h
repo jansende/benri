@@ -24,13 +24,13 @@ namespace benri
 #pragma region helpers
 //dimensionless_t is a shortcut for dimensionless types
 template <class System, class Prefix>
-using dimensionless_t = back_substitution_t<unit<System, typename dim::dimensionless_t, Prefix>>;
+using dimensionless_t = unit<System, typename dim::dimensionless_t, Prefix>;
 //make_one_t creates a dimensionless type from the given Unit
 template <class Unit>
-using make_one_t = back_substitution_t<unit<typename Unit::system, typename dim::dimensionless_t, list<>>>;
+using make_one_t = unit<typename Unit::system, typename dim::dimensionless_t, list<>>;
 //make_plane_angle_t creates an angle type from the given Unit
 template <class Unit>
-using make_plane_angle_t = back_substitution_t<unit<typename Unit::system, typename dim::plane_angle_t, list<>>>;
+using make_plane_angle_t = unit<typename Unit::system, typename dim::plane_angle_t, list<>>;
 #pragma endregion
 #pragma region cmath
 //In the following, most functions of <cmath> are implemented. The order and
