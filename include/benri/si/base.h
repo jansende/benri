@@ -1,4 +1,6 @@
 #pragma once
+#include <benri/quantity.h>
+#include <benri/quantity_point.h>
 #include <benri/si/system.h>
 #include <benri/units/dimensions.h>
 #include <benri/units/macros.h>
