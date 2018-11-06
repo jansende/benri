@@ -11,36 +11,36 @@ namespace si
 namespace astronomic
 {
 #pragma region astronomical unit(length)
-implement_subunit(si, si, astronomic, astronomical_unit, _astronomical_unit, dim::length_t, prefix::astronomical_unit_t);
+implement_subunit(si, si, astronomic, astronomical_unit, dim::length_t, prefix::astronomical_unit_t);
 #pragma endregion
 #pragma region light speed based units(length)
-implement_subunit(si, si, astronomic, lightsecond, _lightsecond, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::second>));
-implement_subunit(si, si, astronomic, lightminute, _lightminute, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::minute>));
-implement_subunit(si, si, astronomic, lighthour, _lighthour, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::hour>));
-implement_subunit(si, si, astronomic, lightday, _lightday, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::day>));
-implement_subunit(si, si, astronomic, lightyear, _lightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>));
-implement_subunit(si, si, astronomic, kilolightyear, _kilolightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::kilo, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
-implement_subunit(si, si, astronomic, megalightyear, _megalightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::mega, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
-implement_subunit(si, si, astronomic, gigalightyear, _gigalightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::giga, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
+implement_subunit(si, si, astronomic, lightsecond, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::second>));
+implement_subunit(si, si, astronomic, lightminute, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::minute>));
+implement_subunit(si, si, astronomic, lighthour, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::hour>));
+implement_subunit(si, si, astronomic, lightday, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::day>));
+implement_subunit(si, si, astronomic, lightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>));
+implement_subunit(si, si, astronomic, kilolightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::kilo, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
+implement_subunit(si, si, astronomic, megalightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::mega, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
+implement_subunit(si, si, astronomic, gigalightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::giga, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
 #pragma endregion
 #pragma region parsec(length)
-implement_subunit(si, si, astronomic, parsec, _parsec, dim::length_t, fix(impl::multiply_lists_t<prefix::one, prefix::parsec_t>));
-implement_subunit(si, si, astronomic, kiloparsec, _kiloparsec, dim::length_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::parsec_t>));
-implement_subunit(si, si, astronomic, megaparsec, _megaparsec, dim::length_t, fix(impl::multiply_lists_t<prefix::mega, prefix::parsec_t>));
-implement_subunit(si, si, astronomic, gigaparsec, _gigaparsec, dim::length_t, fix(impl::multiply_lists_t<prefix::giga, prefix::parsec_t>));
+implement_subunit(si, si, astronomic, parsec, dim::length_t, fix(impl::multiply_lists_t<prefix::one, prefix::parsec_t>));
+implement_subunit(si, si, astronomic, kiloparsec, dim::length_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::parsec_t>));
+implement_subunit(si, si, astronomic, megaparsec, dim::length_t, fix(impl::multiply_lists_t<prefix::mega, prefix::parsec_t>));
+implement_subunit(si, si, astronomic, gigaparsec, dim::length_t, fix(impl::multiply_lists_t<prefix::giga, prefix::parsec_t>));
 #pragma endregion
 #pragma region solar mass, ...(mass)
-implement_subunit(si, si, astronomic, solar_mass, _solar_mass, dim::mass_t, prefix::solar_mass_t);
-implement_subunit(si, si, astronomic, jupiter_mass, _jupiter_mass, dim::mass_t, prefix::jupiter_mass_t);
-implement_subunit(si, si, astronomic, earth_mass, _earth_mass, dim::mass_t, prefix::earth_mass_t);
+implement_subunit(si, si, astronomic, solar_mass, dim::mass_t, prefix::solar_mass_t);
+implement_subunit(si, si, astronomic, jupiter_mass, dim::mass_t, prefix::jupiter_mass_t);
+implement_subunit(si, si, astronomic, earth_mass, dim::mass_t, prefix::earth_mass_t);
 #pragma endregion
 #pragma region solar mass per year, ...(massloss)
-implement_subunit(si, si, astronomic, solar_mass_per_year, _solar_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::solar_mass_t, prefix::year>));
-implement_subunit(si, si, astronomic, jupiter_mass_per_year, _jupiter_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::jupiter_mass_t, prefix::year>));
-implement_subunit(si, si, astronomic, earth_mass_per_year, _earth_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::earth_mass_t, prefix::year>));
+implement_subunit(si, si, astronomic, solar_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::solar_mass_t, prefix::year>));
+implement_subunit(si, si, astronomic, jupiter_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::jupiter_mass_t, prefix::year>));
+implement_subunit(si, si, astronomic, earth_mass_per_year, dim::massloss_t, fix(impl::divide_lists_t<prefix::earth_mass_t, prefix::year>));
 #pragma endregion
 #pragma region solar luminosity (luminosity)
-implement_subunit(si, si, astronomic, solar_luminosity, _solar_luminosity, dim::luminosity_t, prefix::solar_luminosity_t);
+implement_subunit(si, si, astronomic, solar_luminosity, dim::luminosity_t, prefix::solar_luminosity_t);
 #pragma endregion
 } // namespace astronomic
 #pragma region constants
@@ -48,10 +48,10 @@ namespace constant
 {
 using namespace benri::si::base;
 #pragma region astronomical constants
-create_constant(solar_luminosity, prefix::solar_luminosity_v, watt_per_steradian);
-create_constant(solar_mass, prefix::solar_mass_v, kilogram);
-create_constant(jupiter_mass, prefix::jupiter_mass_v, kilogram);
-create_constant(earth_mass, prefix::earth_mass_v, kilogram);
+create_constant(solar_luminosity, prefix::solar_luminosity_v, watt_per_steradian_t);
+create_constant(solar_mass, prefix::solar_mass_v, kilogram_t);
+create_constant(jupiter_mass, prefix::jupiter_mass_v, kilogram_t);
+create_constant(earth_mass, prefix::earth_mass_v, kilogram_t);
 #pragma endregion
 } // namespace constant
 #pragma endregion
