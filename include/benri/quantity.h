@@ -57,9 +57,9 @@ class quantity
     template <class ResultValueType, class Unit, class ValueType>
     friend constexpr auto value_type_cast(const quantity<Unit, ValueType> &rhs) -> quantity<Unit, ResultValueType>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions>, quantity<ResultUnit, ValueType>>;
+    friend constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions>, quantity<ResultUnit, ValueType>>;
+    friend constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
     template <class ResultValueType, class Unit, class ValueType>
     friend constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<no_prefix_unit_t<Unit>, ResultValueType>;
 #pragma endregion
@@ -397,10 +397,16 @@ constexpr auto value_type_cast(const quantity<Unit, ValueType> &rhs) -> quantity
 //compile time. However, the implementation has a restriction, that it is
 //not compatible with roots of units.
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions>, quantity<ResultUnit, ValueType>>
+constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
     //calculation
     return quantity<ResultUnit, ValueType>{rhs._value * impl::expand_list_v<ValueType, impl::divide_lists_t<typename Unit::prefix, typename ResultUnit::prefix>>};
+}
+template <class ResultUnit, class Unit, class ValueType>
+constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
+{
+    //calculation
+    return simple_cast<typename ResultUnit::unit_type>(rhs);
 }
 //The unit_cast function lets you cast one quantity to another unit.
 //This is done by multiplying the value of the quantity with the right
@@ -410,7 +416,7 @@ constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_
 //marked constexpr, to be forward compatible with a constexpr std::pow
 //implementation.
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions>, quantity<ResultUnit, ValueType>>
+constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
     //type checking
     static_assert(is_unit_v<ResultUnit>, "lhs has to be a unit.");
@@ -418,6 +424,12 @@ constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if
     static_assert(impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions>, "lhs and rhs have to have the same dimensions.");
     //calculation
     return quantity<ResultUnit, ValueType>{rhs._value * impl::runtime_expand_list<ValueType>(impl::divide_lists_t<typename Unit::prefix, typename ResultUnit::prefix>{})};
+}
+template <class ResultUnit, class Unit, class ValueType>
+constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
+{
+    //calculation
+    return unit_cast<typename ResultUnit::unit_type>(rhs);
 }
 //The remove_prefix function lets you get rid of the prefix of an arbitrary
 //unit, by multiplying the value of the quantity with the prefix value.

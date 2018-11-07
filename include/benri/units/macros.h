@@ -1,6 +1,7 @@
 #pragma once
 
 #define fix(...) __VA_ARGS__
+
 #define implement_unit(SYSTEM, NAMESPACE, NAME, DIMENSIONS, PREFIX)                  \
     using NAME##_t = unit<SYSTEM, DIMENSIONS, PREFIX>;                               \
     constexpr auto operator"" _##NAME(long double value)                             \
@@ -11,20 +12,7 @@
     {                                                                                \
         return quantity<NAME##_t, Precision>{static_cast<Precision>(value)};         \
     }                                                                                \
-    constexpr auto NAME = quantity<NAME##_t, Precision>{static_cast<Precision>(1)};  \
-    }                                                                                \
-    template <>                                                                      \
-    struct resolve_name<quantity<typename NAMESPACE::NAME##_t, Precision>>           \
-    {                                                                                \
-        static constexpr auto name = #NAME;                                          \
-    };                                                                               \
-    template <>                                                                      \
-    struct resolve_name<typename NAMESPACE::NAME##_t>                                \
-    {                                                                                \
-        static constexpr auto name = #NAME;                                          \
-    };                                                                               \
-    namespace NAMESPACE                                                              \
-    {
+    constexpr auto NAME = quantity<NAME##_t, Precision>{static_cast<Precision>(1)};
 #define implement_subunit(SYSTEM, NAMESPACE, SUBSPACE, NAME, DIMENSIONS, PREFIX)     \
     using NAME##_t = unit<SYSTEM, DIMENSIONS, PREFIX>;                               \
     constexpr auto operator"" _##NAME(long double value)                             \
@@ -35,23 +23,7 @@
     {                                                                                \
         return quantity<NAME##_t, Precision>{static_cast<Precision>(value)};         \
     }                                                                                \
-    constexpr auto NAME = quantity<NAME##_t, Precision>{static_cast<Precision>(1)};  \
-    }                                                                                \
-    }                                                                                \
-    template <>                                                                      \
-    struct resolve_name<quantity<typename NAMESPACE::SUBSPACE::NAME##_t, Precision>> \
-    {                                                                                \
-        static constexpr auto name = #NAME;                                          \
-    };                                                                               \
-    template <>                                                                      \
-    struct resolve_name<typename NAMESPACE::SUBSPACE::NAME##_t>                      \
-    {                                                                                \
-        static constexpr auto name = #NAME;                                          \
-    };                                                                               \
-    namespace NAMESPACE                                                              \
-    {                                                                                \
-    namespace SUBSPACE                                                               \
-    {
+    constexpr auto NAME = quantity<NAME##_t, Precision>{static_cast<Precision>(1)};
 
 #define link_unit(NAME, ALIAS)                                      \
     using NAME##_t = ALIAS##_t;                                     \

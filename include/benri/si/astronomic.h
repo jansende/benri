@@ -19,9 +19,6 @@ implement_subunit(si, si, astronomic, lightminute, dim::length_t, fix(impl::mult
 implement_subunit(si, si, astronomic, lighthour, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::hour>));
 implement_subunit(si, si, astronomic, lightday, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::day>));
 implement_subunit(si, si, astronomic, lightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>));
-implement_subunit(si, si, astronomic, kilolightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::kilo, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
-implement_subunit(si, si, astronomic, megalightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::mega, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
-implement_subunit(si, si, astronomic, gigalightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::giga, impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year>>));
 #pragma endregion
 #pragma region parsec(length)
 implement_subunit(si, si, astronomic, parsec, dim::length_t, fix(impl::multiply_lists_t<prefix::one, prefix::parsec_t>));
@@ -48,7 +45,7 @@ namespace constant
 {
 using namespace benri::si::base;
 #pragma region astronomical constants
-create_constant(solar_luminosity, prefix::solar_luminosity_v, watt_per_steradian_t);
+create_constant(solar_luminosity, prefix::solar_luminosity_v, typename decltype(watt / steradian)::unit_type);
 create_constant(solar_mass, prefix::solar_mass_v, kilogram_t);
 create_constant(jupiter_mass, prefix::jupiter_mass_v, kilogram_t);
 create_constant(earth_mass, prefix::earth_mass_v, kilogram_t);
