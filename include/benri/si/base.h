@@ -190,9 +190,9 @@ implement_subunit(si, si, base, candela, dim::luminous_intensity_t, prefix::one)
 #pragma endregion
 #pragma region radian(plane angle)
 implement_subunit(si, si, base, radian, dim::plane_angle_t, prefix::one);
-implement_subunit(si, si, base, degree, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 180>>));
-implement_subunit(si, si, base, arcminute, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 10800>>));
-implement_subunit(si, si, base, arcsecond, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 648000>>));
+implement_subunit(si, si, base, degree, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 180>>));
+implement_subunit(si, si, base, arcminute, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 10800>>));
+implement_subunit(si, si, base, arcsecond, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 648000>>));
 #pragma endregion
 #pragma region count(number of radioactive events)
 implement_subunit(si, si, base, count, dim::number_of_radioactive_events_t, prefix::one);

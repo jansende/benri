@@ -31,10 +31,10 @@ implement_subunit(si, si, cgs, erg, dim::energy_t, fix(impl::multiply_lists_t<im
 implement_subunit(si, si, cgs, dyne, dim::force_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::micro,prefix::deca>,prefix::one>));
 #pragma endregion
 #pragma region oersted(magnetic field strength)
-implement_subunit(si, si, cgs, oersted, dim::magnetic_field_strength_t, fix(impl::multiply_lists_t<impl::divide_lists_t<prefix::kilo,impl::multiply_lists_t<make_fraction_list_t<4>,prefix::pi_t>>,prefix::one>));
+implement_subunit(si, si, cgs, oersted, dim::magnetic_field_strength_t, fix(impl::multiply_lists_t<impl::divide_lists_t<prefix::kilo,impl::multiply_lists_t<make_fraction_list<4>,prefix::pi_t>>,prefix::one>));
 #pragma endregion
 #pragma region stilb(luminance)
-implement_subunit(si, si, cgs, stilb, dim::luminance_t, fix(impl::multiply_lists_t<make_power_list_t<-4>,prefix::one>));
+implement_subunit(si, si, cgs, stilb, dim::luminance_t, fix(impl::multiply_lists_t<make_power_list<-4>,prefix::one>));
 #pragma endregion
 } // namespace cgs
 } // namespace si

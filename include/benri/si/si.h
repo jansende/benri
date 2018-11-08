@@ -24,7 +24,7 @@ implement_unit(si, si, inch, dim::length_t, prefix::inch_t);
 implement_unit(si, si, dalton, dim::mass_t, prefix::atomic_mass_unit_t);
 link_unit(atomic_mass_unit, dalton);
 implement_unit(si, si, natural_unit_of_mass, dim::mass_t, prefix::electron_mass_t);
-implement_unit(si, si, carat, dim::mass_t, fix(impl::multiply_lists_t<make_fraction_list_t<2>,make_power_list_t<-4>>));
+implement_unit(si, si, carat, dim::mass_t, fix(impl::multiply_lists_t<make_fraction_list<2>,make_power_list<-4>>));
 implement_unit(si, si, pound, dim::mass_t, prefix::pound_t);
 implement_unit(si, si, ounce, dim::mass_t, prefix::ounce_t);
 #pragma endregion
@@ -44,15 +44,15 @@ implement_unit(si, si, natural_unit_of_time, dim::time_t, fix(impl::divide_lists
 implement_unit(si, si, atomic_unit_of_time, dim::time_t, fix(impl::divide_lists_t<prefix::reduced_planck_constant_t,prefix::hartree_energy_t>));
 #pragma endregion
 #pragma region square metre(area)
-implement_unit(si, si, barn, dim::area_t, make_power_list_t<-28>);
+implement_unit(si, si, barn, dim::area_t, make_power_list<-28>);
 implement_unit(si, si, square_picometre, dim::area_t, prefix::yocto);
 implement_unit(si, si, square_nanometre, dim::area_t, prefix::atto);
 implement_unit(si, si, square_micrometre, dim::area_t, prefix::pico);
 implement_unit(si, si, square_millimetre, dim::area_t, prefix::micro);
-implement_unit(si, si, square_centimetre, dim::area_t, fix(make_fraction_list_t<1, 10000>));
+implement_unit(si, si, square_centimetre, dim::area_t, fix(make_fraction_list<1, 10000>));
 implement_unit(si, si, square_decimetre, dim::area_t, prefix::centi);
 implement_unit(si, si, square_metre, dim::area_t, prefix::one);
-implement_unit(si, si, hectare, dim::area_t, make_fraction_list_t<10000>);
+implement_unit(si, si, hectare, dim::area_t, make_fraction_list<10000>);
 implement_unit(si, si, square_kilometre, dim::area_t, prefix::mega);
 #pragma endregion
 #pragma region cubic metre(volume)
@@ -102,7 +102,7 @@ implement_unit(si, si, cubic_kilometre, dim::volume_t, prefix::giga);
 #pragma region candela per square metre(luminance)
 #pragma endregion
 #pragma region plane angle
-implement_unit(si, si, gon, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list_t<1, 200>>));
+implement_unit(si, si, gon, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 200>>));
 implement_unit(si, si, revolution, dim::plane_angle_t, prefix::two_pi_t);
 #pragma endregion
 #pragma region solid angle
@@ -118,11 +118,11 @@ implement_unit(si, si, newton, dim::force_t, prefix::one);
 implement_unit(si, si, pascal, dim::pressure_t, prefix::one);
 #pragma endregion
 #pragma region bar, mmHg, ...(pressure)
-implement_unit(si, si, bar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::one, make_power_list_t<5>>));
+implement_unit(si, si, bar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::one, make_power_list<5>>));
 
-implement_unit(si, si, millimeter_of_mercury, dim::pressure_t, fix(make_fraction_list_t<133322,1000>));
-implement_unit(si, si, atmosphere, dim::pressure_t, make_fraction_list_t<101325>);
-implement_unit(si, si, torr, dim::pressure_t, fix(make_fraction_list_t<101325,760>));
+implement_unit(si, si, millimeter_of_mercury, dim::pressure_t, fix(make_fraction_list<133322,1000>));
+implement_unit(si, si, atmosphere, dim::pressure_t, make_fraction_list<101325>);
+implement_unit(si, si, torr, dim::pressure_t, fix(make_fraction_list<101325,760>));
 #pragma endregion
 #pragma region joule(energy)
 implement_unit(si, si, joule, dim::energy_t, prefix::one);

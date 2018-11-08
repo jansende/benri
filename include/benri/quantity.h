@@ -400,7 +400,7 @@ template <class ResultUnit, class Unit, class ValueType>
 constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
     //calculation
-    return quantity<ResultUnit, ValueType>{rhs._value * impl::expand_list_v<ValueType, impl::divide_lists_t<typename Unit::prefix, typename ResultUnit::prefix>>};
+    return quantity<ResultUnit, ValueType>{rhs._value * impl::multiply_elements<ValueType, impl::divide_lists_t<typename Unit::prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Unit, class ValueType>
 constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
@@ -423,7 +423,7 @@ constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if
     static_assert(std::is_same_v<typename ResultUnit::system, typename Unit::system>, "lhs and rhs have to be from the same unit system.");
     static_assert(impl::is_equivalent_list_v<typename ResultUnit::dimensions, typename Unit::dimensions>, "lhs and rhs have to have the same dimensions.");
     //calculation
-    return quantity<ResultUnit, ValueType>{rhs._value * impl::runtime_expand_list<ValueType>(impl::divide_lists_t<typename Unit::prefix, typename ResultUnit::prefix>{})};
+    return quantity<ResultUnit, ValueType>{rhs._value * impl::runtime_multiply_elements<ValueType>(impl::divide_lists_t<typename Unit::prefix, typename ResultUnit::prefix>{})};
 }
 template <class ResultUnit, class Unit, class ValueType>
 constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
@@ -444,7 +444,7 @@ constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<n
 {
     //calculation
     using PrefixType = typename Unit::prefix;
-    return quantity<no_prefix_unit_t<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_expand_list<ResultValueType>(PrefixType{})};
+    return quantity<no_prefix_unit_t<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_multiply_elements<ResultValueType>(PrefixType{})};
 }
 template <class Unit, class ValueType>
 constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs)
