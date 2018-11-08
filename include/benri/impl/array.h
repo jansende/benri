@@ -53,6 +53,15 @@ struct make_integer_array_impl
 };
 template <class T, T... nums>
 constexpr impl::array<T, sizeof...(nums)> make_integer_array = make_integer_array_impl<T, nums...>::value;
+template <class T, size_t N>
+constexpr auto make_index_array_impl() {
+    auto val = impl::array<T,N>{};
+    for (auto i = size_t{0}; i < N; ++i)
+        val[i] = static_cast<T>(i);
+    return val;
+}
+template <class T, size_t N>
+constexpr auto make_index_array = make_index_array_impl<T,N>();
 //TODO: - Put this into a unit test folder.
 auto test_make_integer_array()
 {

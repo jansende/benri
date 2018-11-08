@@ -1,5 +1,6 @@
 #pragma once
 #include <benri/impl/list.h>
+#include <benri/impl/sorting.h>
 
 namespace benri
 {
@@ -223,7 +224,7 @@ struct pow_unit
 template <template <class, class, class> class Unit, class System, class Dimensions, class Prefix, intmax_t num, intmax_t den>
 struct pow_unit<Unit<System, Dimensions, Prefix>, std::ratio<num, den>>
 {
-    using type = unit<System, impl::pow_list_t<Dimensions, std::ratio<num, den>>, impl::pow_list_t<Prefix, std::ratio<num, den>>>;
+    using type = unit<System, impl::pow_list<Dimensions, std::ratio<num, den>>, impl::pow_list<Prefix, std::ratio<num, den>>>;
 };
 template <class L, class R>
 using pow_unit_t = typename pow_unit<L, R>::type;

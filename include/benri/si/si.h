@@ -10,7 +10,7 @@ namespace si
 using namespace benri::si::base;
 #pragma region units
 implement_unit(si, si, natural_unit_of_speed, dim::velocity_t, prefix::speed_of_light_t);
-implement_unit(si, si, knot, dim::velocity_t, fix(impl::divide_lists_t<prefix::nautical_mile_t,prefix::hour>));
+implement_unit(si, si, knot, dim::velocity_t, fix(impl::divide_lists_t<prefix::nautical_mile_t,prefix::hour_t>));
 #pragma region angstroem, ...(length)
 implement_unit(si, si, angstroem, dim::length_t, prefix::angstroem_t);
 implement_unit(si, si, bohr, dim::length_t, prefix::bohr_t);
@@ -29,18 +29,18 @@ implement_unit(si, si, pound, dim::mass_t, prefix::pound_t);
 implement_unit(si, si, ounce, dim::mass_t, prefix::ounce_t);
 #pragma endregion
 #pragma region minute, hour, ...(time)
-implement_unit(si, si, minute, dim::time_t, prefix::minute);
-implement_unit(si, si, hour, dim::time_t, prefix::hour);
-implement_unit(si, si, day, dim::time_t, prefix::day);
-implement_unit(si, si, week, dim::time_t, prefix::week);
-implement_unit(si, si, month, dim::time_t, prefix::month);
-implement_unit(si, si, year, dim::time_t, prefix::year);
-implement_unit(si, si, kiloyear, dim::time_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::year>));
-implement_unit(si, si, megayear, dim::time_t, fix(impl::multiply_lists_t<prefix::mega, prefix::year>));
-implement_unit(si, si, gigayear, dim::time_t, fix(impl::multiply_lists_t<prefix::giga, prefix::year>));
-implement_unit(si, si, sidereal_year, dim::time_t, prefix::sidereal_year);
-implement_unit(si, si, tropical_year, dim::time_t, prefix::tropical_year);
-implement_unit(si, si, natural_unit_of_time, dim::time_t, fix(impl::divide_lists_t<prefix::reduced_planck_constant_t,impl::multiply_lists_t<prefix::electron_mass_t,impl::pow_list_t<prefix::speed_of_light_t,std::ratio<2>>>>));
+implement_unit(si, si, minute, dim::time_t, prefix::minute_t);
+implement_unit(si, si, hour, dim::time_t, prefix::hour_t);
+implement_unit(si, si, day, dim::time_t, prefix::day_t);
+implement_unit(si, si, week, dim::time_t, prefix::week_t);
+implement_unit(si, si, month, dim::time_t, prefix::month_t);
+implement_unit(si, si, year, dim::time_t, prefix::year_t);
+implement_unit(si, si, kiloyear, dim::time_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::year_t>));
+implement_unit(si, si, megayear, dim::time_t, fix(impl::multiply_lists_t<prefix::mega, prefix::year_t>));
+implement_unit(si, si, gigayear, dim::time_t, fix(impl::multiply_lists_t<prefix::giga, prefix::year_t>));
+implement_unit(si, si, sidereal_year, dim::time_t, prefix::sidereal_year_t);
+implement_unit(si, si, tropical_year, dim::time_t, prefix::tropical_year_t);
+implement_unit(si, si, natural_unit_of_time, dim::time_t, fix(impl::divide_lists_t<prefix::reduced_planck_constant_t,impl::multiply_lists_t<prefix::electron_mass_t,impl::pow_list<prefix::speed_of_light_t,std::ratio<2>>>>));
 implement_unit(si, si, atomic_unit_of_time, dim::time_t, fix(impl::divide_lists_t<prefix::reduced_planck_constant_t,prefix::hartree_energy_t>));
 #pragma endregion
 #pragma region square metre(area)

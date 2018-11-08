@@ -2,6 +2,7 @@
 #include <benri/unit.h>
 #include <benri/impl/list.h>
 #include <benri/units/macros.h>
+#include <benri/impl/sorting.h>
 
 namespace benri
 {
@@ -24,6 +25,81 @@ struct B;    //amount of data
 struct X;    //screen position
 struct degC; //absolute degree celsius
 struct degF; //absolute degree fahrenheit
+} // namespace dim
+//si
+template <>
+struct hash<dim::L>
+{
+    static constexpr float value = 20;
+}; //length
+template <>
+struct hash<dim::M>
+{
+    static constexpr float value = 21;
+}; //mass
+template <>
+struct hash<dim::T>
+{
+    static constexpr float value = 22;
+}; //time, duration
+template <>
+struct hash<dim::I>
+{
+    static constexpr float value = 23;
+}; //current
+template <>
+struct hash<dim::H>
+{
+    static constexpr float value = 24;
+}; //thermodynamic temperature (actually this should be a Θ, but H looks similar)
+template <>
+struct hash<dim::N>
+{
+    static constexpr float value = 25;
+}; //amount of substance
+template <>
+struct hash<dim::J>
+{
+    static constexpr float value = 26;
+}; //luminous intensity
+//special symbols
+template <>
+struct hash<dim::A>
+{
+    static constexpr float value = 27;
+}; //angle
+template <>
+struct hash<dim::C>
+{
+    static constexpr float value = 28;
+}; //number of events (count)
+template <>
+struct hash<dim::S>
+{
+    static constexpr float value = 29;
+}; //helper for Sievert based units
+template <>
+struct hash<dim::B>
+{
+    static constexpr float value = 30;
+}; //amount of data
+template <>
+struct hash<dim::X>
+{
+    static constexpr float value = 31;
+}; //screen position
+template <>
+struct hash<dim::degC>
+{
+    static constexpr float value = 32;
+}; //absolute degree celsius
+template <>
+struct hash<dim::degF>
+{
+    static constexpr float value = 33;
+}; //absolute degree fahrenheit
+namespace dim
+{
 #pragma endregion
 #pragma region atom helper
 template <class Dimension, intmax_t Power = 1>

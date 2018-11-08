@@ -43,13 +43,13 @@ using zebi = impl::multiply_lists_t<pebi, mebi>;
 using yobi = impl::multiply_lists_t<pebi, gibi>;
 #pragma endregion
 #pragma region time prefixes
-using second = make_fraction_list<>;
-using minute = impl::multiply_lists_t<second, make_fraction_list<60>>;
-using hour = impl::multiply_lists_t<minute, make_fraction_list<60>>;
-using day = impl::multiply_lists_t<hour, make_fraction_list<24>>;
-using week = impl::multiply_lists_t<day, make_fraction_list<7>>;
-using month = impl::multiply_lists_t<day, make_fraction_list<30>>;
-using year = impl::multiply_lists_t<day, make_fraction_list<36525, 100>>;
+using second_t = make_fraction_list<>;
+using minute_t = impl::multiply_lists_t<second_t, make_fraction_list<60>>;
+using hour_t = impl::multiply_lists_t<minute_t, make_fraction_list<60>>;
+using day_t = impl::multiply_lists_t<hour_t, make_fraction_list<24>>;
+using week_t = impl::multiply_lists_t<day_t, make_fraction_list<7>>;
+using month_t = impl::multiply_lists_t<day_t, make_fraction_list<30>>;
+using year_t = impl::multiply_lists_t<day_t, make_fraction_list<36525, 100>>;
 //sidereal year in s
 struct sidereal_year
 {
