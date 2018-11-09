@@ -90,7 +90,8 @@ constexpr auto bubble_sort(impl::array<T, N> val, impl::array<size_t, N> index, 
 {
     for (auto i = size_t{0}; i < N - 1; ++i)
         for (auto j = size_t{0}; j < N - i - 1; ++j)
-            if (reverse ? val[j] < val[j + 1] : val[j] > val[j + 1]) {
+            if (reverse ? val[j] < val[j + 1] : val[j] > val[j + 1])
+            {
                 impl::constexpr_swap(val[j], val[j + 1]);
                 impl::constexpr_swap(index[j], index[j + 1]);
             }

@@ -316,7 +316,7 @@ auto test_pow_list()
     static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>>, std::ratio<1, 3>>, list<atom<std::ratio<5>, std::ratio<1, 3>>>>, "");
     static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>>, std::ratio<-1, 3>>, list<atom<std::ratio<5>, std::ratio<-1, 3>>>>, "");
 
-    static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<1>>, list<atom<std::ratio<3>>,atom<std::ratio<5>>>>, "");
+    static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<1>>, list<atom<std::ratio<3>>, atom<std::ratio<5>>>>, "");
     static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<2>>, list<atom<std::ratio<3>, std::ratio<2>>, atom<std::ratio<5>, std::ratio<2>>>>, "");
     static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<-2>>, list<atom<std::ratio<3>, std::ratio<-2>>, atom<std::ratio<5>, std::ratio<-2>>>>, "");
     static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<1, 3>>, list<atom<std::ratio<3>, std::ratio<1, 3>>, atom<std::ratio<5>, std::ratio<1, 3>>>>, "");
@@ -442,9 +442,9 @@ constexpr auto runtime_multiply_elements(list<Atoms...>)
 } // namespace impl
 //Pull the list type and its generators into the benri namespace,
 //because we need it for constructing units.
-using impl::multiply_lists;
 using impl::divide_lists;
 using impl::list;
 using impl::make_fraction_list;
 using impl::make_power_list;
+using impl::multiply_lists;
 } // namespace benri

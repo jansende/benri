@@ -6,8 +6,9 @@
 
 namespace benri
 {
-namespace impl {
-    template <class...>
+namespace impl
+{
+template <class...>
 struct list;
 }
 #pragma region hash function
@@ -76,33 +77,40 @@ struct hash<double>
     static constexpr float value = 12;
 };
 template <class Atom, bool hasValue>
-struct atom_hash_value {
+struct atom_hash_value
+{
     //TODO
 };
 template <template <class, class> class Atom, intmax_t num, intmax_t den, class Power>
-struct atom_hash_value<Atom<std::ratio<num,den>,Power>, false> {
+struct atom_hash_value<Atom<std::ratio<num, den>, Power>, false>
+{
     static constexpr float value = static_cast<float>(num) / static_cast<float>(den);
 };
 template <template <class, class> class Atom, class T, class Power>
-struct atom_hash_value<Atom<T,Power>, false> {
+struct atom_hash_value<Atom<T, Power>, false>
+{
     static constexpr float value = hash<T>::value;
 };
 template <template <class, class> class Atom, class T, class Power>
-struct atom_hash_value<Atom<T,Power>, true> {
+struct atom_hash_value<Atom<T, Power>, true>
+{
     static constexpr float value = static_cast<float>(T::value);
 };
 template <class Atom>
-struct atom_hash {
-//TODO
+struct atom_hash
+{
+    //TODO
 };
 template <template <class, class> class Atom, class T, class Power>
-struct atom_hash<Atom<T,Power>> {
-    static constexpr float value = atom_hash_value<Atom<T,Power>, impl::has_static_constexpr_value_v<T>>::value;
+struct atom_hash<Atom<T, Power>>
+{
+    static constexpr float value = atom_hash_value<Atom<T, Power>, impl::has_static_constexpr_value_v<T>>::value;
 };
 
 template <template <class, class> class Atom, class T, class Power>
-struct hash<Atom<T,Power>> {
-    static constexpr float value = atom_hash<Atom<T,Power>>::value;
+struct hash<Atom<T, Power>>
+{
+    static constexpr float value = atom_hash<Atom<T, Power>>::value;
 };
 template <class T>
 constexpr float hash_v = hash<T>::value;
@@ -187,7 +195,7 @@ static_assert(std::is_same_v<list<int, double>, sort_list<list<int, double>>>, "
 static_assert(std::is_same_v<list<int, double>, sort_list<list<double, int>>>, "");
 static_assert(std::is_same_v<list<int, int, double>, sort_list<list<int, double, int>>>, "");
 static_assert(std::is_same_v<list<int, float, double>, sort_list<list<double, float, int>>>, "");
-static_assert(std::is_same_v<list<atom<int>, atom<float,std::ratio<2>>, atom<double>>, sort_list<list<atom<double>, atom<float,std::ratio<2>>, atom<int>>>>, "");
+static_assert(std::is_same_v<list<atom<int>, atom<float, std::ratio<2>>, atom<double>>, sort_list<list<atom<double>, atom<float, std::ratio<2>>, atom<int>>>>, "");
 } // namespace impl
 using impl::sort_list;
 } // namespace benri

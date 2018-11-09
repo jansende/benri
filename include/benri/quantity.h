@@ -37,8 +37,10 @@ template <class Unit, class ValueType = Precision>
 class quantity
 {
   public:
-    template <class, class> friend class quantity;
-    template <class, class> friend class quantity_point;
+    template <class, class>
+    friend class quantity;
+    template <class, class>
+    friend class quantity_point;
     constexpr quantity(ValueType value) : _value(value) {}
     using value_type = ValueType;
     using unit_type = Unit;
@@ -56,9 +58,9 @@ class quantity
     template <class ResultValueType, class Unit, class ValueType>
     friend constexpr auto value_type_cast(const quantity<Unit, ValueType> &rhs) -> quantity<Unit, ResultValueType>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
+    friend constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
+    friend constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
     template <class ResultValueType, class Unit, class ValueType>
     friend constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<no_prefix_unit_t<Unit>, ResultValueType>;
 #pragma endregion
@@ -72,28 +74,28 @@ class quantity
     //default constructor
     ~quantity() = default;
     //copy assignment
-    constexpr quantity& operator=(const quantity&) = default;
+    constexpr quantity &operator=(const quantity &) = default;
     template <class rhsUnit>
     constexpr auto operator=(const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity &>
     {
         _value = rhs._value;
         return *this;
     }
-    template <class Dummy = quantity&>
+    template <class Dummy = quantity &>
     constexpr auto operator=(const value_type &rhs) noexcept -> std::enable_if_t<is_one_v<unit_type>, Dummy>
     {
         _value = rhs;
         return *this;
     }
     //move assignment
-    constexpr quantity& operator=(quantity&&) = default;
+    constexpr quantity &operator=(quantity &&) = default;
     template <class rhsUnit>
     constexpr auto operator=(quantity<rhsUnit, value_type> &&rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity &>
     {
         _value = std::move(rhs._value);
         return *this;
     }
-    template <class Dummy = quantity&>
+    template <class Dummy = quantity &>
     constexpr auto operator=(value_type &&rhs) noexcept -> std::enable_if_t<is_one_v<unit_type>, Dummy>
     {
         _value = std::move(rhs);
@@ -101,7 +103,8 @@ class quantity
     }
     //implicit type conversion
     template <class Dummy = value_type, typename = std::enable_if_t<is_one_v<unit_type>, Dummy>>
-    explicit operator value_type() const {
+    explicit operator value_type() const
+    {
         return _value;
     }
 #pragma endregion
@@ -117,29 +120,29 @@ class quantity
     }
 #pragma endregion
 #pragma region addition
-    constexpr auto operator+=(const quantity& rhs)
+    constexpr auto operator+=(const quantity &rhs)
     {
         this->_value += rhs._value;
         return *this;
     }
     template <class rhsUnit>
-    constexpr auto operator+=(const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity&>
+    constexpr auto operator+=(const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity &>
     {
         this->_value += rhs._value;
         return *this;
     }
-    template <class Dummy = quantity&>
+    template <class Dummy = quantity &>
     constexpr auto operator+=(const value_type &rhs) -> std::enable_if_t<is_one_v<unit_type>, Dummy>
     {
         this->_value += rhs;
         return *this;
     }
-    friend constexpr auto operator+(const quantity& lhs, const quantity& rhs) 
+    friend constexpr auto operator+(const quantity &lhs, const quantity &rhs)
     {
         return quantity{lhs._value + rhs._value};
     }
     template <class rhsUnit>
-    friend constexpr auto operator+(const quantity& lhs, const quantity<rhsUnit, value_type>& rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity>
+    friend constexpr auto operator+(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity>
     {
         return quantity{lhs._value + rhs._value};
     }
@@ -153,29 +156,29 @@ class quantity
     {
         return quantity{lhs._value + rhs};
     }
-    constexpr auto operator-=(const quantity& rhs)
+    constexpr auto operator-=(const quantity &rhs)
     {
         this->_value -= rhs._value;
         return *this;
     }
     template <class rhsUnit>
-    constexpr auto operator-=(const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity&>
+    constexpr auto operator-=(const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity &>
     {
         this->_value -= rhs._value;
         return *this;
     }
-    template <class Dummy = quantity&>
+    template <class Dummy = quantity &>
     constexpr auto operator-=(const value_type &rhs) -> std::enable_if_t<is_one_v<unit_type>, Dummy>
     {
         this->_value -= rhs;
         return *this;
     }
-    friend constexpr auto operator-(const quantity& lhs, const quantity& rhs) 
+    friend constexpr auto operator-(const quantity &lhs, const quantity &rhs)
     {
         return quantity{lhs._value - rhs._value};
     }
     template <class rhsUnit>
-    friend constexpr auto operator-(const quantity& lhs, const quantity<rhsUnit, value_type>& rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity>
+    friend constexpr auto operator-(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity>
     {
         return quantity{lhs._value - rhs._value};
     }
@@ -208,7 +211,7 @@ class quantity
     //     return quantity<multiply_units_t<lhsUnit, unit_type>, value_type>{lhs._value * rhs._value};
     // }
     template <class lhsUnit, class rhsUnit, class ValueType>
-    friend constexpr auto operator*(const quantity<lhsUnit, ValueType>& lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units_t<lhsUnit, rhsUnit>, ValueType>;
+    friend constexpr auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units_t<lhsUnit, rhsUnit>, ValueType>;
     friend constexpr auto operator*(const quantity &lhs, const value_type &rhs)
     {
         return quantity{lhs._value * rhs};
@@ -234,7 +237,7 @@ class quantity
     //     return quantity<divide_units_t<lhsUnit, unit_type>, value_type>{lhs._value / rhs._value};
     // }
     template <class lhsUnit, class rhsUnit, class ValueType>
-    friend constexpr auto operator/(const quantity<lhsUnit, ValueType>& lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units_t<lhsUnit, rhsUnit>, ValueType>;
+    friend constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units_t<lhsUnit, rhsUnit>, ValueType>;
     // template <class rhsUnit>
     // friend constexpr auto operator/(const quantity& lhs, const quantity<rhsUnit, value_type> &rhs)
     // {
@@ -250,11 +253,13 @@ class quantity
     }
 #pragma endregion
 #pragma region comparisons
-    friend constexpr auto operator==(const quantity& lhs, const quantity& rhs) {
+    friend constexpr auto operator==(const quantity &lhs, const quantity &rhs)
+    {
         return lhs._value == rhs._value;
     }
     template <class rhsUnit>
-    friend constexpr auto operator==(const quantity& lhs, const quantity<rhsUnit, value_type>& rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool> {
+    friend constexpr auto operator==(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    {
         return lhs._value == rhs._value;
     }
     template <class Dummy = bool>
@@ -267,11 +272,13 @@ class quantity
     {
         return lhs._value == rhs;
     }
-    friend constexpr auto operator!=(const quantity& lhs, const quantity& rhs) {
+    friend constexpr auto operator!=(const quantity &lhs, const quantity &rhs)
+    {
         return !(lhs == rhs);
     }
     template <class rhsUnit>
-    friend constexpr auto operator!=(const quantity& lhs, const quantity<rhsUnit, value_type>& rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool> {
+    friend constexpr auto operator!=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    {
         return !(lhs == rhs);
     }
     template <class Dummy = bool>
@@ -284,11 +291,13 @@ class quantity
     {
         return !(lhs == rhs);
     }
-    friend constexpr auto operator<(const quantity& lhs, const quantity& rhs) {
+    friend constexpr auto operator<(const quantity &lhs, const quantity &rhs)
+    {
         return lhs._value < rhs._value;
     }
     template <class rhsUnit>
-    friend constexpr auto operator<(const quantity& lhs, const quantity<rhsUnit, value_type>& rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool> {
+    friend constexpr auto operator<(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    {
         return lhs._value < rhs._value;
     }
     template <class Dummy = bool>
@@ -301,11 +310,13 @@ class quantity
     {
         return lhs._value < rhs;
     }
-    friend constexpr auto operator>(const quantity& lhs, const quantity& rhs) {
+    friend constexpr auto operator>(const quantity &lhs, const quantity &rhs)
+    {
         return rhs < lhs;
     }
     template <class rhsUnit>
-    friend constexpr auto operator>(const quantity& lhs, const quantity<rhsUnit, value_type>& rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool> {
+    friend constexpr auto operator>(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    {
         return rhs < lhs;
     }
     template <class Dummy = bool>
@@ -318,11 +329,13 @@ class quantity
     {
         return rhs < lhs;
     }
-    friend constexpr auto operator<=(const quantity& lhs, const quantity& rhs) {
+    friend constexpr auto operator<=(const quantity &lhs, const quantity &rhs)
+    {
         return !(rhs < lhs);
     }
     template <class rhsUnit>
-    friend constexpr auto operator<=(const quantity& lhs, const quantity<rhsUnit, value_type>& rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool> {
+    friend constexpr auto operator<=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    {
         return !(rhs < lhs);
     }
     template <class Dummy = bool>
@@ -335,11 +348,13 @@ class quantity
     {
         return !(rhs < lhs);
     }
-    friend constexpr auto operator>=(const quantity& lhs, const quantity& rhs) {
+    friend constexpr auto operator>=(const quantity &lhs, const quantity &rhs)
+    {
         return !(lhs < rhs);
     }
     template <class rhsUnit>
-    friend constexpr auto operator>=(const quantity& lhs, const quantity<rhsUnit, value_type>& rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool> {
+    friend constexpr auto operator>=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    {
         return !(lhs < rhs);
     }
     template <class Dummy = bool>
@@ -351,17 +366,17 @@ class quantity
     friend constexpr auto operator>=(const quantity &lhs, const value_type &rhs) -> std::enable_if_t<is_one_v<unit_type>, Dummy>
     {
         return !(lhs < rhs);
-    }   
+    }
 #pragma endregion
 #pragma endregion
 };
 template <class lhsUnit, class rhsUnit, class ValueType>
-constexpr auto operator*(const quantity<lhsUnit, ValueType>& lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units_t<lhsUnit, rhsUnit>, ValueType>
+constexpr auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units_t<lhsUnit, rhsUnit>, ValueType>
 {
     return quantity<multiply_units_t<lhsUnit, rhsUnit>, ValueType>{lhs._value * rhs._value};
 }
 template <class lhsUnit, class rhsUnit, class ValueType>
-constexpr auto operator/(const quantity<lhsUnit, ValueType>& lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units_t<lhsUnit, rhsUnit>, ValueType>
+constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units_t<lhsUnit, rhsUnit>, ValueType>
 {
     return quantity<divide_units_t<lhsUnit, rhsUnit>, ValueType>{lhs._value / rhs._value};
 }
@@ -380,7 +395,7 @@ constexpr auto value_type_cast(const quantity<Unit, ValueType> &rhs) -> quantity
 //compile time. However, the implementation has a restriction, that it is
 //not compatible with roots of units.
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
+constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
     //calculation
     return quantity<ResultUnit, ValueType>{rhs._value * impl::multiply_elements<ValueType, impl::divide_lists_t<typename Unit::prefix, typename ResultUnit::prefix>>};
@@ -399,11 +414,10 @@ constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_
 //marked constexpr, to be forward compatible with a constexpr std::pow
 //implementation.
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::system, typename Unit::system> && std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
+constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
     //type checking
     static_assert(is_unit_v<ResultUnit>, "lhs has to be a unit.");
-    static_assert(std::is_same_v<typename ResultUnit::system, typename Unit::system>, "lhs and rhs have to be from the same unit system.");
     static_assert(std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions>, "lhs and rhs have to have the same dimensions.");
     //calculation
     return quantity<ResultUnit, ValueType>{rhs._value * impl::runtime_multiply_elements<ValueType>(impl::divide_lists_t<typename Unit::prefix, typename ResultUnit::prefix>{})};

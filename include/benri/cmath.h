@@ -23,14 +23,14 @@ namespace benri
 {
 #pragma region helpers
 //make_dimensionless is a shortcut for dimensionless types
-template <class System, class Prefix>
-using make_dimensionless = unit<System, typename dim::dimensionless_t, Prefix>;
+template <class Prefix>
+using make_dimensionless = unit<typename dim::dimensionless_t, Prefix>;
 //make_one creates a dimensionless type from the given Unit
 template <class Unit>
-using make_one = unit<typename Unit::system, typename dim::dimensionless_t, list<>>;
+using make_one = unit<typename dim::dimensionless_t, list<>>;
 //make_plane_angle creates an angle type from the given Unit
 template <class Unit>
-using make_plane_angle = unit<typename Unit::system, typename dim::plane_angle_t, list<>>;
+using make_plane_angle = unit<typename dim::plane_angle_t, list<>>;
 #pragma endregion
 #pragma region cmath
 //In the following, most functions of <cmath> are implemented. The order and
@@ -718,7 +718,6 @@ constexpr auto pow(quantity<baseUnit, ValueType> base)
 template <bool AllowImplicitConversion = false, class baseUnit, class exponentUnit, class ValueType>
 constexpr auto pow(quantity<baseUnit, ValueType> y, quantity<exponentUnit, ValueType> x) -> quantity<make_one<baseUnit>, decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()))>
 {
-    static_assert(std::is_same_v<typename baseUnit::system, typename exponentUnit::system>, "You can only calculate the pow of quantities from the same unit system.");
     static_assert(std::is_same_v<typename baseUnit::dimensions, dim::dimensionless_t> && std::is_same_v<typename exponentUnit::dimensions, dim::dimensionless_t>, "You can only calculate the pow of dimensionless quantities.");
     using ResultType = decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -948,7 +947,6 @@ constexpr auto atan(quantity<Unit, ValueType> val) -> quantity<make_plane_angle<
 template <bool AllowImplicitConversion = false, class yUnit, class xUnit, class ValueType>
 constexpr auto atan2(quantity<yUnit, ValueType> y, quantity<xUnit, ValueType> x) -> quantity<make_plane_angle<yUnit>, decltype(std::atan2(remove_prefix(y).value(), remove_prefix(x).value()))>
 {
-    static_assert(std::is_same_v<typename yUnit::system, typename xUnit::system>, "You can only calculate the atan2 of quantities from the same unit system.");
     static_assert(std::is_same_v<typename yUnit::dimensions, typename xUnit::dimensions>, "You can only calculate the atan2 of quantities with the same dimensions.");
     using ResultType = decltype(std::atan2(remove_prefix(y).value(), remove_prefix(x).value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
