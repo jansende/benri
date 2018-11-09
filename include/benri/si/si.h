@@ -7,6 +7,14 @@ namespace benri
 {
 namespace si
 {
+template <class T>
+constexpr auto square(T val) {
+    return val * val;
+}
+template <class T>
+constexpr auto cubic(T val) {
+    return val * val * val;
+}
 using namespace benri::si::base;
 #pragma region units
 implement_unit(si, si, natural_unit_of_speed, dim::velocity_t, prefix::speed_of_light_t);
@@ -35,9 +43,6 @@ implement_unit(si, si, day, dim::time_t, prefix::day_t);
 implement_unit(si, si, week, dim::time_t, prefix::week_t);
 implement_unit(si, si, month, dim::time_t, prefix::month_t);
 implement_unit(si, si, year, dim::time_t, prefix::year_t);
-implement_unit(si, si, kiloyear, dim::time_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::year_t>));
-implement_unit(si, si, megayear, dim::time_t, fix(impl::multiply_lists_t<prefix::mega, prefix::year_t>));
-implement_unit(si, si, gigayear, dim::time_t, fix(impl::multiply_lists_t<prefix::giga, prefix::year_t>));
 implement_unit(si, si, sidereal_year, dim::time_t, prefix::sidereal_year_t);
 implement_unit(si, si, tropical_year, dim::time_t, prefix::tropical_year_t);
 implement_unit(si, si, natural_unit_of_time, dim::time_t, fix(impl::divide_lists_t<prefix::reduced_planck_constant_t,impl::multiply_lists_t<prefix::electron_mass_t,impl::pow_list<prefix::speed_of_light_t,std::ratio<2>>>>));
@@ -45,25 +50,10 @@ implement_unit(si, si, atomic_unit_of_time, dim::time_t, fix(impl::divide_lists_
 #pragma endregion
 #pragma region square metre(area)
 implement_unit(si, si, barn, dim::area_t, make_power_list<-28>);
-implement_unit(si, si, square_picometre, dim::area_t, prefix::yocto);
-implement_unit(si, si, square_nanometre, dim::area_t, prefix::atto);
-implement_unit(si, si, square_micrometre, dim::area_t, prefix::pico);
-implement_unit(si, si, square_millimetre, dim::area_t, prefix::micro);
-implement_unit(si, si, square_centimetre, dim::area_t, fix(make_fraction_list<1, 10000>));
-implement_unit(si, si, square_decimetre, dim::area_t, prefix::centi);
-implement_unit(si, si, square_metre, dim::area_t, prefix::one);
 implement_unit(si, si, hectare, dim::area_t, make_fraction_list<10000>);
-implement_unit(si, si, square_kilometre, dim::area_t, prefix::mega);
 #pragma endregion
 #pragma region cubic metre(volume)
-implement_unit(si, si, cubic_micrometre, dim::volume_t, prefix::atto);
-implement_unit(si, si, cubic_millimetre, dim::volume_t, prefix::nano);
-implement_unit(si, si, cubic_centimetre, dim::volume_t, prefix::micro);
-link_unit(millilitre, cubic_centimetre);
-implement_unit(si, si, cubic_decimetre, dim::volume_t, prefix::milli);
-link_unit(litre, cubic_decimetre);
-implement_unit(si, si, cubic_metre, dim::volume_t, prefix::one);
-implement_unit(si, si, cubic_kilometre, dim::volume_t, prefix::giga);
+implement_unit(si, si, litre, dim::volume_t, prefix::milli);
 #pragma endregion
 #pragma region metre per second(velocity)
 #pragma endregion

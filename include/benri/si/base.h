@@ -34,7 +34,7 @@ implement_subunit(si, si, base, celsius, dim::celsius_temperature_t, prefix::one
 } // namespace base
 } // namespace si
 template <class System, class lhsDimensions, class rhsDimensions, class Prefix>
-struct is_compatible_impl<System, lhsDimensions, Prefix, System, rhsDimensions, Prefix, std::enable_if_t<(impl::is_equivalent_list_v<lhsDimensions, dim::celsius_temperature_t> && impl::is_equivalent_list_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (impl::is_equivalent_list_v<lhsDimensions, dim::thermodynamic_temperature_t> && impl::is_equivalent_list_v<rhsDimensions, dim::celsius_temperature_t>)>> : std::true_type
+struct is_compatible_impl<System, lhsDimensions, Prefix, System, rhsDimensions, Prefix, std::enable_if_t<(std::is_same_v<lhsDimensions, dim::celsius_temperature_t> && std::is_same_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (std::is_same_v<lhsDimensions, dim::thermodynamic_temperature_t> && std::is_same_v<rhsDimensions, dim::celsius_temperature_t>)>> : std::true_type
 {
 };
 namespace si
@@ -50,7 +50,7 @@ implement_subunit(si, si, base, fahrenheit, dim::fahrenheit_temperature_t, prefi
 } // namespace base
 } // namespace si
 template <class System, class lhsDimensions, class lhsPrefix, class rhsDimensions, class rhsPrefix>
-struct is_compatible_impl<System, lhsDimensions, lhsPrefix, System, rhsDimensions, rhsPrefix, std::enable_if_t<((impl::is_equivalent_list_v<lhsDimensions, dim::fahrenheit_temperature_t> && impl::is_equivalent_list_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (impl::is_equivalent_list_v<lhsDimensions, dim::thermodynamic_temperature_t> && impl::is_equivalent_list_v<rhsDimensions, dim::fahrenheit_temperature_t>)) && ((impl::is_equivalent_list_v<lhsPrefix, impl::multiply_lists_t<rhsPrefix, prefix::rankine_t>>) || (impl::is_equivalent_list_v<impl::multiply_lists_t<lhsPrefix, prefix::rankine_t>, rhsPrefix>))>> : std::true_type
+struct is_compatible_impl<System, lhsDimensions, lhsPrefix, System, rhsDimensions, rhsPrefix, std::enable_if_t<((std::is_same_v<lhsDimensions, dim::fahrenheit_temperature_t> && std::is_same_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (std::is_same_v<lhsDimensions, dim::thermodynamic_temperature_t> && std::is_same_v<rhsDimensions, dim::fahrenheit_temperature_t>)) && ((std::is_same_v<lhsPrefix, impl::multiply_lists_t<rhsPrefix, prefix::rankine_t>>) || (std::is_same_v<impl::multiply_lists_t<lhsPrefix, prefix::rankine_t>, rhsPrefix>))>> : std::true_type
 {
 };
 namespace si

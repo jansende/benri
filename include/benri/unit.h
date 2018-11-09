@@ -19,9 +19,9 @@ template <class T>
 struct has_dimensions
 {
     template <class U>
-    static constexpr auto test(typename U::dimensions *) { return true; };
+    static constexpr auto test(typename U::dimensions *) { return true; }
     template <class U>
-    static constexpr auto test(...) { return false; };
+    static constexpr auto test(...) { return false; }
 
     static constexpr auto value = test<T>(0);
 };
@@ -62,9 +62,9 @@ template <class T>
 struct has_prefix
 {
     template <class U>
-    static constexpr auto test(typename U::prefix *) { return true; };
+    static constexpr auto test(typename U::prefix *) { return true; }
     template <class U>
-    static constexpr auto test(...) { return false; };
+    static constexpr auto test(...) { return false; }
 
     static constexpr auto value = test<T>(0);
 };
@@ -105,9 +105,9 @@ template <class T>
 struct has_system
 {
     template <class U>
-    static constexpr auto test(typename U::system *) { return true; };
+    static constexpr auto test(typename U::system *) { return true; }
     template <class U>
-    static constexpr auto test(...) { return false; };
+    static constexpr auto test(...) { return false; }
 
     static constexpr auto value = test<T>(0);
 };
@@ -229,16 +229,6 @@ struct pow_unit<Unit<System, Dimensions, Prefix>, std::ratio<num, den>>
 template <class L, class R>
 using pow_unit_t = typename pow_unit<L, R>::type;
 #pragma endregion
-#pragma endregion
-#pragma region unit equivalence checker
-//The is_equivalent function checks if two units are equivalent.
-//Meaning that the dimensions and prefixes are equal.
-template <class L, class R>
-struct is_equivalent : std::integral_constant<bool, impl::is_equivalent_list_v<typename L::dimensions, typename R::dimensions> && impl::is_equivalent_list_v<typename L::prefix, typename R::prefix>>
-{
-};
-template <class L, class R>
-constexpr bool is_equivalent_v = is_equivalent<L, R>::value;
 #pragma endregion
 #pragma region unit compatibility checker
 //The is_compatible function checks if two units should be handled

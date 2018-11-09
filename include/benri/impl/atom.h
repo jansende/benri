@@ -23,9 +23,9 @@ template <class T>
 struct has_type
 {
     template <class U>
-    static constexpr auto test(typename U::type *) { return true; };
+    static constexpr auto test(typename U::type *) { return true; }
     template <class U>
-    static constexpr auto test(...) { return false; };
+    static constexpr auto test(...) { return false; }
 
     static constexpr auto value = test<T>(0);
 };
@@ -97,9 +97,9 @@ template <class T>
 struct has_power
 {
     template <class U>
-    static constexpr auto test(typename U::power *) { return true; };
+    static constexpr auto test(typename U::power *) { return true; }
     template <class U>
-    static constexpr auto test(...) { return false; };
+    static constexpr auto test(...) { return false; }
 
     static constexpr auto value = test<T>(0);
 };

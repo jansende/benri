@@ -89,7 +89,7 @@ struct atom_hash_value<Atom<T,Power>, false> {
 };
 template <template <class, class> class Atom, class T, class Power>
 struct atom_hash_value<Atom<T,Power>, true> {
-    static constexpr float value = T::value;
+    static constexpr float value = static_cast<float>(T::value);
 };
 template <class Atom>
 struct atom_hash {

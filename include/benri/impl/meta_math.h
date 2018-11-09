@@ -14,9 +14,9 @@ template <class T>
 struct has_static_constexpr_value
 {
     template <class U>
-    static constexpr auto test(decltype(U::value) *) { return true; };
+    static constexpr auto test(decltype(U::value) *) { return true; }
     template <class U>
-    static constexpr auto test(...) { return false; };
+    static constexpr auto test(...) { return false; }
 
     static constexpr auto value = test<T>(0);
 };
