@@ -18,7 +18,7 @@ implement_subunit(si, astronomic, lightminute, dim::length_t, fix(impl::multiply
 implement_subunit(si, astronomic, lighthour, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::hour_t>));
 implement_subunit(si, astronomic, lightday, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::day_t>));
 implement_subunit(si, astronomic, lightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year_t>));
-implement_subunit(si, astronomic, parsec, dim::length_t, fix(impl::multiply_lists_t<prefix::one, prefix::parsec_t>));
+implement_subunit(si, astronomic, parsec, dim::length_t, prefix::parsec_t);
 #pragma endregion
 #pragma region mass
 implement_subunit(si, astronomic, solar_mass, dim::mass_t, prefix::solar_mass_t);
@@ -34,17 +34,17 @@ implement_subunit(si, astronomic, solar_luminosity, dim::luminosity_t, prefix::s
 #pragma endregion
 #pragma region spectral heat flux density
 //TODO: Check
-implement_subunit(si, astronomic, jansky, dim::surface_tension_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::yocto, prefix::centi>, prefix::one>));
+implement_subunit(si, astronomic, jansky, dim::surface_tension_t, fix(impl::multiply_lists_t<prefix::yocto_t, prefix::centi_t>));
 #pragma endregion
 } // namespace astronomic
 #pragma region constants
 namespace constant
 {
 #pragma region astronomical constants
-create_constant(solar_luminosity, prefix::solar_luminosity_v, typename decltype(kilogram * square(metre) / cubic(second) / steradian)::unit_type);
-create_constant(solar_mass, prefix::solar_mass_v, kilogram_t);
-create_constant(jupiter_mass, prefix::jupiter_mass_v, kilogram_t);
-create_constant(earth_mass, prefix::earth_mass_v, kilogram_t);
+create_constant(solar_luminosity, prefix::solar_luminosity_t, typename decltype(kilogram * square(metre) / cubic(second) / steradian)::unit_type);
+create_constant(solar_mass, prefix::solar_mass_t, kilogram_t);
+create_constant(jupiter_mass, prefix::jupiter_mass_t, kilogram_t);
+create_constant(earth_mass, prefix::earth_mass_t, kilogram_t);
 #pragma endregion
 } // namespace constant
 #pragma endregion

@@ -38,17 +38,17 @@ implement_unit(si, atomic_unit_of_time, dim::time_t, fix(impl::divide_lists_t<pr
 implement_unit(si, hectare, dim::area_t, make_fraction_list<10000>);
 #pragma endregion
 #pragma region volume
-implement_unit(si, litre, dim::volume_t, prefix::milli);
+implement_unit(si, litre, dim::volume_t, prefix::milli_t);
 #pragma endregion
 #pragma region plane angle
 implement_unit(si, gon, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 200>>));
 implement_unit(si, revolution, dim::plane_angle_t, prefix::two_pi_t);
 #pragma endregion
 #pragma region frequency
-implement_unit(si, hertz, dim::frequency_t, prefix::one);
+implement_unit(si, hertz, dim::frequency_t, prefix::one_t);
 #pragma endregion
 #pragma region force
-implement_unit(si, newton, dim::force_t, prefix::one);
+implement_unit(si, newton, dim::force_t, prefix::one_t);
 #pragma endregion
 #pragma region pressure
 //Windows headers might define the pascal macro. This conflicts with
@@ -58,64 +58,64 @@ implement_unit(si, newton, dim::force_t, prefix::one);
 #define BENRI_PASCAL pascal
 #undef pascal
 #endif
-implement_unit(si, pascal, dim::pressure_t, prefix::one);
+implement_unit(si, pascal, dim::pressure_t, prefix::one_t);
 //Restore the value of the pascal macro, if necessary.
 #ifdef BENRI_PASCAL
 #define pascal BENRI_PASCAL
 #undef BENRI_PASCAL
 #endif
-implement_unit(si, bar, dim::pressure_t, fix(impl::multiply_lists_t<prefix::one, make_power_list<5>>));
+implement_unit(si, bar, dim::pressure_t, make_power_list<5>);
 #pragma endregion
 #pragma region energy
-implement_unit(si, joule, dim::energy_t, prefix::one);
-implement_unit(si, electron_volt, dim::energy_t, fix(impl::multiply_lists_t<prefix::one, prefix::elementary_charge_t>));
-implement_unit(si, hartree, dim::energy_t, fix(impl::multiply_lists_t<prefix::one, prefix::hartree_energy_t>));
+implement_unit(si, joule, dim::energy_t, prefix::one_t);
+implement_unit(si, electron_volt, dim::energy_t, prefix::elementary_charge_t);
+implement_unit(si, hartree, dim::energy_t, prefix::hartree_energy_t);
 #pragma endregion
 #pragma region power
-implement_unit(si, watt, dim::power_t, prefix::one);
+implement_unit(si, watt, dim::power_t, prefix::one_t);
 #pragma endregion
 #pragma region electric charge
-implement_unit(si, coulomb, dim::electric_charge_t, prefix::one);
-implement_unit(si, electron, dim::electric_charge_t, fix(impl::multiply_lists_t<prefix::one, prefix::elementary_charge_t>));
+implement_unit(si, coulomb, dim::electric_charge_t, prefix::one_t);
+implement_unit(si, electron, dim::electric_charge_t, prefix::elementary_charge_t);
 #pragma endregion
 #pragma region electric potential
-implement_unit(si, volt, dim::electric_potential_t, prefix::one);
+implement_unit(si, volt, dim::electric_potential_t, prefix::one_t);
 #pragma endregion
 #pragma region capacitance
-implement_unit(si, farad, dim::capacitance_t, prefix::one);
+implement_unit(si, farad, dim::capacitance_t, prefix::one_t);
 #pragma endregion
 #pragma region electric resistance
-implement_unit(si, ohm, dim::electric_resistance_t, prefix::one);
+implement_unit(si, ohm, dim::electric_resistance_t, prefix::one_t);
 #pragma endregion
 #pragma region electric conductance
-implement_unit(si, siemens, dim::electric_conductance_t, prefix::one);
+implement_unit(si, siemens, dim::electric_conductance_t, prefix::one_t);
 #pragma endregion
 #pragma region magnetic flux
-implement_unit(si, weber, dim::magnetic_flux_t, prefix::one);
+implement_unit(si, weber, dim::magnetic_flux_t, prefix::one_t);
 #pragma endregion
 #pragma region magnetic flux density
-implement_unit(si, tesla, dim::magnetic_flux_density_t, prefix::one);
+implement_unit(si, tesla, dim::magnetic_flux_density_t, prefix::one_t);
 #pragma endregion
 #pragma region inductance
-implement_unit(si, henry, dim::inductance_t, prefix::one);
+implement_unit(si, henry, dim::inductance_t, prefix::one_t);
 #pragma endregion
 #pragma region luminous flux
-implement_unit(si, lumen, dim::luminous_flux_t, prefix::one);
+implement_unit(si, lumen, dim::luminous_flux_t, prefix::one_t);
 #pragma endregion
 #pragma region illuminance
-implement_unit(si, lux, dim::illuminance_t, prefix::one);
+implement_unit(si, lux, dim::illuminance_t, prefix::one_t);
 #pragma endregion
 #pragma region activity referred to a radionuclide
-implement_unit(si, becquerel, dim::activity_of_radionuclide_t, prefix::one);
+implement_unit(si, becquerel, dim::activity_of_radionuclide_t, prefix::one_t);
 #pragma endregion
 #pragma region specific energy
-implement_unit(si, gray, dim::absorbed_dose_t, prefix::one);
+implement_unit(si, gray, dim::absorbed_dose_t, prefix::one_t);
 #pragma endregion
 #pragma region dose equivalent
-implement_unit(si, sievert, dim::dose_equivalent_t, prefix::one);
+implement_unit(si, sievert, dim::dose_equivalent_t, prefix::one_t);
 #pragma endregion
 #pragma region catalytic activity
-implement_unit(si, katal, dim::catalytic_activity_t, prefix::one);
+implement_unit(si, katal, dim::catalytic_activity_t, prefix::one_t);
 #pragma endregion
 } // namespace si
 } // namespace benri

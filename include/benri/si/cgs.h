@@ -11,28 +11,28 @@ namespace si
 namespace cgs
 {
 #pragma region acceleration
-implement_subunit(si, cgs, gal, dim::acceleration_t, prefix::deci);
+implement_subunit(si, cgs, gal, dim::acceleration_t, prefix::deci_t);
 #pragma endregion
 #pragma region dynamic viscosity
-implement_subunit(si, cgs, poise, dim::dynamic_viscosity_t, prefix::deci);
+implement_subunit(si, cgs, poise, dim::dynamic_viscosity_t, prefix::deci_t);
 #pragma endregion
 #pragma region magnetic flux
-implement_subunit(si, cgs, maxwell, dim::magnetic_flux_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano, prefix::deca>, prefix::one>));
+implement_subunit(si, cgs, maxwell, dim::magnetic_flux_t, fix(impl::multiply_lists_t<prefix::nano_t, prefix::deca_t>));
 #pragma endregion
 #pragma region magentic flux density
-implement_subunit(si, cgs, gauss, dim::magnetic_flux_density_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::milli, prefix::deci>, prefix::one>));
+implement_subunit(si, cgs, gauss, dim::magnetic_flux_density_t, fix(impl::multiply_lists_t<prefix::milli_t, prefix::deci_t>));
 #pragma endregion
 #pragma region energy
-implement_subunit(si, cgs, erg, dim::energy_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::nano, prefix::hecto>, prefix::one>));
+implement_subunit(si, cgs, erg, dim::energy_t, fix(impl::multiply_lists_t<prefix::nano_t, prefix::hecto_t>));
 #pragma endregion
 #pragma region force
-implement_subunit(si, cgs, dyne, dim::force_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::micro, prefix::deca>, prefix::one>));
+implement_subunit(si, cgs, dyne, dim::force_t, fix(impl::multiply_lists_t<prefix::micro_t, prefix::deca_t>));
 #pragma endregion
 #pragma region magnetic field strength
-implement_subunit(si, cgs, oersted, dim::magnetic_field_strength_t, fix(impl::multiply_lists_t<impl::divide_lists_t<prefix::kilo, impl::multiply_lists_t<make_fraction_list<4>, prefix::pi_t>>, prefix::one>));
+implement_subunit(si, cgs, oersted, dim::magnetic_field_strength_t, fix(impl::divide_lists_t<prefix::kilo_t, impl::multiply_lists_t<make_fraction_list<4>, prefix::pi_t>>));
 #pragma endregion
 #pragma region luminance
-implement_subunit(si, cgs, stilb, dim::luminance_t, fix(impl::multiply_lists_t<make_power_list<-4>, prefix::one>));
+implement_subunit(si, cgs, stilb, dim::luminance_t, make_power_list<-4>);
 #pragma endregion
 } // namespace cgs
 } // namespace si

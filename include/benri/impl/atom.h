@@ -151,15 +151,10 @@ static_assert(is_atom_v<atom<std::ratio<3>>>, "");
 #pragma endregion
 #pragma region expansion
 //The is_root function checks if a given atom has a root power.
-template <class T>
-struct is_root : std::false_type
-{
-    static_assert(is_atom_v<T>, "is_root takes an atom, but your T is not an atom.");
-};
 template <template <class, class> class Atom, class T, intmax_t num, intmax_t den>
-struct is_root<Atom<T, std::ratio<num, den>>> : std::integral_constant<bool, den != 1>
-{
-};
+constexpr auto is_root_impl(Atom<T, std::ratio<num, den>>) { return den != 1; }
+template <class T>
+struct is_root : std::integral_constant<bool, is_root_impl(T{})> {};
 template <class T>
 constexpr bool is_root_v = is_root<T>::value;
 //TODO: - Put this into a unit test folder.
@@ -178,7 +173,6 @@ struct expand_atom
     static_assert(is_atom_v<Atom>, "expand_atom takes a value type and an atom, but your Atom is not an atom.");
     static_assert(has_valid_type_v<Atom>, "expand_atom requires the ::type of your Atom to be std::ratio or have a static constexpr arithmetic ::value.");
     static_assert(!is_root_v<Atom>, "expand_atom cannot handle roots in the atoms at the moment. Sorry!");
-    // static_assert(is_ratio_v<typename Atom::type>, "expand_atom cannot handle constexpr atom::types at the moment. Sorry!");
     static constexpr auto value = power_v<T, typename Atom::type, typename Atom::power>;
 };
 template <class T, class Atom>
