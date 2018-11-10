@@ -1172,22 +1172,22 @@ constexpr auto nextafter(lhsQuantity x, rhsQuantity y)
     return nextafter_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto nexttoward_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::nexttoward(x.value(), y.value()))>
+constexpr auto nexttoward_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())))>
 {
-    using ResultType = decltype(std::nexttoward(x.value(), y.value()));
+    using ResultType = decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
 #endif
-    return quantity<Unit, ResultType>{std::nexttoward(x.value(), y.value())};
+    return quantity<Unit, ResultType>{std::nexttoward(x.value(), static_cast<long double>(y.value()))};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto nexttoward_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, decltype(std::nexttoward(x.value(), y.value()))>
+constexpr auto nexttoward_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())))>
 {
-    using ResultType = decltype(std::nexttoward(x.value(), y.value()));
+    using ResultType = decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
 #endif
-    return quantity_point<Unit, ResultType>{std::nexttoward(x.value(), y.value())};
+    return quantity_point<Unit, ResultType>{std::nexttoward(x.value(), static_cast<long double>(y.value()))};
 }
 template <bool AllowImplicitConversion = false, class lhsQuantity, class rhsQuantity>
 constexpr auto nexttoward(lhsQuantity x, rhsQuantity y)

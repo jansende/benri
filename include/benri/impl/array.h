@@ -18,7 +18,7 @@ struct array
     constexpr array() = default;
     constexpr auto &operator[](size_t index) { return data[index]; }
     constexpr const auto &operator[](size_t index) const { return data[index]; }
-    constexpr const auto size() const { return N; }
+    constexpr auto size() const { return N; }
     constexpr const auto *begin() const { return data; }
     constexpr const auto *end() const { return data + N; }
 };
@@ -29,9 +29,18 @@ struct array<T, 0>
     using value_type = T;
     T data[1];
     constexpr array() = default;
+#pragma warning(push)           //fix msvc warning for this line
+#pragma warning(disable : 4100) //we are warned that we are not using index inside the function, but this is on purpose here
+#pragma GCC diagnostic push     //apply the same fix for gcc and clang
+#pragma GCC diagnostic ignored "-Wunused-parameter"
     constexpr auto &operator[](size_t index) { return data[0]; }
     constexpr const auto &operator[](size_t index) const { return data[0]; }
-    constexpr const auto size() const { return size_t{0}; }
+#pragma GCC diagnostic pop
+#pragma warning(pop)
+    constexpr auto size() const
+    {
+        return size_t{0};
+    }
     constexpr const auto *begin() const { return nullptr; }
     constexpr const auto *end() const { return nullptr; }
 };
