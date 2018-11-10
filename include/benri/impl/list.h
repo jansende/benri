@@ -31,34 +31,34 @@ template <class List>
 constexpr bool is_list_v = is_list<List>::value;
 #pragma endregion
 #pragma region list functions
-#pragma region concat_lists
-//The concat_lists function lets you concat_listsenate two or more lists.
+#pragma region concat
+//The concat function lets you concatenate two or more lists.
 template <class... Lists>
-struct concat_lists_impl
+struct concat_impl
 {
-    static_assert(all_true_v<is_list_v<Lists>...>, "all arguments of concat_lists need to be lists.");
+    static_assert(all_true_v<is_list_v<Lists>...>, "all arguments of concat need to be lists.");
     using type = void;
 };
 template <class... lhsElements, class... rhsElements>
-struct concat_lists_impl<list<lhsElements...>, list<rhsElements...>>
+struct concat_impl<list<lhsElements...>, list<rhsElements...>>
 {
     using type = list<lhsElements..., rhsElements...>;
 };
 template <class lhsList, class rhsList, class... RestLists>
-struct concat_lists_impl<lhsList, rhsList, RestLists...>
+struct concat_impl<lhsList, rhsList, RestLists...>
 {
-    static_assert(is_list_v<lhsList> && is_list_v<rhsList> && all_true_v<is_list_v<RestLists>...>, "all arguments of concat_lists need to be lists.");
-    using type = typename concat_lists_impl<typename concat_lists_impl<lhsList, rhsList>::type, RestLists...>::type;
+    static_assert(is_list_v<lhsList> && is_list_v<rhsList> && all_true_v<is_list_v<RestLists>...>, "all arguments of concat need to be lists.");
+    using type = typename concat_impl<typename concat_impl<lhsList, rhsList>::type, RestLists...>::type;
 };
 template <class... Lists>
-using concat_lists = typename concat_lists_impl<Lists...>::type;
+using concat = typename concat_impl<Lists...>::type;
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(std::is_same_v<concat_lists<list<atom<int>>, list<>>, list<atom<int>>>, "");
-static_assert(std::is_same_v<concat_lists<list<atom<int>>, list<>, list<>>, list<atom<int>>>, "");
-static_assert(std::is_same_v<concat_lists<list<atom<int>>, list<atom<int>>, list<>>, list<atom<int>, atom<int>>>, "");
-static_assert(std::is_same_v<concat_lists<list<atom<bool>>, list<atom<int>>, list<>>, list<atom<bool>, atom<int>>>, "");
-static_assert(std::is_same_v<concat_lists<list<atom<int>, atom<float>, atom<bool>>, list<atom<int>, atom<float>>>, list<atom<int>, atom<float>, atom<bool>, atom<int>, atom<float>>>, "");
+static_assert(std::is_same_v<concat<list<atom<int>>, list<>>, list<atom<int>>>, "");
+static_assert(std::is_same_v<concat<list<atom<int>>, list<>, list<>>, list<atom<int>>>, "");
+static_assert(std::is_same_v<concat<list<atom<int>>, list<atom<int>>, list<>>, list<atom<int>, atom<int>>>, "");
+static_assert(std::is_same_v<concat<list<atom<bool>>, list<atom<int>>, list<>>, list<atom<bool>, atom<int>>>, "");
+static_assert(std::is_same_v<concat<list<atom<int>, atom<float>, atom<bool>>, list<atom<int>, atom<float>>>, list<atom<int>, atom<float>, atom<bool>, atom<int>, atom<float>>>, "");
 #pragma endregion
 #pragma region multiplication
 //The drop_zero_atoms function removes all atoms with a power of zero.
@@ -81,7 +81,7 @@ struct drop_zero_atoms_impl<list<Atom<T, std::ratio<0>>, RestElements...>>
 template <class FirstElement, class... RestElements>
 struct drop_zero_atoms_impl<list<FirstElement, RestElements...>>
 {
-    using type = concat_lists<list<FirstElement>, typename drop_zero_atoms_impl<list<RestElements...>>::type>;
+    using type = concat<list<FirstElement>, typename drop_zero_atoms_impl<list<RestElements...>>::type>;
 };
 template <class List>
 using drop_zero_atoms = typename drop_zero_atoms_impl<List>::type;
@@ -117,7 +117,7 @@ template <class FirstElement, class... RestElements, template <class, class> cla
 struct add_to_first_atom_impl<list<FirstElement, RestElements...>, Atom<T, Power>>
 {
     static_assert(is_atom_v<Atom<T, Power>>, "the rhs of add_to_first_atom needs to be an atom.");
-    using type = concat_lists<list<FirstElement>, typename add_to_first_atom_impl<list<RestElements...>, Atom<T, Power>>::type>;
+    using type = concat<list<FirstElement>, typename add_to_first_atom_impl<list<RestElements...>, Atom<T, Power>>::type>;
 };
 template <class List, class Atom>
 using add_to_first_atom = typename add_to_first_atom_impl<List, Atom>::type;
@@ -198,7 +198,7 @@ template <class FirstElement, class... RestElements, template <class, class> cla
 struct subtract_from_first_atom_impl<list<FirstElement, RestElements...>, Atom<T, Power>>
 {
     static_assert(is_atom_v<Atom<T, Power>>, "the rhs of subtract_from_first_atom needs to be an atom.");
-    using type = concat_lists<list<FirstElement>, typename subtract_from_first_atom_impl<list<RestElements...>, Atom<T, Power>>::type>;
+    using type = concat<list<FirstElement>, typename subtract_from_first_atom_impl<list<RestElements...>, Atom<T, Power>>::type>;
 };
 template <class List, class Atom>
 using subtract_from_first_atom = typename subtract_from_first_atom_impl<List, Atom>::type;
@@ -283,7 +283,7 @@ template <template <class, class> class Atom, class T, class AtomPower, class...
 struct pow_list_impl<list<Atom<T, AtomPower>, RestElements...>, Power>
 {
     static_assert(is_ratio_v<Power>, "the rhs of pow_list needs to be a std::ratio.");
-    using type = concat_lists<list<Atom<T, std::ratio_multiply<AtomPower, Power>>>, typename pow_list_impl<list<RestElements...>, Power>::type>;
+    using type = concat<list<Atom<T, std::ratio_multiply<AtomPower, Power>>>, typename pow_list_impl<list<RestElements...>, Power>::type>;
 };
 template <class List, class Power>
 using pow_list = sort_list<typename pow_list_impl<List, Power>::type>;
