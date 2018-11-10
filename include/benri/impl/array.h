@@ -36,12 +36,10 @@ struct array<T, 0>
     constexpr const auto *end() const { return nullptr; }
 };
 //TODO: - Put this into a unit test folder.
-auto test_array()
-{
-    static_assert(impl::array<int, 0>{}.size() == 0, "impl::array<int,0> should have zero size.");
-    static_assert(impl::array<int, 4>{1, 2, 3, 4}.size() == 4, "impl::array<int, 4>{1, 2, 3, 4} should have a size of four.");
-    static_assert(impl::array<int, 4>{1, 2, 3, 4}[0] == 1 && impl::array<int, 4>{1, 2, 3, 4}[1] == 2 && impl::array<int, 4>{1, 2, 3, 4}[2] == 3 && impl::array<int, 4>{1, 2, 3, 4}[3] == 4, "impl::array<int, 4>{1, 2, 3, 4} should save the right numbers into the array.");
-}
+//basic tests
+static_assert(impl::array<int, 0>{}.size() == 0, "impl::array<int,0> should have zero size.");
+static_assert(impl::array<int, 4>{1, 2, 3, 4}.size() == 4, "impl::array<int, 4>{1, 2, 3, 4} should have a size of four.");
+static_assert(impl::array<int, 4>{1, 2, 3, 4}[0] == 1 && impl::array<int, 4>{1, 2, 3, 4}[1] == 2 && impl::array<int, 4>{1, 2, 3, 4}[2] == 3 && impl::array<int, 4>{1, 2, 3, 4}[3] == 4, "impl::array<int, 4>{1, 2, 3, 4} should save the right numbers into the array.");
 #pragma endregion
 #pragma region array generator
 //The make_integer_array function creates a custom array from a list
@@ -64,12 +62,10 @@ constexpr auto make_index_array_impl()
 template <class T, size_t N>
 constexpr auto make_index_array = make_index_array_impl<T, N>();
 //TODO: - Put this into a unit test folder.
-auto test_make_integer_array()
-{
-    static_assert(make_integer_array<int>.size() == 0, "make_integer_array<int> should have zero size.");
-    static_assert(make_integer_array<int, 1, 2, 3, 4>.size() == 4, "make_integer_array<int, 1, 2, 3, 4> should have a size of four.");
-    static_assert(make_integer_array<int, 1, 2, 3, 4>[0] == 1 && make_integer_array<int, 1, 2, 3, 4>[1] == 2 && make_integer_array<int, 1, 2, 3, 4>[2] == 3 && make_integer_array<int, 1, 2, 3, 4>[3] == 4, "make_integer_array<int, 1, 2, 3, 4> should save the right numbers into the array.");
-}
+//basic tests
+static_assert(make_integer_array<int>.size() == 0, "make_integer_array<int> should have zero size.");
+static_assert(make_integer_array<int, 1, 2, 3, 4>.size() == 4, "make_integer_array<int, 1, 2, 3, 4> should have a size of four.");
+static_assert(make_integer_array<int, 1, 2, 3, 4>[0] == 1 && make_integer_array<int, 1, 2, 3, 4>[1] == 2 && make_integer_array<int, 1, 2, 3, 4>[2] == 3 && make_integer_array<int, 1, 2, 3, 4>[3] == 4, "make_integer_array<int, 1, 2, 3, 4> should save the right numbers into the array.");
 #pragma endregion
 } // namespace impl
 } // namespace benri

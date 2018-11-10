@@ -108,12 +108,10 @@ struct is_unit : std::integral_constant<bool, has_valid_dimensions_v<T> && has_v
 template <class T>
 constexpr bool is_unit_v = is_unit<T>::value;
 //TODO: - Put this into a unit test folder.
-auto test_is_unit()
-{
-    static_assert(!is_unit_v<int>, "");
-    static_assert(!is_unit_v<unit<double, double>>, "");
-    static_assert(is_unit_v<unit<list<>, list<>>>, "");
-}
+//basic tests
+static_assert(!is_unit_v<int>, "");
+static_assert(!is_unit_v<unit<double, double>>, "");
+static_assert(is_unit_v<unit<list<>, list<>>>, "");
 template <class T>
 struct is_dimensionless : std::integral_constant<bool, std::is_same_v<typename T::dimensions, list<>>>
 {

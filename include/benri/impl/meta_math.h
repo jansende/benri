@@ -92,13 +92,11 @@ struct is_integer_sequence<std::integer_sequence<T, Ints...>> : std::true_type
 template <class T>
 constexpr bool is_integer_sequence_v = is_integer_sequence<T>::value;
 //TODO: - Put this into a unit test folder.
-auto test_is_integer_sequence()
-{
-    static_assert(is_integer_sequence_v<std::integer_sequence<intmax_t, 1, 2>>, "std::integer_sequence<intmax_t, 1, 2> should be a integer_sequence.");
-    static_assert(is_integer_sequence_v<std::integer_sequence<intmax_t, 1>>, "std::integer_sequence<intmax_t, 1> should be a integer_sequence.");
-    static_assert(is_integer_sequence_v<std::integer_sequence<intmax_t>>, "std::integer_sequence<intmax_t> should be a integer_sequence.");
-    static_assert(!is_integer_sequence_v<int>, "int should not be a integer_sequence.");
-}
+//basic tests
+static_assert(is_integer_sequence_v<std::integer_sequence<intmax_t, 1, 2>>, "std::integer_sequence<intmax_t, 1, 2> should be a integer_sequence.");
+static_assert(is_integer_sequence_v<std::integer_sequence<intmax_t, 1>>, "std::integer_sequence<intmax_t, 1> should be a integer_sequence.");
+static_assert(is_integer_sequence_v<std::integer_sequence<intmax_t>>, "std::integer_sequence<intmax_t> should be a integer_sequence.");
+static_assert(!is_integer_sequence_v<int>, "int should not be a integer_sequence.");
 //The concat function lets you concatenate two or more integer_sequences.
 template <class... Ts>
 struct concat
@@ -126,14 +124,12 @@ struct concat<L, R, Ts...>
 template <class... Ts>
 using concat_t = typename concat<Ts...>::type;
 //TODO: - Put this into a unit test folder.
-auto test_concat()
-{
-    static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t>, std::integer_sequence<intmax_t, 2>>, std::integer_sequence<intmax_t, 2>>, "std::integer_sequence<intmax_t> and std::integer_sequence<intmax_t, 2> should concat into std::integer_sequence<intmax_t, 2>.");
-    static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t, 2>, std::integer_sequence<intmax_t>>, std::integer_sequence<intmax_t, 2>>, "std::integer_sequence<intmax_t, 2> and std::integer_sequence<intmax_t> should concat into std::integer_sequence<intmax_t, 2>.");
-    static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t, 1>, std::integer_sequence<intmax_t, 7>>, std::integer_sequence<intmax_t, 1, 7>>, "std::integer_sequence<intmax_t, 1> and std::integer_sequence<intmax_t, 7> should concat into std::integer_sequence<intmax_t, 1, 7>.");
-    static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t, 7>, std::integer_sequence<intmax_t, 1>>, std::integer_sequence<intmax_t, 7, 1>>, "std::integer_sequence<intmax_t, 7> and std::integer_sequence<intmax_t, 1> should concat into std::integer_sequence<intmax_t, 7, 1>.");
-    static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t, 1, 7>, std::integer_sequence<intmax_t, 3, 2, 9>>, std::integer_sequence<intmax_t, 1, 7, 3, 2, 9>>, "std::integer_sequence<intmax_t, 1, 7> and std::integer_sequence<intmax_t, 3, 2, 9> should concat into std::integer_sequence<intmax_t, 1, 7, 3, 2, 9>.");
-}
+//basic tests
+static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t>, std::integer_sequence<intmax_t, 2>>, std::integer_sequence<intmax_t, 2>>, "std::integer_sequence<intmax_t> and std::integer_sequence<intmax_t, 2> should concat into std::integer_sequence<intmax_t, 2>.");
+static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t, 2>, std::integer_sequence<intmax_t>>, std::integer_sequence<intmax_t, 2>>, "std::integer_sequence<intmax_t, 2> and std::integer_sequence<intmax_t> should concat into std::integer_sequence<intmax_t, 2>.");
+static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t, 1>, std::integer_sequence<intmax_t, 7>>, std::integer_sequence<intmax_t, 1, 7>>, "std::integer_sequence<intmax_t, 1> and std::integer_sequence<intmax_t, 7> should concat into std::integer_sequence<intmax_t, 1, 7>.");
+static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t, 7>, std::integer_sequence<intmax_t, 1>>, std::integer_sequence<intmax_t, 7, 1>>, "std::integer_sequence<intmax_t, 7> and std::integer_sequence<intmax_t, 1> should concat into std::integer_sequence<intmax_t, 7, 1>.");
+static_assert(std::is_same_v<concat_t<std::integer_sequence<intmax_t, 1, 7>, std::integer_sequence<intmax_t, 3, 2, 9>>, std::integer_sequence<intmax_t, 1, 7, 3, 2, 9>>, "std::integer_sequence<intmax_t, 1, 7> and std::integer_sequence<intmax_t, 3, 2, 9> should concat into std::integer_sequence<intmax_t, 1, 7, 3, 2, 9>.");
 //The drop_numbers function lets you drop all occurences of a number
 //from an integer_sequence.
 template <class T, T, T...>
@@ -193,14 +189,12 @@ struct drop_ones<std::integer_sequence<T, nums...>>
 template <class T>
 using drop_ones_t = typename drop_ones<T>::type;
 //TODO: - Put this into a unit test folder.
-auto test_drop_ones()
-{
-    static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t>>, std::integer_sequence<intmax_t>>::value, "drop_ones_t<std::integer_sequence<intmax_t>> should be transformed to std::integer_sequence<intmax_t>.");
-    static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t, 1>>, std::integer_sequence<intmax_t>>::value, "drop_ones_t<std::integer_sequence<intmax_t, 1>> should be transformed to std::integer_sequence<intmax_t>.");
-    static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t, 2>>, std::integer_sequence<intmax_t, 2>>::value, "drop_ones_t<std::integer_sequence<intmax_t, 2>> should be transformed to std::integer_sequence<intmax_t, 2>.");
-    static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t, 1, 1, 1>>, std::integer_sequence<intmax_t>>::value, "drop_ones_t<std::integer_sequence<intmax_t, 1, 1, 1>> should be transformed to std::integer_sequence<intmax_t>.");
-    static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t, 0, 1, 0, 2>>, std::integer_sequence<intmax_t, 0, 0, 2>>::value, "drop_ones_t<std::integer_sequence<intmax_t, 0, 1, 0, 2>> should be transformed to std::integer_sequence<intmax_t, 0, 0, 2>.");
-}
+//basic tests
+static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t>>, std::integer_sequence<intmax_t>>::value, "drop_ones_t<std::integer_sequence<intmax_t>> should be transformed to std::integer_sequence<intmax_t>.");
+static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t, 1>>, std::integer_sequence<intmax_t>>::value, "drop_ones_t<std::integer_sequence<intmax_t, 1>> should be transformed to std::integer_sequence<intmax_t>.");
+static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t, 2>>, std::integer_sequence<intmax_t, 2>>::value, "drop_ones_t<std::integer_sequence<intmax_t, 2>> should be transformed to std::integer_sequence<intmax_t, 2>.");
+static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t, 1, 1, 1>>, std::integer_sequence<intmax_t>>::value, "drop_ones_t<std::integer_sequence<intmax_t, 1, 1, 1>> should be transformed to std::integer_sequence<intmax_t>.");
+static_assert(std::is_same<drop_ones_t<std::integer_sequence<intmax_t, 0, 1, 0, 2>>, std::integer_sequence<intmax_t, 0, 0, 2>>::value, "drop_ones_t<std::integer_sequence<intmax_t, 0, 1, 0, 2>> should be transformed to std::integer_sequence<intmax_t, 0, 0, 2>.");
 #pragma endregion
 #pragma region primes
 //The is_prime function lets you check if a number is prime.
@@ -220,16 +214,14 @@ struct is_prime : std::integral_constant<bool, is_prime_impl(Num)>
 template <intmax_t Num>
 constexpr bool is_prime_v = is_prime<Num>::value;
 //TODO: - Put this into a unit test folder.
-auto test_is_prime()
-{
-    static_assert(!is_prime_v<100>, "100 is not prime.");
-    static_assert(is_prime_v<19>, "19 is prime.");
-    static_assert(is_prime_v<5>, "5 is prime.");
-    static_assert(is_prime_v<2>, "2 is prime.");
-    static_assert(!is_prime_v<1>, "1 is not prime.");
-    static_assert(!is_prime_v<9>, "9 is not prime.");
-    static_assert(is_prime_v<293339>, "293339 is prime.");
-}
+//basic tests
+static_assert(!is_prime_v<100>, "100 is not prime.");
+static_assert(is_prime_v<19>, "19 is prime.");
+static_assert(is_prime_v<5>, "5 is prime.");
+static_assert(is_prime_v<2>, "2 is prime.");
+static_assert(!is_prime_v<1>, "1 is not prime.");
+static_assert(!is_prime_v<9>, "9 is not prime.");
+static_assert(is_prime_v<293339>, "293339 is prime.");
 //The next_prime function calculates the next prime number after
 //the given number. The given number does no have to be prime.
 template <class T>
@@ -246,13 +238,11 @@ struct next_prime : std::integral_constant<intmax_t, next_prime_impl(Num)>
 template <intmax_t Num>
 constexpr intmax_t next_prime_v = next_prime<Num>::value;
 //TODO: - Put this into a unit test folder.
-auto test_next_prime()
-{
-    static_assert(next_prime_v<2> == 3, "3 is the next prime after 2.");
-    static_assert(next_prime_v<3> == 5, "5 is the next prime after 3.");
-    static_assert(next_prime_v<17> == 19, "19 is the next prime after 17.");
-    static_assert(next_prime_v<9> == 11, "11 is the next prime after 9.");
-}
+//basic tests
+static_assert(next_prime_v<2> == 3, "3 is the next prime after 2.");
+static_assert(next_prime_v<3> == 5, "5 is the next prime after 3.");
+static_assert(next_prime_v<17> == 19, "19 is the next prime after 17.");
+static_assert(next_prime_v<9> == 11, "11 is the next prime after 9.");
 #pragma endregion
 #pragma region factorization
 //The factorization function computes the prime factors of a given
@@ -295,16 +285,14 @@ struct factorization
 template <class T, T Value>
 using factorization_t = typename factorization<T, Value>::type;
 //TODO: - Put this into a unit test folder.
-auto test_factorization()
-{
-    static_assert(std::is_same_v<factorization_t<int, 1>, std::integer_sequence<int>>, "factorization<1> should be <>.");
-    static_assert(std::is_same_v<factorization_t<int, 2>, std::integer_sequence<int, 2>>, "factorization<2> should be <2>.");
-    static_assert(std::is_same_v<factorization_t<int, 17>, std::integer_sequence<int, 17>>, "factorization<17> should be <17>.");
-    static_assert(std::is_same_v<factorization_t<int, 6>, std::integer_sequence<int, 3, 2>>, "factorization<6> should be <3, 2>.");
-    static_assert(std::is_same_v<factorization_t<int, 4>, std::integer_sequence<int, 2, 2>>, "factorization<4> should be <2, 2>.");
-    static_assert(std::is_same_v<factorization_t<int, 8>, std::integer_sequence<int, 2, 2, 2>>, "factorization<8> should be <2, 2, 2>.");
-    static_assert(std::is_same_v<factorization_t<int, 30>, std::integer_sequence<int, 5, 3, 2>>, "factorization<30> should be <5, 3, 2>.");
-}
+//basic tests
+static_assert(std::is_same_v<factorization_t<int, 1>, std::integer_sequence<int>>, "factorization<1> should be <>.");
+static_assert(std::is_same_v<factorization_t<int, 2>, std::integer_sequence<int, 2>>, "factorization<2> should be <2>.");
+static_assert(std::is_same_v<factorization_t<int, 17>, std::integer_sequence<int, 17>>, "factorization<17> should be <17>.");
+static_assert(std::is_same_v<factorization_t<int, 6>, std::integer_sequence<int, 3, 2>>, "factorization<6> should be <3, 2>.");
+static_assert(std::is_same_v<factorization_t<int, 4>, std::integer_sequence<int, 2, 2>>, "factorization<4> should be <2, 2>.");
+static_assert(std::is_same_v<factorization_t<int, 8>, std::integer_sequence<int, 2, 2, 2>>, "factorization<8> should be <2, 2, 2>.");
+static_assert(std::is_same_v<factorization_t<int, 30>, std::integer_sequence<int, 5, 3, 2>>, "factorization<30> should be <5, 3, 2>.");
 #pragma endregion
 } // namespace impl
 } // namespace benri
