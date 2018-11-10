@@ -1,11 +1,11 @@
 #pragma once
-#include <cmath>
-#include <benri/impl/atom.h>
-#include <benri/impl/type_traits.h>
-#include <benri/impl/meta_math.h>
-#include <benri/impl/array.h>
 #include <benri/impl/algorithm.h>
+#include <benri/impl/array.h>
+#include <benri/impl/atom.h>
+#include <benri/impl/meta_math.h>
 #include <benri/impl/sorting.h>
+#include <benri/impl/type_traits.h>
+#include <cmath>
 
 namespace benri
 {

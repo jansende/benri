@@ -1,7 +1,9 @@
 #pragma once
-#include <benri/units/dimensions.h>
-#include <benri/units/macros.h>
-#include <benri/units/prefix.h>
+#include <benri/quantity.h>
+#include <benri/impl/dimensions.h>
+#include <benri/impl/macros.h>
+#include <benri/impl/prefix.h>
+#include <benri/si/base.h>
 
 namespace benri
 {
@@ -9,36 +11,37 @@ namespace si
 {
 namespace astronomic
 {
-#pragma region astronomical unit(length)
+#pragma region length
 implement_subunit(si, astronomic, astronomical_unit, dim::length_t, prefix::astronomical_unit_t);
-#pragma endregion
-#pragma region light speed based units(length)
 implement_subunit(si, astronomic, lightsecond, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::second_t>));
 implement_subunit(si, astronomic, lightminute, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::minute_t>));
 implement_subunit(si, astronomic, lighthour, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::hour_t>));
 implement_subunit(si, astronomic, lightday, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::day_t>));
 implement_subunit(si, astronomic, lightyear, dim::length_t, fix(impl::multiply_lists_t<prefix::speed_of_light_t, prefix::year_t>));
-#pragma endregion
-#pragma region parsec(length)
 implement_subunit(si, astronomic, parsec, dim::length_t, fix(impl::multiply_lists_t<prefix::one, prefix::parsec_t>));
 #pragma endregion
-#pragma region solar mass, ...(mass)
+#pragma region mass
 implement_subunit(si, astronomic, solar_mass, dim::mass_t, prefix::solar_mass_t);
 implement_subunit(si, astronomic, jupiter_mass, dim::mass_t, prefix::jupiter_mass_t);
 implement_subunit(si, astronomic, earth_mass, dim::mass_t, prefix::earth_mass_t);
 #pragma endregion
-#pragma region solar mass per year, ...(massloss)
+#pragma region plane angle
+implement_subunit(si, astronomic, arcminute, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 10800>>));
+implement_subunit(si, astronomic, arcsecond, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 648000>>));
 #pragma endregion
-#pragma region solar luminosity(luminosity)
+#pragma region luminosity
 implement_subunit(si, astronomic, solar_luminosity, dim::luminosity_t, prefix::solar_luminosity_t);
+#pragma endregion
+#pragma region spectral heat flux density
+//TODO: Check
+implement_subunit(si, astronomic, jansky, dim::surface_tension_t, fix(impl::multiply_lists_t<impl::multiply_lists_t<prefix::yocto, prefix::centi>, prefix::one>));
 #pragma endregion
 } // namespace astronomic
 #pragma region constants
 namespace constant
 {
-using namespace benri::si::base;
 #pragma region astronomical constants
-create_constant(solar_luminosity, prefix::solar_luminosity_v, typename decltype(watt / steradian)::unit_type);
+create_constant(solar_luminosity, prefix::solar_luminosity_v, typename decltype(kilogram * square(metre) / cubic(second) / steradian)::unit_type);
 create_constant(solar_mass, prefix::solar_mass_v, kilogram_t);
 create_constant(jupiter_mass, prefix::jupiter_mass_v, kilogram_t);
 create_constant(earth_mass, prefix::earth_mass_v, kilogram_t);

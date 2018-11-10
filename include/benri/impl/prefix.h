@@ -1,7 +1,7 @@
 #pragma once
-#include <benri/config.h>
-#include <benri/unit.h>
+#include <benri/impl/config.h>
 #include <benri/impl/list.h>
+#include <benri/impl/unit.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
 

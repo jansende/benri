@@ -1,12 +1,27 @@
 #pragma once
+#include <benri/impl/config.h>
+#include <benri/impl/dimensions.h>
+#include <benri/impl/unit.h>
 #include <cmath>
-#include <benri/units/dimensions.h>
-#include <benri/unit.h>
-#include <benri/config.h>
 #include <type_traits>
 
 namespace benri
 {
+template <class T>
+constexpr auto square(T val)
+{
+    return val * val;
+}
+template <class T>
+constexpr auto cubic(T val)
+{
+    return val * val * val;
+}
+template <class T>
+constexpr auto quartic(T val)
+{
+    return val * val * val * val;
+}
 #pragma region quantity class helpers
 //quantity forward declaration
 template <class Unit, class ValueType>

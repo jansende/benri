@@ -1,13 +1,13 @@
 #pragma once
 #include <benri/quantity.h>
 #include <benri/quantity_point.h>
-#include <benri/units/dimensions.h>
-#include <benri/unit.h>
-#include <benri/impl/meta_math.h>
+#include <benri/impl/dimensions.h>
 #include <benri/impl/list.h>
-#include <cstdlib>
-#include <cmath>
+#include <benri/impl/meta_math.h>
+#include <benri/impl/unit.h>
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
 namespace std
 {
 template <class T>

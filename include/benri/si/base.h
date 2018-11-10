@@ -1,236 +1,81 @@
 #pragma once
 #include <benri/quantity.h>
 #include <benri/quantity_point.h>
-#include <benri/units/dimensions.h>
-#include <benri/units/macros.h>
-#include <benri/units/prefix.h>
+#include <benri/impl/dimensions.h>
+#include <benri/impl/macros.h>
+#include <benri/impl/prefix.h>
 
 namespace benri
 {
 namespace si
 {
-namespace base
-{
-#pragma region metre(length)
-implement_subunit(si, base, metre, dim::length_t, prefix::one);
+#pragma region length
+implement_unit(si, metre, dim::length_t, prefix::one);
 #pragma endregion
-#pragma region kilogram(mass)
-implement_subunit(si, base, gram, dim::mass_t, fix(impl::multiply_lists_t<prefix::one, prefix::milli>));
-implement_subunit(si, base, kilogram, dim::mass_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::milli>));
-implement_subunit(si, base, tonne, dim::mass_t, fix(impl::multiply_lists_t<prefix::mega, prefix::milli>));
+#pragma region mass
+implement_unit(si, gram, dim::mass_t, fix(impl::multiply_lists_t<prefix::one, prefix::milli>));
+implement_unit(si, kilogram, dim::mass_t, fix(impl::multiply_lists_t<prefix::kilo, prefix::milli>));
+implement_unit(si, tonne, dim::mass_t, fix(impl::multiply_lists_t<prefix::mega, prefix::milli>));
 #pragma endregion
-#pragma region second(time)
-implement_subunit(si, base, second, dim::time_t, prefix::one);
+#pragma region time
+implement_unit(si, second, dim::time_t, prefix::one);
 #pragma endregion
-#pragma region ampere(electric current)
-implement_subunit(si, base, ampere, dim::electric_current_t, prefix::one);
+#pragma region electric current
+implement_unit(si, ampere, dim::electric_current_t, prefix::one);
 #pragma endregion
-#pragma region kelvin(thermodynamic temperature)
-implement_subunit(si, base, kelvin, dim::thermodynamic_temperature_t, prefix::one);
-#pragma endregion
-#pragma region celsius(thermodynamic temperature)
-implement_subunit(si, base, celsius, dim::celsius_temperature_t, prefix::one);
-} // namespace base
-} // namespace si
-template <class lhsDimensions, class rhsDimensions, class Prefix>
-struct is_compatible_impl<lhsDimensions, Prefix, rhsDimensions, Prefix, std::enable_if_t<(std::is_same_v<lhsDimensions, dim::celsius_temperature_t> && std::is_same_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (std::is_same_v<lhsDimensions, dim::thermodynamic_temperature_t> && std::is_same_v<rhsDimensions, dim::celsius_temperature_t>)>> : std::true_type
-{
-};
-namespace si
-{
-namespace base
-{
-#pragma endregion
-#pragma region rankine(thermodynamic temperature)
-implement_subunit(si, base, rankine, dim::thermodynamic_temperature_t, fix(impl::multiply_lists_t<prefix::one, prefix::rankine_t>));
-#pragma endregion
-#pragma region fahrenheit(thermodynamic temperature)
-implement_subunit(si, base, fahrenheit, dim::fahrenheit_temperature_t, prefix::one);
-} // namespace base
-} // namespace si
-template <class lhsDimensions, class lhsPrefix, class rhsDimensions, class rhsPrefix>
-struct is_compatible_impl<lhsDimensions, lhsPrefix, rhsDimensions, rhsPrefix, std::enable_if_t<((std::is_same_v<lhsDimensions, dim::fahrenheit_temperature_t> && std::is_same_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (std::is_same_v<lhsDimensions, dim::thermodynamic_temperature_t> && std::is_same_v<rhsDimensions, dim::fahrenheit_temperature_t>)) && ((std::is_same_v<lhsPrefix, impl::multiply_lists_t<rhsPrefix, prefix::rankine_t>>) || (std::is_same_v<impl::multiply_lists_t<lhsPrefix, prefix::rankine_t>, rhsPrefix>))>> : std::true_type
-{
-};
-namespace si
-{
-namespace base
-{
-#pragma endregion
-#pragma region degree_kelvin(thermodynamic temperature)
+#pragma region thermodynamic temperature
+implement_unit(si, kelvin, dim::thermodynamic_temperature_t, prefix::one);
 link_unit_point(degree_kelvin, kelvin);
 #pragma endregion
-#pragma region degree celsius(thermodynamic temperature)
-link_unit_point(degree_celsius, celsius);
+#pragma region amount of substance
+implement_unit(si, mole, dim::amount_of_substance_t, prefix::one);
 #pragma endregion
-#pragma region degree_rankine(thermodynamic temperature)
-link_unit_point(degree_rankine, rankine);
-#pragma region degree fahrenheit(thermodynamic temperature)
-link_unit_point(degree_fahrenheit, fahrenheit);
+#pragma region luminous intensity
+implement_unit(si, candela, dim::luminous_intensity_t, prefix::one);
 #pragma endregion
-#pragma region simple_cast / unit_cast overloads
-//conversion overload (we need an actual overload, because partial function template specialization is not allowed)
-//celsius to kelvin
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin_t>, quantity_point<degree_kelvin_t, ValueType>>
-{
-    return quantity_point<degree_kelvin_t, ValueType>{rhs.value() + static_cast<ValueType>(prefix::absolute_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin_t>, quantity_point<degree_kelvin_t, ValueType>>
-{
-    return simple_cast<degree_kelvin_t>(rhs);
-}
-//kelvin to celsius
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_kelvin_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius_t>, quantity_point<degree_celsius_t, ValueType>>
-{
-    return quantity_point<degree_celsius_t, ValueType>{rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_kelvin_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius_t>, quantity_point<degree_celsius_t, ValueType>>
-{
-    return simple_cast<degree_celsius_t>(rhs);
-}
-//celsius to rankine
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine_t>, quantity_point<degree_rankine_t, ValueType>>
-{
-    return simple_cast<degree_rankine_t>(simple_cast<degree_kelvin_t>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine_t>, quantity_point<degree_rankine_t, ValueType>>
-{
-    return simple_cast<degree_rankine_t>(rhs);
-}
-//rankine to celsius
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius_t>, quantity_point<degree_celsius_t, ValueType>>
-{
-    return simple_cast<degree_celsius_t>(simple_cast<degree_kelvin_t>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius_t>, quantity_point<degree_celsius_t, ValueType>>
-{
-    return simple_cast<degree_celsius_t>(rhs);
-}
-//fahrenheit to kelvin
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin_t>, quantity_point<degree_kelvin_t, ValueType>>
-{
-    return quantity_point<degree_kelvin_t, ValueType>{(rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)) / static_cast<ValueType>(prefix::rankine::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_kelvin_t>, quantity_point<degree_kelvin_t, ValueType>>
-{
-    return simple_cast<degree_kelvin_t>(rhs);
-}
-//kelvin to fahrenheit
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_kelvin_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit_t>, quantity_point<degree_fahrenheit_t, ValueType>>
-{
-    return quantity_point<degree_fahrenheit_t, ValueType>{rhs.value() * static_cast<ValueType>(prefix::rankine::value) + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_kelvin_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit_t>, quantity_point<degree_fahrenheit_t, ValueType>>
-{
-    return simple_cast<degree_fahrenheit_t>(rhs);
-}
-//fahrenheit to celsius
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius_t>, quantity_point<degree_celsius_t, ValueType>>
-{
-    return simple_cast<degree_celsius_t>(simple_cast<degree_kelvin_t>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_celsius_t>, quantity_point<degree_celsius_t, ValueType>>
-{
-    return simple_cast<degree_celsius_t>(rhs);
-}
-//celsius to fahrenheit
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit_t>, quantity_point<degree_fahrenheit_t, ValueType>>
-{
-    return simple_cast<degree_fahrenheit_t>(simple_cast<degree_kelvin_t>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit_t>, quantity_point<degree_fahrenheit_t, ValueType>>
-{
-    return simple_cast<degree_fahrenheit_t>(rhs);
-}
-//fahrenheit to rankine
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine_t>, quantity_point<degree_rankine_t, ValueType>>
-{
-    return simple_cast<degree_rankine_t>(simple_cast<degree_kelvin_t>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_rankine_t>, quantity_point<degree_rankine_t, ValueType>>
-{
-    return simple_cast<degree_rankine_t>(rhs);
-}
-//rankine to fahrenheit
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit_t>, quantity_point<degree_fahrenheit_t, ValueType>>
-{
-    return simple_cast<degree_fahrenheit_t>(simple_cast<degree_kelvin_t>(rhs));
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, degree_fahrenheit_t>, quantity_point<degree_fahrenheit_t, ValueType>>
-{
-    return simple_cast<degree_fahrenheit_t>(rhs);
-}
+#pragma region plane angle
+implement_unit(si, radian, dim::plane_angle_t, prefix::one);
+implement_unit(si, degree, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 180>>));
 #pragma endregion
-#pragma region mole(amount of substance)
-implement_subunit(si, base, mole, dim::amount_of_substance_t, prefix::one);
+#pragma region solid angle
+implement_unit(si, steradian, dim::solid_angle_t, prefix::one);
 #pragma endregion
-#pragma region candela(luminous intensity)
-implement_subunit(si, base, candela, dim::luminous_intensity_t, prefix::one);
+#pragma region number of radioactive events
+implement_unit(si, count, dim::number_of_radioactive_events_t, prefix::one);
 #pragma endregion
-#pragma region radian(plane angle)
-implement_subunit(si, base, radian, dim::plane_angle_t, prefix::one);
-implement_subunit(si, base, degree, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 180>>));
-implement_subunit(si, base, arcminute, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 10800>>));
-implement_subunit(si, base, arcsecond, dim::plane_angle_t, fix(impl::multiply_lists_t<prefix::pi_t, make_fraction_list<1, 648000>>));
+#pragma region radiation weighting factor
+implement_unit(si, sievert_per_gray, dim::radiation_weighting_factor_t, prefix::one);
 #pragma endregion
-#pragma region count(number of radioactive events)
-implement_subunit(si, base, count, dim::number_of_radioactive_events_t, prefix::one);
-#pragma endregion
-#pragma region sievert per gray(radiation weighting factor)
-implement_subunit(si, base, sievert_per_gray, dim::radiation_weighting_factor_t, prefix::one);
-#pragma endregion
-#pragma region number(dimensionless data)
-implement_subunit(si, base, percent, dim::dimensionless_t, prefix::centi);
-implement_subunit(si, base, permille, dim::dimensionless_t, prefix::milli);
-implement_subunit(si, base, parts_per_million, dim::dimensionless_t, prefix::micro);
+#pragma region dimensionless data
+implement_unit(si, percent, dim::dimensionless_t, prefix::centi);
+implement_unit(si, permille, dim::dimensionless_t, prefix::milli);
+implement_unit(si, parts_per_million, dim::dimensionless_t, prefix::micro);
 
-implement_subunit(si, base, yocto, dim::dimensionless_t, prefix::yocto);
-implement_subunit(si, base, zepto, dim::dimensionless_t, prefix::zepto);
-implement_subunit(si, base, atto, dim::dimensionless_t, prefix::atto);
-implement_subunit(si, base, femto, dim::dimensionless_t, prefix::femto);
-implement_subunit(si, base, pico, dim::dimensionless_t, prefix::pico);
-implement_subunit(si, base, nano, dim::dimensionless_t, prefix::nano);
-implement_subunit(si, base, micro, dim::dimensionless_t, prefix::micro);
-implement_subunit(si, base, milli, dim::dimensionless_t, prefix::milli);
-implement_subunit(si, base, centi, dim::dimensionless_t, prefix::centi);
-implement_subunit(si, base, deci, dim::dimensionless_t, prefix::deci);
-implement_subunit(si, base, one, dim::dimensionless_t, prefix::one);
-implement_subunit(si, base, deca, dim::dimensionless_t, prefix::deca);
-implement_subunit(si, base, hecto, dim::dimensionless_t, prefix::hecto);
-implement_subunit(si, base, kilo, dim::dimensionless_t, prefix::kilo);
-implement_subunit(si, base, mega, dim::dimensionless_t, prefix::mega);
-implement_subunit(si, base, giga, dim::dimensionless_t, prefix::giga);
-implement_subunit(si, base, tera, dim::dimensionless_t, prefix::tera);
-implement_subunit(si, base, peta, dim::dimensionless_t, prefix::peta);
-implement_subunit(si, base, exa, dim::dimensionless_t, prefix::exa);
-implement_subunit(si, base, zetta, dim::dimensionless_t, prefix::zetta);
-implement_subunit(si, base, yotta, dim::dimensionless_t, prefix::yotta);
+implement_unit(si, yocto, dim::dimensionless_t, prefix::yocto);
+implement_unit(si, zepto, dim::dimensionless_t, prefix::zepto);
+implement_unit(si, atto, dim::dimensionless_t, prefix::atto);
+implement_unit(si, femto, dim::dimensionless_t, prefix::femto);
+implement_unit(si, pico, dim::dimensionless_t, prefix::pico);
+implement_unit(si, nano, dim::dimensionless_t, prefix::nano);
+implement_unit(si, micro, dim::dimensionless_t, prefix::micro);
+implement_unit(si, milli, dim::dimensionless_t, prefix::milli);
+implement_unit(si, centi, dim::dimensionless_t, prefix::centi);
+implement_unit(si, deci, dim::dimensionless_t, prefix::deci);
+implement_unit(si, one, dim::dimensionless_t, prefix::one);
+implement_unit(si, deca, dim::dimensionless_t, prefix::deca);
+implement_unit(si, hecto, dim::dimensionless_t, prefix::hecto);
+implement_unit(si, kilo, dim::dimensionless_t, prefix::kilo);
+implement_unit(si, mega, dim::dimensionless_t, prefix::mega);
+implement_unit(si, giga, dim::dimensionless_t, prefix::giga);
+implement_unit(si, tera, dim::dimensionless_t, prefix::tera);
+implement_unit(si, peta, dim::dimensionless_t, prefix::peta);
+implement_unit(si, exa, dim::dimensionless_t, prefix::exa);
+implement_unit(si, zetta, dim::dimensionless_t, prefix::zetta);
+implement_unit(si, yotta, dim::dimensionless_t, prefix::yotta);
 #pragma endregion
-} // namespace base
 #pragma region constants
 namespace constant
 {
-using namespace benri::si::base;
 #pragma region mathematical constants
 create_constant(quarter_pi, prefix::quarter_pi_v, one_t);
 create_constant(half_pi, prefix::half_pi_v, one_t);
@@ -241,33 +86,48 @@ create_constant(phi, prefix::phi_v, one_t);
 create_constant(gamma, prefix::gamma_v, one_t);
 create_constant(root_two, prefix::root_two_v, one_t);
 #pragma endregion
+#pragma region physical constants
+create_constant(speed_of_light, prefix::speed_of_light_v, typename decltype(metre / second)::unit_type);
+create_constant(magnetic_constant, prefix::magnetic_constant_v, typename decltype(metre * kilogram / square(second) / square(ampere))::unit_type);
+create_constant(electric_constant, prefix::electric_constant_v, typename decltype(one / cubic(metre) / kilogram * quartic(second) * square(ampere))::unit_type);
+create_constant(gravitational_constant, prefix::gravitational_constant_v, typename decltype(cubic(metre) / kilogram / square(second))::unit_type);
+create_constant(planck_constant, prefix::planck_constant_v, typename decltype(square(metre) * kilogram / second)::unit_type);
+create_constant(reduced_planck_constant, prefix::reduced_planck_constant_v, typename decltype(square(metre) * kilogram / second)::unit_type);
+create_constant(elementary_charge, prefix::elementary_charge_v, typename decltype(second * ampere)::unit_type);
+create_constant(fine_structure_constant, prefix::fine_structure_constant_v, one_t);
+create_constant(inverse_fine_structure_constant, prefix::inverse_fine_structure_constant_v, one_t);
+create_constant(electron_mass, prefix::electron_mass_v, kilogram_t);
+create_constant(proton_mass, prefix::proton_mass_v, kilogram_t);
+create_constant(muon_mass, prefix::muon_mass_v, kilogram_t);
+create_constant(tau_mass, prefix::tau_mass_v, kilogram_t);
+create_constant(neutron_mass, prefix::neutron_mass_v, kilogram_t);
+create_constant(deuteron_mass, prefix::deuteron_mass_v, kilogram_t);
+create_constant(triton_mass, prefix::triton_mass_v, kilogram_t);
+create_constant(helion_mass, prefix::helion_mass_v, kilogram_t);
+create_constant(alpha_particle_mass, prefix::alpha_particle_mass_v, kilogram_t);
+create_constant(rydberg_constant, prefix::rydberg_constant_v, typename decltype(one / metre)::unit_type);
+create_constant(bohr_radius, prefix::bohr_radius_v, metre_t);
+create_constant(bohr_magneton, prefix::bohr_magneton_v, typename decltype(square(metre) * ampere)::unit_type);
+create_constant(avogadro_constant, prefix::avogadro_constant_v, typename decltype(one / mole)::unit_type);
+create_constant(faraday_constant, prefix::faraday_constant_v, typename decltype(second * ampere / mole)::unit_type);
+create_constant(molar_gas_constant, prefix::molar_gas_constant_v, typename decltype(square(metre) * kilogram / square(second) / mole / kelvin)::unit_type);
+create_constant(boltzmann_constant, prefix::boltzmann_constant_v, typename decltype(square(metre) * kilogram / square(second) / kelvin)::unit_type);
+create_constant(stefan_boltzmann_constant, prefix::stefan_boltzmann_constant_v, typename decltype(kilogram / cubic(second) / quartic(kelvin) / steradian)::unit_type);
+create_constant(magnetic_flux_quantum, prefix::magnetic_flux_quantum_v, typename decltype(square(metre) * kilogram / square(second) / ampere)::unit_type);
+create_constant(josephson_constant, prefix::josephson_constant_v, typename decltype(one / square(metre) / kilogram * square(second) * ampere)::unit_type);
+create_constant(von_klitzing_constant, prefix::von_klitzing_constant_v, typename decltype(square(metre) * kilogram / cubic(second) / square(ampere))::unit_type);
+create_constant(atomic_mass_unit, prefix::atomic_mass_unit_v, kilogram_t);
+create_constant(hartree_energy, prefix::hartree_energy_v, typename decltype(square(metre) * kilogram / square(second))::unit_type);
+create_constant(conductance_quantum, prefix::conductance_quantum_v, typename decltype(one / square(metre) / kilogram * cubic(second) * square(ampere))::unit_type);
+create_constant(inverse_conductance_quantum, prefix::inverse_conductance_quantum_v, typename decltype(square(metre) * kilogram / cubic(second) / square(ampere))::unit_type);
+create_constant(vacuum_impedance, prefix::vacuum_impedance_v, typename decltype(square(metre) * kilogram / cubic(second) / square(ampere))::unit_type);
+create_constant(nuclear_magneton, prefix::nuclear_magneton_v, typename decltype(square(metre) * ampere)::unit_type);
+#pragma endregion
 } // namespace constant
 #pragma endregion
 #pragma region symbols
 namespace symbol
 {
-#pragma region prefixes
-create_symbol(yocto, dim::dimensionless_t, prefix::yocto);
-create_symbol(zepto, dim::dimensionless_t, prefix::zepto);
-create_symbol(atto, dim::dimensionless_t, prefix::atto);
-create_symbol(femto, dim::dimensionless_t, prefix::femto);
-create_symbol(pico, dim::dimensionless_t, prefix::pico);
-create_symbol(nano, dim::dimensionless_t, prefix::nano);
-create_symbol(micro, dim::dimensionless_t, prefix::micro);
-create_symbol(milli, dim::dimensionless_t, prefix::milli);
-create_symbol(centi, dim::dimensionless_t, prefix::centi);
-create_symbol(deci, dim::dimensionless_t, prefix::deci);
-create_symbol(deca, dim::dimensionless_t, prefix::deca);
-create_symbol(hecto, dim::dimensionless_t, prefix::hecto);
-create_symbol(kilo, dim::dimensionless_t, prefix::kilo);
-create_symbol(mega, dim::dimensionless_t, prefix::mega);
-create_symbol(giga, dim::dimensionless_t, prefix::giga);
-create_symbol(tera, dim::dimensionless_t, prefix::tera);
-create_symbol(peta, dim::dimensionless_t, prefix::peta);
-create_symbol(exa, dim::dimensionless_t, prefix::exa);
-create_symbol(zetta, dim::dimensionless_t, prefix::zetta);
-create_symbol(yotta, dim::dimensionless_t, prefix::yotta);
-#pragma endregion
 #pragma region mathematical constants
 create_symbol(quarter_pi, dim::dimensionless_t, prefix::quarter_pi_t);
 create_symbol(half_pi, dim::dimensionless_t, prefix::half_pi_t);
@@ -277,6 +137,43 @@ create_symbol(e, dim::dimensionless_t, prefix::e_t);
 create_symbol(phi, dim::dimensionless_t, prefix::phi_t);
 create_symbol(gamma, dim::dimensionless_t, prefix::gamma_t);
 create_symbol(root_two, dim::dimensionless_t, prefix::root_two_t);
+#pragma endregion
+#pragma region physical constants
+create_symbol(speed_of_light, dim::velocity_t, prefix::speed_of_light_t);
+create_symbol(magnetic_constant, dim::permeability_t, prefix::magnetic_constant_t);
+create_symbol(electric_constant, dim::permittivity_t, prefix::electric_constant_t);
+create_symbol(gravitational_constant, fix(impl::multiply_lists_t<dim::force_t, impl::divide_lists_t<dim::area_t, impl::multiply_lists_t<dim::mass_t, dim::mass_t>>>), prefix::gravitational_constant_t);
+create_symbol(planck_constant, dim::action_t, prefix::planck_constant_t);
+create_symbol(reduced_planck_constant, dim::action_t, prefix::reduced_planck_constant_t);
+create_symbol(elementary_charge, dim::electric_charge_t, prefix::elementary_charge_t);
+create_symbol(fine_structure_constant, dim::dimensionless_t, prefix::fine_structure_constant_t);
+create_symbol(inverse_fine_structure_constant, dim::dimensionless_t, prefix::inverse_fine_structure_constant_t);
+create_symbol(electron_mass, dim::mass_t, prefix::electron_mass_t);
+create_symbol(proton_mass, dim::mass_t, prefix::proton_mass_t);
+create_symbol(muon_mass, dim::mass_t, prefix::muon_mass_t);
+create_symbol(tau_mass, dim::mass_t, prefix::tau_mass_t);
+create_symbol(neutron_mass, dim::mass_t, prefix::neutron_mass_t);
+create_symbol(deuteron_mass, dim::mass_t, prefix::deuteron_mass_t);
+create_symbol(triton_mass, dim::mass_t, prefix::triton_mass_t);
+create_symbol(helion_mass, dim::mass_t, prefix::helion_mass_t);
+create_symbol(alpha_particle_mass, dim::mass_t, prefix::alpha_particle_mass_t);
+create_symbol(rydberg_constant, dim::wavenumber_t, prefix::rydberg_constant_t);
+create_symbol(bohr_radius, dim::length_t, prefix::bohr_radius_t);
+create_symbol(bohr_magneton, fix(impl::divide_lists_t<dim::energy_t, dim::magnetic_flux_density_t>), prefix::bohr_magneton_t);
+create_symbol(avogadro_constant, fix(impl::divide_lists_t<dim::dimensionless_t, dim::amount_of_substance_t>), prefix::avogadro_constant_t);
+create_symbol(faraday_constant, fix(impl::divide_lists_t<dim::electric_charge_t, dim::amount_of_substance_t>), prefix::faraday_constant_t);
+create_symbol(molar_gas_constant, dim::molar_heat_capacity_t, prefix::molar_gas_constant_t);
+create_symbol(boltzmann_constant, dim::heat_capacity_t, prefix::boltzmann_constant_t);
+create_symbol(stefan_boltzmann_constant, fix(impl::divide_lists_t<dim::power_t, impl::multiply_lists_t<dim::area_t, impl::multiply_lists_t<impl::multiply_lists_t<impl::multiply_lists_t<dim::thermodynamic_temperature_t, dim::thermodynamic_temperature_t>, impl::multiply_lists_t<dim::thermodynamic_temperature_t, dim::thermodynamic_temperature_t>>, dim::solid_angle_t>>>), prefix::stefan_boltzmann_constant_t);
+create_symbol(magnetic_flux_quantum, dim::magnetic_flux_t, prefix::magnetic_flux_quantum_t);
+create_symbol(josephson_constant, fix(impl::divide_lists_t<dim::dimensionless_t, dim::magnetic_flux_t>), prefix::josephson_constant_t);
+create_symbol(von_klitzing_constant, dim::electric_resistance_t, prefix::von_klitzing_constant_t);
+create_symbol(atomic_mass_unit, dim::mass_t, prefix::atomic_mass_unit_t);
+create_symbol(hartree_energy, dim::energy_t, prefix::hartree_energy_t);
+create_symbol(conductance_quantum, dim::electric_conductance_t, prefix::conductance_quantum_t);
+create_symbol(inverse_conductance_quantum, dim::electric_resistance_t, prefix::inverse_conductance_quantum_t);
+create_symbol(vacuum_impedance, dim::electric_resistance_t, prefix::vacuum_impedance_t);
+create_symbol(nuclear_magneton, fix(impl::divide_lists_t<dim::energy_t, dim::magnetic_flux_density_t>), prefix::nuclear_magneton_t);
 #pragma endregion
 } // namespace symbol
 #pragma endregion

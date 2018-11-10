@@ -1,6 +1,6 @@
 #pragma once
-#include <benri/impl/array.h>
 #include <benri/impl/algorithm.h>
+#include <benri/impl/array.h>
 #include <benri/impl/atom.h>
 #include <benri/impl/list.h>
 

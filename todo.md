@@ -207,43 +207,43 @@ prefix     = (yocto | zepto | ... | yotta) //See table of prefixes
 
 ## Table of physical constants
 
- | Name                            | Symbol                   | Value                             |
- |:--------------------------------|:-------------------------|:----------------------------------|
-i| speed of light                  | c                        | 299 792 458 m/s (exact)           |
-i| magnetic constant               | μ₀                       | 4π×10⁻⁷ H/m (exact)               |
-i| electric constant               | ε₀ = 1/μ₀c²              | 8.854 178 817...×10⁻¹² F/m        |
-i| gravitational constant          | G                        | 6.674 08(31)×10⁻¹¹ m³ kg⁻¹ s⁻²    |
-i| Planck constant                 | h                        | 6.626 070 040(81)×10⁻³⁴ J s       |
-i| reduced Planck constant         | ħ = h/2π                 | 1.054 571 800(13)×10⁻³⁴ J s       |
-i| elementary charge               | e                        | 1.602 176 6208(98)×10⁻¹⁹ C        |
-i| fine-structure constant         | α = e²/4πε₀ħc = e²μ₀c/2h | 7.297 352 5664(17)×10⁻³           |
-i| inverse fine-structure constant | α⁻¹                      | 137.035 999 139(31)               |
-i| electron mass                   | m_e                      | 9.109 383 56(11)×10⁻³¹ kg         |
-i| proton mass                     | m_p                      | 1.672 621 898(21)×10⁻²⁷ kg        |
-i| muon mass                       | m_μ                      | 1.883 531 594(48)×10⁻²⁸ kg        |
-i| tau mass                        | m_τ                      | 3.167 47(29)×10⁻²⁷ kg             |
-i| neutron mass                    | m_n                      | 1.674 927 471(21)×10⁻²⁷ kg        |
-i| deuteron mass                   | m_d                      | 3.343 583 719(41)×10⁻²⁷ kg        |
-i| triton mass                     | m_t                      | 5.007 356 665(62)×10⁻²⁷ kg        |
-i| helion mass                     | m_h                      | 5.006 412 700(62)×10⁻²⁷ kg        |
-i| α particle mass                 | m_α                      | 6.644 657 230(82)×10⁻²⁷ kg        |
-i| Rydberg constant                | R_∞ = α²m_e c/2h         | 10 973 731.568 508(65) m⁻¹        |
-i| Bohr radius                     | a₀ = α/4πR_∞             | 0.529 177 210 67(12)×10⁻¹⁰ m      |
-i| Bohr magneton                   | μ_B = eħ/2m_e            | 927.400 9994(57)×10⁻²⁶ J/T        |
-i| Avogadro constant               | N_A                      | 6.022 140 857(74)×10²³ mol⁻¹      |
-i| Faraday constant                | F = N_A e                | 96 485.332 89(59) C/mol           |
-i| molar gas constant              | R                        | 8.314 4598(48) J/(mol K)          |
-i| Boltzmann constant              | k = R/N_A                | 1.380 648 52(79)×10⁻²³ J/K        |
-i| Stefan-Boltzmann constant       | σ = π²k⁴/60 ħ³c²         | 5.670 367(13)×10⁻⁸ W m⁻² K⁻⁴ sr⁻¹ |
-i| magnetic flux quantum           | φ₀ = h/2e                | 2.067 833 831(13)×10⁻¹⁵ Wb        |
-i| Josephson constant              | K_J = 2e/h               | 483 597.8525(30)×10⁹ Hz/V         |
-i| von Klitzing constant           | R_K = h/e²               | 25 812.807 4555(59) Ω             |
-i| atomic mass unit                | u                        | 1.660 538 86(28)×10⁻²⁷ kg         |
-i| Hartree energy                  | E_h = e²/4πε₀a₀          | 4.359 744 650(54)×10⁻¹⁸ J         |
-i| conductance quantum             | G₀ = 2e²/h               | 7.748 091 7310(18)×10⁻⁵ S         |
-i| inverse conductance quantum     | G₀⁻¹                     | 12 906.403 7278(29) Ω             |
-i| vacuum impedance                | Z₀ = μ₀c                 | 376.730 313 461... Ω              |
-i| Nuclear magneton                | μ_N = eħ/2m_p            | 5.050 783 699(31)×10⁻²⁷ J/T       |
+ | Name                            | Symbol                   | Value                             | Base Unit                                |
+ |:--------------------------------|:-------------------------|:----------------------------------|:-----------------------------------------|
+i| speed of light                  | c                        | 299 792 458 m/s (exact)           |                    1 m s⁻¹               |
+i| magnetic constant               | μ₀                       | 4π×10⁻⁷ H/m (exact)               |            1 H/m = 1 m kg s⁻² A⁻²        |
+i| electric constant               | ε₀ = 1/μ₀c²              | 8.854 178 817...×10⁻¹² F/m        |            1 F/m = 1 m⁻³ kg⁻¹ s⁴ A²      |
+i| gravitational constant          | G                        | 6.674 08(31)×10⁻¹¹ m³ kg⁻¹ s⁻²    |                    1 m³ kg⁻¹ s⁻²         |
+i| Planck constant                 | h                        | 6.626 070 040(81)×10⁻³⁴ J s       |            1 J s = 1 m² kg s⁻¹           |
+i| reduced Planck constant         | ħ = h/2π                 | 1.054 571 800(13)×10⁻³⁴ J s       |            1 J s = 1 m² kg s⁻¹           |
+i| elementary charge               | e                        | 1.602 176 6208(98)×10⁻¹⁹ C        |              1 C = 1 s A                 |
+i| fine-structure constant         | α = e²/4πε₀ħc = e²μ₀c/2h | 7.297 352 5664(17)×10⁻³           |                    1                     |
+i| inverse fine-structure constant | α⁻¹                      | 137.035 999 139(31)               |                    1                     |
+i| electron mass                   | m_e                      | 9.109 383 56(11)×10⁻³¹ kg         |                    1 kg                  |
+i| proton mass                     | m_p                      | 1.672 621 898(21)×10⁻²⁷ kg        |                    1 kg                  |
+i| muon mass                       | m_μ                      | 1.883 531 594(48)×10⁻²⁸ kg        |                    1 kg                  |
+i| tau mass                        | m_τ                      | 3.167 47(29)×10⁻²⁷ kg             |                    1 kg                  |
+i| neutron mass                    | m_n                      | 1.674 927 471(21)×10⁻²⁷ kg        |                    1 kg                  |
+i| deuteron mass                   | m_d                      | 3.343 583 719(41)×10⁻²⁷ kg        |                    1 kg                  |
+i| triton mass                     | m_t                      | 5.007 356 665(62)×10⁻²⁷ kg        |                    1 kg                  |
+i| helion mass                     | m_h                      | 5.006 412 700(62)×10⁻²⁷ kg        |                    1 kg                  |
+i| α particle mass                 | m_α                      | 6.644 657 230(82)×10⁻²⁷ kg        |                    1 kg                  |
+i| Rydberg constant                | R_∞ = α²m_e c/2h         | 10 973 731.568 508(65) m⁻¹        |                    1 m⁻¹                 |
+i| Bohr radius                     | a₀ = α/4πR_∞             | 0.529 177 210 67(12)×10⁻¹⁰ m      |                    1 m                   |
+i| Bohr magneton                   | μ_B = eħ/2m_e            | 927.400 9994(57)×10⁻²⁶ J/T        |            1 J/T = 1 m² A                |
+i| Avogadro constant               | N_A                      | 6.022 140 857(74)×10²³ mol⁻¹      |                    1 mol⁻¹               |
+i| Faraday constant                | F = N_A e                | 96 485.332 89(59) C/mol           |          1 C/mol = 1 s A mol⁻¹           |
+i| molar gas constant              | R                        | 8.314 4598(48) J/(mol K)          |      1 J/(mol K) = 1 m² kg s⁻² mol⁻¹ K⁻¹ |
+i| Boltzmann constant              | k = R/N_A                | 1.380 648 52(79)×10⁻²³ J/K        |            1 J/K = 1 m² kg s⁻² K⁻¹       |
+i| Stefan-Boltzmann constant       | σ = π²k⁴/60 ħ³c²         | 5.670 367(13)×10⁻⁸ W m⁻² K⁻⁴ sr⁻¹ | 1 W m⁻² K⁻⁴ sr⁻¹ = 1 kg s⁻³ K⁻⁴ sr⁻¹     |
+i| magnetic flux quantum           | φ₀ = h/2e                | 2.067 833 831(13)×10⁻¹⁵ Wb        |             1 Wb = 1 m² kg s⁻² A⁻¹       |
+i| Josephson constant              | K_J = 2e/h               | 483 597.8525(30)×10⁹ Hz/V         |           1 Hz/V = 1 m⁻² kg⁻¹ s² A       |
+i| von Klitzing constant           | R_K = h/e²               | 25 812.807 4555(59) Ω             |              1 Ω = 1 m² kg s⁻³ A⁻²       |
+i| atomic mass unit                | u                        | 1.660 538 86(28)×10⁻²⁷ kg         |                    1 kg                  |
+i| Hartree energy                  | E_h = e²/4πε₀a₀          | 4.359 744 650(54)×10⁻¹⁸ J         |              1 J = 1 m² kg s⁻²           |
+i| conductance quantum             | G₀ = 2e²/h               | 7.748 091 7310(18)×10⁻⁵ S         |              1 S = 1 m⁻² kg⁻¹ s³ A²      |
+i| inverse conductance quantum     | G₀⁻¹                     | 12 906.403 7278(29) Ω             |              1 Ω = 1 m² kg s⁻³ A⁻²       |
+i| vacuum impedance                | Z₀ = μ₀c                 | 376.730 313 461... Ω              |              1 Ω = 1 m² kg s⁻³ A⁻²       |
+i| Nuclear magneton                | μ_N = eħ/2m_p            | 5.050 783 699(31)×10⁻²⁷ J/T       |            1 J/T = 1 m² A                |
 
 ## Table of mathematical constants
 
