@@ -62,7 +62,7 @@ template <class T, size_t N, size_t M>
 constexpr auto equal(impl::array<T, N> vals1, impl::array<T, M> vals2)
 {
     //std::begin and std::end don't work here. thus we use .begin() and .end() instead
-    return impl::equal(vals1.begin(), vals1.end(), vals2.begin(), vals2.end());
+    return (N == 0 || M == 0) ? (N == M) : (N == M && impl::equal(vals1.begin(), vals1.end(), vals2.begin(), vals2.end()));
 }
 //TODO: - Put this into a unit test folder.
 //basic tests
