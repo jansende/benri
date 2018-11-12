@@ -31,7 +31,7 @@ implement_unit(si, month, dim::time_t, prefix::month_t);
 implement_unit(si, year, dim::time_t, prefix::year_t);
 implement_unit(si, sidereal_year, dim::time_t, prefix::sidereal_year_t);
 implement_unit(si, tropical_year, dim::time_t, prefix::tropical_year_t);
-implement_unit(si, natural_unit_of_time, dim::time_t, fix(divide_lists<prefix::reduced_planck_constant_t, multiply_lists<prefix::electron_mass_t, impl::pow_list<prefix::speed_of_light_t, std::ratio<2>>>>));
+implement_unit(si, natural_unit_of_time, dim::time_t, fix(divide_lists<prefix::reduced_planck_constant_t, multiply_lists<prefix::electron_mass_t, pow_list<prefix::speed_of_light_t, std::ratio<2>>>>));
 implement_unit(si, atomic_unit_of_time, dim::time_t, fix(divide_lists<prefix::reduced_planck_constant_t, prefix::hartree_energy_t>));
 #pragma endregion
 #pragma region area

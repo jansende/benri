@@ -192,7 +192,7 @@ struct pow_unit
 template <template <class, class> class Unit, class Dimensions, class Prefix, intmax_t num, intmax_t den>
 struct pow_unit<Unit<Dimensions, Prefix>, std::ratio<num, den>>
 {
-    using type = unit<impl::pow_list<Dimensions, std::ratio<num, den>>, impl::pow_list<Prefix, std::ratio<num, den>>>;
+    using type = unit<pow_list<Dimensions, std::ratio<num, den>>, pow_list<Prefix, std::ratio<num, den>>>;
 };
 template <class L, class R>
 using pow_unit_t = typename pow_unit<L, R>::type;

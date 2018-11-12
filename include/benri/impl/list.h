@@ -170,27 +170,27 @@ static_assert(std::is_same_v<multiply_lists<list<atom<int>, atom<bool>>, list<at
 #pragma region power
 //The pow_list function adds a given power to every atom in a
 //list.
+template <class T, class Power, intmax_t num, intmax_t den>
+constexpr auto pow_atom_impl(atom<T, Power>, std::ratio<num, den>) {
+    return atom<T, std::ratio_multiply<Power, std::ratio<num, den>>>{};
+}
+template <class Atom, class Power>
+using pow_atom = decltype(pow_atom_impl(Atom{}, Power{}));
+
+template <class...Elements, intmax_t num, intmax_t den>
+constexpr auto pow_list_func(list<Elements...>, std::ratio<num, den>) {
+    return list<pow_atom<Elements, std::ratio<num, den>>...>{};
+}
 template <class List, class Power>
-struct pow_list_impl
-{
-    static_assert(is_list_v<List>, "the lhs of pow_list needs to be a list.");
-    static_assert(is_ratio_v<Power>, "the rhs of pow_list needs to be a std::ratio.");
-    using type = void;
+struct pow_list_impl {
+    using type = decltype(pow_list_func(List{}, Power{}));
 };
-template <class Power>
-struct pow_list_impl<list<>, Power>
-{
-    static_assert(is_ratio_v<Power>, "the rhs of pow_list needs to be a std::ratio.");
+template <class List>
+struct pow_list_impl<List, std::ratio<0>> {
     using type = list<>;
 };
-template <template <class, class> class Atom, class T, class AtomPower, class... RestElements, class Power>
-struct pow_list_impl<list<Atom<T, AtomPower>, RestElements...>, Power>
-{
-    static_assert(is_ratio_v<Power>, "the rhs of pow_list needs to be a std::ratio.");
-    using type = concat<list<Atom<T, std::ratio_multiply<AtomPower, Power>>>, typename pow_list_impl<list<RestElements...>, Power>::type>;
-};
 template <class List, class Power>
-using pow_list = sort_list<typename pow_list_impl<List, Power>::type>;
+using pow_list = typename pow_list_impl<List, Power>::type;
 //TODO: - Put this into a unit test folder.
 //basic tests
 static_assert(std::is_same_v<pow_list<list<>, std::ratio<2>>, list<>>, "");
@@ -202,11 +202,11 @@ static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>>, std::ratio<2>>,
 static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>>, std::ratio<-2>>, list<atom<std::ratio<5>, std::ratio<-2>>>>, "");
 static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>>, std::ratio<1, 3>>, list<atom<std::ratio<5>, std::ratio<1, 3>>>>, "");
 static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>>, std::ratio<-1, 3>>, list<atom<std::ratio<5>, std::ratio<-1, 3>>>>, "");
-static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<1>>, list<atom<std::ratio<3>>, atom<std::ratio<5>>>>, "");
-static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<2>>, list<atom<std::ratio<3>, std::ratio<2>>, atom<std::ratio<5>, std::ratio<2>>>>, "");
-static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<-2>>, list<atom<std::ratio<3>, std::ratio<-2>>, atom<std::ratio<5>, std::ratio<-2>>>>, "");
-static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<1, 3>>, list<atom<std::ratio<3>, std::ratio<1, 3>>, atom<std::ratio<5>, std::ratio<1, 3>>>>, "");
-static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<-1, 3>>, list<atom<std::ratio<3>, std::ratio<-1, 3>>, atom<std::ratio<5>, std::ratio<-1, 3>>>>, "");
+static_assert(std::is_same_v<pow_list<list<atom<std::ratio<3>>, atom<std::ratio<5>>>, std::ratio<1>>, list<atom<std::ratio<3>>, atom<std::ratio<5>>>>, "");
+static_assert(std::is_same_v<pow_list<list<atom<std::ratio<3>>, atom<std::ratio<5>>>, std::ratio<2>>, list<atom<std::ratio<3>, std::ratio<2>>, atom<std::ratio<5>, std::ratio<2>>>>, "");
+static_assert(std::is_same_v<pow_list<list<atom<std::ratio<3>>, atom<std::ratio<5>>>, std::ratio<-2>>, list<atom<std::ratio<3>, std::ratio<-2>>, atom<std::ratio<5>, std::ratio<-2>>>>, "");
+static_assert(std::is_same_v<pow_list<list<atom<std::ratio<3>>, atom<std::ratio<5>>>, std::ratio<1, 3>>, list<atom<std::ratio<3>, std::ratio<1, 3>>, atom<std::ratio<5>, std::ratio<1, 3>>>>, "");
+static_assert(std::is_same_v<pow_list<list<atom<std::ratio<3>>, atom<std::ratio<5>>>, std::ratio<-1, 3>>, list<atom<std::ratio<3>, std::ratio<-1, 3>>, atom<std::ratio<5>, std::ratio<-1, 3>>>>, "");
 #pragma endregion
 #pragma region division
 template <class lhsList, class rhsList>
@@ -342,9 +342,10 @@ constexpr auto runtime_multiply_elements(list<Atoms...>)
 } // namespace impl
 //Pull the list type and its generators into the benri namespace,
 //because we need it for constructing units.
+using impl::multiply_lists;
 using impl::divide_lists;
+using impl::pow_list;
 using impl::list;
 using impl::make_fraction_list;
 using impl::make_power_list;
-using impl::multiply_lists;
 } // namespace benri
