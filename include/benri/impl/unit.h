@@ -149,7 +149,7 @@ struct multiply_units<L, Unit<Dimensions, Prefix>>
 template <template <class, class> class LUnit, class LDimensions, class LPrefix, template <class, class> class RUnit, class RDimensions, class RPrefix>
 struct multiply_units<LUnit<LDimensions, LPrefix>, RUnit<RDimensions, RPrefix>>
 {
-    using type = unit<impl::multiply_lists_t<LDimensions, RDimensions>, impl::multiply_lists_t<LPrefix, RPrefix>>;
+    using type = unit<multiply_lists<LDimensions, RDimensions>, multiply_lists<LPrefix, RPrefix>>;
 };
 template <class L, class R>
 using multiply_units_t = typename multiply_units<L, R>::type;
@@ -175,7 +175,7 @@ struct divide_units<L, Unit<Dimensions, Prefix>>
 template <template <class, class> class LUnit, class LDimensions, class LPrefix, template <class, class> class RUnit, class RDimensions, class RPrefix>
 struct divide_units<LUnit<LDimensions, LPrefix>, RUnit<RDimensions, RPrefix>>
 {
-    using type = unit<impl::divide_lists_t<LDimensions, RDimensions>, impl::divide_lists_t<LPrefix, RPrefix>>;
+    using type = unit<divide_lists<LDimensions, RDimensions>, divide_lists<LPrefix, RPrefix>>;
 };
 template <class L, class R>
 using divide_units_t = typename divide_units<L, R>::type;

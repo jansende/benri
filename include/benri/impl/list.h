@@ -155,113 +155,17 @@ struct multiply_lists_impl<lhsList, list<rhsFirstElement, rhsRestElements...>>
     using type = typename multiply_lists_impl<add_to_first_atom<lhsList, rhsFirstElement>, list<rhsRestElements...>>::type;
 };
 template <class lhsList, class rhsList>
-struct multiply_lists
-{
-    static_assert(is_list_v<lhsList> && is_list_v<rhsList>, "lhs and rhs of multiply_lists need to be lists.");
-    using type = drop_zero_atoms<typename multiply_lists_impl<lhsList, rhsList>::type>;
-};
-template <class lhsList, class rhsList>
-using multiply_lists_t = sort_list<typename multiply_lists<lhsList, rhsList>::type>;
+using multiply_lists = sort_list<drop_zero_atoms<typename multiply_lists_impl<lhsList, rhsList>::type>>;
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(std::is_same_v<multiply_lists_t<list<>, list<atom<int>>>, list<atom<int>>>, "");
-static_assert(std::is_same_v<multiply_lists_t<list<atom<int>>, list<>>, list<atom<int>>>, "");
-static_assert(std::is_same_v<multiply_lists_t<list<atom<int>>, list<atom<bool>>>, list<atom<bool>, atom<int>>>, "");
-static_assert(std::is_same_v<multiply_lists_t<list<atom<int>>, list<atom<int>>>, list<atom<int, std::ratio<2>>>>, "");
-static_assert(std::is_same_v<multiply_lists_t<list<atom<int>>, list<atom<int, std::ratio<-1>>>>, list<>>, "");
-static_assert(std::is_same_v<multiply_lists_t<list<atom<int>>, list<atom<int>, atom<bool>>>, list<atom<bool>, atom<int, std::ratio<2>>>>, "");
-static_assert(std::is_same_v<multiply_lists_t<list<atom<int>>, list<atom<bool>, atom<int>>>, list<atom<bool>, atom<int, std::ratio<2>>>>, "");
-static_assert(std::is_same_v<multiply_lists_t<list<atom<int>, atom<bool>>, list<atom<int>>>, list<atom<bool>, atom<int, std::ratio<2>>>>, "");
-//The subtract_from_first_atom function searches the first match-
-//ing atom in a list, and updating it. If it does not exist, the
-//entry is added to the end of the list.
-template <class List, class Atom>
-struct subtract_from_first_atom_impl
-{
-    static_assert(is_list_v<List>, "the lhs of subtract_from_first_atom needs to be a list.");
-    static_assert(is_atom_v<Atom>, "the rhs of subtract_from_first_atom needs to be an atom.");
-    using type = void;
-};
-template <template <class, class> class Atom, class T, class Power>
-struct subtract_from_first_atom_impl<list<>, Atom<T, Power>>
-{
-    static_assert(is_atom_v<Atom<T, Power>>, "the rhs of subtract_from_first_atom needs to be an atom.");
-    using type = list<atom<T, std::ratio_subtract<std::ratio<0>, Power>>>;
-};
-template <template <class, class> class lhsAtom, template <class, class> class rhsAtom, class T, class lhsPower, class rhsPower, class... RestElements>
-struct subtract_from_first_atom_impl<list<lhsAtom<T, lhsPower>, RestElements...>, rhsAtom<T, rhsPower>>
-{
-    static_assert(is_atom_v<rhsAtom<T, rhsPower>>, "the rhs of subtract_from_first_atom needs to be an atom.");
-    using type = list<lhsAtom<T, std::ratio_subtract<lhsPower, rhsPower>>, RestElements...>;
-};
-template <class FirstElement, class... RestElements, template <class, class> class Atom, class T, class Power>
-struct subtract_from_first_atom_impl<list<FirstElement, RestElements...>, Atom<T, Power>>
-{
-    static_assert(is_atom_v<Atom<T, Power>>, "the rhs of subtract_from_first_atom needs to be an atom.");
-    using type = concat<list<FirstElement>, typename subtract_from_first_atom_impl<list<RestElements...>, Atom<T, Power>>::type>;
-};
-template <class List, class Atom>
-using subtract_from_first_atom = typename subtract_from_first_atom_impl<List, Atom>::type;
-//TODO: - Put this into a unit test folder.
-//basic tests
-static_assert(std::is_same_v<subtract_from_first_atom<list<>, atom<int>>, list<atom<int, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<subtract_from_first_atom<list<atom<bool>>, atom<int>>, list<atom<bool>, atom<int, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<subtract_from_first_atom<list<atom<int>>, atom<int>>, list<atom<int, std::ratio<0>>>>, "");
-static_assert(std::is_same_v<subtract_from_first_atom<list<atom<int>, atom<bool>>, atom<int>>, list<atom<int, std::ratio<0>>, atom<bool>>>, "");
-static_assert(std::is_same_v<subtract_from_first_atom<list<atom<bool>, atom<int>>, atom<int>>, list<atom<bool>, atom<int, std::ratio<0>>>>, "");
-//The divide_lists function combines the atoms in two lists,
-//by subtracting the power of atoms with the same type of the
-//left list from the right.
-template <class lhsList, class rhsList>
-struct divide_lists_impl
-{
-    static_assert(is_list_v<lhsList> && is_list_v<rhsList>, "lhs and rhs of divide_lists need to be lists.");
-    using type = void;
-};
-template <class lhsList>
-struct divide_lists_impl<lhsList, list<>>
-{
-    static_assert(is_list_v<lhsList>, "lhs and rhs of divide_lists need to be lists.");
-    using type = lhsList;
-};
-template <class lhsList, class rhsElement>
-struct divide_lists_impl<lhsList, list<rhsElement>>
-{
-    static_assert(is_list_v<lhsList>, "lhs and rhs of divide_lists need to be lists.");
-    using type = subtract_from_first_atom<lhsList, rhsElement>;
-};
-template <class lhsList, class rhsFirstElement, class... rhsRestElements>
-struct divide_lists_impl<lhsList, list<rhsFirstElement, rhsRestElements...>>
-{
-    static_assert(is_list_v<lhsList>, "lhs and rhs of divide_lists need to be lists.");
-    using type = typename divide_lists_impl<subtract_from_first_atom<lhsList, rhsFirstElement>, list<rhsRestElements...>>::type;
-};
-template <class lhsList, class rhsList>
-struct divide_lists
-{
-    static_assert(is_list_v<lhsList> && is_list_v<rhsList>, "lhs and rhs of divide_lists need to be lists.");
-    using type = drop_zero_atoms<typename divide_lists_impl<lhsList, rhsList>::type>;
-};
-template <class lhsList, class rhsList>
-using divide_lists_t = sort_list<typename divide_lists<lhsList, rhsList>::type>;
-//TODO: - Put this into a unit test folder.
-//basic tests
-static_assert(std::is_same_v<divide_lists_t<list<>, list<atom<int>>>, list<atom<int, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<int>>, list<>>, list<atom<int>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<int>>, list<atom<bool>>>, list<atom<bool, std::ratio<-1>>, atom<int>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<int>>, list<atom<int>>>, list<>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<int>>, list<atom<int>, atom<bool>>>, list<atom<bool, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<int>>, list<atom<bool>, atom<int>>>, list<atom<bool, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<int>, atom<bool>>, list<atom<int>>>, list<atom<bool>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<>, list<atom<std::ratio<3>>>>, list<atom<std::ratio<3>, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<>>, list<atom<std::ratio<3>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<7>>>>, list<atom<std::ratio<3>>, atom<std::ratio<7>, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>>>>, list<>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>>, atom<std::ratio<7>>>>, list<atom<std::ratio<7>, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<7>>, atom<std::ratio<3>>>>, list<atom<std::ratio<7>, std::ratio<-1>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>, atom<std::ratio<7>>>, list<atom<std::ratio<3>>>>, list<atom<std::ratio<7>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<>, list<atom<std::ratio<3>, std::ratio<2>>>>, list<atom<std::ratio<3>, std::ratio<-2>>>>, "");
-static_assert(std::is_same_v<divide_lists_t<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>, std::ratio<2>>>>, list<atom<std::ratio<3>, std::ratio<-1>>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<>, list<atom<int>>>, list<atom<int>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<atom<int>>, list<>>, list<atom<int>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<atom<int>>, list<atom<bool>>>, list<atom<bool>, atom<int>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<atom<int>>, list<atom<int>>>, list<atom<int, std::ratio<2>>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<atom<int>>, list<atom<int, std::ratio<-1>>>>, list<>>, "");
+static_assert(std::is_same_v<multiply_lists<list<atom<int>>, list<atom<int>, atom<bool>>>, list<atom<bool>, atom<int, std::ratio<2>>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<atom<int>>, list<atom<bool>, atom<int>>>, list<atom<bool>, atom<int, std::ratio<2>>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<atom<int>, atom<bool>>, list<atom<int>>>, list<atom<bool>, atom<int, std::ratio<2>>>>, "");
 #pragma endregion
 #pragma region power
 //The pow_list function adds a given power to every atom in a
@@ -304,6 +208,27 @@ static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<
 static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<1, 3>>, list<atom<std::ratio<3>, std::ratio<1, 3>>, atom<std::ratio<5>, std::ratio<1, 3>>>>, "");
 static_assert(std::is_same_v<pow_list<list<atom<std::ratio<5>>, atom<std::ratio<3>>>, std::ratio<-1, 3>>, list<atom<std::ratio<3>, std::ratio<-1, 3>>, atom<std::ratio<5>, std::ratio<-1, 3>>>>, "");
 #pragma endregion
+#pragma region division
+template <class lhsList, class rhsList>
+using divide_lists = multiply_lists<lhsList, pow_list<rhsList, std::ratio<-1>>>;
+//TODO: - Put this into a unit test folder.
+//basic tests
+static_assert(std::is_same_v<divide_lists<list<>, list<atom<int>>>, list<atom<int, std::ratio<-1>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<int>>, list<>>, list<atom<int>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<int>>, list<atom<bool>>>, list<atom<bool, std::ratio<-1>>, atom<int>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<int>>, list<atom<int>>>, list<>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<int>>, list<atom<int>, atom<bool>>>, list<atom<bool, std::ratio<-1>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<int>>, list<atom<bool>, atom<int>>>, list<atom<bool, std::ratio<-1>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<int>, atom<bool>>, list<atom<int>>>, list<atom<bool>>>, "");
+static_assert(std::is_same_v<divide_lists<list<>, list<atom<std::ratio<3>>>>, list<atom<std::ratio<3>, std::ratio<-1>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<std::ratio<3>>>, list<>>, list<atom<std::ratio<3>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<std::ratio<3>>>, list<atom<std::ratio<7>>>>, list<atom<std::ratio<3>>, atom<std::ratio<7>, std::ratio<-1>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>>>>, list<>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>>, atom<std::ratio<7>>>>, list<atom<std::ratio<7>, std::ratio<-1>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<std::ratio<3>>>, list<atom<std::ratio<7>>, atom<std::ratio<3>>>>, list<atom<std::ratio<7>, std::ratio<-1>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<std::ratio<3>>, atom<std::ratio<7>>>, list<atom<std::ratio<3>>>>, list<atom<std::ratio<7>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<>, list<atom<std::ratio<3>, std::ratio<2>>>>, list<atom<std::ratio<3>, std::ratio<-2>>>>, "");
+static_assert(std::is_same_v<divide_lists<list<atom<std::ratio<3>>>, list<atom<std::ratio<3>, std::ratio<2>>>>, list<atom<std::ratio<3>, std::ratio<-1>>>>, "");
 #pragma endregion
 #pragma region list generators
 //The make_list function generates a list of atoms from an integer_sequence.
@@ -325,7 +250,7 @@ using make_list = sort_list<typename make_list_impl<Sequence>::type>;
 template <intmax_t Value>
 struct make_factorial_list_impl
 {
-    using type = multiply_lists_t<list<>, make_list<factorization_t<intmax_t, Value>>>;
+    using type = multiply_lists<list<>, make_list<factorization_t<intmax_t, Value>>>;
 };
 template <intmax_t Value>
 using make_factorial_list = sort_list<typename make_factorial_list_impl<Value>::type>;
@@ -334,14 +259,14 @@ using make_factorial_list = sort_list<typename make_factorial_list_impl<Value>::
 template <intmax_t num = 1, intmax_t den = 1>
 struct make_fraction_list_impl
 {
-    using type = divide_lists_t<make_factorial_list<num>, make_factorial_list<den>>;
+    using type = divide_lists<make_factorial_list<num>, make_factorial_list<den>>;
 };
 template <intmax_t num = 1, intmax_t den = 1>
 using make_fraction_list = sort_list<typename make_fraction_list_impl<num, den>::type>;
 //TODO: - Put this into a unit test folder.
 //basic tests
 static_assert(std::is_same_v<make_list<factorization_t<int, 9>>, list<atom<std::ratio<3>>, atom<std::ratio<3>>>>, "");
-static_assert(std::is_same_v<multiply_lists_t<list<>, make_list<factorization_t<int, 9>>>, list<atom<std::ratio<3>, std::ratio<2>>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<>, make_list<factorization_t<int, 9>>>, list<atom<std::ratio<3>, std::ratio<2>>>>, "");
 static_assert(std::is_same_v<make_factorial_list<8>, list<atom<std::ratio<2>, std::ratio<3>>>>, "");
 static_assert(std::is_same_v<make_fraction_list<1, 8>, list<atom<std::ratio<2>, std::ratio<-3>>>>, "");
 static_assert(std::is_same_v<make_fraction_list<4, 8>, list<atom<std::ratio<2>, std::ratio<-1>>>>, "");
@@ -366,12 +291,12 @@ struct make_power_list_impl<false, 0>
 template <intmax_t Power>
 struct make_power_list_impl<true, Power>
 {
-    using type = multiply_lists_t<make_fraction_list<10>, typename make_power_list_impl<true, Power - 1>::type>;
+    using type = multiply_lists<make_fraction_list<10>, typename make_power_list_impl<true, Power - 1>::type>;
 };
 template <intmax_t Power>
 struct make_power_list_impl<false, Power>
 {
-    using type = multiply_lists_t<make_fraction_list<1, 10>, typename make_power_list_impl<false, Power + 1>::type>;
+    using type = multiply_lists<make_fraction_list<1, 10>, typename make_power_list_impl<false, Power + 1>::type>;
 };
 template <intmax_t Power>
 using make_power_list = sort_list<typename make_power_list_impl<(Power >= 0), Power>::type>;

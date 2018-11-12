@@ -32,7 +32,7 @@ struct is_compatible_impl<lhsDimensions, Prefix, rhsDimensions, Prefix, std::ena
 {
 };
 template <class lhsDimensions, class lhsPrefix, class rhsDimensions, class rhsPrefix>
-struct is_compatible_impl<lhsDimensions, lhsPrefix, rhsDimensions, rhsPrefix, std::enable_if_t<((std::is_same_v<lhsDimensions, dim::fahrenheit_temperature_t> && std::is_same_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (std::is_same_v<lhsDimensions, dim::thermodynamic_temperature_t> && std::is_same_v<rhsDimensions, dim::fahrenheit_temperature_t>)) && ((std::is_same_v<lhsPrefix, impl::multiply_lists_t<rhsPrefix, prefix::rankine_t>>) || (std::is_same_v<impl::multiply_lists_t<lhsPrefix, prefix::rankine_t>, rhsPrefix>))>> : std::true_type
+struct is_compatible_impl<lhsDimensions, lhsPrefix, rhsDimensions, rhsPrefix, std::enable_if_t<((std::is_same_v<lhsDimensions, dim::fahrenheit_temperature_t> && std::is_same_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (std::is_same_v<lhsDimensions, dim::thermodynamic_temperature_t> && std::is_same_v<rhsDimensions, dim::fahrenheit_temperature_t>)) && ((std::is_same_v<lhsPrefix, multiply_lists<rhsPrefix, prefix::rankine_t>>) || (std::is_same_v<multiply_lists<lhsPrefix, prefix::rankine_t>, rhsPrefix>))>> : std::true_type
 {
 };
 #pragma endregion

@@ -38,18 +38,18 @@ using mebi_t = make_fraction_list<1048576>;
 using gibi_t = make_fraction_list<1073741824>;
 using tebi_t = make_fraction_list<1099511627776>;
 using pebi_t = make_fraction_list<1125899906842624>;
-using exbi_t = impl::multiply_lists_t<pebi_t, kibi_t>;
-using zebi_t = impl::multiply_lists_t<pebi_t, mebi_t>;
-using yobi_t = impl::multiply_lists_t<pebi_t, gibi_t>;
+using exbi_t = multiply_lists<pebi_t, kibi_t>;
+using zebi_t = multiply_lists<pebi_t, mebi_t>;
+using yobi_t = multiply_lists<pebi_t, gibi_t>;
 #pragma endregion
 #pragma region time prefixes
 using second_t = make_fraction_list<>;
-using minute_t = impl::multiply_lists_t<second_t, make_fraction_list<60>>;
-using hour_t = impl::multiply_lists_t<minute_t, make_fraction_list<60>>;
-using day_t = impl::multiply_lists_t<hour_t, make_fraction_list<24>>;
-using week_t = impl::multiply_lists_t<day_t, make_fraction_list<7>>;
-using month_t = impl::multiply_lists_t<day_t, make_fraction_list<30>>;
-using year_t = impl::multiply_lists_t<day_t, make_fraction_list<36525, 100>>;
+using minute_t = multiply_lists<second_t, make_fraction_list<60>>;
+using hour_t = multiply_lists<minute_t, make_fraction_list<60>>;
+using day_t = multiply_lists<hour_t, make_fraction_list<24>>;
+using week_t = multiply_lists<day_t, make_fraction_list<7>>;
+using month_t = multiply_lists<day_t, make_fraction_list<30>>;
+using year_t = multiply_lists<day_t, make_fraction_list<36525, 100>>;
 //sidereal year in s
 struct sidereal_year
 {
@@ -72,11 +72,11 @@ struct pi
 };
 using pi_t = list<atom<pi>>;
 //quarter pi
-using quarter_pi_t = impl::multiply_lists_t<make_fraction_list<1, 4>, pi_t>;
+using quarter_pi_t = multiply_lists<make_fraction_list<1, 4>, pi_t>;
 //half pi
-using half_pi_t = impl::multiply_lists_t<make_fraction_list<1, 2>, pi_t>;
+using half_pi_t = multiply_lists<make_fraction_list<1, 2>, pi_t>;
 //two pi
-using two_pi_t = impl::multiply_lists_t<make_fraction_list<2>, pi_t>;
+using two_pi_t = multiply_lists<make_fraction_list<2>, pi_t>;
 struct e
 {
     //euler constant
@@ -115,9 +115,9 @@ struct speed_of_light
 };
 using speed_of_light_t = list<atom<speed_of_light>>;
 //magnetic constant in H/m (exact, by definition)
-using magnetic_constant_t = impl::multiply_lists_t<make_fraction_list<2>, impl::multiply_lists_t<two_pi_t, make_fraction_list<1, 10000000>>>;
+using magnetic_constant_t = multiply_lists<make_fraction_list<2>, multiply_lists<two_pi_t, make_fraction_list<1, 10000000>>>;
 //electric constant in F/m (exact, by definition)
-using electric_constant_t = impl::divide_lists_t<make_fraction_list<1>, impl::multiply_lists_t<magnetic_constant_t, impl::multiply_lists_t<speed_of_light_t, speed_of_light_t>>>;
+using electric_constant_t = divide_lists<make_fraction_list<1>, multiply_lists<magnetic_constant_t, multiply_lists<speed_of_light_t, speed_of_light_t>>>;
 //gravitational constant in N m²/kg
 struct gravitational_constant //TODO: check value
 {
@@ -131,7 +131,7 @@ struct planck_constant
 };
 using planck_constant_t = list<atom<planck_constant>>;
 //reduced planck constant in J s
-using reduced_planck_constant_t = impl::divide_lists_t<planck_constant_t, two_pi_t>;
+using reduced_planck_constant_t = divide_lists<planck_constant_t, two_pi_t>;
 //elementary charge in C
 struct elementary_charge
 {
@@ -139,9 +139,9 @@ struct elementary_charge
 };
 using elementary_charge_t = list<atom<elementary_charge>>;
 //fine structure constant in 1
-using fine_structure_constant_t = impl::divide_lists_t<impl::multiply_lists_t<impl::multiply_lists_t<elementary_charge_t, elementary_charge_t>, impl::multiply_lists_t<magnetic_constant_t, speed_of_light_t>>, impl::multiply_lists_t<make_fraction_list<2>, planck_constant_t>>;
+using fine_structure_constant_t = divide_lists<multiply_lists<multiply_lists<elementary_charge_t, elementary_charge_t>, multiply_lists<magnetic_constant_t, speed_of_light_t>>, multiply_lists<make_fraction_list<2>, planck_constant_t>>;
 //inverse fine structure constant in 1
-using inverse_fine_structure_constant_t = impl::divide_lists_t<make_fraction_list<1>, fine_structure_constant_t>;
+using inverse_fine_structure_constant_t = divide_lists<make_fraction_list<1>, fine_structure_constant_t>;
 //electron mass in kg
 struct electron_mass
 {
@@ -197,11 +197,11 @@ struct alpha_particle_mass
 };
 using alpha_particle_mass_t = list<atom<alpha_particle_mass>>;
 //rydberg constant in m⁻¹
-using rydberg_constant_t = impl::divide_lists_t<impl::multiply_lists_t<impl::multiply_lists_t<fine_structure_constant_t, fine_structure_constant_t>, impl::multiply_lists_t<electron_mass_t, speed_of_light_t>>, impl::multiply_lists_t<make_fraction_list<2>, planck_constant_t>>;
+using rydberg_constant_t = divide_lists<multiply_lists<multiply_lists<fine_structure_constant_t, fine_structure_constant_t>, multiply_lists<electron_mass_t, speed_of_light_t>>, multiply_lists<make_fraction_list<2>, planck_constant_t>>;
 //bohr radius in m
-using bohr_radius_t = impl::divide_lists_t<fine_structure_constant_t, impl::multiply_lists_t<impl::multiply_lists_t<make_fraction_list<4>, pi_t>, rydberg_constant_t>>;
+using bohr_radius_t = divide_lists<fine_structure_constant_t, multiply_lists<multiply_lists<make_fraction_list<4>, pi_t>, rydberg_constant_t>>;
 //bohr magneton in J/T
-using bohr_magneton_t = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_t, reduced_planck_constant_t>, impl::multiply_lists_t<make_fraction_list<2>, electron_mass_t>>;
+using bohr_magneton_t = divide_lists<multiply_lists<elementary_charge_t, reduced_planck_constant_t>, multiply_lists<make_fraction_list<2>, electron_mass_t>>;
 //avogadro constant in mol⁻¹
 struct avogadro_constant
 {
@@ -209,7 +209,7 @@ struct avogadro_constant
 };
 using avogadro_constant_t = list<atom<avogadro_constant>>;
 //faraday constant in C/mol
-using faraday_constant_t = impl::multiply_lists_t<avogadro_constant_t, elementary_charge_t>;
+using faraday_constant_t = multiply_lists<avogadro_constant_t, elementary_charge_t>;
 //molar gas constant in J/(mol K)
 struct molar_gas_constant
 {
@@ -217,15 +217,15 @@ struct molar_gas_constant
 };
 using molar_gas_constant_t = list<atom<molar_gas_constant>>;
 //boltzmann constant in J/K
-using boltzmann_constant_t = impl::divide_lists_t<molar_gas_constant_t, avogadro_constant_t>;
+using boltzmann_constant_t = divide_lists<molar_gas_constant_t, avogadro_constant_t>;
 //stefan-boltzmann constant in W m⁻² K⁻⁴ sr⁻¹
-using stefan_boltzmann_constant_t = impl::divide_lists_t<impl::multiply_lists_t<impl::multiply_lists_t<pi_t, pi_t>, impl::multiply_lists_t<impl::multiply_lists_t<boltzmann_constant_t, boltzmann_constant_t>, impl::multiply_lists_t<boltzmann_constant_t, boltzmann_constant_t>>>, impl::multiply_lists_t<impl::multiply_lists_t<impl::multiply_lists_t<make_fraction_list<60>, reduced_planck_constant_t>, impl::multiply_lists_t<reduced_planck_constant_t, reduced_planck_constant_t>>, impl::multiply_lists_t<speed_of_light_t, speed_of_light_t>>>;
+using stefan_boltzmann_constant_t = divide_lists<multiply_lists<multiply_lists<pi_t, pi_t>, multiply_lists<multiply_lists<boltzmann_constant_t, boltzmann_constant_t>, multiply_lists<boltzmann_constant_t, boltzmann_constant_t>>>, multiply_lists<multiply_lists<multiply_lists<make_fraction_list<60>, reduced_planck_constant_t>, multiply_lists<reduced_planck_constant_t, reduced_planck_constant_t>>, multiply_lists<speed_of_light_t, speed_of_light_t>>>;
 //magnetic flux quantum in Wb
-using magnetic_flux_quantum_t = impl::divide_lists_t<planck_constant_t, impl::multiply_lists_t<make_fraction_list<2>, elementary_charge_t>>;
+using magnetic_flux_quantum_t = divide_lists<planck_constant_t, multiply_lists<make_fraction_list<2>, elementary_charge_t>>;
 //josephson constant in Hz/V
-using josephson_constant_t = impl::divide_lists_t<impl::multiply_lists_t<make_fraction_list<2>, elementary_charge_t>, planck_constant_t>;
+using josephson_constant_t = divide_lists<multiply_lists<make_fraction_list<2>, elementary_charge_t>, planck_constant_t>;
 //von klitzing constant in Ω
-using von_klitzing_constant_t = impl::divide_lists_t<planck_constant_t, impl::multiply_lists_t<elementary_charge_t, elementary_charge_t>>;
+using von_klitzing_constant_t = divide_lists<planck_constant_t, multiply_lists<elementary_charge_t, elementary_charge_t>>;
 //atomic mass unit in kg
 struct atomic_mass_unit
 {
@@ -233,15 +233,15 @@ struct atomic_mass_unit
 };
 using atomic_mass_unit_t = list<atom<atomic_mass_unit>>;
 //hartree energy in J
-using hartree_energy_t = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_t, elementary_charge_t>, impl::multiply_lists_t<impl::multiply_lists_t<make_fraction_list<4>, pi_t>, impl::multiply_lists_t<electric_constant_t, bohr_radius_t>>>;
+using hartree_energy_t = divide_lists<multiply_lists<elementary_charge_t, elementary_charge_t>, multiply_lists<multiply_lists<make_fraction_list<4>, pi_t>, multiply_lists<electric_constant_t, bohr_radius_t>>>;
 //conductance quantum in S
-using conductance_quantum_t = impl::divide_lists_t<impl::multiply_lists_t<make_fraction_list<2>, impl::multiply_lists_t<elementary_charge_t, elementary_charge_t>>, planck_constant_t>;
+using conductance_quantum_t = divide_lists<multiply_lists<make_fraction_list<2>, multiply_lists<elementary_charge_t, elementary_charge_t>>, planck_constant_t>;
 //inverse conductance quantum in Ω
-using inverse_conductance_quantum_t = impl::divide_lists_t<make_fraction_list<1>, conductance_quantum_t>;
+using inverse_conductance_quantum_t = divide_lists<make_fraction_list<1>, conductance_quantum_t>;
 //vacuum impedance in Ω
-using vacuum_impedance_t = impl::multiply_lists_t<magnetic_constant_t, speed_of_light_t>;
+using vacuum_impedance_t = multiply_lists<magnetic_constant_t, speed_of_light_t>;
 //nuclear magneton in J/T
-using nuclear_magneton_t = impl::divide_lists_t<impl::multiply_lists_t<elementary_charge_t, reduced_planck_constant_t>, impl::multiply_lists_t<make_fraction_list<2>, proton_mass_t>>;
+using nuclear_magneton_t = divide_lists<multiply_lists<elementary_charge_t, reduced_planck_constant_t>, multiply_lists<make_fraction_list<2>, proton_mass_t>>;
 #pragma endregion
 #pragma region conversion values
 //astronomical unit in m
@@ -251,7 +251,7 @@ struct astronomical_unit
 };
 using astronomical_unit_t = list<atom<astronomical_unit>>;
 //parsec in m
-using parsec_t = impl::multiply_lists_t<impl::divide_lists_t<make_fraction_list<648000>, pi_t>, astronomical_unit_t>;
+using parsec_t = multiply_lists<divide_lists<make_fraction_list<648000>, pi_t>, astronomical_unit_t>;
 //solar mass in kg
 struct solar_mass
 {

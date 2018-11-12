@@ -21,12 +21,12 @@ implement_subunit(si, imperial, inch, dim::length_t, prefix::inch_t);
 implement_subunit(si, imperial, barn, dim::area_t, make_power_list<-28>);
 #pragma endregion
 #pragma region mass
-implement_subunit(si, imperial, carat, dim::mass_t, fix(impl::multiply_lists_t<make_fraction_list<2>, make_power_list<-4>>));
+implement_subunit(si, imperial, carat, dim::mass_t, fix(multiply_lists<make_fraction_list<2>, make_power_list<-4>>));
 implement_subunit(si, imperial, pound, dim::mass_t, prefix::pound_t);
 implement_subunit(si, imperial, ounce, dim::mass_t, prefix::ounce_t);
 #pragma endregion
 #pragma region velocity
-implement_subunit(si, imperial, knot, dim::velocity_t, fix(impl::divide_lists_t<prefix::nautical_mile_t, prefix::hour_t>));
+implement_subunit(si, imperial, knot, dim::velocity_t, fix(divide_lists<prefix::nautical_mile_t, prefix::hour_t>));
 #pragma endregion
 #pragma region pressure
 implement_subunit(si, imperial, torr, dim::pressure_t, fix(make_fraction_list<101325, 760>));
