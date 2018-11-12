@@ -125,17 +125,6 @@ struct is_one : std::integral_constant<bool, std::is_same_v<typename T::dimensio
 template <class T>
 constexpr bool is_one_v = is_one<T>::value;
 #pragma endregion
-#pragma region name resolution
-//The resolve_name function provides overloads to get the
-//name of complicated units.
-template <class T>
-struct resolve_name
-{
-    static constexpr auto name = "unknown";
-};
-template <class T>
-constexpr auto resolve_name_v = resolve_name<T>::name;
-#pragma endregion
 #pragma region unit functions
 #pragma region multiplication
 //The multiply_units_t function multiplies two units.

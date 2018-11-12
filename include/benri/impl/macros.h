@@ -53,12 +53,4 @@
     constexpr auto NAME = quantity<UNIT, Precision>{impl::multiply_elements<Precision, VALUE>};
 
 #define create_and_register_dimension(NAME, ...)   \
-    using NAME##_t = sort_list<list<__VA_ARGS__>>; \
-    }                                              \
-    template <>                                    \
-    struct resolve_name<typename dim::NAME##_t>    \
-    {                                              \
-        static constexpr auto name = #NAME;        \
-    };                                             \
-    namespace dim                                  \
-    {
+    using NAME##_t = sort_list<list<__VA_ARGS__>>;
