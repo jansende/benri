@@ -293,7 +293,7 @@ constexpr auto remquo(ValueType x, quantity<yUnit, ValueType> y, int *quo) -> qu
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class zUnit, class ValueType>
 constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, quantity<zUnit, ValueType> z) -> quantity<zUnit, decltype(std::fma(x.value(), y.value(), z.value()))>
 {
-    static_assert(std::is_same_v<multiply_units_t<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units_t<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(std::is_same_v<multiply_units<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -303,7 +303,7 @@ constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, q
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class zUnit, class ValueType>
 constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, quantity_point<zUnit, ValueType> z) -> quantity_point<zUnit, decltype(std::fma(x.value(), y.value(), z.value()))>
 {
-    static_assert(std::is_same_v<multiply_units_t<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units_t<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(std::is_same_v<multiply_units<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -353,7 +353,7 @@ constexpr auto fma(quantity<xUnit, ValueType> x, ValueType y, quantity_point<zUn
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class ValueType>
 constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, ValueType z) -> quantity<one_unit, decltype(std::fma(x.value(), y.value(), z))>
 {
-    static_assert(std::is_same_v<multiply_units_t<xUnit, yUnit>, one_unit>, "You can only calculate the fma of quantities with the units being x*y == z.");
+    static_assert(std::is_same_v<multiply_units<xUnit, yUnit>, one_unit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
@@ -558,14 +558,14 @@ constexpr auto log1p(quantity<Unit, ValueType> val) -> quantity<one_unit, declty
 //pow<std::ratio<1,2>> or using integers pow<1,2>. With the denominator being
 //optional: pow<std::ratio<2>> = pow<2>.
 template <class Exponent, bool AllowImplicitConversion = false, class baseUnit, class ValueType>
-constexpr auto pow(quantity<baseUnit, ValueType> base) -> quantity<pow_unit_t<baseUnit, Exponent>, decltype(std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den)))>
+constexpr auto pow(quantity<baseUnit, ValueType> base) -> quantity<pow_unit<baseUnit, Exponent>, decltype(std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den)))>
 {
     static_assert(impl::is_ratio_v<Exponent>, "The Exponent needs to be a std::ratio.");
     using ResultType = decltype(std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den)));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
 #endif
-    return quantity<pow_unit_t<baseUnit, Exponent>, ResultType>{std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den))};
+    return quantity<pow_unit<baseUnit, Exponent>, ResultType>{std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den))};
 }
 template <intmax_t num, intmax_t den = 1, bool AllowImplicitConversion = false, class baseUnit, class ValueType>
 constexpr auto pow(quantity<baseUnit, ValueType> base)
@@ -608,22 +608,22 @@ constexpr auto pow(quantity<baseUnit, ValueType> y, ValueType x) -> quantity<one
 //unit. While the pow function could be used as well, the sqrt and cbrt functions
 //directly access the std equivalents instead of using std::pow.
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto sqrt(quantity<Unit, ValueType> val) -> quantity<pow_unit_t<Unit, std::ratio<1, 2>>, decltype(std::sqrt(val.value()))>
+constexpr auto sqrt(quantity<Unit, ValueType> val) -> quantity<pow_unit<Unit, std::ratio<1, 2>>, decltype(std::sqrt(val.value()))>
 {
     using ResultType = decltype(std::sqrt(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
 #endif
-    return quantity<pow_unit_t<Unit, std::ratio<1, 2>>, ResultType>{std::sqrt(val.value())};
+    return quantity<pow_unit<Unit, std::ratio<1, 2>>, ResultType>{std::sqrt(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto cbrt(quantity<Unit, ValueType> val) -> quantity<pow_unit_t<Unit, std::ratio<1, 3>>, decltype(std::cbrt(val.value()))>
+constexpr auto cbrt(quantity<Unit, ValueType> val) -> quantity<pow_unit<Unit, std::ratio<1, 3>>, decltype(std::cbrt(val.value()))>
 {
     using ResultType = decltype(std::cbrt(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
     static_assert(std::is_same_v<ValueType, ResultType> || AllowImplicitConversion, "Your value_type is implicitly converted.");
 #endif
-    return quantity<pow_unit_t<Unit, std::ratio<1, 3>>, ResultType>{std::cbrt(val.value())};
+    return quantity<pow_unit<Unit, std::ratio<1, 3>>, ResultType>{std::cbrt(val.value())};
 }
 //The hypot function returns the norm of two quantities x, and y with the same unit.
 //(hypot(x,y) = sqrt(x^2+y^2))

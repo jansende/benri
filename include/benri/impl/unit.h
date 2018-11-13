@@ -127,75 +127,19 @@ constexpr bool is_one_v = is_one<T>::value;
 #pragma endregion
 #pragma region unit functions
 #pragma region multiplication
-//The multiply_units_t function multiplies two units.
-template <class L, class R>
-struct multiply_units
-{
-    static_assert(is_unit_v<L> && is_unit_v<R>, "multiply_units takes a unit and a std::ratio, but one of them is not a unit.");
-    using type = typename multiply_units<unit<typename L::dimensions, typename L::prefix>, unit<typename R::dimensions, typename R::prefix>>::type;
-};
-template <template <class, class> class Unit, class Dimensions, class Prefix, class R>
-struct multiply_units<Unit<Dimensions, Prefix>, R>
-{
-    static_assert(is_unit_v<R>, "multiply_units takes a unit and a std::ratio, but R is not a unit.");
-    using type = typename multiply_units<Unit<Dimensions, Prefix>, unit<typename R::dimensions, typename R::prefix>>::type;
-};
-template <class L, template <class, class> class Unit, class Dimensions, class Prefix>
-struct multiply_units<L, Unit<Dimensions, Prefix>>
-{
-    static_assert(is_unit_v<L>, "multiply_units takes a unit and a std::ratio, but L is not a unit.");
-    using type = typename multiply_units<unit<typename L::dimensions, typename L::prefix>, Unit<Dimensions, Prefix>>::type;
-};
-template <template <class, class> class LUnit, class LDimensions, class LPrefix, template <class, class> class RUnit, class RDimensions, class RPrefix>
-struct multiply_units<LUnit<LDimensions, LPrefix>, RUnit<RDimensions, RPrefix>>
-{
-    using type = unit<multiply_lists<LDimensions, RDimensions>, multiply_lists<LPrefix, RPrefix>>;
-};
-template <class L, class R>
-using multiply_units_t = typename multiply_units<L, R>::type;
-//The divide_units function divide two units.
-template <class L, class R>
-struct divide_units
-{
-    static_assert(is_unit_v<L> && is_unit_v<R>, "divide_units takes a unit and a std::ratio, but one of them is not a unit.");
-    using type = typename divide_units<unit<typename L::dimensions, typename L::prefix>, unit<typename R::dimensions, typename R::prefix>>::type;
-};
-template <template <class, class> class Unit, class Dimensions, class Prefix, class R>
-struct divide_units<Unit<Dimensions, Prefix>, R>
-{
-    static_assert(is_unit_v<R>, "divide_units takes a unit and a std::ratio, but R is not a unit.");
-    using type = typename divide_units<Unit<Dimensions, Prefix>, unit<typename R::dimensions, typename R::prefix>>::type;
-};
-template <class L, template <class, class> class Unit, class Dimensions, class Prefix>
-struct divide_units<L, Unit<Dimensions, Prefix>>
-{
-    static_assert(is_unit_v<L>, "divide_units takes a unit and a std::ratio, but L is not a unit.");
-    using type = typename divide_units<unit<typename L::dimensions, typename L::prefix>, Unit<Dimensions, Prefix>>::type;
-};
-template <template <class, class> class LUnit, class LDimensions, class LPrefix, template <class, class> class RUnit, class RDimensions, class RPrefix>
-struct divide_units<LUnit<LDimensions, LPrefix>, RUnit<RDimensions, RPrefix>>
-{
-    using type = unit<divide_lists<LDimensions, RDimensions>, divide_lists<LPrefix, RPrefix>>;
-};
-template <class L, class R>
-using divide_units_t = typename divide_units<L, R>::type;
+//The multiply_units function multiplies two units.
+template <class lhsUnit, class rhsUnit>
+using multiply_units = unit<multiply_lists<typename lhsUnit::dimensions, typename rhsUnit::dimensions>, multiply_lists<typename lhsUnit::prefix, typename rhsUnit::prefix>>;
 #pragma endregion
 #pragma region power
 //The pow_unit function applies a given power to a unit.
-template <class L, class R>
-struct pow_unit
-{
-    static_assert(is_unit_v<L>, "pow_unit takes a unit and a std::ratio, but your L is not a unit.");
-    static_assert(impl::is_ratio_v<R>, "pow_unit takes a unit and a std::ratio, but your R is not a std::ratio.");
-    using type = typename pow_unit<unit<typename L::dimensions, typename L::prefix>, R>::type;
-};
-template <template <class, class> class Unit, class Dimensions, class Prefix, intmax_t num, intmax_t den>
-struct pow_unit<Unit<Dimensions, Prefix>, std::ratio<num, den>>
-{
-    using type = unit<pow_list<Dimensions, std::ratio<num, den>>, pow_list<Prefix, std::ratio<num, den>>>;
-};
-template <class L, class R>
-using pow_unit_t = typename pow_unit<L, R>::type;
+template <class Unit, class Power>
+using pow_unit = unit<pow_list<typename Unit::dimensions, Power>, pow_list<typename Unit::prefix, Power>>;
+#pragma endregion
+#pragma region division
+//The divide_units function divide two units.
+template <class lhsUnit, class rhsUnit>
+using divide_units = unit<divide_lists<typename lhsUnit::dimensions, typename rhsUnit::dimensions>,divide_lists<typename lhsUnit::prefix, typename rhsUnit::prefix>>;
 #pragma endregion
 #pragma endregion
 #pragma region unit compatibility checker

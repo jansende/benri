@@ -160,7 +160,7 @@ class quantity
         return *this;
     }
     template <class lhsUnit, class rhsUnit, class ValueType>
-    friend constexpr auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units_t<lhsUnit, rhsUnit>, ValueType>;
+    friend constexpr auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>;
     friend constexpr auto operator*(const quantity &lhs, const value_type &rhs)
     {
         return quantity{lhs._value * rhs};
@@ -175,14 +175,14 @@ class quantity
         return *this;
     }
     template <class lhsUnit, class rhsUnit, class ValueType>
-    friend constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units_t<lhsUnit, rhsUnit>, ValueType>;
+    friend constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units<lhsUnit, rhsUnit>, ValueType>;
     friend constexpr auto operator/(const quantity &lhs, const value_type &rhs)
     {
         return quantity{lhs._value / rhs};
     }
     friend constexpr auto operator/(const value_type &lhs, const quantity &rhs)
     {
-        return quantity<pow_unit_t<unit_type, std::ratio<-1>>, value_type>{lhs / rhs._value};
+        return quantity<pow_unit<unit_type, std::ratio<-1>>, value_type>{lhs / rhs._value};
     }
 #pragma endregion
 #pragma region comparisons
@@ -244,14 +244,14 @@ class quantity
 #pragma endregion
 };
 template <class lhsUnit, class rhsUnit, class ValueType>
-constexpr auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units_t<lhsUnit, rhsUnit>, ValueType>
+constexpr auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>
 {
-    return quantity<multiply_units_t<lhsUnit, rhsUnit>, ValueType>{lhs._value * rhs._value};
+    return quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>{lhs._value * rhs._value};
 }
 template <class lhsUnit, class rhsUnit, class ValueType>
-constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units_t<lhsUnit, rhsUnit>, ValueType>
+constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units<lhsUnit, rhsUnit>, ValueType>
 {
-    return quantity<divide_units_t<lhsUnit, rhsUnit>, ValueType>{lhs._value / rhs._value};
+    return quantity<divide_units<lhsUnit, rhsUnit>, ValueType>{lhs._value / rhs._value};
 }
 #pragma region casting functions
 //The value_type_cast function lets you cast the value_type of a quantity
