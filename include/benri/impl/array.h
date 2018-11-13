@@ -51,15 +51,7 @@ static_assert(impl::array<int, 4>{1, 2, 3, 4}.size() == 4, "impl::array<int, 4>{
 static_assert(impl::array<int, 4>{1, 2, 3, 4}[0] == 1 && impl::array<int, 4>{1, 2, 3, 4}[1] == 2 && impl::array<int, 4>{1, 2, 3, 4}[2] == 3 && impl::array<int, 4>{1, 2, 3, 4}[3] == 4, "impl::array<int, 4>{1, 2, 3, 4} should save the right numbers into the array.");
 #pragma endregion
 #pragma region array generator
-//The make_integer_array function creates a custom array from a list
-//of integers.
-template <class T, T... nums>
-struct make_integer_array_impl
-{
-    static constexpr auto value = impl::array<T, sizeof...(nums)>{nums...};
-};
-template <class T, T... nums>
-constexpr impl::array<T, sizeof...(nums)> make_integer_array = make_integer_array_impl<T, nums...>::value;
+//TODO
 template <class T, size_t N>
 constexpr auto make_index_array_impl()
 {
@@ -70,11 +62,6 @@ constexpr auto make_index_array_impl()
 }
 template <class T, size_t N>
 constexpr auto make_index_array = make_index_array_impl<T, N>();
-//TODO: - Put this into a unit test folder.
-//basic tests
-static_assert(make_integer_array<int>.size() == 0, "make_integer_array<int> should have zero size.");
-static_assert(make_integer_array<int, 1, 2, 3, 4>.size() == 4, "make_integer_array<int, 1, 2, 3, 4> should have a size of four.");
-static_assert(make_integer_array<int, 1, 2, 3, 4>[0] == 1 && make_integer_array<int, 1, 2, 3, 4>[1] == 2 && make_integer_array<int, 1, 2, 3, 4>[2] == 3 && make_integer_array<int, 1, 2, 3, 4>[3] == 4, "make_integer_array<int, 1, 2, 3, 4> should save the right numbers into the array.");
 #pragma endregion
 } // namespace impl
 } // namespace benri

@@ -142,7 +142,7 @@ create_symbol(root_two, dim::dimensionless_t, prefix::root_two_symbol_t);
 create_symbol(speed_of_light, dim::velocity_t, prefix::speed_of_light_t);
 create_symbol(magnetic_constant, dim::permeability_t, prefix::magnetic_constant_t);
 create_symbol(electric_constant, dim::permittivity_t, prefix::electric_constant_t);
-create_symbol(gravitational_constant, fix(multiply_lists<dim::force_t, divide_lists<dim::area_t, multiply_lists<dim::mass_t, dim::mass_t>>>), prefix::gravitational_constant_t);
+create_symbol(gravitational_constant, fix(multiply_lists<dim::force_t, divide_lists<dim::area_t, pow_list<dim::mass_t, std::ratio<2>>>>), prefix::gravitational_constant_t);
 create_symbol(planck_constant, dim::action_t, prefix::planck_constant_t);
 create_symbol(reduced_planck_constant, dim::action_t, prefix::reduced_planck_constant_t);
 create_symbol(elementary_charge, dim::electric_charge_t, prefix::elementary_charge_t);
@@ -164,7 +164,7 @@ create_symbol(avogadro_constant, fix(divide_lists<dim::dimensionless_t, dim::amo
 create_symbol(faraday_constant, fix(divide_lists<dim::electric_charge_t, dim::amount_of_substance_t>), prefix::faraday_constant_t);
 create_symbol(molar_gas_constant, dim::molar_heat_capacity_t, prefix::molar_gas_constant_t);
 create_symbol(boltzmann_constant, dim::heat_capacity_t, prefix::boltzmann_constant_t);
-create_symbol(stefan_boltzmann_constant, fix(divide_lists<dim::power_t, multiply_lists<dim::area_t, multiply_lists<multiply_lists<multiply_lists<dim::thermodynamic_temperature_t, dim::thermodynamic_temperature_t>, multiply_lists<dim::thermodynamic_temperature_t, dim::thermodynamic_temperature_t>>, dim::solid_angle_t>>>), prefix::stefan_boltzmann_constant_t);
+create_symbol(stefan_boltzmann_constant, fix(divide_lists<dim::power_t, multiply_lists<dim::area_t, pow_list<dim::thermodynamic_temperature_t, std::ratio<4>>, dim::solid_angle_t>>), prefix::stefan_boltzmann_constant_t);
 create_symbol(magnetic_flux_quantum, dim::magnetic_flux_t, prefix::magnetic_flux_quantum_t);
 create_symbol(josephson_constant, fix(divide_lists<dim::dimensionless_t, dim::magnetic_flux_t>), prefix::josephson_constant_t);
 create_symbol(von_klitzing_constant, dim::electric_resistance_t, prefix::von_klitzing_constant_t);

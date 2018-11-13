@@ -14,6 +14,7 @@ namespace impl
 template <class T, class Power = std::ratio<1>>
 struct atom
 {
+    static_assert(!std::is_same_v<Power, std::ratio<0>>, "Atoms with a Power of 0 are not allowed.");
     using type = T;
     using power = Power;
 };

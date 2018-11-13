@@ -115,9 +115,9 @@ struct speed_of_light
 };
 using speed_of_light_t = list<atom<speed_of_light>>;
 //magnetic constant in H/m (exact, by definition)
-using magnetic_constant_t = multiply_lists<make_fraction_list<2>, multiply_lists<two_pi_t, make_fraction_list<1, 10000000>>>;
+using magnetic_constant_t = multiply_lists<make_fraction_list<2>, two_pi_t, make_fraction_list<1, 10000000>>;
 //electric constant in F/m (exact, by definition)
-using electric_constant_t = divide_lists<make_fraction_list<1>, multiply_lists<magnetic_constant_t, multiply_lists<speed_of_light_t, speed_of_light_t>>>;
+using electric_constant_t = divide_lists<make_fraction_list<1>, multiply_lists<magnetic_constant_t, pow_list<speed_of_light_t, std::ratio<2>>>>;
 //gravitational constant in N m²/kg
 struct gravitational_constant //TODO: check value
 {
@@ -197,9 +197,9 @@ struct alpha_particle_mass
 };
 using alpha_particle_mass_t = list<atom<alpha_particle_mass>>;
 //rydberg constant in m⁻¹
-using rydberg_constant_t = divide_lists<multiply_lists<multiply_lists<fine_structure_constant_t, fine_structure_constant_t>, multiply_lists<electron_mass_t, speed_of_light_t>>, multiply_lists<make_fraction_list<2>, planck_constant_t>>;
+using rydberg_constant_t = divide_lists<multiply_lists<pow_list<fine_structure_constant_t, std::ratio<2>>, electron_mass_t, speed_of_light_t>, multiply_lists<make_fraction_list<2>, planck_constant_t>>;
 //bohr radius in m
-using bohr_radius_t = divide_lists<fine_structure_constant_t, multiply_lists<multiply_lists<make_fraction_list<4>, pi_t>, rydberg_constant_t>>;
+using bohr_radius_t = divide_lists<fine_structure_constant_t, multiply_lists<make_fraction_list<4>, pi_t, rydberg_constant_t>>;
 //bohr magneton in J/T
 using bohr_magneton_t = divide_lists<multiply_lists<elementary_charge_t, reduced_planck_constant_t>, multiply_lists<make_fraction_list<2>, electron_mass_t>>;
 //avogadro constant in mol⁻¹
@@ -219,13 +219,13 @@ using molar_gas_constant_t = list<atom<molar_gas_constant>>;
 //boltzmann constant in J/K
 using boltzmann_constant_t = divide_lists<molar_gas_constant_t, avogadro_constant_t>;
 //stefan-boltzmann constant in W m⁻² K⁻⁴ sr⁻¹
-using stefan_boltzmann_constant_t = divide_lists<multiply_lists<multiply_lists<pi_t, pi_t>, multiply_lists<multiply_lists<boltzmann_constant_t, boltzmann_constant_t>, multiply_lists<boltzmann_constant_t, boltzmann_constant_t>>>, multiply_lists<multiply_lists<multiply_lists<make_fraction_list<60>, reduced_planck_constant_t>, multiply_lists<reduced_planck_constant_t, reduced_planck_constant_t>>, multiply_lists<speed_of_light_t, speed_of_light_t>>>;
+using stefan_boltzmann_constant_t = divide_lists<multiply_lists<pow_list<pi_t, std::ratio<2>>,pow_list<boltzmann_constant_t, std::ratio<4>>>, multiply_lists<make_fraction_list<60>, pow_list<reduced_planck_constant_t, std::ratio<3>>, pow_list<speed_of_light_t, std::ratio<2>>>>;
 //magnetic flux quantum in Wb
 using magnetic_flux_quantum_t = divide_lists<planck_constant_t, multiply_lists<make_fraction_list<2>, elementary_charge_t>>;
 //josephson constant in Hz/V
 using josephson_constant_t = divide_lists<multiply_lists<make_fraction_list<2>, elementary_charge_t>, planck_constant_t>;
 //von klitzing constant in Ω
-using von_klitzing_constant_t = divide_lists<planck_constant_t, multiply_lists<elementary_charge_t, elementary_charge_t>>;
+using von_klitzing_constant_t = divide_lists<planck_constant_t, pow_list<elementary_charge_t, std::ratio<2>>>;
 //atomic mass unit in kg
 struct atomic_mass_unit
 {
@@ -233,9 +233,9 @@ struct atomic_mass_unit
 };
 using atomic_mass_unit_t = list<atom<atomic_mass_unit>>;
 //hartree energy in J
-using hartree_energy_t = divide_lists<multiply_lists<elementary_charge_t, elementary_charge_t>, multiply_lists<multiply_lists<make_fraction_list<4>, pi_t>, multiply_lists<electric_constant_t, bohr_radius_t>>>;
+using hartree_energy_t = divide_lists<pow_list<elementary_charge_t, std::ratio<2>>, multiply_lists<make_fraction_list<4>, pi_t, electric_constant_t, bohr_radius_t>>;
 //conductance quantum in S
-using conductance_quantum_t = divide_lists<multiply_lists<make_fraction_list<2>, multiply_lists<elementary_charge_t, elementary_charge_t>>, planck_constant_t>;
+using conductance_quantum_t = divide_lists<multiply_lists<make_fraction_list<2>, pow_list<elementary_charge_t, std::ratio<2>>>, planck_constant_t>;
 //inverse conductance quantum in Ω
 using inverse_conductance_quantum_t = divide_lists<make_fraction_list<1>, conductance_quantum_t>;
 //vacuum impedance in Ω
