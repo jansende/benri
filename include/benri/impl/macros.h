@@ -2,18 +2,7 @@
 
 #define fix(...) __VA_ARGS__
 
-#define implement_unit(NAMESPACE, NAME, DIMENSIONS, PREFIX)                  \
-    using NAME##_t = unit<sort_list<DIMENSIONS>, sort_list<PREFIX>>;         \
-    constexpr auto operator"" _##NAME(long double value)                     \
-    {                                                                        \
-        return quantity<NAME##_t, Precision>{static_cast<Precision>(value)}; \
-    }                                                                        \
-    constexpr auto operator"" _##NAME(unsigned long long int value)          \
-    {                                                                        \
-        return quantity<NAME##_t, Precision>{static_cast<Precision>(value)}; \
-    }                                                                        \
-    constexpr auto NAME = quantity<NAME##_t, Precision>{static_cast<Precision>(1)};
-#define implement_subunit(NAMESPACE, SUBSPACE, NAME, DIMENSIONS, PREFIX)     \
+#define implement_unit(NAME, DIMENSIONS, PREFIX)                  \
     using NAME##_t = unit<sort_list<DIMENSIONS>, sort_list<PREFIX>>;         \
     constexpr auto operator"" _##NAME(long double value)                     \
     {                                                                        \

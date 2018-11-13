@@ -13,15 +13,15 @@ namespace si
 namespace temperature
 {
 #pragma region celsius temperature
-implement_subunit(si, temperature, celsius, dim::celsius_temperature_t, prefix::one_t);
+implement_unit(celsius, dim::celsius_temperature_t, prefix::one_t);
 link_unit_point(degree_celsius, celsius);
 #pragma endregion
 #pragma region rankine temperature
-implement_subunit(si, temperature, rankine, dim::thermodynamic_temperature_t, prefix::rankine_t);
+implement_unit(rankine, dim::thermodynamic_temperature_t, prefix::rankine_t);
 link_unit_point(degree_rankine, rankine);
 #pragma endregion
 #pragma region fahrenheit temperature
-implement_subunit(si, temperature, fahrenheit, dim::fahrenheit_temperature_t, prefix::one_t);
+implement_unit(fahrenheit, dim::fahrenheit_temperature_t, prefix::one_t);
 link_unit_point(degree_fahrenheit, fahrenheit);
 #pragma endregion
 } // namespace temperature

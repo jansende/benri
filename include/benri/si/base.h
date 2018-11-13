@@ -10,68 +10,68 @@ namespace benri
 namespace si
 {
 #pragma region length
-implement_unit(si, metre, dim::length_t, prefix::one_t);
+implement_unit(metre, dim::length_t, prefix::one_t);
 #pragma endregion
 #pragma region mass
-implement_unit(si, gram, dim::mass_t, prefix::milli_t);
-implement_unit(si, kilogram, dim::mass_t, fix(multiply_lists<prefix::kilo_t, prefix::milli_t>));
-implement_unit(si, tonne, dim::mass_t, fix(multiply_lists<prefix::mega_t, prefix::milli_t>));
+implement_unit(gram, dim::mass_t, prefix::milli_t);
+implement_unit(kilogram, dim::mass_t, fix(multiply_lists<prefix::kilo_t, prefix::milli_t>));
+implement_unit(tonne, dim::mass_t, fix(multiply_lists<prefix::mega_t, prefix::milli_t>));
 #pragma endregion
 #pragma region time
-implement_unit(si, second, dim::time_t, prefix::one_t);
+implement_unit(second, dim::time_t, prefix::one_t);
 #pragma endregion
 #pragma region electric current
-implement_unit(si, ampere, dim::electric_current_t, prefix::one_t);
+implement_unit(ampere, dim::electric_current_t, prefix::one_t);
 #pragma endregion
 #pragma region thermodynamic temperature
-implement_unit(si, kelvin, dim::thermodynamic_temperature_t, prefix::one_t);
+implement_unit(kelvin, dim::thermodynamic_temperature_t, prefix::one_t);
 link_unit_point(degree_kelvin, kelvin);
 #pragma endregion
 #pragma region amount of substance
-implement_unit(si, mole, dim::amount_of_substance_t, prefix::one_t);
+implement_unit(mole, dim::amount_of_substance_t, prefix::one_t);
 #pragma endregion
 #pragma region luminous intensity
-implement_unit(si, candela, dim::luminous_intensity_t, prefix::one_t);
+implement_unit(candela, dim::luminous_intensity_t, prefix::one_t);
 #pragma endregion
 #pragma region plane angle
-implement_unit(si, radian, dim::plane_angle_t, prefix::one_t);
-implement_unit(si, degree, dim::plane_angle_t, fix(multiply_lists<prefix::pi_t, make_fraction_list<1, 180>>));
+implement_unit(radian, dim::plane_angle_t, prefix::one_t);
+implement_unit(degree, dim::plane_angle_t, fix(multiply_lists<prefix::pi_t, make_fraction_list<1, 180>>));
 #pragma endregion
 #pragma region solid angle
-implement_unit(si, steradian, dim::solid_angle_t, prefix::one_t);
+implement_unit(steradian, dim::solid_angle_t, prefix::one_t);
 #pragma endregion
 #pragma region number of radioactive events
-implement_unit(si, count, dim::number_of_radioactive_events_t, prefix::one_t);
+implement_unit(count, dim::number_of_radioactive_events_t, prefix::one_t);
 #pragma endregion
 #pragma region radiation weighting factor
-implement_unit(si, sievert_per_gray, dim::radiation_weighting_factor_t, prefix::one_t);
+implement_unit(sievert_per_gray, dim::radiation_weighting_factor_t, prefix::one_t);
 #pragma endregion
 #pragma region dimensionless data
-implement_unit(si, percent, dim::dimensionless_t, prefix::centi_t);
-implement_unit(si, permille, dim::dimensionless_t, prefix::milli_t);
-implement_unit(si, parts_per_million, dim::dimensionless_t, prefix::micro_t);
+implement_unit(percent, dim::dimensionless_t, prefix::centi_t);
+implement_unit(permille, dim::dimensionless_t, prefix::milli_t);
+implement_unit(parts_per_million, dim::dimensionless_t, prefix::micro_t);
 
-implement_unit(si, yocto, dim::dimensionless_t, prefix::yocto_t);
-implement_unit(si, zepto, dim::dimensionless_t, prefix::zepto_t);
-implement_unit(si, atto, dim::dimensionless_t, prefix::atto_t);
-implement_unit(si, femto, dim::dimensionless_t, prefix::femto_t);
-implement_unit(si, pico, dim::dimensionless_t, prefix::pico_t);
-implement_unit(si, nano, dim::dimensionless_t, prefix::nano_t);
-implement_unit(si, micro, dim::dimensionless_t, prefix::micro_t);
-implement_unit(si, milli, dim::dimensionless_t, prefix::milli_t);
-implement_unit(si, centi, dim::dimensionless_t, prefix::centi_t);
-implement_unit(si, deci, dim::dimensionless_t, prefix::deci_t);
-implement_unit(si, one, dim::dimensionless_t, prefix::one_t);
-implement_unit(si, deca, dim::dimensionless_t, prefix::deca_t);
-implement_unit(si, hecto, dim::dimensionless_t, prefix::hecto_t);
-implement_unit(si, kilo, dim::dimensionless_t, prefix::kilo_t);
-implement_unit(si, mega, dim::dimensionless_t, prefix::mega_t);
-implement_unit(si, giga, dim::dimensionless_t, prefix::giga_t);
-implement_unit(si, tera, dim::dimensionless_t, prefix::tera_t);
-implement_unit(si, peta, dim::dimensionless_t, prefix::peta_t);
-implement_unit(si, exa, dim::dimensionless_t, prefix::exa_t);
-implement_unit(si, zetta, dim::dimensionless_t, prefix::zetta_t);
-implement_unit(si, yotta, dim::dimensionless_t, prefix::yotta_t);
+implement_unit(yocto, dim::dimensionless_t, prefix::yocto_t);
+implement_unit(zepto, dim::dimensionless_t, prefix::zepto_t);
+implement_unit(atto, dim::dimensionless_t, prefix::atto_t);
+implement_unit(femto, dim::dimensionless_t, prefix::femto_t);
+implement_unit(pico, dim::dimensionless_t, prefix::pico_t);
+implement_unit(nano, dim::dimensionless_t, prefix::nano_t);
+implement_unit(micro, dim::dimensionless_t, prefix::micro_t);
+implement_unit(milli, dim::dimensionless_t, prefix::milli_t);
+implement_unit(centi, dim::dimensionless_t, prefix::centi_t);
+implement_unit(deci, dim::dimensionless_t, prefix::deci_t);
+implement_unit(one, dim::dimensionless_t, prefix::one_t);
+implement_unit(deca, dim::dimensionless_t, prefix::deca_t);
+implement_unit(hecto, dim::dimensionless_t, prefix::hecto_t);
+implement_unit(kilo, dim::dimensionless_t, prefix::kilo_t);
+implement_unit(mega, dim::dimensionless_t, prefix::mega_t);
+implement_unit(giga, dim::dimensionless_t, prefix::giga_t);
+implement_unit(tera, dim::dimensionless_t, prefix::tera_t);
+implement_unit(peta, dim::dimensionless_t, prefix::peta_t);
+implement_unit(exa, dim::dimensionless_t, prefix::exa_t);
+implement_unit(zetta, dim::dimensionless_t, prefix::zetta_t);
+implement_unit(yotta, dim::dimensionless_t, prefix::yotta_t);
 #pragma endregion
 #pragma region constants
 namespace constant
