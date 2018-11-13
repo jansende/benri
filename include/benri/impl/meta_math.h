@@ -1,4 +1,6 @@
 #pragma once
+#include <benri/impl/array.h>
+#include <benri/impl/algorithm.h>
 #include <benri/impl/type_traits.h>
 #include <ratio>
 #include <utility>
@@ -72,12 +74,7 @@ constexpr auto power_impl() -> std::enable_if_t<is_ratio_v<Base>, T>
     return Exponent::num >= 0 ? (num / den) : (den / num);
 }
 template <class T, class Base, class Exponent>
-struct power
-{
-    static constexpr auto value = power_impl<T, Base, Exponent>();
-};
-template <class T, class Base, class Exponent>
-constexpr T power_v = power<T, Base, Exponent>::value;
+constexpr T power_v = power_impl<T, Base, Exponent>();
 #pragma endregion
 #pragma region integer_sequence helpers
 //The is_integer_sequence checks if a given type is an integer_sequence.
@@ -117,13 +114,25 @@ template <intmax_t Num>
 constexpr bool is_prime_v = is_prime<Num>::value;
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(!is_prime_v<100>, "100 is not prime.");
-static_assert(is_prime_v<19>, "19 is prime.");
-static_assert(is_prime_v<5>, "5 is prime.");
-static_assert(is_prime_v<2>, "2 is prime.");
-static_assert(!is_prime_v<1>, "1 is not prime.");
-static_assert(!is_prime_v<9>, "9 is not prime.");
-static_assert(is_prime_v<293339>, "293339 is prime.");
+static_assert(is_prime_v< 0> == false, "0 is not prime.");
+static_assert(is_prime_v< 1> == false, "1 is not prime.");
+static_assert(is_prime_v< 2> == true, "2 is prime.");
+static_assert(is_prime_v< 3> == true, "3 is prime.");
+static_assert(is_prime_v< 4> == false, "4 is not prime.");
+static_assert(is_prime_v< 5> == true, "5 is prime.");
+static_assert(is_prime_v< 6> == false, "6 is not prime.");
+static_assert(is_prime_v< 7> == true, "7 is prime.");
+static_assert(is_prime_v< 8> == false, "8 is not prime.");
+static_assert(is_prime_v< 9> == false, "9 is not prime.");
+static_assert(is_prime_v<10> == false, "10 is not prime.");
+static_assert(is_prime_v<11> == true, "11 is prime.");
+static_assert(is_prime_v<12> == false, "12 is not prime.");
+static_assert(is_prime_v<13> == true, "13 is prime.");
+static_assert(is_prime_v<14> == false, "14 is not prime.");
+static_assert(is_prime_v<15> == false, "15 is not prime.");
+static_assert(is_prime_v<19> == true, "19 is prime.");
+static_assert(is_prime_v<100> == false, "100 is not prime.");
+static_assert(is_prime_v<293339> == true, "293339 is prime.");
 //The next_prime function calculates the next prime number after
 //the given number. The given number does no have to be prime.
 template <class T>
@@ -141,60 +150,112 @@ template <intmax_t Num>
 constexpr intmax_t next_prime_v = next_prime<Num>::value;
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(next_prime_v<2> == 3, "3 is the next prime after 2.");
-static_assert(next_prime_v<3> == 5, "5 is the next prime after 3.");
+static_assert(next_prime_v< 0> == 2, "2 is the next prime after 0.");
+static_assert(next_prime_v< 1> == 2, "2 is the next prime after 1.");
+static_assert(next_prime_v< 2> == 3, "3 is the next prime after 2.");
+static_assert(next_prime_v< 3> == 5, "5 is the next prime after 3.");
+static_assert(next_prime_v< 4> == 5, "5 is the next prime after 4.");
+static_assert(next_prime_v< 5> == 7, "7 is the next prime after 5.");
+static_assert(next_prime_v< 6> == 7, "7 is the next prime after 6.");
+static_assert(next_prime_v< 7> == 11, "11 is the next prime after 7.");
+static_assert(next_prime_v< 8> == 11, "11 is the next prime after 8.");
+static_assert(next_prime_v< 9> == 11, "11 is the next prime after 9.");
+static_assert(next_prime_v<10> == 11, "11 is the next prime after 10.");
+static_assert(next_prime_v<11> == 13, "13 is the next prime after 11.");
+static_assert(next_prime_v<12> == 13, "13 is the next prime after 12.");
+static_assert(next_prime_v<13> == 17, "17 is the next prime after 13.");
+static_assert(next_prime_v<14> == 17, "17 is the next prime after 14.");
+static_assert(next_prime_v<15> == 17, "17 is the next prime after 15.");
 static_assert(next_prime_v<17> == 19, "19 is the next prime after 17.");
-static_assert(next_prime_v<9> == 11, "11 is the next prime after 9.");
 #pragma endregion
 #pragma region factorization
+constexpr auto number_of_factors_impl(intmax_t number) {
+    auto counter = size_t{0};
+    for (auto test = intmax_t{2}; number > 1; ) {
+        if (number % test == 0) {
+            ++counter;
+            number /= test;
+        } else {
+            test = next_prime_impl(test);
+        }
+    }
+    return counter;
+}
+template <intmax_t Num>
+struct number_of_factors : std::integral_constant<size_t, number_of_factors_impl(Num)>
+{
+};
+template <intmax_t Num>
+constexpr size_t number_of_factors_v = number_of_factors<Num>::value;
+//TODO
+static_assert(number_of_factors_v< 0> == 0, "");
+static_assert(number_of_factors_v< 1> == 0, "");
+static_assert(number_of_factors_v< 2> == 1, "");
+static_assert(number_of_factors_v< 3> == 1, "");
+static_assert(number_of_factors_v< 4> == 2, "");
+static_assert(number_of_factors_v< 5> == 1, "");
+static_assert(number_of_factors_v< 6> == 2, "");
+static_assert(number_of_factors_v< 7> == 1, "");
+static_assert(number_of_factors_v< 8> == 3, "");
+static_assert(number_of_factors_v< 9> == 2, "");
+static_assert(number_of_factors_v<10> == 2, "");
+static_assert(number_of_factors_v<11> == 1, "");
+static_assert(number_of_factors_v<12> == 3, "");
+static_assert(number_of_factors_v<13> == 1, "");
+static_assert(number_of_factors_v<14> == 2, "");
+static_assert(number_of_factors_v<15> == 2, "");
+
+template <size_t N>
+constexpr auto factorization_factors(intmax_t number) {
+    auto factors = impl::array<intmax_t,N>{};
+    auto counter = size_t{0};
+    for (auto test = intmax_t{2}; number > 1; ) {
+        if (number % test == 0) {
+            factors[counter] = test;
+            ++counter;
+            number /= test;
+        } else {
+            test = next_prime_impl(test);
+        }
+    }
+    return factors;
+}
+static_assert(impl::equal(factorization_factors<0>( 0), impl::array<intmax_t, 0>{}), "");
+static_assert(impl::equal(factorization_factors<0>( 1), impl::array<intmax_t, 0>{}), "");
+static_assert(impl::equal(factorization_factors<1>( 2), impl::array<intmax_t, 1>{2}), "");
+static_assert(impl::equal(factorization_factors<1>( 3), impl::array<intmax_t, 1>{3}), "");
+static_assert(impl::equal(factorization_factors<2>( 4), impl::array<intmax_t, 2>{2, 2}), "");
+static_assert(impl::equal(factorization_factors<1>( 5), impl::array<intmax_t, 1>{5}), "");
+static_assert(impl::equal(factorization_factors<2>( 6), impl::array<intmax_t, 2>{2,3}), "");
+static_assert(impl::equal(factorization_factors<1>( 7), impl::array<intmax_t, 1>{7}), "");
+static_assert(impl::equal(factorization_factors<3>( 8), impl::array<intmax_t, 3>{2, 2, 2}), "");
+static_assert(impl::equal(factorization_factors<2>( 9), impl::array<intmax_t, 2>{3, 3}), "");
+static_assert(impl::equal(factorization_factors<2>(10), impl::array<intmax_t, 2>{2, 5}), "");
+static_assert(impl::equal(factorization_factors<1>(11), impl::array<intmax_t, 1>{11}), "");
+static_assert(impl::equal(factorization_factors<3>(12), impl::array<intmax_t, 3>{2, 2, 3}), "");
+static_assert(impl::equal(factorization_factors<1>(13), impl::array<intmax_t, 1>{13}), "");
+static_assert(impl::equal(factorization_factors<2>(14), impl::array<intmax_t, 2>{2, 7}), "");
+static_assert(impl::equal(factorization_factors<2>(15), impl::array<intmax_t, 2>{3, 5}), "");
+
+
 //The factorization function computes the prime factors of a given
 //number, and returns them as an integer_sequence.
+template <intmax_t number, size_t...Index>
+constexpr auto factorization_impl(std::integer_sequence<size_t, Index...>) {
+    return std::integer_sequence<intmax_t, factorization_factors<sizeof...(Index)>(number)[Index]...>{};
+};
+template <intmax_t number>
+using factorization = decltype(factorization_impl<number>(std::make_index_sequence<number_of_factors_impl(number)>{}));
 
-//Wraps the remainder check to reduce code duplication.
-template <template <bool, class T, T...> class Func, class T, T One, T Value, T Prime, T... PrimeFactors>
-struct factorization_advance
-{
-    //In addition to the usual algorithm, provide an is_prime_check for early recursion canceling.
-    using type = typename Func<is_prime_v<Value> || (Value % Prime) == 0, T, One, Value, is_prime_v<Value> ? Value : Prime, PrimeFactors...>::type;
-};
-//Stop searching for prime factors.
-template <template <bool, class T, T...> class Func, class T, T One, T Prime, T... PrimeFactors>
-struct factorization_advance<Func, T, One, One, Prime, PrimeFactors...>
-{
-    using type = std::integer_sequence<T, PrimeFactors...>;
-};
-template <bool, class T, T, T, T, T...>
-struct factorization_check;
-//Found that value is not dividable by the current prime.
-template <class T, T One, T Value, T Prime, T... PrimeFactors>
-struct factorization_check<false, T, One, Value, Prime, PrimeFactors...>
-{
-    //Try the next prime.
-    using type = typename factorization_advance<benri::impl::factorization_check, T, One, Value, next_prime_v<Prime>, PrimeFactors...>::type;
-};
-//Found that value is dividable by the current prime.
-template <class T, T One, T Value, T Prime, T... PrimeFactors>
-struct factorization_check<true, T, One, Value, Prime, PrimeFactors...>
-{
-    //Add the prime to the list of prime factors and try dividing again.
-    using type = typename factorization_advance<benri::impl::factorization_check, T, One, Value / Prime, Prime, Prime, PrimeFactors...>::type;
-};
-template <class T, T Value>
-struct factorization
-{
-    using type = typename factorization_advance<factorization_check, T, 1, Value, 2>::type;
-};
-template <class T, T Value>
-using factorization_t = typename factorization<T, Value>::type;
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(std::is_same_v<factorization_t<int, 1>, std::integer_sequence<int>>, "factorization<1> should be <>.");
-static_assert(std::is_same_v<factorization_t<int, 2>, std::integer_sequence<int, 2>>, "factorization<2> should be <2>.");
-static_assert(std::is_same_v<factorization_t<int, 17>, std::integer_sequence<int, 17>>, "factorization<17> should be <17>.");
-static_assert(std::is_same_v<factorization_t<int, 6>, std::integer_sequence<int, 3, 2>>, "factorization<6> should be <3, 2>.");
-static_assert(std::is_same_v<factorization_t<int, 4>, std::integer_sequence<int, 2, 2>>, "factorization<4> should be <2, 2>.");
-static_assert(std::is_same_v<factorization_t<int, 8>, std::integer_sequence<int, 2, 2, 2>>, "factorization<8> should be <2, 2, 2>.");
-static_assert(std::is_same_v<factorization_t<int, 30>, std::integer_sequence<int, 5, 3, 2>>, "factorization<30> should be <5, 3, 2>.");
+static_assert(std::is_same_v<factorization<1>, std::integer_sequence<intmax_t>>, "factorization<1> should be <>.");
+static_assert(std::is_same_v<factorization<2>, std::integer_sequence<intmax_t, 2>>, "factorization<2> should be <2>.");
+static_assert(std::is_same_v<factorization<17>, std::integer_sequence<intmax_t, 17>>, "factorization<17> should be <17>.");
+static_assert(std::is_same_v<factorization<6>, std::integer_sequence<intmax_t, 2, 3>>, "factorization<6> should be <2, 3>.");
+static_assert(std::is_same_v<factorization<4>, std::integer_sequence<intmax_t, 2, 2>>, "factorization<4> should be <2, 2>.");
+static_assert(std::is_same_v<factorization<8>, std::integer_sequence<intmax_t, 2, 2, 2>>, "factorization<8> should be <2, 2, 2>.");
+static_assert(std::is_same_v<factorization<30>, std::integer_sequence<intmax_t, 2, 3, 5>>, "factorization<30> should be <2, 3, 5>.");
 #pragma endregion
 } // namespace impl
 } // namespace benri

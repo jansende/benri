@@ -250,7 +250,7 @@ using make_list = sort_list<typename make_list_impl<Sequence>::type>;
 template <intmax_t Value>
 struct make_factorial_list_impl
 {
-    using type = multiply_lists<list<>, make_list<factorization_t<intmax_t, Value>>>;
+    using type = multiply_lists<list<>, make_list<factorization<Value>>>;
 };
 template <intmax_t Value>
 using make_factorial_list = sort_list<typename make_factorial_list_impl<Value>::type>;
@@ -265,8 +265,8 @@ template <intmax_t num = 1, intmax_t den = 1>
 using make_fraction_list = sort_list<typename make_fraction_list_impl<num, den>::type>;
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(std::is_same_v<make_list<factorization_t<int, 9>>, list<atom<std::ratio<3>>, atom<std::ratio<3>>>>, "");
-static_assert(std::is_same_v<multiply_lists<list<>, make_list<factorization_t<int, 9>>>, list<atom<std::ratio<3>, std::ratio<2>>>>, "");
+static_assert(std::is_same_v<make_list<factorization<9>>, list<atom<std::ratio<3>>, atom<std::ratio<3>>>>, "");
+static_assert(std::is_same_v<multiply_lists<list<>, make_list<factorization<9>>>, list<atom<std::ratio<3>, std::ratio<2>>>>, "");
 static_assert(std::is_same_v<make_factorial_list<8>, list<atom<std::ratio<2>, std::ratio<3>>>>, "");
 static_assert(std::is_same_v<make_fraction_list<1, 8>, list<atom<std::ratio<2>, std::ratio<-3>>>>, "");
 static_assert(std::is_same_v<make_fraction_list<4, 8>, list<atom<std::ratio<2>, std::ratio<-1>>>>, "");
