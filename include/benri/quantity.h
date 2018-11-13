@@ -77,7 +77,7 @@ class quantity
     template <class ResultUnit, class Unit, class ValueType>
     friend constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
     template <class ResultValueType, class Unit, class ValueType>
-    friend constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<no_prefix_unit_t<Unit>, ResultValueType>;
+    friend constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<remove_unit_prefix<Unit>, ResultValueType>;
 #pragma endregion
 #pragma region rule of three
     //default constructor
@@ -310,11 +310,11 @@ constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if
 //Furthermore, you can provide a ResultValueType for the function, in the case that
 //the transformation would lead to conversion errors.
 template <class ResultValueType, class Unit, class ValueType>
-constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<no_prefix_unit_t<Unit>, ResultValueType>
+constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<remove_unit_prefix<Unit>, ResultValueType>
 {
     //calculation
     using PrefixType = typename Unit::prefix;
-    return quantity<no_prefix_unit_t<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_multiply_elements<ResultValueType>(PrefixType{})};
+    return quantity<remove_unit_prefix<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_multiply_elements<ResultValueType>(PrefixType{})};
 }
 template <class Unit, class ValueType>
 constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs)

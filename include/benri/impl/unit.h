@@ -213,18 +213,7 @@ template <class L, class R>
 constexpr bool is_compatible_v = is_compatible<L, R>::value;
 #pragma endregion
 #pragma region remove prefix
-template <class T>
-struct no_prefix_unit
-{
-    static_assert(is_unit_v<T>, "no_prefix_unit takes a unit, but your T is not a unit.");
-    using type = unit<typename T::dimensions, list<>>;
-};
-template <class Dimensions, class Prefix>
-struct no_prefix_unit<unit<Dimensions, Prefix>>
-{
-    using type = unit<Dimensions, list<>>;
-};
-template <class T>
-using no_prefix_unit_t = typename no_prefix_unit<T>::type;
+template <class Unit>
+using remove_unit_prefix = unit<typename Unit::dimensions, list<>>;
 #pragma endregion
 } // namespace benri
