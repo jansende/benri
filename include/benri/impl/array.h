@@ -41,8 +41,8 @@ struct array<T, 0>
     {
         return size_t{0};
     }
-    constexpr const auto *begin() const { return nullptr; }
-    constexpr const auto *end() const { return nullptr; }
+    constexpr const auto *begin() const { return data; }
+    constexpr const auto *end() const { return data + 0; }
 };
 //TODO: - Put this into a unit test folder.
 //basic tests
