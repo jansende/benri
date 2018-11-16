@@ -17,32 +17,36 @@ implement_unit(celsius, dim::celsius_temperature_t, prefix::one_t);
 link_unit_point(degree_celsius, celsius);
 #pragma endregion
 #pragma region rankine temperature
-implement_unit(rankine, dim::thermodynamic_temperature_t, prefix::rankine_t);
+implement_unit(rankine, dim::thermodynamic_temperature_t, fix(pow_list<prefix::rankine_t, std::ratio<-1>>));
 link_unit_point(degree_rankine, rankine);
 #pragma endregion
 #pragma region fahrenheit temperature
-implement_unit(fahrenheit, dim::fahrenheit_temperature_t, prefix::one_t);
+implement_unit(fahrenheit, dim::fahrenheit_temperature_t, fix(pow_list<prefix::rankine_t, std::ratio<-1>>));
 link_unit_point(degree_fahrenheit, fahrenheit);
 #pragma endregion
 } // namespace temperature
 } // namespace si
 #pragma region is_compatible definitions
-template <class lhsDimensions, class rhsDimensions, class Prefix>
-struct is_compatible_impl<lhsDimensions, Prefix, rhsDimensions, Prefix, std::enable_if_t<(std::is_same_v<lhsDimensions, dim::celsius_temperature_t> && std::is_same_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (std::is_same_v<lhsDimensions, dim::thermodynamic_temperature_t> && std::is_same_v<rhsDimensions, dim::celsius_temperature_t>)>> : std::true_type
-{
-};
-template <class lhsDimensions, class lhsPrefix, class rhsDimensions, class rhsPrefix>
-struct is_compatible_impl<lhsDimensions, lhsPrefix, rhsDimensions, rhsPrefix, std::enable_if_t<((std::is_same_v<lhsDimensions, dim::fahrenheit_temperature_t> && std::is_same_v<rhsDimensions, dim::thermodynamic_temperature_t>) || (std::is_same_v<lhsDimensions, dim::thermodynamic_temperature_t> && std::is_same_v<rhsDimensions, dim::fahrenheit_temperature_t>)) && ((std::is_same_v<lhsPrefix, multiply_lists<rhsPrefix, prefix::rankine_t>>) || (std::is_same_v<multiply_lists<lhsPrefix, prefix::rankine_t>, rhsPrefix>))>> : std::true_type
-{
-};
+template <class Prefix>
+struct is_compatible_impl<dim::celsius_temperature_t, Prefix, dim::thermodynamic_temperature_t, Prefix> : std::true_type
+{};
+template <class Prefix>
+struct is_compatible_impl<dim::thermodynamic_temperature_t, Prefix, dim::celsius_temperature_t, Prefix> : std::true_type
+{};
+template <class Prefix>
+struct is_compatible_impl<dim::fahrenheit_temperature_t, Prefix, dim::thermodynamic_temperature_t, Prefix> : std::true_type
+{};
+template <class Prefix>
+struct is_compatible_impl<dim::thermodynamic_temperature_t, Prefix, dim::fahrenheit_temperature_t, Prefix> : std::true_type
+{};
 #pragma endregion
 #pragma region simple_cast / unit_cast overloads
-//conversion overload (we need an actual overload, because partial function template specialization is not allowed)
+//conversion overload for quantity points (we need an actual overload, because partial function template specialization is not allowed)
 //celsius to kelvin
 template <class ResultUnit, class ValueType>
 constexpr auto simple_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::degree_kelvin_t>, quantity_point<si::degree_kelvin_t, ValueType>>
 {
-    return quantity_point<si::degree_kelvin_t, ValueType>{rhs.value() + static_cast<ValueType>(prefix::absolute_zero::value)};
+    return quantity_point<si::degree_kelvin_t, ValueType>{rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto unit_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::degree_kelvin_t>, quantity_point<si::degree_kelvin_t, ValueType>>
@@ -53,7 +57,7 @@ constexpr auto unit_cast(const quantity_point<si::temperature::degree_celsius_t,
 template <class ResultUnit, class ValueType>
 constexpr auto simple_cast(const quantity_point<si::degree_kelvin_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_celsius_t>, quantity_point<si::temperature::degree_celsius_t, ValueType>>
 {
-    return quantity_point<si::temperature::degree_celsius_t, ValueType>{rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
+    return quantity_point<si::temperature::degree_celsius_t, ValueType>{rhs.value() + static_cast<ValueType>(prefix::absolute_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto unit_cast(const quantity_point<si::degree_kelvin_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_celsius_t>, quantity_point<si::temperature::degree_celsius_t, ValueType>>
@@ -148,5 +152,118 @@ constexpr auto unit_cast(const quantity_point<si::temperature::degree_rankine_t,
 {
     return simple_cast<si::temperature::degree_fahrenheit_t>(rhs);
 }
+#pragma endregion
+#pragma region simple_cast / unit_cast overloads
+//conversion overload for quantities (we need an actual overload, because partial function template specialization is not allowed)
+//celsius to kelvin
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto simple_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::thermodynamic_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+}
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto unit_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::thermodynamic_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+}
+//kelvin to celsius
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto simple_cast(const quantity<unit<dim::thermodynamic_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::celsius_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+}
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto unit_cast(const quantity<unit<dim::thermodynamic_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::celsius_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+}
+// //celsius to rankine
+// template <class ResultUnit, class Prefix, class ValueType>
+// constexpr auto simple_cast(const quantity<si::temperature::degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_rankine_t>, quantity<si::temperature::degree_rankine_t, ValueType>>
+// {
+//     return simple_cast<si::temperature::degree_rankine_t>(simple_cast<si::degree_kelvin_t>(rhs));
+// }
+// template <class ResultUnit, class Prefix, class ValueType>
+// constexpr auto unit_cast(const quantity<si::temperature::degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_rankine_t>, quantity<si::temperature::degree_rankine_t, ValueType>>
+// {
+//     return simple_cast<si::temperature::degree_rankine_t>(rhs);
+// }
+// //rankine to celsius
+// template <class ResultUnit, class Prefix, class ValueType>
+// constexpr auto simple_cast(const quantity<si::temperature::degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_celsius_t>, quantity<si::temperature::degree_celsius_t, ValueType>>
+// {
+//     return simple_cast<si::temperature::degree_celsius_t>(simple_cast<si::degree_kelvin_t>(rhs));
+// }
+// template <class ResultUnit, class Prefix, class ValueType>
+// constexpr auto unit_cast(const quantity<si::temperature::degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_celsius_t>, quantity<si::temperature::degree_celsius_t, ValueType>>
+// {
+//     return simple_cast<si::temperature::degree_celsius_t>(rhs);
+// }
+//fahrenheit to kelvin
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto simple_cast(const quantity<unit<dim::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::thermodynamic_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+}
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto unit_cast(const quantity<unit<dim::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::thermodynamic_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+}
+//kelvin to fahrenheit
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto simple_cast(const quantity<unit<dim::thermodynamic_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::fahrenheit_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+}
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto unit_cast(const quantity<unit<dim::thermodynamic_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::fahrenheit_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+}
+//fahrenheit to celsius
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto simple_cast(const quantity<unit<dim::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::celsius_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+}
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto unit_cast(const quantity<unit<dim::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::celsius_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+}
+//celsius to fahrenheit
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto simple_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::fahrenheit_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+}
+template <class ResultUnit, class Prefix, class ValueType>
+constexpr auto unit_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, dim::fahrenheit_temperature_t>, quantity<ResultUnit, ValueType>>
+{
+    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+}
+// //fahrenheit to rankine
+// template <class ResultUnit, class Prefix, class ValueType>
+// constexpr auto simple_cast(const quantity<si::temperature::degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_rankine_t>, quantity<si::temperature::degree_rankine_t, ValueType>>
+// {
+//     return simple_cast<si::temperature::degree_rankine_t>(simple_cast<si::degree_kelvin_t>(rhs));
+// }
+// template <class ResultUnit, class Prefix, class ValueType>
+// constexpr auto unit_cast(const quantity<si::temperature::degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_rankine_t>, quantity<si::temperature::degree_rankine_t, ValueType>>
+// {
+//     return simple_cast<si::temperature::degree_rankine_t>(rhs);
+// }
+// //rankine to fahrenheit
+// template <class ResultUnit, class Prefix, class ValueType>
+// constexpr auto simple_cast(const quantity<si::temperature::degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_fahrenheit_t>, quantity<si::temperature::degree_fahrenheit_t, ValueType>>
+// {
+//     return simple_cast<si::temperature::degree_fahrenheit_t>(simple_cast<si::degree_kelvin_t>(rhs));
+// }
+// template <class ResultUnit, class Prefix, class ValueType>
+// constexpr auto unit_cast(const quantity<si::temperature::degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<ResultUnit, si::temperature::degree_fahrenheit_t>, quantity<si::temperature::degree_fahrenheit_t, ValueType>>
+// {
+//     return simple_cast<si::temperature::degree_fahrenheit_t>(rhs);
+// }
 #pragma endregion
 } // namespace benri

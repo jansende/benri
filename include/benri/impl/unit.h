@@ -145,7 +145,7 @@ using divide_units = unit<divide_lists<typename lhsUnit::dimensions, typename rh
 #pragma region unit compatibility checker
 //The is_compatible function checks if two units should be handled
 //as if they are equivalent, even if they are not.
-template <class LDimensions, class LPrefix, class RDimensions, class RPrefix, class Enable = void>
+template <class LDimensions, class LPrefix, class RDimensions, class RPrefix>
 struct is_compatible_impl : std::false_type
 {
 };

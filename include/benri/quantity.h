@@ -289,9 +289,6 @@ constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_
 template <class ResultUnit, class Unit, class ValueType>
 constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
-    //type checking
-    static_assert(is_unit_v<ResultUnit>, "lhs has to be a unit.");
-    static_assert(std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions>, "lhs and rhs have to have the same dimensions.");
     //calculation
     return quantity<ResultUnit, ValueType>{rhs._value * impl::runtime_multiply_elements<ValueType>(divide_lists<typename Unit::prefix, typename ResultUnit::prefix>{})};
 }

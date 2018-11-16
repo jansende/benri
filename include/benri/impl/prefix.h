@@ -326,22 +326,22 @@ struct ounce
     static constexpr Precision value = 2.834952e-2;
 };
 using ounce_t = list<atom<ounce>>;
-//rankine in kelvin
+//kelvin in rankine
 struct rankine
 {
     static constexpr Precision value = 1.8;
 };
 using rankine_t = list<atom<rankine>>;
-//fahrenheit zero in 1.8*kelvin
+//absolute zero in fahrenheit
 struct fahrenheit_zero
 {
-    static constexpr Precision value = 459.67;
+    static constexpr Precision value = -459.67;
 };
 using fahrenheit_zero_t = list<atom<fahrenheit_zero>>;
-//absolute zero in kelvin
+//absolute zero in celsius
 struct absolute_zero
 {
-    static constexpr Precision value = 273.15;
+    static constexpr Precision value = -273.15;
 };
 using absolute_zero_t = list<atom<absolute_zero>>;
 #pragma endregion
