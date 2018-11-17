@@ -62,7 +62,19 @@ auto mass_b = 5_kilo * gram; //both are fine
 For more information either read the rest of this document, or have a look at the examples in the `samples/` folder.
 
 ## Installation using cmake
+If you are using cmake, you can use *benri* by cloning the repository, and adding the `add_subdirectory` and `target_link` library command to your `CMakeLists.txt`. A simple project file might look like this:
+```cmake
+cmake_minimum_required(VERSION 3.1)
 
+#define the project
+project(hello_benri)
+add_executable(hello_benri main.cpp)
+
+#add the benri repository
+add_subdirectory(benri)
+#add the library to the project
+target_link_libraries(hello_benri PRIVATE benri)
+```
 # Philosophy
 The functions and types provided in *benri* are a compromise of generality, usability, and compile time. All of the libraries functions and types are defined using `constexpr` constructs and should therefore support compile time evaluation. In reality however, the support is currently limited, because only some of the c++ standard library functions, which are used in *benri*, support this behaviour.
 

@@ -1,1 +1,7 @@
-.vscode
+#ignore vscode file
+/.vscode/
+/.vs/
+#ignore the build folder
+/build/
+#ignore the install folder
+/bin/
