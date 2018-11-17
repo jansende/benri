@@ -21,6 +21,7 @@
 - [ ] document the is_compatible trickery
 - [ ] do some cleaning up
 - [ ] get the right value for the solar luminosity
+- [ ] add smoot and sakura constant
 
 ## Quantities using Integral Types
 
