@@ -128,8 +128,21 @@ constexpr bool is_one_v = is_one<T>::value;
 #pragma region unit functions
 #pragma region multiplication
 //The multiply_units function multiplies two units.
+template <class...Lists>
+struct multiply_units_impl {
+    using type = void;
+};
 template <class lhsUnit, class rhsUnit>
-using multiply_units = unit<multiply_lists<typename lhsUnit::dimensions, typename rhsUnit::dimensions>, multiply_lists<typename lhsUnit::prefix, typename rhsUnit::prefix>>;
+struct multiply_units_impl<lhsUnit, rhsUnit> {
+    using type = unit<multiply_lists<typename lhsUnit::dimensions, typename rhsUnit::dimensions>, multiply_lists<typename lhsUnit::prefix, typename rhsUnit::prefix>>;
+};
+template <class lhsUnit, class rhsUnit, class...Rest>
+struct multiply_units_impl<lhsUnit, rhsUnit, Rest...> {
+    using type = typename multiply_units_impl<typename multiply_units_impl<lhsUnit, rhsUnit>::type, Rest...>::type;
+};
+
+template <class...Lists>
+using multiply_units = typename multiply_units_impl<Lists...>::type;
 #pragma endregion
 #pragma region power
 //The pow_unit function applies a given power to a unit.

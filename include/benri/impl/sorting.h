@@ -163,17 +163,26 @@ using get_element = typename get_element_impl<List, Index>::type;
 #pragma endregion
 #pragma region permutations
 template <class List, size_t... Index>
-constexpr auto permutate_list_impl(List, std::integer_sequence<size_t, Index...>)
+constexpr auto permutate_list_func(List, std::integer_sequence<size_t, Index...>)
 {
     return list<get_element<List, Index>...>{};
 }
+template <class List, class Index, class NewIndex>
+struct permutate_list_impl {
+    using type = decltype(permutate_list_func(List{}, NewIndex{}));
+};
 template <class List, class Index>
-using permutate_list = decltype(permutate_list_impl(List{}, Index{}));
+struct permutate_list_impl<List, Index, Index> {
+    using type = List;
+};
+
+template <class List, class Index, class NewIndex>
+using permutate_list = typename permutate_list_impl<List, Index, NewIndex>::type;
 #pragma endregion
 #pragma region sorting function
 template <class List, size_t... Index>
 constexpr auto sort_list_func(List, std::integer_sequence<size_t, Index...>) {
-    return permutate_list<List, std::integer_sequence<size_t, bubble_sort(make_hash_array<List>, make_index_array<size_t, sizeof...(Index)>)[Index]...>>{};
+    return permutate_list<List, std::integer_sequence<size_t, Index...>, std::integer_sequence<size_t, bubble_sort(make_hash_array<List>, make_index_array<size_t, sizeof...(Index)>)[Index]...>>{};
 }
 template <class...Elements>
 constexpr auto sort_list_impl(list<Elements...>) {
