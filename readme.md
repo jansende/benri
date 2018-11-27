@@ -20,20 +20,20 @@ int main()
 {
     using namespace benri::si;
 
-    //set size of the cake
+    //Set size of the cake.
     auto height = 4_centi * metre;
     auto diameter = 30_centi * metre;
 
-    //calculate volume
+    //Calculate the volume.
     auto volume = height * constant::pi * square(diameter / 2.0);
 
-    //set density of the batter
+    //Set the density of the batter.
     auto density = 1_gram / cubic(centi * metre);
 
-    //calculate the mass of the cake
+    //Calculate the mass of the cake.
     auto mass = density * volume;
 
-    //print the recipe
+    //Print the recipe.
     std::cout
         << "  vanille cake  \n"
         << "----------------\n"
@@ -56,27 +56,27 @@ If you are using cmake, you can use *benri* by cloning the repository, and addin
 ```cmake
 cmake_minimum_required(VERSION 3.1)
 
-#define the project
+#Define the project.
 project(hello_benri)
 add_executable(hello_benri main.cpp)
 
-#add the benri repository
+#Add the benri repository.
 add_subdirectory(benri)
-#add the library to the project
+#Add the library to the project.
 target_link_libraries(hello_benri PRIVATE benri)
 ```
 
 ## TLDR; Using *benri*
 The library provides several literal types, which can be used in the following way:
 ```c++
-//add namespace containing the literals
+//Add namespace containing the literals.
 using namespace benri::si;
-//compose quantities using a prefix literal and a unit constant
+//Compose quantities using a prefix literal and a unit constant.
 auto capacity = 10_micro * farad;
-//the literal can be omitted if the prefix is one
+//The literal can be omitted if the prefix is one.
 auto resistance_a = 10_one * ohm;
 auto resistance_b = 10_ohm;
-//the kilogram is the only exception to the composition rule
+//The kilogram is the only exception to the composition rule.
 auto mass_a = 5_kilogram;
 auto mass_b = 5_kilo * gram; //both are fine
 ```
@@ -111,7 +111,7 @@ The *benri* library tries to help writing correct c++ programs using the followi
  - The unit pascal might conflict with the `pascal` macro set in some windows headers.
 
 # Competition
-The *benri* library is not the only library for working with physical quantities. The most notable competitors are [nholthaus]() and [boost](). These libraries provide similar facilities to *benri*, but differ in some important areas. It is therefore recommended to check what you need in your project and select accordingly.
+The *benri* library is not the only library for working with physical quantities. The most notable competitors are [nholthaus](https://github.com/nholthaus/units) and [boost](https://www.boost.org/doc/libs/1_68_0/doc/html/boost_units.html). These libraries provide similar facilities to *benri*, but differ in some important areas. It is therefore recommended to check what you need in your project and select accordingly.
 
 ## Quick Comparison
 The following table gives a quick overview on the most important features provided by the different quantity libraries:
@@ -167,11 +167,50 @@ auto print(benri::quantity<)
 ```
 
 #### User defined dimensions
-*benri* allows its users to define new base dimensions and seemlessly use them together with the already existing ones.
-<!-- TODO: Write example code. -->
+*benri* allows its users to define new base dimensions and seemlessly use them together with the already existing ones:
 ```c++
+#include <benri/impl/dimensions.h>
+
+//We need to go into the benri namespace, otherwise the compiler complains.
+namespace benri
+{
+//Dimensions are defined in the dim namespace.
+namespace dim
+{
+//add a pirate (pir) dimension and a ninja (nin) dimension
+struct pir;
+struct nin;
+} // namespace dim
+
+//The following overload need to be provided, because benri internally sorts
+//the dimensions by the value of this function.
+//For the value all numbers equal or larger 100 can be used. Other values
+//are reserved.
+template <>
+struct hash<dim::pir>
+{
+    static constexpr float value = 100; 
+};
+template <>
+struct hash<dim::nin>
+{
+    static constexpr float value = 101;
+};
+
+//The dimensions can be registered in the benri namespace using macros.
+//This has to be done inside the dim namespace.
+namespace dim
+{
+create_and_register_dimension(pirate, helper<pir>);
+create_and_register_dimension(ninja, helper<nin>);
+//Compound dimensions can be defined this way.
+create_and_register_dimension(woodleg, helper<pir>, helper<L>); //pirate*length
+create_and_register_dimension(pirate_ninja, helper<pir>, helper<nin>); //pirate*ninja
+} // namespace dim
+} // namespace benri
 ```
 
+<!-- TODO: Check this again -->
 At the moment *benri* is the only library providing this functionality. In all other libraries, the whole code needs to be expanded, when adding a new dimensions. The reason is, that they store their dimensional information in a fixed (compile time) data structure, whereas *benri* uses a type list.
 
 #### Affine quantities
@@ -180,7 +219,64 @@ At the moment *benri* is the only library providing this functionality. In all o
 The types provided by *benri* allow to make a distinction between these quantities and only allow reasonable operations on them. For example:
 <!-- TODO: Write example code. -->
 ```c++
+
 ```
 
 #### No runtime units
-*benri* units can only be derived at compile time.
+*benri* units can only be derived at compile time. Therefore, you can only use quantities with units which are known at compile time. If you want to make a runtime decision on which units you use, you need to either use the c++17 `std::variant`/`std::any` or another libraries equivalent. For example:
+
+<!-- TODO: Write example code. -->
+```c++
+#include <iostream>
+#include <string>
+#include <variant>
+#include <benri/si/base.h>
+
+//Define a variant holding the quantities.
+using si_unit = std::variant<
+    benri::quantity<benri::si::kilogram_t>,
+    benri::quantity<benri::si::metre_t>,
+    benri::quantity<benri::si::second_t>
+>;
+
+//Define a runtime function.
+auto parse(const std::string& input)
+{
+    if (input == "kilogram")
+        return si_unit(benri::quantity<benri::si::kilogram_t>{1});
+    else if (input == "metre")
+        return si_unit(benri::quantity<benri::si::metre_t>{1});
+    else if (input == "second")
+        return si_unit(benri::quantity<benri::si::second_t>{1});
+    else
+        throw;
+}
+//Define another runtime function.
+auto print(si_unit value)
+{
+    std::cout << "You entered: ";
+    std::visit([](auto&& arg) {
+        using T = std::decay_t<decltype(arg)>;
+        if constexpr (std::is_same_v<T, benri::quantity<benri::si::kilogram_t>>)
+            std::cout << "kilogram\n" << std::flush;
+        else if constexpr (std::is_same_v<T, benri::quantity<benri::si::metre_t>>)
+            std::cout << "metre\n" << std::flush;
+        else if constexpr (std::is_same_v<T, benri::quantity<benri::si::second_t>>)
+            std::cout << "second\n" << std::flush;
+        else
+            throw;
+    }, value);
+}
+
+int main()
+{
+    //Get runtime quantity from user input.
+    std::string input;
+    std::cin >> input;
+
+    auto value = parse(input);
+
+    //Print unit of the quantity.
+    print(value);
+}
+```
