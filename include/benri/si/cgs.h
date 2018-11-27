@@ -11,7 +11,7 @@ namespace si
 namespace cgs
 {
 #pragma region acceleration
-implement_unit(gal, dim::acceleration_t, prefix::deci_t);
+implement_unit(galileo, dim::acceleration_t, prefix::deci_t);
 #pragma endregion
 #pragma region dynamic viscosity
 implement_unit(poise, dim::dynamic_viscosity_t, prefix::deci_t);

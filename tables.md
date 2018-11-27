@@ -46,7 +46,10 @@
 | luminous intensity                                                   | SI, base        | J                | candela                             | cd        | (base unit)                                    |
 | area                                                                 | SI              | L²               | square metre                        |           | 1 m²                                           |
 |                                                                      | SI              |                  | hectare                             | ha        | 1 ha = 10⁴ m²                                  |
+|                                                                      | extra           |                  | are                                 | a         | 1 a = 10² m²                                   | <!-- TODO: Implement in benri. -->
 |                                                                      | imperial        |                  | barn                                | b         | 1 b = 10⁻²⁸ m²                                 |
+|                                                                      | imperial        |                  | acre                                | A         | 1 A =                                          | <!-- TODO: Find reference, and implement in benri. -->
+|                                                                      | imperial        |                  | international acre                  | ac        | 1 ac =                                         | <!-- TODO: Find reference, and implement in benri. -->
 | volume                                                               | SI              | L³               | cubic metre                         |           | 1 m³                                           |
 |                                                                      | SI              |                  | litre                               | l         | 1 l = 10⁻³ m³                                  |
 | speed, velocity                                                      | SI              | L T⁻¹            | metre per second                    |           | 1 m/s                                          |
@@ -54,7 +57,8 @@
 |                                                                      | extra           |                  | natural unit of speed               | c         | 1 c = 299 792 458 m/s (exact)                  |
 |                                                                      | imperial        |                  | knot (nautical mile per hour)       | kn        | 1 M/h = 1852/3600 m/s                          |
 | acceleration                                                         | SI              | L T⁻²            | metre per second squared            |           | 1 m/s²                                         |
-|                                                                      | CGS             |                  | gal                                 | Gal       | 1 Gal = 10⁻² m s⁻²                             |
+|                                                                      | CGS             |                  | galileo                             | Gal       | 1 Gal = 10⁻² m s⁻²                             |
+|                                                                      | imperial        |                  | standard gravity                    | g         | 1 g = 9.806 65 m/s²                            | <!-- TODO: Implement in benri. -->
 | wavenumber                                                           | SI              | L⁻¹              | reciprocal metre                    |           | 1 m⁻¹                                          |
 | density, mass density, mass concentration                            | SI              | L⁻³ M            | kilogram per cubic metre            |           | 1 kg/m³                                        |
 | surface density, area density                                        | SI              | L⁻² M            | kilogram per square metre           |           | 1 kg/m²                                        |
@@ -93,6 +97,7 @@
 | electric charge, amount of electricty                                | SI              | T I              | coulomb                             | C         | 1 C = 1 s A                                    |
 |                                                                      | SI              |                  | ampere hour                         |           | 1 A h = 3 600 A s                              |
 |                                                                      | extra           |                  | atomic unit of charge               | e         | 1 e = 1.602 176 53(14)×10⁻¹⁹ C                 |
+|                                                                      | imperial        |                  | faraday                             | F         | 1 F = 1 N_A e mol = 96 485.332 89(59) C        | <!-- TODO: Implement in benri. -->
 | electric potential difference, electromotive force                   | SI              | L² M T⁻³ I⁻¹     | volt                                | V         | 1 V = 1 W/A = 1 m² kg s⁻³ A⁻¹                  |
 | capacitance                                                          | SI              | L⁻² M⁻¹ T⁴ I²    | farad                               | F         | 1 F = 1C/V = 1 m⁻² kg⁻¹ s⁴ A²                  |
 | electric resitance, impedance                                        | SI              | L² M T⁻³ I⁻²     | ohm                                 | Ω         | 1 Ω = 1V/A = 1 m² kg s⁻³ A⁻²                   |
