@@ -1,8 +1,8 @@
-# License
+# Warning
 
 **benri** is published under the [MIT License](https://choosealicense.com/licenses/mit/). Be aware, that the idea behind this software might be patented by someone other than the author. Check with your laywer first, when using the library.
 
-## MIT License
+# MIT License
 
 Copyright (c) 2018 Jan Sende
 
