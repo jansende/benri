@@ -87,7 +87,7 @@ In addition, a replacement for most `<cmath>` functions is provided:
 talk about pow
 ```
 
-Moreover, *benrr* provides a range of helper functions:
+Moreover, *benri* provides a range of helper functions:
 <!-- TODO: Write example code. -->
 ```c++
 show casting
@@ -95,13 +95,111 @@ talk about square and cubic
 ```
 
 # Philosophy
-<!-- TODO: Expand on the philosophy behind benri. -->
-The functions and types provided in *benri* are a compromise of generality, usability, and compile time. All of the libraries functions and types are defined using `constexpr` constructs and should therefore support compile time evaluation. In reality however, the support is currently limited, because only some of the c++ standard library functions, which are used in *benri*, support this behaviour.
+The *benri* library tries to help writing correct and efficient c++ programs using the following principles:
 
-The *benri* library tries to help writing correct c++ programs using the following principles:
-- No weird conversions.
-- No surprises.
-## Design Decisions
+- Be correct.
+- Be explicit.
+- Be sane.
+- Be as efficient as possible.
+
+In the following, these principles are explained in detail.
+
+#### Be correct. (No stupid semantic errors.)
+*benri* aims to help you write correct c++ programs on the first try. It especially wants to protect you from stupid semantic errors. If your program compiles, it should be correct. An infamous example of this kind of error is the [Mars Climate Orbiter](https://en.wikipedia.org/wiki/Mars_Climate_Orbiter). The probe crashed into Mars, because one of the sensors was giving data in `pound-force seconds` instead of `newton seconds`. However this discrepancy was not checked for, leading to faulty steering commands and finally to the destruction of the probe.
+
+*benri* checks for these kind of errors and will fail to compile. For example:
+```c++
+void steer_mars_climate_orbiter(quantity<newton_second_t> force);
+
+steer_mars_climate_orbiter(3_pound_force * second); //Will not compile.
+```
+
+However, *benri* cannot prevent you from doing all stupid things:
+```c++
+double get_thrust_in_pound_force_second();
+
+auto get_thrust_force()
+{
+    return quantity<newton_second_t>(get_thrust_in_pound_force_second()); //Do not ever do that!
+}
+```
+
+#### Be explicit. (No overflowing/faulty conversions.)
+The libraries forces users to be as explicit with their programming as possible. The reason being that the implicit conversions are very error prone and can lead to unintended consequences. Therefore nearly all conversions between units and values need to be made explicit. For example:
+
+```c++
+//Dummy function.
+auto test(quantity<metre_t>);
+
+test(20_metre);                                                        //Works fine.
+test(2000_centi * metre);                                              //Does not compile, because converting cm to m might cause an overflow in the value of the quantity.
+test(simple_cast<decltype(centi * metre)>(2000_centi * metre)); //Works fine. The conversion is now explicitely visible.
+```
+
+This rule applies to math as well. For addition/subtraction implicit conversions are not allowed. Multiplication/division is fine, because we can save the value in a new type. For example:
+```c++
+auto d = 2_metre + 4_metre;            //Works fine.
+auto e = 2_metre + 400_centi * metre;  //Does not compile, because a conversion is necessary.
+auto f = 2_metre / 1_second;           //Works fine. Result is in m/s.
+auto g = 200_centi * metre / 1_second; //Works fine. Result is in cm/s.
+```
+
+Furthermore, implicit coversions for comparisons are not allowed:
+```c++
+if (f < 3_metre / second)         //Works fine.
+    ...
+if (f < 3_centi * metre / second) //Does not compile, because a conversion is necessary.
+    ...
+if (f < g)                        //Does not compile, because a conversion is necessary.
+    ...
+if (f < simple_cast<decltype(f)>(3_centi * metre / second)) //Works fine.
+    ...
+if (f < simple_cast<decltype(f)>(g))                        //Works fine.
+    ...
+```
+
+#### Be sane. (Do not do weird things.)
+The *benri* library tries to behave in a resonable way and as one expects. The goal is to always behave in a non-surprising way. Thus, overloads for commonly used functions and operators, as well as for dimensionless units are implemented. In addition, unusual usage is disabled where ever possible. For example:
+```c++
+auto a = 1_metre;
+a += 10_centi * metre; //Does not compile, because a conversion is necessary.
+a += 10.0;             //Does not compile, because a no quantity is used.
+
+auto b = 1_one;
+a += 10_one;                       //Works fine.
+a += 10_metre / 5_metre;           //Works fine.
+a += 10_metre / 500_centi * metre; //Does not compile, because a conversion is necessary. (The result of the division is in %.)
+a += 10.0;                         //Works fine.
+```
+
+#### Be as efficient as possible. (`constexpr` all the things.)
+All of *benris* library types are defined using `constexpr` constructs. This should allow the compiler to completely eliminate the library overhead of *benri* at compile time. Thus, the assembly of code written with *benri* and of code written with standard c++ types should be exactly the same. For example:
+```c++
+constexpr auto calculate_area(quantity<metre_t> length, quantity<metre_t> width)
+{
+    return length * width; //You get proper unit checking in the rest of the code.
+}
+constexpr auto calculate_area(double length, double width)
+{
+    return length * width; //No one prevents you to put the value in kilometre here.
+}
+```
+
+In addition to the types, all of *benris* library functions are defined using `constexpr` as well. This should allow the compile time calculation of these functions. In reality however, the support is currently limited, because only some of the c++ standard library functions used in *benri* support compile time evaluation. For example:
+
+```c++
+constexpr auto delta = benri::abs(5_second - 10_second); //Evaluates to delta = 5_second at compile time.
+constexpr auto angle = benri::asin(4_metre / 1_metre);   //Does not compile, because compilers do not currently support compile time asin.
+```
+
+Moreover *benri* tries to reduce the amount of calculations done at runtime by shifting the work to the compile step. For example, the following operations can be evaluated at compile time:
+```c++
+constexpr auto energy = simple_cast<joule_t>(50_giga * joule); //The simple_cast function can be evaluated at compile time.
+constexpr auto energy = 50000_joule;                           //These two definition therefore are EXACTLY the same.
+
+constexpr auto energy = 4_joule + 5_joule; //Works fine.
+constexpr auto ratio  = 4_joule / 5_joule; //Works fine.
+```
 
 # Using *benri*
 <!-- TODO: Expand on the usage of benri. --
@@ -117,27 +215,27 @@ The *benri* library is not the only library for working with physical quantities
 The following table gives a quick overview on the most important features provided by the different quantity libraries:
 
 <!-- TODO: Extend table. -->
-| Features                         | benri              | nholthaus | boost |
-|:---------------------------------|:-------------------|:----------|:------|
-| SI units                         | :heavy_check_mark: |           |       |
-| CGS units                        | :heavy_check_mark: |           |       |
-| imperial units                   | :heavy_check_mark: |           |       |
-| astronomical units               | :heavy_check_mark: |           |       |
-| Gray/Sievert support¹            | :heavy_check_mark: |           |       |
-| temperature support²             | :heavy_check_mark: |           |       |
-| physical/mathematical constants³ | :heavy_check_mark: |           |       |
-| affine quantities⁴               | :heavy_check_mark: |           |       |
-| user defined dimensions          | :heavy_check_mark: |           |       |
-| user defined prefixes            | :heavy_check_mark: |           |       |
-| arbitrary prefix conversions⁵    | :heavy_check_mark: |           |       |
-| symbolic computation⁶            | :heavy_check_mark: |           |       |
-| `<cmath>`  functions             | :heavy_check_mark: |           |       |
-| `<chrono>` interoperability      | :x:                |           |       |
-| `<iostream>` functions           | :x:                |           |       |
-| `<boost>` required               | :x:                |           |       |
-| minimum c++ version              | `c++14`            |           |       |
-| extensive documentation          | :x:⁷               |           |       |
-| extensive unit tests             | :x:⁷               |           |       |
+| Features                         | [benri](https://github.com/jansende/benri) | [boost](https://www.boost.org/doc/libs/1_68_0/doc/html/boost_units.html) | [nholthaus](https://github.com/nholthaus/units) |
+|:---------------------------------|:------------------------------------------:|:------------------------------------------------------------------------:|:-----------------------------------------------:|
+| SI units                         | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :heavy_check_mark:                              |
+| CGS units                        | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :x:                                             |
+| imperial units                   | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :heavy_check_mark:                              |
+| astronomical units               | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :x:                                             |
+| Gray/Sievert support¹            | :heavy_check_mark:                         | :x:                                                                      | :x:                                             |
+| temperature support²             | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :heavy_check_mark:                              |
+| physical/mathematical constants³ | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :heavy_check_mark:⁸                             |
+| affine quantities⁴               | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :x:                                             |
+| user defined dimensions          | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :x:                                             |
+| user defined prefixes            | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :heavy_check_mark:                              |
+| arbitrary prefix conversions⁵    | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :x:                                             |
+| symbolic computation⁶            | :heavy_check_mark:                         | :x:                                                                      | :x:                                             |
+| `<cmath>`  functions             | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :heavy_check_mark:                              |
+| `<chrono>` interoperability      | :x:                                        | :x:                                                                      | :heavy_check_mark:                              |
+| `<iostream>` functions           | :x:                                        | :heavy_check_mark:                                                       | :heavy_check_mark:                              |
+| `<boost>` required               | :x:                                        | :heavy_check_mark:                                                       | :x:                                             |
+| minimum c++ version              | `c++14`                                    | `c++98`                                                                  | `c++14`                                         |
+| extensive documentation          | :x:⁷                                       | :heavy_check_mark:                                                       | :heavy_check_mark:                              |
+| extensive unit tests             | :x:⁷                                       | :heavy_check_mark:                                                       | :heavy_check_mark:                              |
 
 ¹ The base units of Sievert and Gray are the same, but their meaning is different. Does the library make a distinction between them?
 
@@ -153,6 +251,8 @@ The following table gives a quick overview on the most important features provid
 
 ⁷ Improvements are planned.
 
+⁸ [nholthaus](https://github.com/nholthaus/units) only supplies a very limited list of constants, without source.
+
 ## Important features
 In the following, the most important differences and features are explained in detail.
 
@@ -162,8 +262,28 @@ In the following, the most important differences and features are explained in d
 For example, if your project only handles different times, you can write:
 <!-- TODO: Write example code. -->
 ```c++
-template <class >
-auto print(benri::quantity<)
+#include <benri/si/base.h>
+
+template <class Unit, class ValueType>
+auto print(benri::quantity<Unit, ValueType> value)
+{
+    std::cout << value.value() << "?";
+}
+template <class ValueType>
+auto print(benri::quantity<benri::si::second_t, ValueType> value)
+{
+    std::cout << value.value() << "s";
+}
+template <class ValueType>
+auto print(benri::quantity<benri::si::minute_t, ValueType> value)
+{
+    std::cout << value.value() << "min";
+}
+template <class ValueType>
+auto print(benri::quantity<benri::si::hour_t, ValueType> value)
+{
+    std::cout << value.value() << "h";
+}
 ```
 
 #### User defined dimensions
@@ -210,16 +330,44 @@ create_and_register_dimension(pirate_ninja, helper<pir>, helper<nin>); //pirate*
 } // namespace benri
 ```
 
-<!-- TODO: Check this again -->
-At the moment *benri* is the only library providing this functionality. In all other libraries, the whole code needs to be expanded, when adding a new dimensions. The reason is, that they store their dimensional information in a fixed (compile time) data structure, whereas *benri* uses a type list.
-
 #### Affine quantities
 *benri* provides support for [affine](https://en.wikipedia.org/wiki/Affine_space) quantities. In short, these are a vector and a point type. Affine quantities often occur in physics. The following pairs are examples of affine quantities: (time point, time delta); (position, length); (temperature, temperature difference).
 
 The types provided by *benri* allow to make a distinction between these quantities and only allow reasonable operations on them. For example:
-<!-- TODO: Write example code. -->
 ```c++
+#include <benri/si/temperature.h>
 
+//Given the following function for setting the temperature of a baking oven...
+void set_oven(benri::quantity_point<benri::si::celsius_t> temperature);
+
+//...we can do the following:
+using namespace benri::si::temperature;
+
+set_oven(200_degree_celsius); //Sets the temperature to 200°C.
+set_oven(200_celsius);        //Will not compile.
+```
+
+This seems quite simple, but is important if the temperature is derived in another function. For example, several functions might provide a new temperature, but not all results make sense. For example:
+```c++
+//Given the following function...
+auto temperature_update()
+{
+    using namespace benri::si::temperature;
+
+    //Increase temperature by 10°C.
+    return 10_celsius;
+}
+auto new_temperature()
+{
+    using namespace benri::si::temperature;
+
+    //Set temperature to 210°C.
+    return 210_degree_celsius;
+}
+
+//...we can be safe from the following:
+set_oven(temperature_update()); //Will not compile. (Otherwise the oven would now be at 10°C.)
+set_oven(new_temperature());    //Will compile, and set the temperature to 210°C.
 ```
 
 #### No runtime units
