@@ -1,6 +1,25 @@
 # Introduction
 *benri* is a c++ library for working with physical quantities. Quantities are the combination of a value with a unit. For example: the quantity `1km` consists of the value `1` and the unit `kilometre`. The library allows the definition of arbitrary units, and provides a container type for quantities. The container handles unit conversions and dimensional checking. Furthermore, a replacement for most of the `<cmath>` functions is provided, to easily updated existing code.
 
+# Table of Contents
+
+- [Introduction](#introduction)
+- [Quickstart](#quickstart)
+    + [Install without using cmake](#install-without-using-cmake)
+    + [Install using cmake](#install-using-cmake)
+    + [TL;DR / Using *benri*](#tldr--using-benri)
+- [Philosophy](#philosophy)
+- [Using *benri*](#using-benri)
+    + [Library structure](#library-structure)
+    + [`<cmath>` functions](#cmath-functions)
+    + [Unit conversions and casts](#unit-conversions-and-casts)
+    + [Template functions](#template-functions)
+    + [Learn more](#learn-more)
+    + [Known bugs](#known-bugs)
+- [Competition](#competition)
+    + [Quick comparison](#quick-comparison)
+    + [Features](#features)
+
 # Quickstart
 In the following, instructions for installing and using *benri* are provided. If you want more information, please read the later sections on specific topics, have a look at the [examples](./examples/) folder, or have a look at the api list in [tables.md](table.md).
 
@@ -66,7 +85,7 @@ add_subdirectory(benri)
 target_link_libraries(hello_benri PRIVATE benri)
 ```
 
-## TLDR; Using *benri*
+## TL;DR / Using *benri*
 The library provides several literal types, which can be used in the following way:
 ```c++
 //Add namespace containing the literals.
@@ -202,16 +221,20 @@ constexpr auto ratio  = 4_joule / 5_joule; //Works fine.
 ```
 
 # Using *benri*
-<!-- TODO: Expand on the usage of benri. --
->
-# Known Bugs
+<!-- TODO: Expand on the usage of benri. -->
+## Library structure
+## `<cmath>` functions
+## Unit conversions and casts
+## Template functions
+## Learn more
+## Known bugs
 <!-- TODO: Can this be done better? -->
  - The unit pascal might conflict with the `pascal` macro set in some windows headers.
 
 # Competition
 The *benri* library is not the only library for working with physical quantities. The most notable competitors are [nholthaus](https://github.com/nholthaus/units) and [boost](https://www.boost.org/doc/libs/1_68_0/doc/html/boost_units.html). These libraries provide similar facilities to *benri*, but differ in some important areas. It is therefore recommended to check what you need in your project and select accordingly.
 
-## Quick Comparison
+## Quick comparison
 The following table gives a quick overview on the most important features provided by the different quantity libraries:
 
 <!-- TODO: Extend table. -->
@@ -253,7 +276,7 @@ The following table gives a quick overview on the most important features provid
 
 ⁸ [nholthaus](https://github.com/nholthaus/units) only supplies a very limited list of constants, without source.
 
-## Important features
+## Features
 In the following, the most important differences and features are explained in detail.
 
 #### `<iostream>` functions
