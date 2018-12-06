@@ -28,7 +28,7 @@ int main()
         << benri::ceil(mass * 0.0635).value() << " gram flour\n"
         << benri::ceil(mass / 2828.0).value() << " pack of backing soda\n"
         << benri::floor(mass * 0.002).value() << " eggs\n"
-        << benri::ceil(mass * 0.1765).value()  << " gram quark cream\n"
+        << benri::ceil(mass * 0.1765).value() << " gram quark cream\n"
         << benri::ceil(mass * 0.0705).value() << " gram oil\n"
         << benri::ceil(mass / 2828.0).value() << " pack of vanille aroma\n"
         << benri::ceil(mass / 2828.0).value() << "/2 litre milk\n"

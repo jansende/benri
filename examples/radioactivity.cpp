@@ -1,28 +1,31 @@
 #include <benri/si/si.h>
 #include <iostream>
 
-enum class radiation_type {
+enum class radiation_type
+{
     alpha,
     beta,
     protons,
 };
 
-auto weighting_factor(radiation_type radiation) {
+auto weighting_factor(radiation_type radiation)
+{
     using namespace benri::si;
 
     switch (radiation)
     {
-        case radiation_type::alpha:
-            return 1_sievert_per_gray;
-        case radiation_type::beta:
-            return 20_sievert_per_gray;
-        case radiation_type::protons:
-            return 2_sievert_per_gray;
+    case radiation_type::alpha:
+        return 1_sievert_per_gray;
+    case radiation_type::beta:
+        return 20_sievert_per_gray;
+    case radiation_type::protons:
+        return 2_sievert_per_gray;
     }
 }
 
 template <class T>
-auto equivalent_dose(benri::quantity<benri::si::gray_t, T> absorbed_dose, radiation_type radiation) {
+auto equivalent_dose(benri::quantity<benri::si::gray_t, T> absorbed_dose, radiation_type radiation)
+{
     return absorbed_dose * benri::value_type_cast<T>(weighting_factor(radiation));
 }
 

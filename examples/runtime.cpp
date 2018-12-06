@@ -7,11 +7,10 @@
 using si_unit = std::variant<
     benri::quantity<benri::si::kilogram_t>,
     benri::quantity<benri::si::metre_t>,
-    benri::quantity<benri::si::second_t>
->;
+    benri::quantity<benri::si::second_t>>;
 
 //Define a runtime function.
-auto parse(const std::string& input)
+auto parse(const std::string &input)
 {
     if (input == "kilogram")
         return si_unit(benri::quantity<benri::si::kilogram_t>{1});
@@ -26,7 +25,7 @@ auto parse(const std::string& input)
 auto print(si_unit value)
 {
     std::cout << "You entered: ";
-    std::visit([](auto&& arg) {
+    std::visit([](auto &&arg) {
         using T = std::decay_t<decltype(arg)>;
         if constexpr (std::is_same_v<T, benri::quantity<benri::si::kilogram_t>>)
             std::cout << "kilogram\n" << std::flush;
@@ -36,7 +35,8 @@ auto print(si_unit value)
             std::cout << "second\n" << std::flush;
         else
             throw;
-    }, value);
+    },
+               value);
 }
 
 int main()

@@ -2,12 +2,14 @@
 #include <iostream>
 
 //sensor functions
-inline auto get_outdoor_temperature() {
+inline auto get_outdoor_temperature()
+{
     using namespace benri::si::temperature;
     //return fake data
     return 10_degree_celsius;
 }
-inline auto get_indoor_temperature() {
+inline auto get_indoor_temperature()
+{
     using namespace benri::si::temperature;
     //return fake data
     return 18_degree_celsius;

@@ -8,17 +8,17 @@
 namespace benri
 {
 template <class T>
-constexpr auto square(T val)
+[[nodiscard]] constexpr inline auto square(T val) noexcept
 {
     return val * val;
 }
 template <class T>
-constexpr auto cubic(T val)
+[[nodiscard]] constexpr inline auto cubic(T val) noexcept
 {
     return val * val * val;
 }
 template <class T>
-constexpr auto quartic(T val)
+[[nodiscard]] constexpr inline auto quartic(T val) noexcept
 {
     return val * val * val * val;
 }
@@ -56,7 +56,7 @@ class quantity
     friend class quantity;
     template <class, class>
     friend class quantity_point;
-    
+
     using value_type = ValueType;
     using unit_type = Unit;
 
@@ -64,179 +64,179 @@ class quantity
     value_type _value;
 
   public:
-    constexpr auto value() const
+    [[nodiscard]] constexpr inline auto value() const noexcept
     {
         return _value;
     }
 #pragma region casting
     //Friend declaration for the casting functions.
     template <class ResultValueType, class Unit, class ValueType>
-    friend constexpr auto value_type_cast(const quantity<Unit, ValueType> &rhs) -> quantity<Unit, ResultValueType>;
+    friend constexpr inline auto value_type_cast(const quantity<Unit, ValueType> &rhs) noexcept -> quantity<Unit, ResultValueType>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
+    friend constexpr inline auto simple_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
+    friend constexpr inline auto unit_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>;
     template <class ResultValueType, class Unit, class ValueType>
-    friend constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<remove_unit_prefix<Unit>, ResultValueType>;
+    friend constexpr inline auto remove_prefix(const quantity<Unit, ValueType> &rhs) noexcept -> quantity<remove_unit_prefix<Unit>, ResultValueType>;
 #pragma endregion
 #pragma region rule of three
     //default constructor
-    constexpr quantity() = default;
+    constexpr inline quantity() noexcept = default;
     //value constructor
-    explicit constexpr quantity(const value_type& value) : _value(value) {}
-    explicit constexpr quantity(value_type&& value) : _value(std::move(value)) {}
+    explicit constexpr inline quantity(const value_type &value) noexcept : _value(value) {}
+    explicit constexpr inline quantity(value_type &&value) noexcept : _value(std::move(value)) {}
     //implicit constructor
     template <class Dummy = void, typename = std::enable_if_t<is_one_v<unit_type>, Dummy>>
-    constexpr quantity(const value_type& value) : _value(value) {}
+    constexpr inline quantity(const value_type &value) noexcept : _value(value) {}
     template <class Dummy = void, typename = std::enable_if_t<is_one_v<unit_type>, Dummy>>
-    constexpr quantity(value_type&& value) : _value(std::move(value)) {}
+    constexpr inline quantity(value_type &&value) noexcept : _value(std::move(value)) {}
     template <class rhsUnit, class Dummy = void, typename = std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, Dummy>>
-    constexpr quantity(const quantity<rhsUnit, value_type>& rhs) : _value(rhs._value) {}
+    constexpr inline quantity(const quantity<rhsUnit, value_type> &rhs) noexcept : _value(rhs._value) {}
     template <class rhsUnit, class Dummy = void, typename = std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, Dummy>>
-    constexpr quantity(quantity<rhsUnit, value_type>&& rhs) : _value(std::move(rhs._value)) {}
+    constexpr inline quantity(quantity<rhsUnit, value_type> &&rhs) noexcept : _value(std::move(rhs._value)) {}
 
     //copy constructor
-    constexpr quantity(const quantity &) = default;
+    constexpr inline quantity(const quantity &) noexcept = default;
     //move constructor
-    constexpr quantity(quantity &&) = default;
+    constexpr inline quantity(quantity &&) noexcept = default;
     //default destructor
-    ~quantity() = default;
+    inline ~quantity() noexcept = default;
     //copy assignment
-    constexpr quantity &operator=(const quantity &) = default;
+    constexpr inline quantity &operator=(const quantity &) noexcept = default;
     //move assignment
-    constexpr quantity &operator=(quantity &&) = default;
+    constexpr inline quantity &operator=(quantity &&) noexcept = default;
     //explicit type conversion
     template <class Dummy = value_type, typename = std::enable_if_t<is_one_v<unit_type>, Dummy>>
-    explicit operator value_type() const
+    [[nodiscard]] constexpr inline explicit operator value_type() const noexcept
     {
         return _value;
     }
 #pragma endregion
 #pragma region math declarations / a bit implementation
 #pragma region unary operators
-    constexpr auto operator+() const
+    [[nodiscard]] constexpr inline auto operator+() const noexcept
     {
         return quantity{_value};
     }
-    constexpr auto operator-() const
+    [[nodiscard]] constexpr inline auto operator-() const noexcept
     {
         return quantity{value_type{-1} * _value};
     }
 #pragma endregion
 #pragma region addition
-    constexpr auto operator+=(const quantity &rhs)
+    constexpr inline auto operator+=(const quantity &rhs) noexcept
     {
         this->_value += rhs._value;
         return *this;
     }
-    friend constexpr auto operator+(const quantity &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator+(const quantity &lhs, const quantity &rhs) noexcept
     {
         return quantity{lhs._value + rhs._value};
     }
     template <class rhsUnit>
-    friend constexpr auto operator+(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity>
+    [[nodiscard]] friend constexpr inline auto operator+(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity>
     {
         return quantity{lhs._value + rhs._value};
     }
-    constexpr auto operator-=(const quantity &rhs)
+    constexpr inline auto operator-=(const quantity &rhs) noexcept
     {
         this->_value -= rhs._value;
         return *this;
     }
-    friend constexpr auto operator-(const quantity &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator-(const quantity &lhs, const quantity &rhs) noexcept
     {
         return quantity{lhs._value - rhs._value};
     }
     template <class rhsUnit>
-    friend constexpr auto operator-(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity>
+    [[nodiscard]] friend constexpr inline auto operator-(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, quantity>
     {
         return quantity{lhs._value - rhs._value};
     }
 #pragma endregion
 #pragma region multiplication
-    constexpr auto &operator*=(const value_type &rhs)
+    constexpr inline auto &operator*=(const value_type &rhs) noexcept
     {
         this->_value *= rhs;
         return *this;
     }
     template <class lhsUnit, class rhsUnit, class ValueType>
-    friend constexpr auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>;
-    friend constexpr auto operator*(const quantity &lhs, const value_type &rhs)
+    friend constexpr inline auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) noexcept -> quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>;
+    [[nodiscard]] friend constexpr inline auto operator*(const quantity &lhs, const value_type &rhs) noexcept
     {
         return quantity{lhs._value * rhs};
     }
-    friend constexpr auto operator*(const value_type &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator*(const value_type &lhs, const quantity &rhs) noexcept
     {
         return quantity{lhs * rhs._value};
     }
-    constexpr auto &operator/=(const value_type &rhs)
+    constexpr inline auto &operator/=(const value_type &rhs) noexcept
     {
         this->_value /= rhs;
         return *this;
     }
     template <class lhsUnit, class rhsUnit, class ValueType>
-    friend constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units<lhsUnit, rhsUnit>, ValueType>;
-    friend constexpr auto operator/(const quantity &lhs, const value_type &rhs)
+    friend constexpr inline auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) noexcept -> quantity<divide_units<lhsUnit, rhsUnit>, ValueType>;
+    [[nodiscard]] friend constexpr inline auto operator/(const quantity &lhs, const value_type &rhs) noexcept
     {
         return quantity{lhs._value / rhs};
     }
-    friend constexpr auto operator/(const value_type &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator/(const value_type &lhs, const quantity &rhs) noexcept
     {
         return quantity<pow_unit<unit_type, std::ratio<-1>>, value_type>{lhs / rhs._value};
     }
 #pragma endregion
 #pragma region comparisons
-    friend constexpr auto operator==(const quantity &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator==(const quantity &lhs, const quantity &rhs) noexcept
     {
         return lhs._value == rhs._value;
     }
     template <class rhsUnit>
-    friend constexpr auto operator==(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    [[nodiscard]] friend constexpr inline auto operator==(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
     {
         return lhs._value == rhs._value;
     }
-    friend constexpr auto operator!=(const quantity &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator!=(const quantity &lhs, const quantity &rhs) noexcept
     {
         return !(lhs == rhs);
     }
     template <class rhsUnit>
-    friend constexpr auto operator!=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    [[nodiscard]] friend constexpr inline auto operator!=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
     {
         return !(lhs == rhs);
     }
-    friend constexpr auto operator<(const quantity &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator<(const quantity &lhs, const quantity &rhs) noexcept
     {
         return lhs._value < rhs._value;
     }
     template <class rhsUnit>
-    friend constexpr auto operator<(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    [[nodiscard]] friend constexpr inline auto operator<(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
     {
         return lhs._value < rhs._value;
     }
-    friend constexpr auto operator>(const quantity &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator>(const quantity &lhs, const quantity &rhs) noexcept
     {
         return rhs < lhs;
     }
     template <class rhsUnit>
-    friend constexpr auto operator>(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    [[nodiscard]] friend constexpr inline auto operator>(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
     {
         return rhs < lhs;
     }
-    friend constexpr auto operator<=(const quantity &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator<=(const quantity &lhs, const quantity &rhs) noexcept
     {
         return !(rhs < lhs);
     }
     template <class rhsUnit>
-    friend constexpr auto operator<=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    [[nodiscard]] friend constexpr inline auto operator<=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
     {
         return !(rhs < lhs);
     }
-    friend constexpr auto operator>=(const quantity &lhs, const quantity &rhs)
+    [[nodiscard]] friend constexpr inline auto operator>=(const quantity &lhs, const quantity &rhs) noexcept
     {
         return !(lhs < rhs);
     }
     template <class rhsUnit>
-    friend constexpr auto operator>=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
+    [[nodiscard]] friend constexpr inline auto operator>=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_compatible_v<unit_type, rhsUnit>, bool>
     {
         return !(lhs < rhs);
     }
@@ -244,12 +244,12 @@ class quantity
 #pragma endregion
 };
 template <class lhsUnit, class rhsUnit, class ValueType>
-constexpr auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>
+[[nodiscard]] constexpr inline auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) noexcept -> quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>
 {
     return quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>{lhs._value * rhs._value};
 }
 template <class lhsUnit, class rhsUnit, class ValueType>
-constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) -> quantity<divide_units<lhsUnit, rhsUnit>, ValueType>
+[[nodiscard]] constexpr inline auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) noexcept -> quantity<divide_units<lhsUnit, rhsUnit>, ValueType>
 {
     return quantity<divide_units<lhsUnit, rhsUnit>, ValueType>{lhs._value / rhs._value};
 }
@@ -257,7 +257,7 @@ constexpr auto operator/(const quantity<lhsUnit, ValueType> &lhs, const quantity
 //The value_type_cast function lets you cast the value_type of a quantity
 //to another value_type.
 template <class ResultValueType, class Unit, class ValueType>
-constexpr auto value_type_cast(const quantity<Unit, ValueType> &rhs) -> quantity<Unit, ResultValueType>
+[[nodiscard]] constexpr inline auto value_type_cast(const quantity<Unit, ValueType> &rhs) noexcept -> quantity<Unit, ResultValueType>
 {
     return quantity<Unit, ResultValueType>{static_cast<ResultValueType>(rhs._value)};
 }
@@ -268,15 +268,13 @@ constexpr auto value_type_cast(const quantity<Unit, ValueType> &rhs) -> quantity
 //compile time. However, the implementation has a restriction, that it is
 //not compatible with roots of units.
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
-    //calculation
     return quantity<ResultUnit, ValueType>{rhs._value * impl::multiply_elements<ValueType, divide_lists<typename Unit::prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
 {
-    //calculation
     return simple_cast<typename ResultUnit::unit_type>(rhs);
 }
 //The unit_cast function lets you cast one quantity to another unit.
@@ -287,15 +285,13 @@ constexpr auto simple_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_
 //marked constexpr, to be forward compatible with a constexpr std::pow
 //implementation.
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
-    //calculation
     return quantity<ResultUnit, ValueType>{rhs._value * impl::runtime_multiply_elements<ValueType>(divide_lists<typename Unit::prefix, typename ResultUnit::prefix>{})};
 }
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
 {
-    //calculation
     return unit_cast<typename ResultUnit::unit_type>(rhs);
 }
 //The remove_prefix function lets you get rid of the prefix of an arbitrary
@@ -307,14 +303,13 @@ constexpr auto unit_cast(const quantity<Unit, ValueType> &rhs) -> std::enable_if
 //Furthermore, you can provide a ResultValueType for the function, in the case that
 //the transformation would lead to conversion errors.
 template <class ResultValueType, class Unit, class ValueType>
-constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs) -> quantity<remove_unit_prefix<Unit>, ResultValueType>
+[[nodiscard]] constexpr inline auto remove_prefix(const quantity<Unit, ValueType> &rhs) noexcept -> quantity<remove_unit_prefix<Unit>, ResultValueType>
 {
-    //calculation
     using PrefixType = typename Unit::prefix;
     return quantity<remove_unit_prefix<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_multiply_elements<ResultValueType>(PrefixType{})};
 }
 template <class Unit, class ValueType>
-constexpr auto remove_prefix(const quantity<Unit, ValueType> &rhs)
+[[nodiscard]] constexpr inline auto remove_prefix(const quantity<Unit, ValueType> &rhs) noexcept
 {
     return remove_prefix<ValueType>(rhs);
 }

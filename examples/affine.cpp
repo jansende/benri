@@ -12,7 +12,7 @@ auto test_1()
 
     //...we can do the following:
     set_oven(200_degree_celsius); //Sets the temperature to 200°C.
-    set_oven(200_celsius);        //Will not compile.
+    // set_oven(200_celsius);        //Will not compile.
 }
 
 //Given the following function...
@@ -36,11 +36,12 @@ auto test_2()
     using namespace benri::si::temperature;
 
     //...we can be safe from the following:
-    set_oven(temperature_update()); //Will not compile. (Otherwise the oven would now be at 10°C.)
+    // set_oven(temperature_update()); //Will not compile. (Otherwise the oven would now be at 10°C.)
     set_oven(new_temperature());    //Will compile, and set the temperature to 210°C.
 }
 
-int main() {
+int main()
+{
     //Call the test functions.
     test_1();
     test_2();

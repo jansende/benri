@@ -37,7 +37,7 @@ class quantity_point
   public:
     template <class Unit, class ValueType>
     friend class quantity_point;
-    
+
     using value_type = ValueType;
     using unit_type = Unit;
 
@@ -45,105 +45,105 @@ class quantity_point
     value_type _value;
 
   public:
-    constexpr auto value() const
+    [[nodiscard]] constexpr inline auto value() const noexcept
     {
         return _value;
     }
 #pragma region casting
     //Friend declaration for the casting functions.
     template <class ResultValueType, class Unit, class ValueType>
-    friend constexpr auto value_type_cast(const quantity_point<Unit, ValueType> &rhs) -> quantity_point<Unit, ResultValueType>;
+    friend constexpr inline auto value_type_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<Unit, ResultValueType>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr auto simple_cast(const quantity_point<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
+    friend constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr auto unit_cast(const quantity_point<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
+    friend constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
     template <class ResultValueType, class Unit, class ValueType>
-    friend constexpr auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) -> quantity_point<remove_unit_prefix<Unit>, ResultValueType>;
+    friend constexpr inline auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<remove_unit_prefix<Unit>, ResultValueType>;
 #pragma endregion
 #pragma region rule of three
     //default constructor
-    constexpr quantity_point() = default;
+    constexpr inline quantity_point() noexcept = default;
     //value constructor
-    explicit constexpr quantity_point(value_type value) : _value(value) {}
+    explicit constexpr inline quantity_point(value_type value) noexcept : _value(value) {}
     //copy constructor
-    constexpr quantity_point(const quantity_point &) = default;
+    constexpr inline quantity_point(const quantity_point &) noexcept = default;
     //move constructor
-    constexpr quantity_point(quantity_point &&) = default;
+    constexpr inline quantity_point(quantity_point &&) noexcept = default;
     //default destructor
-    ~quantity_point() = default;
+    inline ~quantity_point() noexcept = default;
     //copy assignment
-    constexpr quantity_point &operator=(const quantity_point &) = default;
+    constexpr inline quantity_point &operator=(const quantity_point &) noexcept = default;
     //move assignment
-    constexpr quantity_point &operator=(quantity_point &&) = default;
+    constexpr inline quantity_point &operator=(quantity_point &&) noexcept = default;
 #pragma endregion
 #pragma region math declarations / a bit implementation
 #pragma region unary operators
-    constexpr auto operator+() const
+    [[nodiscard]] constexpr inline auto operator+() const noexcept
     {
         return quantity_point{_value};
     }
-    constexpr auto operator-() const
+    [[nodiscard]] constexpr inline auto operator-() const noexcept
     {
         return quantity_point{value_type{-1} * _value};
     }
 #pragma endregion
 #pragma region addition
-    constexpr auto operator+=(const quantity<unit_type, value_type> &rhs)
+    constexpr inline auto operator+=(const quantity<unit_type, value_type> &rhs) noexcept
     {
         this->_value += rhs._value;
         return *this;
     }
 
-    friend constexpr auto operator+(const quantity<unit_type, value_type> &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator+(const quantity<unit_type, value_type> &lhs, const quantity_point &rhs) noexcept
     {
         return quantity_point{lhs._value + rhs._value};
     }
-    friend constexpr auto operator+(const quantity_point &lhs, const quantity<unit_type, value_type> &rhs)
+    [[nodiscard]] friend constexpr inline auto operator+(const quantity_point &lhs, const quantity<unit_type, value_type> &rhs) noexcept
     {
         return quantity_point{lhs._value + rhs._value};
     }
 
-    constexpr auto operator-=(const quantity<unit_type, value_type> &rhs)
+    constexpr inline auto operator-=(const quantity<unit_type, value_type> &rhs) noexcept
     {
         this->_value -= rhs._value;
         return *this;
     }
 
-    friend constexpr auto operator-(const quantity_point &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator-(const quantity_point &lhs, const quantity_point &rhs) noexcept
     {
         return quantity<unit_type, value_type>{lhs._value - rhs._value};
     }
-    friend constexpr auto operator-(const quantity<unit_type, value_type> &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator-(const quantity<unit_type, value_type> &lhs, const quantity_point &rhs) noexcept
     {
         return quantity_point{lhs._value - rhs._value};
     }
-    friend constexpr auto operator-(const quantity_point &lhs, const quantity<unit_type, value_type> &rhs)
+    [[nodiscard]] friend constexpr inline auto operator-(const quantity_point &lhs, const quantity<unit_type, value_type> &rhs) noexcept
     {
         return quantity_point{lhs._value - rhs._value};
     }
 #pragma endregion
 #pragma region comparisons
-    friend constexpr auto operator==(const quantity_point &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator==(const quantity_point &lhs, const quantity_point &rhs) noexcept
     {
         return lhs._value == rhs._value;
     }
-    friend constexpr auto operator!=(const quantity_point &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator!=(const quantity_point &lhs, const quantity_point &rhs) noexcept
     {
         return !(lhs == rhs);
     }
-    friend constexpr auto operator<(const quantity_point &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator<(const quantity_point &lhs, const quantity_point &rhs) noexcept
     {
         return lhs._value < rhs._value;
     }
-    friend constexpr auto operator>(const quantity_point &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator>(const quantity_point &lhs, const quantity_point &rhs) noexcept
     {
         return rhs < lhs;
     }
-    friend constexpr auto operator<=(const quantity_point &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator<=(const quantity_point &lhs, const quantity_point &rhs) noexcept
     {
         return !(rhs < lhs);
     }
-    friend constexpr auto operator>=(const quantity_point &lhs, const quantity_point &rhs)
+    [[nodiscard]] friend constexpr inline auto operator>=(const quantity_point &lhs, const quantity_point &rhs) noexcept
     {
         return !(lhs < rhs);
     }
@@ -157,7 +157,7 @@ class quantity_point
 //The value_type_cast function lets you cast the value_type of a quantity_point
 //to another value_type.
 template <class ResultValueType, class Unit, class ValueType>
-constexpr auto value_type_cast(const quantity_point<Unit, ValueType> &rhs) -> quantity_point<Unit, ResultValueType>
+[[nodiscard]] constexpr inline auto value_type_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<Unit, ResultValueType>
 {
     return quantity_point<Unit, ResultValueType>{static_cast<ResultValueType>(rhs._value)};
 }
@@ -168,15 +168,13 @@ constexpr auto value_type_cast(const quantity_point<Unit, ValueType> &rhs) -> qu
 //compile time. However, the implementation has a restriction, that it is
 //not compatible with roots of units.
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto simple_cast(const quantity_point<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
 {
-    //calculation
     return quantity_point<ResultUnit, ValueType>{rhs._value * impl::multiply_elements<ValueType, divide_lists<typename Unit::prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto simple_cast(const quantity_point<Unit, ValueType> &rhs) -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity_point<typename ResultUnit::unit_type, ValueType>>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity_point<typename ResultUnit::unit_type, ValueType>>
 {
-    //calculation
     return simple_cast<typename ResultUnit::unit_type>(rhs);
 }
 //The unit_cast function lets you cast one quantity_point to another unit.
@@ -187,15 +185,13 @@ constexpr auto simple_cast(const quantity_point<Unit, ValueType> &rhs) -> std::e
 //marked constexpr, to be forward compatible with a constexpr std::pow
 //implementation.
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto unit_cast(const quantity_point<Unit, ValueType> &rhs) -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
 {
-    //calculation
     return quantity_point<ResultUnit, ValueType>{rhs._value * impl::runtime_multiply_elements<ValueType>(divide_lists<typename Unit::prefix, typename ResultUnit::prefix>{})};
 }
 template <class ResultUnit, class Unit, class ValueType>
-constexpr auto unit_cast(const quantity_point<Unit, ValueType> &rhs) -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity_point<typename ResultUnit::unit_type, ValueType>>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity_point<typename ResultUnit::unit_type, ValueType>>
 {
-    //calculation
     return unit_cast<typename ResultUnit::unit_type>(rhs);
 }
 //The remove_prefix function lets you get rid of the prefix of an arbitrary
@@ -207,14 +203,13 @@ constexpr auto unit_cast(const quantity_point<Unit, ValueType> &rhs) -> std::ena
 //Furthermore, you can provide a ResultValueType for the function, in the case that
 //the transformation would lead to conversion errors.
 template <class ResultValueType, class Unit, class ValueType>
-constexpr auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) -> quantity_point<remove_unit_prefix<Unit>, ResultValueType>
+[[nodiscard]] constexpr inline auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<remove_unit_prefix<Unit>, ResultValueType>
 {
-    //calculation
     using PrefixType = typename Unit::prefix;
     return quantity_point<remove_unit_prefix<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_multiply_elements<ResultValueType>(PrefixType{})};
 }
 template <class Unit, class ValueType>
-constexpr auto remove_prefix(const quantity_point<Unit, ValueType> &rhs)
+[[nodiscard]] constexpr inline auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) noexcept
 {
     return remove_prefix<ValueType>(rhs);
 }
