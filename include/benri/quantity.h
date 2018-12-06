@@ -99,7 +99,7 @@ class quantity
     constexpr quantity(const quantity &) = default;
     //move constructor
     constexpr quantity(quantity &&) = default;
-    //default constructor
+    //default destructor
     ~quantity() = default;
     //copy assignment
     constexpr quantity &operator=(const quantity &) = default;

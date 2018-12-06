@@ -163,7 +163,7 @@ auto f = 2_metre / 1_second;           //Works fine. Result is in m/s.
 auto g = 200_centi * metre / 1_second; //Works fine. Result is in cm/s.
 ```
 
-Furthermore, implicit coversions for comparisons are not allowed:
+Furthermore, implicit conversions for comparisons are not allowed:
 ```c++
 if (f < 3_metre / second)         //Works fine.
     ...

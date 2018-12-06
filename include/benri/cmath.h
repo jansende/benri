@@ -118,7 +118,7 @@ using conversion_type_t = typename conversion_type<lhsQuantity, rhsQuantity, All
 //The max, and min functions return the max/min of two quantities with
 //the same unit.
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto max_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::max(x.value(), y.value()))>>
+constexpr auto max_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::max(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::max(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -127,7 +127,7 @@ constexpr auto max_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y
     return quantity<Unit, ResultType>{std::max(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto max_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::max(x.value(), y.value()))>>
+constexpr auto max_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::max(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::max(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -136,13 +136,13 @@ constexpr auto max_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, 
     return quantity_point<Unit, ResultType>{std::max(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion = false, class lhsQuantity, class rhsQuantity>
-constexpr auto max(lhsQuantity x, rhsQuantity y)
+constexpr auto max(const lhsQuantity x, const rhsQuantity y)
 {
     using ConversionType = conversion_type_t<lhsQuantity, rhsQuantity, true>;
     return max_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto min_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::min(x.value(), y.value()))>>
+constexpr auto min_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::min(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::min(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -151,7 +151,7 @@ constexpr auto min_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y
     return quantity<Unit, ResultType>{std::min(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto min_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::min(x.value(), y.value()))>>
+constexpr auto min_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::min(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::min(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -170,7 +170,7 @@ constexpr auto min(lhsQuantity x, rhsQuantity y)
 //The abs, and fabs functions calculate the absolute value of quantities
 //without looking at the underlying unit.
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto abs(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::abs(val.value()))>
+constexpr auto abs(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::abs(val.value()))>
 {
     using ResultType = decltype(std::abs(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -179,7 +179,7 @@ constexpr auto abs(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std
     return quantity<Unit, ResultType>{std::abs(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto abs(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::abs(val.value()))>
+constexpr auto abs(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::abs(val.value()))>
 {
     using ResultType = decltype(std::abs(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -188,7 +188,7 @@ constexpr auto abs(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, 
     return quantity_point<Unit, ResultType>{std::abs(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto fabs(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::fabs(val.value()))>
+constexpr auto fabs(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::fabs(val.value()))>
 {
     using ResultType = decltype(std::fabs(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -197,7 +197,7 @@ constexpr auto fabs(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(st
     return quantity<Unit, ResultType>{std::fabs(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto fabs(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::fabs(val.value()))>
+constexpr auto fabs(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::fabs(val.value()))>
 {
     using ResultType = decltype(std::fabs(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -208,7 +208,7 @@ constexpr auto fabs(quantity_point<Unit, ValueType> val) -> quantity_point<Unit,
 //The fmod, remainder, and remquo functions calculate the remainder of the
 //division of two quantities without looking at the units.
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class ValueType>
-constexpr auto fmod(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y) -> quantity<xUnit, decltype(std::fmod(x.value(), y.value()))>
+constexpr auto fmod(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y) -> quantity<xUnit, decltype(std::fmod(x.value(), y.value()))>
 {
     using ResultType = decltype(std::fmod(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -217,7 +217,7 @@ constexpr auto fmod(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y) 
     return quantity<xUnit, ResultType>{std::fmod(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class ValueType>
-constexpr auto fmod(quantity<xUnit, ValueType> x, ValueType y) -> quantity<xUnit, decltype(std::fmod(x.value(), y))>
+constexpr auto fmod(const quantity<xUnit, ValueType> x, ValueType y) -> quantity<xUnit, decltype(std::fmod(x.value(), y))>
 {
     using ResultType = decltype(std::fmod(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -226,7 +226,7 @@ constexpr auto fmod(quantity<xUnit, ValueType> x, ValueType y) -> quantity<xUnit
     return quantity<xUnit, ResultType>{std::fmod(x.value(), y)};
 }
 template <bool AllowImplicitConversion = false, class yUnit, class ValueType>
-constexpr auto fmod(ValueType x, quantity<yUnit, ValueType> y) -> quantity<one_unit, decltype(std::fmod(x, y.value()))>
+constexpr auto fmod(ValueType x, const quantity<yUnit, ValueType> y) -> quantity<one_unit, decltype(std::fmod(x, y.value()))>
 {
     using ResultType = decltype(std::fmod(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -235,7 +235,7 @@ constexpr auto fmod(ValueType x, quantity<yUnit, ValueType> y) -> quantity<one_u
     return quantity<one_unit, ResultType>{std::fmod(x, y.value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class ValueType>
-constexpr auto remainder(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y) -> quantity<xUnit, decltype(std::remainder(x.value(), y.value()))>
+constexpr auto remainder(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y) -> quantity<xUnit, decltype(std::remainder(x.value(), y.value()))>
 {
     using ResultType = decltype(std::remainder(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -244,7 +244,7 @@ constexpr auto remainder(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType
     return quantity<xUnit, ResultType>{std::remainder(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class ValueType>
-constexpr auto remainder(quantity<xUnit, ValueType> x, ValueType y) -> quantity<xUnit, decltype(std::remainder(x.value(), y))>
+constexpr auto remainder(const quantity<xUnit, ValueType> x, ValueType y) -> quantity<xUnit, decltype(std::remainder(x.value(), y))>
 {
     using ResultType = decltype(std::remainder(x.value(), y));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -253,7 +253,7 @@ constexpr auto remainder(quantity<xUnit, ValueType> x, ValueType y) -> quantity<
     return quantity<xUnit, ResultType>{std::remainder(x.value(), y)};
 }
 template <bool AllowImplicitConversion = false, class yUnit, class ValueType>
-constexpr auto remainder(ValueType x, quantity<yUnit, ValueType> y) -> quantity<one_unit, decltype(std::remainder(x, y.value()))>
+constexpr auto remainder(ValueType x, const quantity<yUnit, ValueType> y) -> quantity<one_unit, decltype(std::remainder(x, y.value()))>
 {
     using ResultType = decltype(std::remainder(x, y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -262,7 +262,7 @@ constexpr auto remainder(ValueType x, quantity<yUnit, ValueType> y) -> quantity<
     return quantity<one_unit, ResultType>{std::remainder(x, y.value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class ValueType>
-constexpr auto remquo(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, int *quo) -> quantity<xUnit, decltype(std::remquo(x.value(), y.value(), quo))>
+constexpr auto remquo(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, int *quo) -> quantity<xUnit, decltype(std::remquo(x.value(), y.value(), quo))>
 {
     using ResultType = decltype(std::remquo(x.value(), y.value(), quo));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -271,7 +271,7 @@ constexpr auto remquo(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y
     return quantity<xUnit, ResultType>{std::remquo(x.value(), y.value(), quo)};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class ValueType>
-constexpr auto remquo(quantity<xUnit, ValueType> x, ValueType y, int *quo) -> quantity<xUnit, decltype(std::remquo(x.value(), y, quo))>
+constexpr auto remquo(const quantity<xUnit, ValueType> x, ValueType y, int *quo) -> quantity<xUnit, decltype(std::remquo(x.value(), y, quo))>
 {
     using ResultType = decltype(std::remquo(x.value(), y, quo));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -280,7 +280,7 @@ constexpr auto remquo(quantity<xUnit, ValueType> x, ValueType y, int *quo) -> qu
     return quantity<xUnit, ResultType>{std::remquo(x.value(), y, quo)};
 }
 template <bool AllowImplicitConversion = false, class yUnit, class ValueType>
-constexpr auto remquo(ValueType x, quantity<yUnit, ValueType> y, int *quo) -> quantity<one_unit, decltype(std::remquo(x, y.value(), quo))>
+constexpr auto remquo(ValueType x, const quantity<yUnit, ValueType> y, int *quo) -> quantity<one_unit, decltype(std::remquo(x, y.value(), quo))>
 {
     using ResultType = decltype(std::remquo(x, y.value(), quo));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -291,7 +291,7 @@ constexpr auto remquo(ValueType x, quantity<yUnit, ValueType> y, int *quo) -> qu
 //The fma function combines a multiplication and addition operation of the quantities
 //x, y, z. The result is x*y+z. The units of x*y and z must be equal.
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class zUnit, class ValueType>
-constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, quantity<zUnit, ValueType> z) -> quantity<zUnit, decltype(std::fma(x.value(), y.value(), z.value()))>
+constexpr auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) -> quantity<zUnit, decltype(std::fma(x.value(), y.value(), z.value()))>
 {
     static_assert(std::is_same_v<multiply_units<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
@@ -301,7 +301,7 @@ constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, q
     return quantity<zUnit, ResultType>{std::fma(x.value(), y.value(), z.value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class zUnit, class ValueType>
-constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, quantity_point<zUnit, ValueType> z) -> quantity_point<zUnit, decltype(std::fma(x.value(), y.value(), z.value()))>
+constexpr auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) -> quantity_point<zUnit, decltype(std::fma(x.value(), y.value(), z.value()))>
 {
     static_assert(std::is_same_v<multiply_units<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units<xUnit, yUnit>, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
@@ -311,7 +311,7 @@ constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, q
     return quantity_point<zUnit, ResultType>{std::fma(x.value(), y.value(), z.value())};
 }
 template <bool AllowImplicitConversion = false, class yUnit, class zUnit, class ValueType>
-constexpr auto fma(ValueType x, quantity<yUnit, ValueType> y, quantity<zUnit, ValueType> z) -> quantity<zUnit, decltype(std::fma(x, y.value(), z.value()))>
+constexpr auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) -> quantity<zUnit, decltype(std::fma(x, y.value(), z.value()))>
 {
     static_assert(std::is_same_v<yUnit, zUnit> || is_compatible_v<yUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
@@ -321,7 +321,7 @@ constexpr auto fma(ValueType x, quantity<yUnit, ValueType> y, quantity<zUnit, Va
     return quantity<zUnit, ResultType>{std::fma(x, y.value(), z.value())};
 }
 template <bool AllowImplicitConversion = false, class yUnit, class zUnit, class ValueType>
-constexpr auto fma(ValueType x, quantity<yUnit, ValueType> y, quantity_point<zUnit, ValueType> z) -> quantity_point<zUnit, decltype(std::fma(x, y.value(), z.value()))>
+constexpr auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) -> quantity_point<zUnit, decltype(std::fma(x, y.value(), z.value()))>
 {
     static_assert(std::is_same_v<yUnit, zUnit> || is_compatible_v<yUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
@@ -331,7 +331,7 @@ constexpr auto fma(ValueType x, quantity<yUnit, ValueType> y, quantity_point<zUn
     return quantity_point<zUnit, ResultType>{std::fma(x, y.value(), z.value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class zUnit, class ValueType>
-constexpr auto fma(quantity<xUnit, ValueType> x, ValueType y, quantity<zUnit, ValueType> z) -> quantity<zUnit, decltype(std::fma(x.value(), y, z.value()))>
+constexpr auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity<zUnit, ValueType> z) -> quantity<zUnit, decltype(std::fma(x.value(), y, z.value()))>
 {
     static_assert(std::is_same_v<xUnit, zUnit> || is_compatible_v<xUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
@@ -341,7 +341,7 @@ constexpr auto fma(quantity<xUnit, ValueType> x, ValueType y, quantity<zUnit, Va
     return quantity<zUnit, ResultType>{std::fma(x.value(), y, z.value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class zUnit, class ValueType>
-constexpr auto fma(quantity<xUnit, ValueType> x, ValueType y, quantity_point<zUnit, ValueType> z) -> quantity_point<zUnit, decltype(std::fma(x.value(), y, z.value()))>
+constexpr auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity_point<zUnit, ValueType> z) -> quantity_point<zUnit, decltype(std::fma(x.value(), y, z.value()))>
 {
     static_assert(std::is_same_v<xUnit, zUnit> || is_compatible_v<xUnit, zUnit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
@@ -351,7 +351,7 @@ constexpr auto fma(quantity<xUnit, ValueType> x, ValueType y, quantity_point<zUn
     return quantity_point<zUnit, ResultType>{std::fma(x.value(), y, z.value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class yUnit, class ValueType>
-constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, ValueType z) -> quantity<one_unit, decltype(std::fma(x.value(), y.value(), z))>
+constexpr auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, ValueType z) -> quantity<one_unit, decltype(std::fma(x.value(), y.value(), z))>
 {
     static_assert(std::is_same_v<multiply_units<xUnit, yUnit>, one_unit>, "You can only calculate the fma of quantities with the units being x*y == z.");
     using ResultType = decltype(std::fma(x.value(), y.value(), z));
@@ -363,7 +363,7 @@ constexpr auto fma(quantity<xUnit, ValueType> x, quantity<yUnit, ValueType> y, V
 //The fmax, and fmin functions return the max/min of two quantities with
 //the same unit.
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto fmax_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::fmax(x.value(), y.value()))>>
+constexpr auto fmax_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::fmax(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::fmax(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -372,7 +372,7 @@ constexpr auto fmax_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> 
     return quantity<Unit, ResultType>{std::fmax(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto fmax_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::fmax(x.value(), y.value()))>>
+constexpr auto fmax_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::fmax(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::fmax(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -387,7 +387,7 @@ constexpr auto fmax(lhsQuantity x, rhsQuantity y)
     return fmax_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto fmin_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::fmin(x.value(), y.value()))>>
+constexpr auto fmin_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::fmin(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::fmin(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -396,7 +396,7 @@ constexpr auto fmin_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> 
     return quantity<Unit, ResultType>{std::fmin(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto fmin_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::fmin(x.value(), y.value()))>>
+constexpr auto fmin_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::fmin(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::fmin(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -413,7 +413,7 @@ constexpr auto fmin(lhsQuantity x, rhsQuantity y)
 //The fdim function returns the positive difference (max(0,x-y)) of two quan-
 //tities with the same unit.
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto fdim_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::fdim(x.value(), y.value()))>>
+constexpr auto fdim_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, std::remove_cvref_t<decltype(std::fdim(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::fdim(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -422,7 +422,7 @@ constexpr auto fdim_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> 
     return quantity<Unit, ResultType>{std::fdim(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto fdim_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::fdim(x.value(), y.value()))>>
+constexpr auto fdim_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> quantity_point<Unit, std::remove_cvref_t<decltype(std::fdim(x.value(), y.value()))>>
 {
     using ResultType = std::remove_cvref_t<decltype(std::fdim(x.value(), y.value()))>;
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -446,7 +446,7 @@ constexpr auto fdim(lhsQuantity x, rhsQuantity y)
 //tial function of dimensionless quantities. Prefixes are removed automatically.
 //This allows correct calculation of percent, ...
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto exp(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::exp(remove_prefix(val).value()))>
+constexpr auto exp(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::exp(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the exp of a dimensionless quantity.");
     using ResultType = decltype(std::exp(remove_prefix(val).value()));
@@ -456,7 +456,7 @@ constexpr auto exp(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype
     return quantity<one_unit, ResultType>{std::exp(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto exp2(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::exp2(remove_prefix(val).value()))>
+constexpr auto exp2(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::exp2(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the exp2 of a dimensionless quantity.");
     using ResultType = decltype(std::exp2(remove_prefix(val).value()));
@@ -466,7 +466,7 @@ constexpr auto exp2(quantity<Unit, ValueType> val) -> quantity<one_unit, decltyp
     return quantity<one_unit, ResultType>{std::exp2(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto expm1(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::expm1(remove_prefix(val).value()))>
+constexpr auto expm1(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::expm1(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the expm1 of a dimensionless quantity.");
     using ResultType = decltype(std::expm1(remove_prefix(val).value()));
@@ -482,7 +482,7 @@ constexpr auto expm1(quantity<Unit, ValueType> val) -> quantity<one_unit, declty
 //matic scaling of the input. For example: log<metre>(1_kilometre) is the same as
 //log(1_kilometre/1_metre)
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto log(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log(remove_prefix(val).value()))>
+constexpr auto log(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log of a dimensionless quantity.");
     using ResultType = decltype(std::log(remove_prefix(val).value()));
@@ -492,7 +492,7 @@ constexpr auto log(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype
     return quantity<one_unit, ResultType>{std::log(remove_prefix(val).value())};
 }
 template <class ScalingUnit, bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto log(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log(remove_prefix(unit_cast<ScalingUnit>(val)).value()))>
+constexpr auto log(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log(remove_prefix(unit_cast<ScalingUnit>(val)).value()))>
 {
     static_assert(std::is_same_v<typename ScalingUnit::dimensions, typename Unit::dimensions>, "Your unit and your scaling unit have to have the same dimensions.");
     using ResultType = decltype(std::log(remove_prefix(unit_cast<ScalingUnit>(val)).value()));
@@ -502,7 +502,7 @@ constexpr auto log(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype
     return quantity<one_unit, ResultType>{std::log(remove_prefix(unit_cast<ScalingUnit>(val)).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto log10(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log10(remove_prefix(val).value()))>
+constexpr auto log10(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log10(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log10 of a dimensionless quantity.");
     using ResultType = decltype(std::log10(remove_prefix(val).value()));
@@ -512,7 +512,7 @@ constexpr auto log10(quantity<Unit, ValueType> val) -> quantity<one_unit, declty
     return quantity<one_unit, ResultType>{std::log10(remove_prefix(val).value())};
 }
 template <class ScalingUnit, bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto log10(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log10(remove_prefix(unit_cast<ScalingUnit>(val)).value()))>
+constexpr auto log10(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log10(remove_prefix(unit_cast<ScalingUnit>(val)).value()))>
 {
     static_assert(std::is_same_v<typename ScalingUnit::dimensions, typename Unit::dimensions>, "Your unit and your scaling unit have to have the same dimensions.");
     using ResultType = decltype(std::log10(remove_prefix(unit_cast<ScalingUnit>(val)).value()));
@@ -522,7 +522,7 @@ constexpr auto log10(quantity<Unit, ValueType> val) -> quantity<one_unit, declty
     return quantity<one_unit, ResultType>{std::log10(remove_prefix(unit_cast<ScalingUnit>(val)).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto log2(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log2(remove_prefix(val).value()))>
+constexpr auto log2(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log2(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log2 of a dimensionless quantity.");
     using ResultType = decltype(std::log2(remove_prefix(val).value()));
@@ -532,7 +532,7 @@ constexpr auto log2(quantity<Unit, ValueType> val) -> quantity<one_unit, decltyp
     return quantity<one_unit, ResultType>{std::log2(remove_prefix(val).value())};
 }
 template <class ScalingUnit, bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto log2(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log2(remove_prefix(unit_cast<ScalingUnit>(val)).value()))>
+constexpr auto log2(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log2(remove_prefix(unit_cast<ScalingUnit>(val)).value()))>
 {
     static_assert(std::is_same_v<typename ScalingUnit::dimensions, typename Unit::dimensions>, "Your unit and your scaling unit have to have the same dimensions.");
     using ResultType = decltype(std::log2(remove_prefix(unit_cast<ScalingUnit>(val)).value()));
@@ -542,7 +542,7 @@ constexpr auto log2(quantity<Unit, ValueType> val) -> quantity<one_unit, decltyp
     return quantity<one_unit, ResultType>{std::log2(remove_prefix(unit_cast<ScalingUnit>(val)).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto log1p(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log1p(remove_prefix(val).value()))>
+constexpr auto log1p(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::log1p(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the log1p of a dimensionless quantity.");
     using ResultType = decltype(std::log1p(remove_prefix(val).value()));
@@ -558,7 +558,7 @@ constexpr auto log1p(quantity<Unit, ValueType> val) -> quantity<one_unit, declty
 //pow<std::ratio<1,2>> or using integers pow<1,2>. With the denominator being
 //optional: pow<std::ratio<2>> = pow<2>.
 template <class Exponent, bool AllowImplicitConversion = false, class baseUnit, class ValueType>
-constexpr auto pow(quantity<baseUnit, ValueType> base) -> quantity<pow_unit<baseUnit, Exponent>, decltype(std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den)))>
+constexpr auto pow(const quantity<baseUnit, ValueType> base) -> quantity<pow_unit<baseUnit, Exponent>, decltype(std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den)))>
 {
     static_assert(impl::is_ratio_v<Exponent>, "The Exponent needs to be a std::ratio.");
     using ResultType = decltype(std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den)));
@@ -568,14 +568,14 @@ constexpr auto pow(quantity<baseUnit, ValueType> base) -> quantity<pow_unit<base
     return quantity<pow_unit<baseUnit, Exponent>, ResultType>{std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den))};
 }
 template <intmax_t num, intmax_t den = 1, bool AllowImplicitConversion = false, class baseUnit, class ValueType>
-constexpr auto pow(quantity<baseUnit, ValueType> base)
+constexpr auto pow(const quantity<baseUnit, ValueType> base)
 {
     return pow<std::ratio<num, den>, AllowImplicitConversion>(base);
 }
 //The pow function calculates the power of a given dimensionless quantity, without
 //changing the unit.
 template <bool AllowImplicitConversion = false, class baseUnit, class exponentUnit, class ValueType>
-constexpr auto pow(quantity<baseUnit, ValueType> y, quantity<exponentUnit, ValueType> x) -> quantity<one_unit, decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()))>
+constexpr auto pow(const quantity<baseUnit, ValueType> y, const quantity<exponentUnit, ValueType> x) -> quantity<one_unit, decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()))>
 {
     static_assert(std::is_same_v<typename baseUnit::dimensions, dim::dimensionless_t> && std::is_same_v<typename exponentUnit::dimensions, dim::dimensionless_t>, "You can only calculate the pow of dimensionless quantities.");
     using ResultType = decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()));
@@ -585,7 +585,7 @@ constexpr auto pow(quantity<baseUnit, ValueType> y, quantity<exponentUnit, Value
     return quantity<one_unit, ResultType>{std::pow(remove_prefix(y).value(), remove_prefix(x).value())};
 }
 template <bool AllowImplicitConversion = false, class exponentUnit, class ValueType>
-constexpr auto pow(ValueType y, quantity<exponentUnit, ValueType> x) -> quantity<one_unit, decltype(std::pow(y, remove_prefix(x).value()))>
+constexpr auto pow(ValueType y, const quantity<exponentUnit, ValueType> x) -> quantity<one_unit, decltype(std::pow(y, remove_prefix(x).value()))>
 {
     static_assert(std::is_same_v<typename exponentUnit::dimensions, dim::dimensionless_t>, "You can only calculate the pow of dimensionless quantities.");
     using ResultType = decltype(std::pow(y, remove_prefix(x).value()));
@@ -595,7 +595,7 @@ constexpr auto pow(ValueType y, quantity<exponentUnit, ValueType> x) -> quantity
     return quantity<one_unit, ResultType>{std::pow(y, remove_prefix(x).value())};
 }
 template <bool AllowImplicitConversion = false, class baseUnit, class ValueType>
-constexpr auto pow(quantity<baseUnit, ValueType> y, ValueType x) -> quantity<one_unit, decltype(std::pow(remove_prefix(y).value(), x))>
+constexpr auto pow(const quantity<baseUnit, ValueType> y, ValueType x) -> quantity<one_unit, decltype(std::pow(remove_prefix(y).value(), x))>
 {
     static_assert(std::is_same_v<typename baseUnit::dimensions, dim::dimensionless_t>, "You can only calculate the pow of dimensionless quantities.");
     using ResultType = decltype(std::pow(remove_prefix(y).value(), x));
@@ -608,7 +608,7 @@ constexpr auto pow(quantity<baseUnit, ValueType> y, ValueType x) -> quantity<one
 //unit. While the pow function could be used as well, the sqrt and cbrt functions
 //directly access the std equivalents instead of using std::pow.
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto sqrt(quantity<Unit, ValueType> val) -> quantity<pow_unit<Unit, std::ratio<1, 2>>, decltype(std::sqrt(val.value()))>
+constexpr auto sqrt(const quantity<Unit, ValueType> val) -> quantity<pow_unit<Unit, std::ratio<1, 2>>, decltype(std::sqrt(val.value()))>
 {
     using ResultType = decltype(std::sqrt(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -617,7 +617,7 @@ constexpr auto sqrt(quantity<Unit, ValueType> val) -> quantity<pow_unit<Unit, st
     return quantity<pow_unit<Unit, std::ratio<1, 2>>, ResultType>{std::sqrt(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto cbrt(quantity<Unit, ValueType> val) -> quantity<pow_unit<Unit, std::ratio<1, 3>>, decltype(std::cbrt(val.value()))>
+constexpr auto cbrt(const quantity<Unit, ValueType> val) -> quantity<pow_unit<Unit, std::ratio<1, 3>>, decltype(std::cbrt(val.value()))>
 {
     using ResultType = decltype(std::cbrt(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -629,7 +629,7 @@ constexpr auto cbrt(quantity<Unit, ValueType> val) -> quantity<pow_unit<Unit, st
 //(hypot(x,y) = sqrt(x^2+y^2))
 //An overload for people using c++17 is provided.
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto hypot_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::hypot(x.value(), y.value()))>
+constexpr auto hypot_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::hypot(x.value(), y.value()))>
 {
     using ResultType = decltype(std::hypot(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -645,7 +645,7 @@ constexpr auto hypot(lhsQuantity x, rhsQuantity y)
 }
 #if __cplusplus >= 201703L
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto hypot_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y, quantity<Unit, ValueType> z) -> quantity<Unit, decltype(std::hypot(x.value(), y.value(), z.value()))>
+constexpr auto hypot_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y, const quantity<Unit, ValueType> z) -> quantity<Unit, decltype(std::hypot(x.value(), y.value(), z.value()))>
 {
     using ResultType = decltype(std::hypot(x.value(), y.value(), z.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -666,7 +666,7 @@ constexpr auto hypot(lhsQuantity x, midQuantity y, rhsQuantity y)
 //metric functions of dimensionless or plane_angle quantities. Prefixes are
 //removed automatically. This allows correct calculation of percent, ...
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto sin(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::sin(remove_prefix(val).value()))>
+constexpr auto sin(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::sin(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the sin of a dimensionless quantity or an angle.");
     using ResultType = decltype(std::sin(remove_prefix(val).value()));
@@ -676,7 +676,7 @@ constexpr auto sin(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype
     return quantity<one_unit, ResultType>{std::sin(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto cos(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::cos(remove_prefix(val).value()))>
+constexpr auto cos(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::cos(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the cos of a dimensionless quantity or an angle.");
     using ResultType = decltype(std::cos(remove_prefix(val).value()));
@@ -686,7 +686,7 @@ constexpr auto cos(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype
     return quantity<one_unit, ResultType>{std::cos(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto tan(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::tan(remove_prefix(val).value()))>
+constexpr auto tan(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::tan(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, "You can only calculate the tan of a dimensionless quantity or an angle.");
     using ResultType = decltype(std::tan(remove_prefix(val).value()));
@@ -700,7 +700,7 @@ constexpr auto tan(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype
 //a plane_angle. Prefixes are removed automatically. This allows correct calcu-
 //lation of percent, ...
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto asin(quantity<Unit, ValueType> val) -> quantity<plane_angle_unit, decltype(std::asin(remove_prefix(val).value()))>
+constexpr auto asin(const quantity<Unit, ValueType> val) -> quantity<plane_angle_unit, decltype(std::asin(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the asin of a dimensionless quantity.");
     using ResultType = decltype(std::asin(remove_prefix(val).value()));
@@ -710,7 +710,7 @@ constexpr auto asin(quantity<Unit, ValueType> val) -> quantity<plane_angle_unit,
     return quantity<plane_angle_unit, ResultType>{std::asin(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto acos(quantity<Unit, ValueType> val) -> quantity<plane_angle_unit, decltype(std::acos(remove_prefix(val).value()))>
+constexpr auto acos(const quantity<Unit, ValueType> val) -> quantity<plane_angle_unit, decltype(std::acos(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the acos of a dimensionless quantity.");
     using ResultType = decltype(std::acos(remove_prefix(val).value()));
@@ -720,7 +720,7 @@ constexpr auto acos(quantity<Unit, ValueType> val) -> quantity<plane_angle_unit,
     return quantity<plane_angle_unit, ResultType>{std::acos(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto atan(quantity<Unit, ValueType> val) -> quantity<plane_angle_unit, decltype(std::atan(remove_prefix(val).value()))>
+constexpr auto atan(const quantity<Unit, ValueType> val) -> quantity<plane_angle_unit, decltype(std::atan(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the atan of a dimensionless quantity.");
     using ResultType = decltype(std::atan(remove_prefix(val).value()));
@@ -734,7 +734,7 @@ constexpr auto atan(quantity<Unit, ValueType> val) -> quantity<plane_angle_unit,
 //are removed automatically. This allows correct calcution of
 //atan2(1_kilometre,1_metre), ...
 template <bool AllowImplicitConversion = false, class yUnit, class xUnit, class ValueType>
-constexpr auto atan2(quantity<yUnit, ValueType> y, quantity<xUnit, ValueType> x) -> quantity<plane_angle_unit, decltype(std::atan2(remove_prefix(y).value(), remove_prefix(x).value()))>
+constexpr auto atan2(const quantity<yUnit, ValueType> y, const quantity<xUnit, ValueType> x) -> quantity<plane_angle_unit, decltype(std::atan2(remove_prefix(y).value(), remove_prefix(x).value()))>
 {
     static_assert(std::is_same_v<typename yUnit::dimensions, typename xUnit::dimensions>, "You can only calculate the atan2 of quantities with the same dimensions.");
     using ResultType = decltype(std::atan2(remove_prefix(y).value(), remove_prefix(x).value()));
@@ -744,7 +744,7 @@ constexpr auto atan2(quantity<yUnit, ValueType> y, quantity<xUnit, ValueType> x)
     return quantity<plane_angle_unit, ResultType>{std::atan2(remove_prefix(y).value(), remove_prefix(x).value())};
 }
 template <bool AllowImplicitConversion = false, class xUnit, class ValueType>
-constexpr auto atan2(ValueType y, quantity<xUnit, ValueType> x) -> quantity<plane_angle_unit, decltype(std::atan2(y, remove_prefix(x).value()))>
+constexpr auto atan2(ValueType y, const quantity<xUnit, ValueType> x) -> quantity<plane_angle_unit, decltype(std::atan2(y, remove_prefix(x).value()))>
 {
     static_assert(std::is_same_v<typename xUnit::dimensions, dim::dimensionless_t>, "You can only calculate the atan2 of quantities with the same dimensions.");
     using ResultType = decltype(std::atan2(y, remove_prefix(x).value()));
@@ -754,7 +754,7 @@ constexpr auto atan2(ValueType y, quantity<xUnit, ValueType> x) -> quantity<plan
     return quantity<plane_angle_unit, ResultType>{std::atan2(y, remove_prefix(x).value())};
 }
 template <bool AllowImplicitConversion = false, class yUnit, class ValueType>
-constexpr auto atan2(quantity<yUnit, ValueType> y, ValueType x) -> quantity<plane_angle_unit, decltype(std::atan2(remove_prefix(y).value(), x))>
+constexpr auto atan2(const quantity<yUnit, ValueType> y, ValueType x) -> quantity<plane_angle_unit, decltype(std::atan2(remove_prefix(y).value(), x))>
 {
     static_assert(std::is_same_v<typename yUnit::dimensions, dim::dimensionless_t>, "You can only calculate the atan2 of quantities with the same dimensions.");
     using ResultType = decltype(std::atan2(remove_prefix(y).value(), x));
@@ -769,7 +769,7 @@ constexpr auto atan2(quantity<yUnit, ValueType> y, ValueType x) -> quantity<plan
 //of the hyperbolic functions and their inverses of dimensionless quantities. Pre-
 //fixes are removed automatically. This allows correct calculation of percent, ...
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto sinh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::sinh(remove_prefix(val).value()))>
+constexpr auto sinh(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::sinh(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the sinh of a dimensionless quantity.");
     using ResultType = decltype(std::sinh(remove_prefix(val).value()));
@@ -779,7 +779,7 @@ constexpr auto sinh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltyp
     return quantity<one_unit, ResultType>{std::sinh(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto cosh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::cosh(remove_prefix(val).value()))>
+constexpr auto cosh(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::cosh(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the cosh of a dimensionless quantity.");
     using ResultType = decltype(std::cosh(remove_prefix(val).value()));
@@ -789,7 +789,7 @@ constexpr auto cosh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltyp
     return quantity<one_unit, ResultType>{std::cosh(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto tanh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::tanh(remove_prefix(val).value()))>
+constexpr auto tanh(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::tanh(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the tanh of a dimensionless quantity.");
     using ResultType = decltype(std::tanh(remove_prefix(val).value()));
@@ -799,7 +799,7 @@ constexpr auto tanh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltyp
     return quantity<one_unit, ResultType>{std::tanh(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto asinh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::asinh(remove_prefix(val).value()))>
+constexpr auto asinh(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::asinh(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the asinh of a dimensionless quantity.");
     using ResultType = decltype(std::asinh(remove_prefix(val).value()));
@@ -809,7 +809,7 @@ constexpr auto asinh(quantity<Unit, ValueType> val) -> quantity<one_unit, declty
     return quantity<one_unit, ResultType>{std::asinh(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto acosh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::acosh(remove_prefix(val).value()))>
+constexpr auto acosh(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::acosh(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the acosh of a dimensionless quantity.");
     using ResultType = decltype(std::acosh(remove_prefix(val).value()));
@@ -819,7 +819,7 @@ constexpr auto acosh(quantity<Unit, ValueType> val) -> quantity<one_unit, declty
     return quantity<one_unit, ResultType>{std::acosh(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto atanh(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::atanh(remove_prefix(val).value()))>
+constexpr auto atanh(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::atanh(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the atanh of a dimensionless quantity.");
     using ResultType = decltype(std::atanh(remove_prefix(val).value()));
@@ -834,7 +834,7 @@ constexpr auto atanh(quantity<Unit, ValueType> val) -> quantity<one_unit, declty
 //dimensionless quantities. Prefixes are removed automatically. This allows correct
 //calculation of percent, ...
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto erf(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::erf(remove_prefix(val).value()))>
+constexpr auto erf(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::erf(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the erf of a dimensionless quantity.");
     using ResultType = decltype(std::erf(remove_prefix(val).value()));
@@ -844,7 +844,7 @@ constexpr auto erf(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype
     return quantity<one_unit, ResultType>{std::erf(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto erfc(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::erfc(remove_prefix(val).value()))>
+constexpr auto erfc(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::erfc(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the erfc of a dimensionless quantity.");
     using ResultType = decltype(std::erfc(remove_prefix(val).value()));
@@ -857,7 +857,7 @@ constexpr auto erfc(quantity<Unit, ValueType> val) -> quantity<one_unit, decltyp
 //of dimensionless quantities. Prefixes are removed automatically. This allows correct
 //calculation of percent, ...
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto tgamma(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::tgamma(remove_prefix(val).value()))>
+constexpr auto tgamma(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::tgamma(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the tgamma of a dimensionless quantity.");
     using ResultType = decltype(std::tgamma(remove_prefix(val).value()));
@@ -867,7 +867,7 @@ constexpr auto tgamma(quantity<Unit, ValueType> val) -> quantity<one_unit, declt
     return quantity<one_unit, ResultType>{std::tgamma(remove_prefix(val).value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto lgamma(quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::lgamma(remove_prefix(val).value()))>
+constexpr auto lgamma(const quantity<Unit, ValueType> val) -> quantity<one_unit, decltype(std::lgamma(remove_prefix(val).value()))>
 {
     static_assert(std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, "You can only calculate the lgamma of a dimensionless quantity.");
     using ResultType = decltype(std::lgamma(remove_prefix(val).value()));
@@ -881,7 +881,7 @@ constexpr auto lgamma(quantity<Unit, ValueType> val) -> quantity<one_unit, declt
 //The ceil, floor, trunc, and nearbyint functions provide nearest integer
 //floating point operations for a quantity, ignoring the unit.
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto ceil(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::ceil(val.value()))>
+constexpr auto ceil(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::ceil(val.value()))>
 {
     using ResultType = decltype(std::ceil(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -890,7 +890,7 @@ constexpr auto ceil(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(st
     return quantity<Unit, ResultType>{std::ceil(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto ceil(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::ceil(val.value()))>
+constexpr auto ceil(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::ceil(val.value()))>
 {
     using ResultType = decltype(std::ceil(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -899,7 +899,7 @@ constexpr auto ceil(quantity_point<Unit, ValueType> val) -> quantity_point<Unit,
     return quantity_point<Unit, ResultType>{std::ceil(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto floor(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::floor(val.value()))>
+constexpr auto floor(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::floor(val.value()))>
 {
     using ResultType = decltype(std::floor(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -908,7 +908,7 @@ constexpr auto floor(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(s
     return quantity<Unit, ResultType>{std::floor(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto floor(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::floor(val.value()))>
+constexpr auto floor(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::floor(val.value()))>
 {
     using ResultType = decltype(std::floor(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -917,7 +917,7 @@ constexpr auto floor(quantity_point<Unit, ValueType> val) -> quantity_point<Unit
     return quantity_point<Unit, ResultType>{std::floor(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto trunc(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::trunc(val.value()))>
+constexpr auto trunc(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::trunc(val.value()))>
 {
     using ResultType = decltype(std::trunc(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -926,7 +926,7 @@ constexpr auto trunc(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(s
     return quantity<Unit, ResultType>{std::trunc(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto trunc(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::trunc(val.value()))>
+constexpr auto trunc(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::trunc(val.value()))>
 {
     using ResultType = decltype(std::trunc(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -935,7 +935,7 @@ constexpr auto trunc(quantity_point<Unit, ValueType> val) -> quantity_point<Unit
     return quantity_point<Unit, ResultType>{std::trunc(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto nearbyint(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::nearbyint(val.value()))>
+constexpr auto nearbyint(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::nearbyint(val.value()))>
 {
     using ResultType = decltype(std::nearbyint(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -944,7 +944,7 @@ constexpr auto nearbyint(quantity<Unit, ValueType> val) -> quantity<Unit, declty
     return quantity<Unit, ResultType>{std::nearbyint(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto nearbyint(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::nearbyint(val.value()))>
+constexpr auto nearbyint(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::nearbyint(val.value()))>
 {
     using ResultType = decltype(std::nearbyint(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -957,7 +957,7 @@ constexpr auto nearbyint(quantity_point<Unit, ValueType> val) -> quantity_point<
 //round, and rint will round the value and try to preserve the value_type of the quantity.
 //lround, llround, lrint, and llrint will change the value_type to long/long long.
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto round(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::round(val.value()))>
+constexpr auto round(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::round(val.value()))>
 {
     using ResultType = decltype(std::round(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -966,7 +966,7 @@ constexpr auto round(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(s
     return quantity<Unit, ResultType>{std::round(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto round(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::round(val.value()))>
+constexpr auto round(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::round(val.value()))>
 {
     using ResultType = decltype(std::round(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -975,7 +975,7 @@ constexpr auto round(quantity_point<Unit, ValueType> val) -> quantity_point<Unit
     return quantity_point<Unit, ResultType>{std::round(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto lround(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::lround(val.value()))>
+constexpr auto lround(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::lround(val.value()))>
 {
     using ResultType = decltype(std::lround(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -984,7 +984,7 @@ constexpr auto lround(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(
     return quantity<Unit, ResultType>{std::lround(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto lround(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::lround(val.value()))>
+constexpr auto lround(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::lround(val.value()))>
 {
     using ResultType = decltype(std::lround(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -993,7 +993,7 @@ constexpr auto lround(quantity_point<Unit, ValueType> val) -> quantity_point<Uni
     return quantity_point<Unit, ResultType>{std::lround(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto llround(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::llround(val.value()))>
+constexpr auto llround(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::llround(val.value()))>
 {
     using ResultType = decltype(std::llround(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1002,7 +1002,7 @@ constexpr auto llround(quantity<Unit, ValueType> val) -> quantity<Unit, decltype
     return quantity<Unit, ResultType>{std::llround(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto llround(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::llround(val.value()))>
+constexpr auto llround(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::llround(val.value()))>
 {
     using ResultType = decltype(std::llround(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1011,7 +1011,7 @@ constexpr auto llround(quantity_point<Unit, ValueType> val) -> quantity_point<Un
     return quantity_point<Unit, ResultType>{std::llround(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto rint(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::rint(val.value()))>
+constexpr auto rint(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::rint(val.value()))>
 {
     using ResultType = decltype(std::rint(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1020,7 +1020,7 @@ constexpr auto rint(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(st
     return quantity<Unit, ResultType>{std::rint(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto rint(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::rint(val.value()))>
+constexpr auto rint(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::rint(val.value()))>
 {
     using ResultType = decltype(std::rint(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1029,7 +1029,7 @@ constexpr auto rint(quantity_point<Unit, ValueType> val) -> quantity_point<Unit,
     return quantity_point<Unit, ResultType>{std::rint(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto lrint(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::lrint(val.value()))>
+constexpr auto lrint(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::lrint(val.value()))>
 {
     using ResultType = decltype(std::lrint(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1038,7 +1038,7 @@ constexpr auto lrint(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(s
     return quantity<Unit, ResultType>{std::lrint(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto lrint(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::lrint(val.value()))>
+constexpr auto lrint(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::lrint(val.value()))>
 {
     using ResultType = decltype(std::lrint(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1047,7 +1047,7 @@ constexpr auto lrint(quantity_point<Unit, ValueType> val) -> quantity_point<Unit
     return quantity_point<Unit, ResultType>{std::lrint(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto llrint(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::llrint(val.value()))>
+constexpr auto llrint(const quantity<Unit, ValueType> val) -> quantity<Unit, decltype(std::llrint(val.value()))>
 {
     using ResultType = decltype(std::llrint(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1056,7 +1056,7 @@ constexpr auto llrint(quantity<Unit, ValueType> val) -> quantity<Unit, decltype(
     return quantity<Unit, ResultType>{std::llrint(val.value())};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto llrint(quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::llrint(val.value()))>
+constexpr auto llrint(const quantity_point<Unit, ValueType> val) -> quantity_point<Unit, decltype(std::llrint(val.value()))>
 {
     using ResultType = decltype(std::llrint(val.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1069,7 +1069,7 @@ constexpr auto llrint(quantity_point<Unit, ValueType> val) -> quantity_point<Uni
 //The frexp, ldexp, modf, scalbn, scalbln, ilogb, and logb functions let
 //you manipulate the value of a quantity, ignoring the unit.
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto frexp(quantity<Unit, ValueType> arg, int *exp) -> quantity<Unit, decltype(std::frexp(arg.value(), exp))>
+constexpr auto frexp(const quantity<Unit, ValueType> arg, int *exp) -> quantity<Unit, decltype(std::frexp(arg.value(), exp))>
 {
     using ResultType = decltype(std::frexp(arg.value(), exp));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1078,7 +1078,7 @@ constexpr auto frexp(quantity<Unit, ValueType> arg, int *exp) -> quantity<Unit, 
     return quantity<Unit, ResultType>{std::frexp(arg.value(), exp)};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto frexp(quantity_point<Unit, ValueType> arg, int *exp) -> quantity_point<Unit, decltype(std::frexp(arg.value(), exp))>
+constexpr auto frexp(const quantity_point<Unit, ValueType> arg, int *exp) -> quantity_point<Unit, decltype(std::frexp(arg.value(), exp))>
 {
     using ResultType = decltype(std::frexp(arg.value(), exp));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1087,7 +1087,7 @@ constexpr auto frexp(quantity_point<Unit, ValueType> arg, int *exp) -> quantity_
     return quantity_point<Unit, ResultType>{std::frexp(arg.value(), exp)};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto ldexp(quantity<Unit, ValueType> x, int exp) -> quantity<Unit, decltype(std::ldexp(x.value(), exp))>
+constexpr auto ldexp(const quantity<Unit, ValueType> x, int exp) -> quantity<Unit, decltype(std::ldexp(x.value(), exp))>
 {
     using ResultType = decltype(std::ldexp(x.value(), exp));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1096,19 +1096,19 @@ constexpr auto ldexp(quantity<Unit, ValueType> x, int exp) -> quantity<Unit, dec
     return quantity<Unit, ResultType>{std::ldexp(x.value(), exp)};
 }
 template <class Unit, class ValueType>
-constexpr auto modf(quantity<Unit, ValueType> x, ValueType *iptr) -> quantity<Unit, decltype(std::modf(x.value(), iptr))>
+constexpr auto modf(const quantity<Unit, ValueType> x, ValueType *iptr) -> quantity<Unit, decltype(std::modf(x.value(), iptr))>
 {
     using ResultType = decltype(std::modf(x.value(), iptr));
     return quantity<Unit, ResultType>{std::modf(x.value(), iptr)};
 }
 template <class Unit, class ValueType>
-constexpr auto modf(quantity_point<Unit, ValueType> x, ValueType *iptr) -> quantity_point<Unit, decltype(std::modf(x.value(), iptr))>
+constexpr auto modf(const quantity_point<Unit, ValueType> x, ValueType *iptr) -> quantity_point<Unit, decltype(std::modf(x.value(), iptr))>
 {
     using ResultType = decltype(std::modf(x.value(), iptr));
     return quantity_point<Unit, ResultType>{std::modf(x.value(), iptr)};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto scalbn(quantity<Unit, ValueType> x, int exp) -> quantity<Unit, decltype(std::scalbn(x.value(), exp))>
+constexpr auto scalbn(const quantity<Unit, ValueType> x, int exp) -> quantity<Unit, decltype(std::scalbn(x.value(), exp))>
 {
     using ResultType = decltype(std::scalbn(x.value(), exp));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1117,7 +1117,7 @@ constexpr auto scalbn(quantity<Unit, ValueType> x, int exp) -> quantity<Unit, de
     return quantity<Unit, ResultType>{std::scalbn(x.value(), exp)};
 }
 template <bool AllowImplicitConversion = false, class Unit, class ValueType>
-constexpr auto scalbln(quantity<Unit, ValueType> x, long exp) -> quantity<Unit, decltype(std::scalbln(x.value(), exp))>
+constexpr auto scalbln(const quantity<Unit, ValueType> x, long exp) -> quantity<Unit, decltype(std::scalbln(x.value(), exp))>
 {
     using ResultType = decltype(std::scalbln(x.value(), exp));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1126,29 +1126,29 @@ constexpr auto scalbln(quantity<Unit, ValueType> x, long exp) -> quantity<Unit, 
     return quantity<Unit, ResultType>{std::scalbln(x.value(), exp)};
 }
 template <class Unit, class ValueType>
-constexpr auto ilogb(quantity<Unit, ValueType> val)
+constexpr auto ilogb(const quantity<Unit, ValueType> val)
 {
     return std::ilogb(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto ilogb(quantity_point<Unit, ValueType> val)
+constexpr auto ilogb(const quantity_point<Unit, ValueType> val)
 {
     return std::ilogb(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto logb(quantity<Unit, ValueType> val)
+constexpr auto logb(const quantity<Unit, ValueType> val)
 {
     return std::logb(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto logb(quantity_point<Unit, ValueType> val)
+constexpr auto logb(const quantity_point<Unit, ValueType> val)
 {
     return std::logb(val.value());
 }
 //The nextafter, nexttoward, and copysign functions let you manipulate the value of
 //two quantities with the same unit.
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto nextafter_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::nextafter(x.value(), y.value()))>
+constexpr auto nextafter_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::nextafter(x.value(), y.value()))>
 {
     using ResultType = decltype(std::nextafter(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1157,7 +1157,7 @@ constexpr auto nextafter_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueT
     return quantity<Unit, ResultType>{std::nextafter(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto nextafter_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, decltype(std::nextafter(x.value(), y.value()))>
+constexpr auto nextafter_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> quantity_point<Unit, decltype(std::nextafter(x.value(), y.value()))>
 {
     using ResultType = decltype(std::nextafter(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1172,7 +1172,7 @@ constexpr auto nextafter(lhsQuantity x, rhsQuantity y)
     return nextafter_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto nexttoward_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())))>
+constexpr auto nexttoward_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())))>
 {
     using ResultType = decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1181,7 +1181,7 @@ constexpr auto nexttoward_impl(quantity<Unit, ValueType> x, quantity<Unit, Value
     return quantity<Unit, ResultType>{std::nexttoward(x.value(), static_cast<long double>(y.value()))};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto nexttoward_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())))>
+constexpr auto nexttoward_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> quantity_point<Unit, decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())))>
 {
     using ResultType = decltype(std::nexttoward(x.value(), static_cast<long double>(y.value())));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1196,7 +1196,7 @@ constexpr auto nexttoward(lhsQuantity x, rhsQuantity y)
     return nexttoward_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto copysign_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::copysign(x.value(), y.value()))>
+constexpr auto copysign_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> quantity<Unit, decltype(std::copysign(x.value(), y.value()))>
 {
     using ResultType = decltype(std::copysign(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1205,7 +1205,7 @@ constexpr auto copysign_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueTy
     return quantity<Unit, ResultType>{std::copysign(x.value(), y.value())};
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto copysign_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> quantity_point<Unit, decltype(std::copysign(x.value(), y.value()))>
+constexpr auto copysign_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> quantity_point<Unit, decltype(std::copysign(x.value(), y.value()))>
 {
     using ResultType = decltype(std::copysign(x.value(), y.value()));
 #ifndef BENRI_ALLOW_IMPLICIT_CONVERSIONS
@@ -1224,74 +1224,74 @@ constexpr auto copysign(lhsQuantity x, rhsQuantity y)
 //The fpclassify, isfinite, isinf, isnan, isnormal, and signbit functions
 //provide informations on the stored value of a quantity, ignoring the unit.
 template <class Unit, class ValueType>
-constexpr auto fpclassify(quantity<Unit, ValueType> val) -> decltype(std::fpclassify(val.value()))
+constexpr auto fpclassify(const quantity<Unit, ValueType> val) -> decltype(std::fpclassify(val.value()))
 {
     return std::fpclassify(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto fpclassify(quantity_point<Unit, ValueType> val) -> decltype(std::fpclassify(val.value()))
+constexpr auto fpclassify(const quantity_point<Unit, ValueType> val) -> decltype(std::fpclassify(val.value()))
 {
     return std::fpclassify(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto isfinite(quantity<Unit, ValueType> val) -> decltype(std::isfinite(val.value()))
+constexpr auto isfinite(const quantity<Unit, ValueType> val) -> decltype(std::isfinite(val.value()))
 {
     return std::isfinite(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto isfinite(quantity_point<Unit, ValueType> val) -> decltype(std::isfinite(val.value()))
+constexpr auto isfinite(const quantity_point<Unit, ValueType> val) -> decltype(std::isfinite(val.value()))
 {
     return std::isfinite(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto isinf(quantity<Unit, ValueType> val) -> decltype(std::isinf(val.value()))
+constexpr auto isinf(const quantity<Unit, ValueType> val) -> decltype(std::isinf(val.value()))
 {
     return std::isinf(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto isinf(quantity_point<Unit, ValueType> val) -> decltype(std::isinf(val.value()))
+constexpr auto isinf(const quantity_point<Unit, ValueType> val) -> decltype(std::isinf(val.value()))
 {
     return std::isinf(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto isnan(quantity<Unit, ValueType> val) -> decltype(std::isnan(val.value()))
+constexpr auto isnan(const quantity<Unit, ValueType> val) -> decltype(std::isnan(val.value()))
 {
     return std::isnan(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto isnan(quantity_point<Unit, ValueType> val) -> decltype(std::isnan(val.value()))
+constexpr auto isnan(const quantity_point<Unit, ValueType> val) -> decltype(std::isnan(val.value()))
 {
     return std::isnan(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto isnormal(quantity<Unit, ValueType> val) -> decltype(std::isnormal(val.value()))
+constexpr auto isnormal(const quantity<Unit, ValueType> val) -> decltype(std::isnormal(val.value()))
 {
     return std::isnormal(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto isnormal(quantity_point<Unit, ValueType> val) -> decltype(std::isnormal(val.value()))
+constexpr auto isnormal(const quantity_point<Unit, ValueType> val) -> decltype(std::isnormal(val.value()))
 {
     return std::isnormal(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto signbit(quantity<Unit, ValueType> val) -> decltype(std::signbit(val.value()))
+constexpr auto signbit(const quantity<Unit, ValueType> val) -> decltype(std::signbit(val.value()))
 {
     return std::signbit(val.value());
 }
 template <class Unit, class ValueType>
-constexpr auto signbit(quantity_point<Unit, ValueType> val) -> decltype(std::signbit(val.value()))
+constexpr auto signbit(const quantity_point<Unit, ValueType> val) -> decltype(std::signbit(val.value()))
 {
     return std::signbit(val.value());
 }
 //The isgreater, isgreaterequal, isless, islessequal, islessgreater, and
 //isunordered functions lets you compare two quantities with the same unit.
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto isgreater_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> decltype(std::isgreater(x.value(), y.value()))
+constexpr auto isgreater_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> decltype(std::isgreater(x.value(), y.value()))
 {
     return std::isgreater(x.value(), y.value());
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto isgreater_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> decltype(std::isgreater(x.value(), y.value()))
+constexpr auto isgreater_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> decltype(std::isgreater(x.value(), y.value()))
 {
     return std::isgreater(x.value(), y.value());
 }
@@ -1302,12 +1302,12 @@ constexpr auto isgreater(lhsQuantity x, rhsQuantity y)
     return isgreater_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto isgreaterequal_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> decltype(std::isgreaterequal(x.value(), y.value()))
+constexpr auto isgreaterequal_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> decltype(std::isgreaterequal(x.value(), y.value()))
 {
     return std::isgreaterequal(x.value(), y.value());
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto isgreaterequal_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> decltype(std::isgreaterequal(x.value(), y.value()))
+constexpr auto isgreaterequal_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> decltype(std::isgreaterequal(x.value(), y.value()))
 {
     return std::isgreaterequal(x.value(), y.value());
 }
@@ -1318,12 +1318,12 @@ constexpr auto isgreaterequal(lhsQuantity x, rhsQuantity y)
     return isgreaterequal_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto isless_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> decltype(std::isless(x.value(), y.value()))
+constexpr auto isless_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> decltype(std::isless(x.value(), y.value()))
 {
     return std::isless(x.value(), y.value());
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto isless_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> decltype(std::isless(x.value(), y.value()))
+constexpr auto isless_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> decltype(std::isless(x.value(), y.value()))
 {
     return std::isless(x.value(), y.value());
 }
@@ -1334,12 +1334,12 @@ constexpr auto isless(lhsQuantity x, rhsQuantity y)
     return isless_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto islessequal_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> decltype(std::islessequal(x.value(), y.value()))
+constexpr auto islessequal_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> decltype(std::islessequal(x.value(), y.value()))
 {
     return std::islessequal(x.value(), y.value());
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto islessequal_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> decltype(std::islessequal(x.value(), y.value()))
+constexpr auto islessequal_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> decltype(std::islessequal(x.value(), y.value()))
 {
     return std::islessequal(x.value(), y.value());
 }
@@ -1350,12 +1350,12 @@ constexpr auto islessequal(lhsQuantity x, rhsQuantity y)
     return islessequal_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto islessgreater_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> decltype(std::islessgreater(x.value(), y.value()))
+constexpr auto islessgreater_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> decltype(std::islessgreater(x.value(), y.value()))
 {
     return std::islessgreater(x.value(), y.value());
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto islessgreater_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> decltype(std::islessgreater(x.value(), y.value()))
+constexpr auto islessgreater_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> decltype(std::islessgreater(x.value(), y.value()))
 {
     return std::islessgreater(x.value(), y.value());
 }
@@ -1366,12 +1366,12 @@ constexpr auto islessgreater(lhsQuantity x, rhsQuantity y)
     return islessgreater_impl<AllowImplicitConversion, typename ConversionType::unit_type, typename ConversionType::value_type>(x, y);
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto isunordered_impl(quantity<Unit, ValueType> x, quantity<Unit, ValueType> y) -> decltype(std::isunordered(x.value(), y.value()))
+constexpr auto isunordered_impl(const quantity<Unit, ValueType> x, const quantity<Unit, ValueType> y) -> decltype(std::isunordered(x.value(), y.value()))
 {
     return std::isunordered(x.value(), y.value());
 }
 template <bool AllowImplicitConversion, class Unit, class ValueType>
-constexpr auto isunordered_impl(quantity_point<Unit, ValueType> x, quantity_point<Unit, ValueType> y) -> decltype(std::isunordered(x.value(), y.value()))
+constexpr auto isunordered_impl(const quantity_point<Unit, ValueType> x, const quantity_point<Unit, ValueType> y) -> decltype(std::isunordered(x.value(), y.value()))
 {
     return std::isunordered(x.value(), y.value());
 }

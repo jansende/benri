@@ -69,7 +69,7 @@ class quantity_point
     constexpr quantity_point(const quantity_point &) = default;
     //move constructor
     constexpr quantity_point(quantity_point &&) = default;
-    //default constructor
+    //default destructor
     ~quantity_point() = default;
     //copy assignment
     constexpr quantity_point &operator=(const quantity_point &) = default;
