@@ -17,4 +17,5 @@ using Precision = BENRI_PRECISION;
 //remove the nodiscard attribute
 #define nodiscard
 #endif
+#endif
 } // namespace benri
