@@ -118,7 +118,7 @@ create_and_register_dimension(luminous_intensity, helper<J>);
 create_and_register_dimension(plane_angle, helper<A>);
 create_and_register_dimension(number_of_radioactive_events, helper<C>);
 create_and_register_dimension(radiation_weighting_factor, helper<S>);
-create_and_register_dimension(dimensionless);
+create_and_register_dimension(dimensionless, );
 create_and_register_dimension(amount_of_data, helper<B>);
 create_and_register_dimension(screen_position, helper<X>);
 #pragma endregion

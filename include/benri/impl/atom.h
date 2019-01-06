@@ -28,7 +28,7 @@ struct has_type
     template <class U>
     static constexpr auto test(...) { return false; }
 
-    static constexpr auto value = test<T>(0);
+    static constexpr auto value = test<T>(nullptr);
 };
 template <class T>
 constexpr bool has_type_v = has_type<T>::value;
@@ -102,7 +102,7 @@ struct has_power
     template <class U>
     static constexpr auto test(...) { return false; }
 
-    static constexpr auto value = test<T>(0);
+    static constexpr auto value = test<T>(nullptr);
 };
 template <class T>
 constexpr bool has_power_v = has_power<T>::value;

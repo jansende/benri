@@ -20,7 +20,7 @@ struct has_static_constexpr_value
     template <class U>
     static constexpr auto test(...) { return false; }
 
-    static constexpr auto value = test<T>(0);
+    static constexpr auto value = test<T>(nullptr);
 };
 template <class T>
 constexpr bool has_static_constexpr_value_v = has_static_constexpr_value<T>::value;

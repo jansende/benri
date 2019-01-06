@@ -2,7 +2,10 @@
 #include <benri/impl/config.h>
 #include <benri/impl/list.h>
 #include <benri/impl/unit.h>
+#pragma GCC diagnostic push                          //fix clang warning for this line
+#pragma GCC diagnostic ignored "-Wreserved-id-macro" //we actually want to define this constant to include M_PI, ...
 #define _USE_MATH_DEFINES
+#pragma GCC diagnostic pop
 #include <math.h>
 
 namespace benri
@@ -347,4 +350,7 @@ using absolute_zero_t = list<atom<absolute_zero>>;
 #pragma endregion
 } // namespace prefix
 } // namespace benri
+#pragma GCC diagnostic push                          //fix clang warning for this line
+#pragma GCC diagnostic ignored "-Wreserved-id-macro"
 #undef _USE_MATH_DEFINES
+#pragma GCC diagnostic pop

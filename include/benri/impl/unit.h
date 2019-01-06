@@ -22,7 +22,7 @@ struct has_dimensions
     template <class U>
     static constexpr auto test(...) { return false; }
 
-    static constexpr auto value = test<T>(0);
+    static constexpr auto value = test<T>(nullptr);
 };
 template <class T>
 constexpr bool has_dimensions_v = has_dimensions<T>::value;
@@ -65,7 +65,7 @@ struct has_prefix
     template <class U>
     static constexpr auto test(...) { return false; }
 
-    static constexpr auto value = test<T>(0);
+    static constexpr auto value = test<T>(nullptr);
 };
 template <class T>
 constexpr bool has_prefix_v = has_prefix<T>::value;
