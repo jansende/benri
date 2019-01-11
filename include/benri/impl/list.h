@@ -241,7 +241,7 @@ static_assert(std::is_same_v<make_power_list<1>, make_fraction_list<10>>, "");
 template <class ValueType, class... Elements>
 constexpr auto multiply_elements_impl(list<Elements...>) {
     static_assert(all_true_v<!is_root_v<Elements>...>, "multiply_elements cannot handle roots in the atoms at the moment. use runtime_multiply_elements instead.");
-    return product(std::initializer_list<ValueType>{expand_atom_v<ValueType, Elements>...});
+    return product(impl::array<ValueType, sizeof...(Elements)>{expand_atom_v<ValueType, Elements>...});
 }
 template <class ValueType, class List>
 constexpr ValueType multiply_elements = multiply_elements_impl<ValueType>(List{});
@@ -257,7 +257,7 @@ static_assert(multiply_elements<double, make_fraction_list<1, 8>> == 1. / 8., ""
 template <class ValueType, class... Elements>
 constexpr auto runtime_multiply_elements(list<Elements...>)
 {
-    return product(std::initializer_list<ValueType>{runtime_expand_atom<ValueType, Elements>()...});
+    return product(impl::array<ValueType, sizeof...(Elements)>{runtime_expand_atom<ValueType, Elements>()...});
 };
 #pragma endregion
 } // namespace impl

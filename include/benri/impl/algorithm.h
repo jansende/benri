@@ -103,11 +103,16 @@ static_assert(impl::equal(impl::bubble_sort(impl::array<int, 3>{3, 5, 1}, impl::
 #pragma region product
 //The product function calculates the product of all given numbers
 //in a vector type.
-template <class T>
-constexpr auto product(T values)
+template <class T, size_t N>
+constexpr auto product(impl::array<T, N> vals)
 {
-    using value_type = typename T::value_type;
-    return impl::accumulate(std::begin(values), std::end(values), value_type{1}, std::multiplies<value_type>());
+    //std::begin and std::end don't work here. thus we use .begin() and .end() instead
+    return impl::accumulate(vals.begin(), vals.end(), T{1}, std::multiplies<T>());
+}
+template <class T>
+constexpr auto product(impl::array<T, 0>)
+{
+    return T{1};
 }
 #pragma endregion
 } // namespace impl

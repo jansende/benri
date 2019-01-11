@@ -1,6 +1,5 @@
 #pragma once
 #include <cstdint>
-#include <initializer_list>
 #include <iterator>
 
 namespace benri
