@@ -159,6 +159,12 @@ class quantity
         this->_value *= rhs;
         return *this;
     }
+    template <class rhsUnit>
+    constexpr inline auto operator*=(const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_one_v<rhsUnit>, quantity &>
+    {
+        this->_value *= rhs.value();
+        return *this;
+    }
     template <class lhsUnit, class rhsUnit, class ValueType>
     friend constexpr inline auto operator*(const quantity<lhsUnit, ValueType> &lhs, const quantity<rhsUnit, ValueType> &rhs) noexcept -> quantity<multiply_units<lhsUnit, rhsUnit>, ValueType>;
     [[nodiscard]] friend constexpr inline auto operator*(const quantity &lhs, const value_type &rhs) noexcept
@@ -172,6 +178,12 @@ class quantity
     constexpr inline auto &operator/=(const value_type &rhs) noexcept
     {
         this->_value /= rhs;
+        return *this;
+    }
+    template <class rhsUnit>
+    constexpr inline auto operator/=(const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<is_one_v<rhsUnit>, quantity &>
+    {
+        this->_value /= rhs.value();
         return *this;
     }
     template <class lhsUnit, class rhsUnit, class ValueType>
