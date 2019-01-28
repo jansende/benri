@@ -4,6 +4,7 @@
 #include <benri/si/cgs.h>
 #include <ratio>
 #include <iostream>
+#include <vector>
 
 namespace benri
 {
@@ -96,12 +97,23 @@ template <class T>
 constexpr auto pi_constant = value_type_cast<T>(constant::pi);
 } // namespace si
 
-#define implement_stream_operator(NAME, SYMBOL)                              \
-    template <class T>                                                       \
-    std::ostream &operator<<(std::ostream &os, const quantity<NAME, T> &obj) \
-    {                                                                        \
-        os << obj.value() << SYMBOL;                                         \
-        return os;                                                           \
+#define implement_stream_operator(NAME, SYMBOL)                                           \
+    template <class T>                                                                    \
+    std::ostream &operator<<(std::ostream &os, const quantity<NAME, T> &obj)              \
+    {                                                                                     \
+        os << obj.value() << SYMBOL;                                                      \
+        return os;                                                                        \
+    }                                                                                     \
+    template <class T>                                                                    \
+    std::ostream &operator<<(std::ostream &os, const std::vector<quantity<NAME, T>> &obj) \
+    {                                                                                     \
+        os << "[";                                                                        \
+        for (auto index = size_t{0}; index < obj.size() - 1; ++index)                     \
+            os << obj[index].value() << ", ";                                             \
+        if (obj.size() > size_t{1})                                                       \
+            os << obj[obj.size() - 1].value();                                            \
+        os << "]" << SYMBOL;                                                              \
+        return os;                                                                        \
     }
 //---dimensionless units
 implement_stream_operator(si::one_t, "");
