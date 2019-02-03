@@ -33,8 +33,8 @@ using plane_angle_unit = unit<typename dim::plane_angle_t, list<>>;
 template <class lhsQuantity, class rhsQuantity, bool AllowPoints>
 struct conversion_type
 {
-    static_assert(std::is_same_v<lhsQuantity, rhsQuantity>, "all arguments have to have the same type.\n(You tried to use an implicit conversion to one for all arguments.)");
-    using type = std::conditional_t<std::is_same_v<lhsQuantity, rhsQuantity>, quantity<one_unit, lhsQuantity>, void>;
+    static_assert(std::is_same<lhsQuantity, rhsQuantity>::value, "all arguments have to have the same type.\n(You tried to use an implicit conversion to one for all arguments.)");
+    using type = std::conditional_t<std::is_same<lhsQuantity, rhsQuantity>::value, quantity<one_unit, lhsQuantity>, void>;
 };
 template <class rhsUnit, class ValueType, bool AllowPoints>
 struct conversion_type<ValueType, quantity<rhsUnit, ValueType>, AllowPoints>
@@ -59,14 +59,14 @@ struct conversion_type<quantity_point<lhsUnit, ValueType>, ValueType, true>
 template <class lhsUnit, class rhsUnit, class ValueType, bool AllowPoints>
 struct conversion_type<quantity<lhsUnit, ValueType>, quantity<rhsUnit, ValueType>, AllowPoints>
 {
-    static_assert(std::is_same_v<lhsUnit, rhsUnit> || is_compatible_v<lhsUnit, rhsUnit>, "all arguments have to have the same or compatible units.");
-    using type = std::conditional_t<std::is_same_v<lhsUnit, rhsUnit> || is_compatible_v<lhsUnit, rhsUnit>, quantity<lhsUnit, ValueType>, void>;
+    static_assert(std::is_same<lhsUnit, rhsUnit>::value || is_compatible_v<lhsUnit, rhsUnit>, "all arguments have to have the same or compatible units.");
+    using type = std::conditional_t<std::is_same<lhsUnit, rhsUnit>::value || is_compatible_v<lhsUnit, rhsUnit>, quantity<lhsUnit, ValueType>, void>;
 };
 template <class lhsUnit, class rhsUnit, class ValueType>
 struct conversion_type<quantity_point<lhsUnit, ValueType>, quantity_point<rhsUnit, ValueType>, true>
 {
-    static_assert(std::is_same_v<lhsUnit, rhsUnit>, "all arguments have to have the same units.");
-    using type = std::conditional_t<std::is_same_v<lhsUnit, rhsUnit>, quantity_point<lhsUnit, ValueType>, void>;
+    static_assert(std::is_same<lhsUnit, rhsUnit>::value, "all arguments have to have the same units.");
+    using type = std::conditional_t<std::is_same<lhsUnit, rhsUnit>::value, quantity_point<lhsUnit, ValueType>, void>;
 };
 template <class lhsQuantity, class rhsQuantity, bool AllowPoints = false>
 using conversion_type_t = typename conversion_type<lhsQuantity, rhsQuantity, AllowPoints>::type;
@@ -229,43 +229,43 @@ template <class yUnit, class ValueType>
 //The fma function combines a multiplication and addition operation of the quantities
 //x, y, z. The result is x*y+z. The units of x*y and z must be equal.
 template <class xUnit, class yUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same_v<multiply_units<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units<xUnit, yUnit>, zUnit>, quantity<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<multiply_units<xUnit, yUnit>, zUnit>::value || is_compatible_v<multiply_units<xUnit, yUnit>, zUnit>, quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
     return quantity<zUnit, ResultType>{std::fma(x.value(), y.value(), z.value())};
 }
 template <class xUnit, class yUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same_v<multiply_units<xUnit, yUnit>, zUnit> || is_compatible_v<multiply_units<xUnit, yUnit>, zUnit>, quantity_point<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<multiply_units<xUnit, yUnit>, zUnit>::value || is_compatible_v<multiply_units<xUnit, yUnit>, zUnit>, quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
     return quantity_point<zUnit, ResultType>{std::fma(x.value(), y.value(), z.value())};
 }
 template <class yUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same_v<yUnit, zUnit> || is_compatible_v<yUnit, zUnit>, quantity<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<yUnit, zUnit>::value || is_compatible_v<yUnit, zUnit>, quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
     return quantity<zUnit, ResultType>{std::fma(x, y.value(), z.value())};
 }
 template <class yUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same_v<yUnit, zUnit> || is_compatible_v<yUnit, zUnit>, quantity_point<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<yUnit, zUnit>::value || is_compatible_v<yUnit, zUnit>, quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
     return quantity_point<zUnit, ResultType>{std::fma(x, y.value(), z.value())};
 }
 template <class xUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same_v<xUnit, zUnit> || is_compatible_v<xUnit, zUnit>, quantity<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<xUnit, zUnit>::value || is_compatible_v<xUnit, zUnit>, quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
     return quantity<zUnit, ResultType>{std::fma(x.value(), y, z.value())};
 }
 template <class xUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same_v<xUnit, zUnit> || is_compatible_v<xUnit, zUnit>, quantity_point<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<xUnit, zUnit>::value || is_compatible_v<xUnit, zUnit>, quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
     return quantity_point<zUnit, ResultType>{std::fma(x.value(), y, z.value())};
 }
 template <class xUnit, class yUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, ValueType z) noexcept -> std::enable_if_t<std::is_same_v<multiply_units<xUnit, yUnit>, one_unit>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, ValueType z) noexcept -> std::enable_if_t<std::is_same<multiply_units<xUnit, yUnit>, one_unit>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y.value(), z));
     return quantity<one_unit, ResultType>{std::fma(x.value(), y.value(), z)};
@@ -338,19 +338,19 @@ template <class lhsQuantity, class rhsQuantity>
 //tial function of dimensionless quantities. Prefixes are removed automatically.
 //This allows correct calculation of percent, ...
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto exp(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto exp(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::exp(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::exp(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto exp2(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto exp2(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::exp2(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::exp2(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto expm1(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto expm1(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::expm1(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::expm1(remove_prefix(val).value())};
@@ -362,43 +362,43 @@ template <class Unit, class ValueType>
 //matic scaling of the input. For example: log<metre>(1_kilometre) is the same as
 //log(1_kilometre/1_metre)
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto log(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto log(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::log(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::log(remove_prefix(val).value())};
 }
 template <class ScalingUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto log(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename ScalingUnit::dimensions, typename Unit::dimensions>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto log(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename ScalingUnit::dimensions, typename Unit::dimensions>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::log(remove_prefix(unit_cast<ScalingUnit>(val)).value()));
     return quantity<one_unit, ResultType>{std::log(remove_prefix(unit_cast<ScalingUnit>(val)).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto log10(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto log10(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::log10(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::log10(remove_prefix(val).value())};
 }
 template <class ScalingUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto log10(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename ScalingUnit::dimensions, typename Unit::dimensions>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto log10(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename ScalingUnit::dimensions, typename Unit::dimensions>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::log10(remove_prefix(unit_cast<ScalingUnit>(val)).value()));
     return quantity<one_unit, ResultType>{std::log10(remove_prefix(unit_cast<ScalingUnit>(val)).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto log2(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto log2(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::log2(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::log2(remove_prefix(val).value())};
 }
 template <class ScalingUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto log2(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename ScalingUnit::dimensions, typename Unit::dimensions>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto log2(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename ScalingUnit::dimensions, typename Unit::dimensions>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::log2(remove_prefix(unit_cast<ScalingUnit>(val)).value()));
     return quantity<one_unit, ResultType>{std::log2(remove_prefix(unit_cast<ScalingUnit>(val)).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto log1p(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto log1p(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::log1p(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::log1p(remove_prefix(val).value())};
@@ -423,19 +423,19 @@ template <intmax_t num, intmax_t den = 1, class baseUnit, class ValueType>
 //The pow function calculates the power of a given dimensionless quantity, without
 //changing the unit.
 template <class baseUnit, class exponentUnit, class ValueType>
-[[nodiscard]] constexpr inline auto pow(const quantity<baseUnit, ValueType> y, const quantity<exponentUnit, ValueType> x) noexcept -> std::enable_if_t<std::is_same_v<typename baseUnit::dimensions, dim::dimensionless_t> && std::is_same_v<typename exponentUnit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto pow(const quantity<baseUnit, ValueType> y, const quantity<exponentUnit, ValueType> x) noexcept -> std::enable_if_t<std::is_same<typename baseUnit::dimensions, dim::dimensionless_t>::value && std::is_same<typename exponentUnit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::pow(remove_prefix(y).value(), remove_prefix(x).value()));
     return quantity<one_unit, ResultType>{std::pow(remove_prefix(y).value(), remove_prefix(x).value())};
 }
 template <class exponentUnit, class ValueType>
-[[nodiscard]] constexpr inline auto pow(ValueType y, const quantity<exponentUnit, ValueType> x) noexcept -> std::enable_if_t<std::is_same_v<typename exponentUnit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto pow(ValueType y, const quantity<exponentUnit, ValueType> x) noexcept -> std::enable_if_t<std::is_same<typename exponentUnit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::pow(y, remove_prefix(x).value()));
     return quantity<one_unit, ResultType>{std::pow(y, remove_prefix(x).value())};
 }
 template <class baseUnit, class ValueType>
-[[nodiscard]] constexpr inline auto pow(const quantity<baseUnit, ValueType> y, ValueType x) noexcept -> std::enable_if_t<std::is_same_v<typename baseUnit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto pow(const quantity<baseUnit, ValueType> y, ValueType x) noexcept -> std::enable_if_t<std::is_same<typename baseUnit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::pow(remove_prefix(y).value(), x));
     return quantity<one_unit, ResultType>{std::pow(remove_prefix(y).value(), x)};
@@ -490,19 +490,19 @@ template <class lhsQuantity, class midQuantity, class rhsQuantity>
 //metric functions of dimensionless or plane_angle quantities. Prefixes are
 //removed automatically. This allows correct calculation of percent, ...
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto sin(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto sin(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value || std::is_same<typename Unit::dimensions, dim::plane_angle_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::sin(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::sin(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto cos(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto cos(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value || std::is_same<typename Unit::dimensions, dim::plane_angle_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::cos(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::cos(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto tan(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t> || std::is_same_v<typename Unit::dimensions, dim::plane_angle_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto tan(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value || std::is_same<typename Unit::dimensions, dim::plane_angle_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::tan(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::tan(remove_prefix(val).value())};
@@ -512,19 +512,19 @@ template <class Unit, class ValueType>
 //a plane_angle. Prefixes are removed automatically. This allows correct calcu-
 //lation of percent, ...
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto asin(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<plane_angle_unit, ValueType>>
+[[nodiscard]] constexpr inline auto asin(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<plane_angle_unit, ValueType>>
 {
     using ResultType = decltype(std::asin(remove_prefix(val).value()));
     return quantity<plane_angle_unit, ResultType>{std::asin(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto acos(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<plane_angle_unit, ValueType>>
+[[nodiscard]] constexpr inline auto acos(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<plane_angle_unit, ValueType>>
 {
     using ResultType = decltype(std::acos(remove_prefix(val).value()));
     return quantity<plane_angle_unit, ResultType>{std::acos(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto atan(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<plane_angle_unit, ValueType>>
+[[nodiscard]] constexpr inline auto atan(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<plane_angle_unit, ValueType>>
 {
     using ResultType = decltype(std::atan(remove_prefix(val).value()));
     return quantity<plane_angle_unit, ResultType>{std::atan(remove_prefix(val).value())};
@@ -534,19 +534,19 @@ template <class Unit, class ValueType>
 //are removed automatically. This allows correct calcution of
 //atan2(1_kilometre,1_metre), ...
 template <class yUnit, class xUnit, class ValueType>
-[[nodiscard]] constexpr inline auto atan2(const quantity<yUnit, ValueType> y, const quantity<xUnit, ValueType> x) noexcept -> std::enable_if_t<std::is_same_v<typename yUnit::dimensions, typename xUnit::dimensions>, quantity<plane_angle_unit, ValueType>>
+[[nodiscard]] constexpr inline auto atan2(const quantity<yUnit, ValueType> y, const quantity<xUnit, ValueType> x) noexcept -> std::enable_if_t<std::is_same<typename yUnit::dimensions, typename xUnit::dimensions>::value, quantity<plane_angle_unit, ValueType>>
 {
     using ResultType = decltype(std::atan2(remove_prefix(y).value(), remove_prefix(x).value()));
     return quantity<plane_angle_unit, ResultType>{std::atan2(remove_prefix(y).value(), remove_prefix(x).value())};
 }
 template <class xUnit, class ValueType>
-[[nodiscard]] constexpr inline auto atan2(ValueType y, const quantity<xUnit, ValueType> x) noexcept -> std::enable_if_t<std::is_same_v<typename xUnit::dimensions, dim::dimensionless_t>, quantity<plane_angle_unit, ValueType>>
+[[nodiscard]] constexpr inline auto atan2(ValueType y, const quantity<xUnit, ValueType> x) noexcept -> std::enable_if_t<std::is_same<typename xUnit::dimensions, dim::dimensionless_t>::value, quantity<plane_angle_unit, ValueType>>
 {
     using ResultType = decltype(std::atan2(y, remove_prefix(x).value()));
     return quantity<plane_angle_unit, ResultType>{std::atan2(y, remove_prefix(x).value())};
 }
 template <class yUnit, class ValueType>
-[[nodiscard]] constexpr inline auto atan2(const quantity<yUnit, ValueType> y, ValueType x) noexcept -> std::enable_if_t<std::is_same_v<typename yUnit::dimensions, dim::dimensionless_t>, quantity<plane_angle_unit, ValueType>>
+[[nodiscard]] constexpr inline auto atan2(const quantity<yUnit, ValueType> y, ValueType x) noexcept -> std::enable_if_t<std::is_same<typename yUnit::dimensions, dim::dimensionless_t>::value, quantity<plane_angle_unit, ValueType>>
 {
     using ResultType = decltype(std::atan2(remove_prefix(y).value(), x));
     return quantity<plane_angle_unit, ResultType>{std::atan2(remove_prefix(y).value(), x)};
@@ -557,37 +557,37 @@ template <class yUnit, class ValueType>
 //of the hyperbolic functions and their inverses of dimensionless quantities. Pre-
 //fixes are removed automatically. This allows correct calculation of percent, ...
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto sinh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto sinh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::sinh(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::sinh(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto cosh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto cosh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::cosh(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::cosh(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto tanh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto tanh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::tanh(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::tanh(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto asinh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto asinh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::asinh(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::asinh(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto acosh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto acosh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::acosh(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::acosh(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto atanh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto atanh(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::atanh(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::atanh(remove_prefix(val).value())};
@@ -598,13 +598,13 @@ template <class Unit, class ValueType>
 //dimensionless quantities. Prefixes are removed automatically. This allows correct
 //calculation of percent, ...
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto erf(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto erf(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::erf(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::erf(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto erfc(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto erfc(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::erfc(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::erfc(remove_prefix(val).value())};
@@ -613,13 +613,13 @@ template <class Unit, class ValueType>
 //of dimensionless quantities. Prefixes are removed automatically. This allows correct
 //calculation of percent, ...
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto tgamma(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto tgamma(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::tgamma(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::tgamma(remove_prefix(val).value())};
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto lgamma(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same_v<typename Unit::dimensions, dim::dimensionless_t>, quantity<one_unit, ValueType>>
+[[nodiscard]] constexpr inline auto lgamma(const quantity<Unit, ValueType> val) noexcept -> std::enable_if_t<std::is_same<typename Unit::dimensions, dim::dimensionless_t>::value, quantity<one_unit, ValueType>>
 {
     using ResultType = decltype(std::lgamma(remove_prefix(val).value()));
     return quantity<one_unit, ResultType>{std::lgamma(remove_prefix(val).value())};

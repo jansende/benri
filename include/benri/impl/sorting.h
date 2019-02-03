@@ -192,13 +192,13 @@ template <class List>
 using sort_list = decltype(sort_list_impl(List{}));
 #pragma endregion
 // //basic tests
-// static_assert(std::is_same_v<list<>, sort_list<list<>>>, "");
-// static_assert(std::is_same_v<list<int>, sort_list<list<int>>>, "");
-// static_assert(std::is_same_v<list<int, double>, sort_list<list<int, double>>>, "");
-// static_assert(std::is_same_v<list<int, double>, sort_list<list<double, int>>>, "");
-// static_assert(std::is_same_v<list<int, int, double>, sort_list<list<int, double, int>>>, "");
-// static_assert(std::is_same_v<list<int, float, double>, sort_list<list<double, float, int>>>, "");
-// static_assert(std::is_same_v<list<atom<int>, atom<float, std::ratio<2>>, atom<double>>, sort_list<list<atom<double>, atom<float, std::ratio<2>>, atom<int>>>>, "");
+// static_assert(std::is_same<list<>, sort_list<list<>>>::value, "");
+// static_assert(std::is_same<list<int>, sort_list<list<int>>>::value, "");
+// static_assert(std::is_same<list<int, double>, sort_list<list<int, double>>>::value, "");
+// static_assert(std::is_same<list<int, double>, sort_list<list<double, int>>>::value, "");
+// static_assert(std::is_same<list<int, int, double>, sort_list<list<int, double, int>>>::value, "");
+// static_assert(std::is_same<list<int, float, double>, sort_list<list<double, float, int>>>::value, "");
+// static_assert(std::is_same<list<atom<int>, atom<float, std::ratio<2>>, atom<double>>, sort_list<list<atom<double>, atom<float, std::ratio<2>>, atom<int>>>>::value, "");
 } // namespace impl
 using impl::sort_list;
 } // namespace benri

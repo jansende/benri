@@ -113,13 +113,13 @@ static_assert(!is_unit_v<int>, "");
 static_assert(!is_unit_v<unit<double, double>>, "");
 static_assert(is_unit_v<unit<list<>, list<>>>, "");
 template <class T>
-struct is_dimensionless : std::integral_constant<bool, std::is_same_v<typename T::dimensions, list<>>>
+struct is_dimensionless : std::integral_constant<bool, std::is_same<typename T::dimensions, list<>>::value>
 {
 };
 template <class T>
 constexpr bool is_dimensionless_v = is_dimensionless<T>::value;
 template <class T>
-struct is_one : std::integral_constant<bool, std::is_same_v<typename T::dimensions, list<>> && std::is_same_v<typename T::prefix, list<>>>
+struct is_one : std::integral_constant<bool, std::is_same<typename T::dimensions, list<>>::value && std::is_same<typename T::prefix, list<>>::value>
 {
 };
 template <class T>

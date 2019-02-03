@@ -27,11 +27,11 @@ auto print(si_unit value)
     std::cout << "You entered: ";
     std::visit([](auto &&arg) {
         using T = std::decay_t<decltype(arg)>;
-        if constexpr (std::is_same_v<T, benri::quantity<benri::si::kilogram_t>>)
+        if constexpr (std::is_same<T, benri::quantity<benri::si::kilogram_t>>::value)
             std::cout << "kilogram\n" << std::flush;
-        else if constexpr (std::is_same_v<T, benri::quantity<benri::si::metre_t>>)
+        else if constexpr (std::is_same<T, benri::quantity<benri::si::metre_t>>::value)
             std::cout << "metre\n" << std::flush;
-        else if constexpr (std::is_same_v<T, benri::quantity<benri::si::second_t>>)
+        else if constexpr (std::is_same<T, benri::quantity<benri::si::second_t>>::value)
             std::cout << "second\n" << std::flush;
         else
             throw;
