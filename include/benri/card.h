@@ -78,6 +78,7 @@ using lemmy_one_t = multiply_units<one_t, lemmy_t>;
 using lemmy_astronomical_unit_t = multiply_units<astronomical_unit_t, lemmy_t>;
 using lemmy_degree_t = multiply_units<degree_t, lemmy_t>;
 using lemmy_radian_t = multiply_units<radian_t, lemmy_t>;
+using lemmy_gram_degree_t = multiply_units<lemmy_gram_t, degree_t>;
 
 using lemmy_per_year_t = divide_units<lemmy_t, year_t>;
 //---various
