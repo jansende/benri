@@ -54,9 +54,9 @@ class quantity_point
     template <class ResultValueType, class Unit, class ValueType>
     friend constexpr inline auto value_type_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<Unit, ResultValueType>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
+    friend constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename Unit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
     template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
+    friend constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename Unit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
     template <class ResultValueType, class Unit, class ValueType>
     friend constexpr inline auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<remove_unit_prefix<Unit>, ResultValueType>;
 #pragma endregion
@@ -168,7 +168,7 @@ template <class ResultValueType, class Unit, class ValueType>
 //compile time. However, the implementation has a restriction, that it is
 //not compatible with roots of units.
 template <class ResultUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename Unit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
 {
     constexpr auto factor = impl::multiply_elements<ValueType, divide_lists<typename Unit::prefix, typename ResultUnit::prefix>>;
     return quantity_point<ResultUnit, ValueType>{rhs._value * factor};
@@ -186,7 +186,7 @@ template <class ResultUnit, class Unit, class ValueType>
 //marked constexpr, to be forward compatible with a constexpr std::pow
 //implementation.
 template <class ResultUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename Unit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
 {
     const auto factor = impl::runtime_multiply_elements<ValueType>(divide_lists<typename Unit::prefix, typename ResultUnit::prefix>{});
     return quantity_point<ResultUnit, ValueType>{rhs._value * factor};

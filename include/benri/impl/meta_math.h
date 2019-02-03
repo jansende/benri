@@ -249,13 +249,13 @@ using factorization = decltype(factorization_impl<number>(std::make_index_sequen
 
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(std::is_same_v<factorization<1>, std::integer_sequence<intmax_t>>, "factorization<1> should be <>.");
-static_assert(std::is_same_v<factorization<2>, std::integer_sequence<intmax_t, 2>>, "factorization<2> should be <2>.");
-static_assert(std::is_same_v<factorization<17>, std::integer_sequence<intmax_t, 17>>, "factorization<17> should be <17>.");
-static_assert(std::is_same_v<factorization<6>, std::integer_sequence<intmax_t, 2, 3>>, "factorization<6> should be <2, 3>.");
-static_assert(std::is_same_v<factorization<4>, std::integer_sequence<intmax_t, 2, 2>>, "factorization<4> should be <2, 2>.");
-static_assert(std::is_same_v<factorization<8>, std::integer_sequence<intmax_t, 2, 2, 2>>, "factorization<8> should be <2, 2, 2>.");
-static_assert(std::is_same_v<factorization<30>, std::integer_sequence<intmax_t, 2, 3, 5>>, "factorization<30> should be <2, 3, 5>.");
+static_assert(std::is_same<factorization<1>, std::integer_sequence<intmax_t>>::value, "factorization<1> should be <>.");
+static_assert(std::is_same<factorization<2>, std::integer_sequence<intmax_t, 2>>::value, "factorization<2> should be <2>.");
+static_assert(std::is_same<factorization<17>, std::integer_sequence<intmax_t, 17>>::value, "factorization<17> should be <17>.");
+static_assert(std::is_same<factorization<6>, std::integer_sequence<intmax_t, 2, 3>>::value, "factorization<6> should be <2, 3>.");
+static_assert(std::is_same<factorization<4>, std::integer_sequence<intmax_t, 2, 2>>::value, "factorization<4> should be <2, 2>.");
+static_assert(std::is_same<factorization<8>, std::integer_sequence<intmax_t, 2, 2, 2>>::value, "factorization<8> should be <2, 2, 2>.");
+static_assert(std::is_same<factorization<30>, std::integer_sequence<intmax_t, 2, 3, 5>>::value, "factorization<30> should be <2, 3, 5>.");
 #pragma endregion
 } // namespace impl
 } // namespace benri

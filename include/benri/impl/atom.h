@@ -14,7 +14,7 @@ namespace impl
 template <class T, class Power = std::ratio<1>>
 struct atom
 {
-    static_assert(!std::is_same_v<Power, std::ratio<0>>, "Atoms with a Power of 0 are not allowed.");
+    static_assert(!std::is_same<Power, std::ratio<0>>::value, "Atoms with a Power of 0 are not allowed.");
     using type = T;
     using power = Power;
 };
@@ -40,7 +40,7 @@ struct value_is_arithmetic_impl;
 template <class T>
 struct value_is_arithmetic_impl<true, T>
 {
-    static constexpr auto value = std::is_arithmetic_v<decltype(T::value)>;
+    static constexpr auto value = std::is_arithmetic<decltype(T::value)>::value;
 };
 template <class T>
 struct value_is_arithmetic_impl<false, T>
