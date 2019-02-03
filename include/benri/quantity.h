@@ -282,7 +282,8 @@ template <class ResultValueType, class Unit, class ValueType>
 template <class ResultUnit, class Unit, class ValueType>
 [[nodiscard]] constexpr inline auto simple_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs._value * impl::multiply_elements<ValueType, divide_lists<typename Unit::prefix, typename ResultUnit::prefix>>};
+    constexpr auto factor = impl::multiply_elements<ValueType, divide_lists<typename Unit::prefix, typename ResultUnit::prefix>>;
+    return quantity<ResultUnit, ValueType>{rhs._value * factor};
 }
 template <class ResultUnit, class Unit, class ValueType>
 [[nodiscard]] constexpr inline auto simple_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
@@ -299,7 +300,8 @@ template <class ResultUnit, class Unit, class ValueType>
 template <class ResultUnit, class Unit, class ValueType>
 [[nodiscard]] constexpr inline auto unit_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same_v<typename ResultUnit::dimensions, typename Unit::dimensions> && is_unit_v<ResultUnit>, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs._value * impl::runtime_multiply_elements<ValueType>(divide_lists<typename Unit::prefix, typename ResultUnit::prefix>{})};
+    const auto factor = impl::runtime_multiply_elements<ValueType>(divide_lists<typename Unit::prefix, typename ResultUnit::prefix>{});
+    return quantity<ResultUnit, ValueType>{rhs._value * factor};
 }
 template <class ResultUnit, class Unit, class ValueType>
 [[nodiscard]] constexpr inline auto unit_cast(const quantity<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity<typename ResultUnit::unit_type, ValueType>>
@@ -318,7 +320,8 @@ template <class ResultValueType, class Unit, class ValueType>
 [[nodiscard]] constexpr inline auto remove_prefix(const quantity<Unit, ValueType> &rhs) noexcept -> quantity<remove_unit_prefix<Unit>, ResultValueType>
 {
     using PrefixType = typename Unit::prefix;
-    return quantity<remove_unit_prefix<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * impl::runtime_multiply_elements<ResultValueType>(PrefixType{})};
+    const auto factor = impl::runtime_multiply_elements<ResultValueType>(PrefixType{});
+    return quantity<remove_unit_prefix<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * factor};
 }
 template <class Unit, class ValueType>
 [[nodiscard]] constexpr inline auto remove_prefix(const quantity<Unit, ValueType> &rhs) noexcept
