@@ -14,3 +14,5 @@ project(benri VERSION 0.1.0
 add_library(benri INTERFACE)
 #add header files
 target_include_directories(benri INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+#add compile features
+target_compile_features(benri INTERFACE cxx_std_14)
