@@ -1,6 +1,7 @@
 #pragma once
 #include <benri/impl/meta_math.h>
 #include <ratio>
+#include <cmath>
 
 namespace benri
 {
