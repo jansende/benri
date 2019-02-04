@@ -35,7 +35,7 @@ template <class Unit, class ValueType = Precision>
 class quantity_point
 {
   public:
-    template <class Unit, class ValueType>
+    template <class, class>
     friend class quantity_point;
 
     using value_type = ValueType;
@@ -51,14 +51,14 @@ class quantity_point
     }
 #pragma region casting
     //Friend declaration for the casting functions.
-    template <class ResultValueType, class Unit, class ValueType>
-    friend constexpr inline auto value_type_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<Unit, ResultValueType>;
-    template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename Unit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
-    template <class ResultUnit, class Unit, class ValueType>
-    friend constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename Unit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>;
-    template <class ResultValueType, class Unit, class ValueType>
-    friend constexpr inline auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<remove_unit_prefix<Unit>, ResultValueType>;
+    template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
+    friend constexpr inline auto value_type_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity_point<ArgumentUnit, ResultValueType>;
+    template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
+    friend constexpr inline auto simple_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ArgumentValueType>>;
+    template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
+    friend constexpr inline auto unit_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ArgumentValueType>>;
+    template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
+    friend constexpr inline auto remove_prefix(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity_point<remove_unit_prefix<ArgumentUnit>, ResultValueType>;
 #pragma endregion
 #pragma region rule of three
     //default constructor
@@ -156,10 +156,10 @@ class quantity_point
 #pragma region casting functions
 //The value_type_cast function lets you cast the value_type of a quantity_point
 //to another value_type.
-template <class ResultValueType, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto value_type_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<Unit, ResultValueType>
+template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
+[[nodiscard]] constexpr inline auto value_type_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity_point<ArgumentUnit, ResultValueType>
 {
-    return quantity_point<Unit, ResultValueType>{static_cast<ResultValueType>(rhs._value)};
+    return quantity_point<ArgumentUnit, ResultValueType>{static_cast<ResultValueType>(rhs._value)};
 }
 //The simple_cast function lets you cast one quantity_point to another unit.
 //This is done by multiplying the value of the quantity_point with the right
@@ -167,14 +167,14 @@ template <class ResultValueType, class Unit, class ValueType>
 //mentation of the power function, which allows it to be evaluated at
 //compile time. However, the implementation has a restriction, that it is
 //not compatible with roots of units.
-template <class ResultUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename Unit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
+template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ArgumentValueType>>
 {
-    constexpr auto factor = impl::multiply_elements<ValueType, divide_lists<typename Unit::prefix, typename ResultUnit::prefix>>;
-    return quantity_point<ResultUnit, ValueType>{rhs._value * factor};
+    constexpr auto factor = impl::multiply_elements<ArgumentValueType, divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>>;
+    return quantity_point<ResultUnit, ArgumentValueType>{rhs._value * factor};
 }
-template <class ResultUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto simple_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity_point<typename ResultUnit::unit_type, ValueType>>
+template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity_point<typename ResultUnit::unit_type, ArgumentValueType>>
 {
     return simple_cast<typename ResultUnit::unit_type>(rhs);
 }
@@ -185,14 +185,14 @@ template <class ResultUnit, class Unit, class ValueType>
 //it incompatible with compile time evaluation. The function is still
 //marked constexpr, to be forward compatible with a constexpr std::pow
 //implementation.
-template <class ResultUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename Unit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ValueType>>
+template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && is_unit_v<ResultUnit>, quantity_point<ResultUnit, ArgumentValueType>>
 {
-    const auto factor = impl::runtime_multiply_elements<ValueType>(divide_lists<typename Unit::prefix, typename ResultUnit::prefix>{});
-    return quantity_point<ResultUnit, ValueType>{rhs._value * factor};
+    const auto factor = impl::runtime_multiply_elements<ArgumentValueType>(divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>{});
+    return quantity_point<ResultUnit, ArgumentValueType>{rhs._value * factor};
 }
-template <class ResultUnit, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto unit_cast(const quantity_point<Unit, ValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity_point<typename ResultUnit::unit_type, ValueType>>
+template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<is_quantity_v<ResultUnit>, quantity_point<typename ResultUnit::unit_type, ArgumentValueType>>
 {
     return unit_cast<typename ResultUnit::unit_type>(rhs);
 }
@@ -204,17 +204,17 @@ template <class ResultUnit, class Unit, class ValueType>
 //tible with a constexpr std::pow implementation.
 //Furthermore, you can provide a ResultValueType for the function, in the case that
 //the transformation would lead to conversion errors.
-template <class ResultValueType, class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) noexcept -> quantity_point<remove_unit_prefix<Unit>, ResultValueType>
+template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
+[[nodiscard]] constexpr inline auto remove_prefix(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity_point<remove_unit_prefix<ArgumentUnit>, ResultValueType>
 {
-    using PrefixType = typename Unit::prefix;
+    using PrefixType = typename ArgumentUnit::prefix;
     const auto factor = impl::runtime_multiply_elements<ResultValueType>(PrefixType{});
-    return quantity_point<remove_unit_prefix<Unit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * factor};
+    return quantity_point<remove_unit_prefix<ArgumentUnit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * factor};
 }
-template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto remove_prefix(const quantity_point<Unit, ValueType> &rhs) noexcept
+template <class ArgumentUnit, class ArgumentValueType>
+[[nodiscard]] constexpr inline auto remove_prefix(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept
 {
-    return remove_prefix<ValueType>(rhs);
+    return remove_prefix<ArgumentValueType>(rhs);
 }
 #pragma endregion
 } // namespace benri
