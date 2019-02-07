@@ -82,6 +82,7 @@ using lemmy_gram_degree_t = multiply_units<lemmy_gram_t, degree_t>;
 
 using lemmy_per_year_t = divide_units<lemmy_t, year_t>;
 //---various
+using one_per_astronomical_unit_degree_t = divide_units<one_t, multiply_units<astronomical_unit_t, degree_t>>;
 using square_gram_t = pow_unit<gram_t, std::ratio<2>>;
 using cubic_astronomical_unit_per_square_year_solar_mass_t = divide_units<pow_unit<astronomical_unit_t, std::ratio<3>>, multiply_units<pow_unit<year_t, std::ratio<2>>, solar_mass_t>>;
 using square_astronomical_unit_per_year_t = divide_units<pow_unit<astronomical_unit_t, std::ratio<2>>, year_t>;
