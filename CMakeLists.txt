@@ -10,9 +10,15 @@ project(benri VERSION 0.1.0
               DESCRIPTION "benri is a c++ library for working with physical quantities, with abilities for math on physical units and conversions between them."
               LANGUAGES CXX)
 
+#add additional build options
+option(BENRI_CPP17_ENABLED "Compile using c++17 flags" OFF)
 #add library interface
 add_library(benri INTERFACE)
 #add header files
 target_include_directories(benri INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 #add compile features
-target_compile_features(benri INTERFACE cxx_std_14)
+if (BENRI_CPP17_ENABLED)
+    target_compile_features(benri INTERFACE cxx_std_17)
+else()
+    target_compile_features(benri INTERFACE cxx_std_14)
+endif()
