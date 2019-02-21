@@ -478,7 +478,7 @@ template <class Unit, class ValueType>
     return quantity<Unit, ResultType>{std::hypot(x.value(), y.value(), z.value())};
 }
 template <class lhsQuantity, class midQuantity, class rhsQuantity>
-[[nodiscard]] constexpr inline auto hypot(lhsQuantity x, midQuantity y, rhsQuantity y)
+[[nodiscard]] constexpr inline auto hypot(lhsQuantity x, midQuantity y, rhsQuantity z)
 {
     using ConversionType = conversion_type_t<lhsQuantity, conversion_type_t<midQuantity, rhsQuantity>>;
     return hypot_impl<typename ConversionType::unit_type, typename ConversionType::value_type>(x, y, z);
