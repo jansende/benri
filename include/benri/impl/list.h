@@ -17,24 +17,25 @@ namespace impl
 template <class... Elements>
 struct list
 {
-    static_assert(all_true_v<is_atom_v<Elements>...>, "all elements of a list need to be atoms.");
+    static_assert(all_true<detect_if<Elements, is_atom>...>, "all elements of a list need to be atoms.");
 };
 template <class>
-struct is_list : std::false_type
+struct is_list_impl : std::false_type
 {
 };
 template <class... Elements>
-struct is_list<list<Elements...>> : std::true_type
+struct is_list_impl<list<Elements...>> : std::true_type
 {
 };
-template <class List>
-constexpr bool is_list_v = is_list<List>::value;
+template <class T>
+using is_list = typename std::enable_if<is_list_impl<T>::value>::type;
 #pragma endregion
 #pragma region list functions
 #pragma region concat
 //The concat function lets you concatenate two or more lists.
 template <class... lhsElements, class... rhsElements>
-constexpr auto concat_impl(list<lhsElements...>, list<rhsElements...>) {
+constexpr auto concat_impl(list<lhsElements...>, list<rhsElements...>)
+{
     return list<lhsElements..., rhsElements...>{};
 }
 template <class lhs, class rhs>
@@ -51,30 +52,29 @@ static_assert(std::is_same<concat<list<atom<int>, atom<float>, atom<bool>>, list
 template <class List, class Atom>
 struct add_to_first_atom_impl
 {
-    static_assert(is_list_v<List>, "the lhs of add_to_first_atom needs to be a list.");
-    static_assert(is_atom_v<Atom>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<List, is_list>, "the lhs of add_to_first_atom needs to be a list.");
+    static_assert(detect_if<Atom, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = void;
 };
 template <class Atom>
 struct add_to_first_atom_impl<list<>, Atom>
 {
-    static_assert(is_atom_v<Atom>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<Atom, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = list<Atom>;
 };
 template <template <class, class> class lhsAtom, template <class, class> class rhsAtom, class T, class lhsPower, class rhsPower, class... RestElements>
 struct add_to_first_atom_impl<list<lhsAtom<T, lhsPower>, RestElements...>, rhsAtom<T, rhsPower>>
 {
-    static_assert(is_atom_v<rhsAtom<T, rhsPower>>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<rhsAtom<T, rhsPower>, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = std::conditional_t<
-    std::is_same<std::ratio_add<lhsPower, rhsPower>, std::ratio<0>>::value, 
-    list<RestElements...>,
-     list<lhsAtom<T, std::ratio_add<lhsPower, rhsPower>>, RestElements...>
-     >;
+        std::is_same<std::ratio_add<lhsPower, rhsPower>, std::ratio<0>>::value,
+        list<RestElements...>,
+        list<lhsAtom<T, std::ratio_add<lhsPower, rhsPower>>, RestElements...>>;
 };
 template <class FirstElement, class... RestElements, template <class, class> class Atom, class T, class Power>
 struct add_to_first_atom_impl<list<FirstElement, RestElements...>, Atom<T, Power>>
 {
-    static_assert(is_atom_v<Atom<T, Power>>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<Atom<T, Power>, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = concat<list<FirstElement>, typename add_to_first_atom_impl<list<RestElements...>, Atom<T, Power>>::type>;
 };
 template <class List, class Atom>
@@ -88,38 +88,30 @@ static_assert(std::is_same<add_to_first_atom<list<atom<int>, atom<bool>>, atom<i
 static_assert(std::is_same<add_to_first_atom<list<atom<bool>, atom<int>>, atom<int>>, list<atom<bool>, atom<int, std::ratio<2>>>>::value, "");
 //The multiply_lists function combines the atoms in two lists,
 //by adding the power of atoms with the same type.
-template <class...Lists>
+template <class... Lists>
 struct multiply_lists_impl
 {
-    static_assert(all_true_v<is_list_v<Lists>...>, "all arguments of multiply_lists need to be lists.");
-    using type = void;
 };
 template <class lhsList>
 struct multiply_lists_impl<lhsList, list<>>
 {
-    static_assert(is_list_v<lhsList>, "all arguments of multiply_lists need to be lists.");
     using type = lhsList;
 };
 template <class lhsList, class rhsElement>
 struct multiply_lists_impl<lhsList, list<rhsElement>>
 {
-    static_assert(is_list_v<lhsList>, "all arguments of multiply_lists need to be lists.");
     using type = add_to_first_atom<lhsList, rhsElement>;
 };
 template <class lhsList, class rhsFirstElement, class... rhsRestElements>
-struct multiply_lists_impl<lhsList, list<rhsFirstElement, rhsRestElements...>>
+struct multiply_lists_impl<lhsList, list<rhsFirstElement, rhsRestElements...>> : multiply_lists_impl<add_to_first_atom<lhsList, rhsFirstElement>, list<rhsRestElements...>>
 {
-    static_assert(is_list_v<lhsList>, "all arguments of multiply_lists need to be lists.");
-    using type = typename multiply_lists_impl<add_to_first_atom<lhsList, rhsFirstElement>, list<rhsRestElements...>>::type;
 };
 template <class lhsList, class rhsList, class... RestLists>
-struct multiply_lists_impl<lhsList, rhsList, RestLists...>
+struct multiply_lists_impl<lhsList, rhsList, RestLists...> : multiply_lists_impl<typename multiply_lists_impl<lhsList, rhsList>::type, RestLists...>
 {
-    static_assert(is_list_v<lhsList> && is_list_v<rhsList> && all_true_v<is_list_v<RestLists>...>, "all arguments of multiply_lists need to be lists.");
-    using type = typename multiply_lists_impl<typename multiply_lists_impl<lhsList, rhsList>::type, RestLists...>::type;
 };
-template <class...Lists>
-using multiply_lists = sort_list<typename multiply_lists_impl<Lists...>::type>;
+template <class... Lists>
+using multiply_lists = sort<typename multiply_lists_impl<Lists...>::type>;
 //TODO: - Put this into a unit test folder.
 //basic tests
 static_assert(std::is_same<multiply_lists<list<>, list<atom<int>>>, list<atom<int>>>::value, "");
@@ -134,27 +126,16 @@ static_assert(std::is_same<multiply_lists<list<atom<int>, atom<bool>>, list<atom
 #pragma region power
 //The pow_list function adds a given power to every atom in a
 //list.
-template <class T, class Power, intmax_t num, intmax_t den>
-constexpr auto pow_atom_impl(atom<T, Power>, std::ratio<num, den>) {
-    return atom<T, std::ratio_multiply<Power, std::ratio<num, den>>>{};
-}
 template <class Atom, class Power>
-using pow_atom = decltype(pow_atom_impl(Atom{}, Power{}));
+using pow_atom = atom<typename Atom::type, std::ratio_multiply<typename Atom::power, Power>>;
 
-template <class...Elements, intmax_t num, intmax_t den>
-constexpr auto pow_list_func(list<Elements...>, std::ratio<num, den>) {
-    return list<pow_atom<Elements, std::ratio<num, den>>...>{};
+template <class... Elements, class Power>
+constexpr auto pow_list_impl(list<Elements...>, Power)
+{
+    return std::conditional_t<std::is_same<Power, std::ratio<0>>::value, list<>, list<pow_atom<Elements, Power>...>>{};
 }
 template <class List, class Power>
-struct pow_list_impl {
-    using type = decltype(pow_list_func(List{}, Power{}));
-};
-template <class List>
-struct pow_list_impl<List, std::ratio<0>> {
-    using type = list<>;
-};
-template <class List, class Power>
-using pow_list = typename pow_list_impl<List, Power>::type;
+using pow_list = decltype(pow_list_impl(List{}, Power{}));
 //TODO: - Put this into a unit test folder.
 //basic tests
 static_assert(std::is_same<pow_list<list<>, std::ratio<2>>, list<>>::value, "");
@@ -239,9 +220,10 @@ static_assert(std::is_same<make_power_list<1>, make_fraction_list<10>>::value, "
 //The multiply_elements function calculates the factor given by expanding
 //and multiplying all atoms in the list.
 template <class ValueType, class... Elements>
-constexpr auto multiply_elements_impl(list<Elements...>) {
-    static_assert(all_true_v<!is_root_v<Elements>...>, "multiply_elements cannot handle roots in the atoms at the moment. use runtime_multiply_elements instead.");
-    return product(impl::array<ValueType, sizeof...(Elements)>{expand_atom_v<ValueType, Elements>...});
+constexpr auto multiply_elements_impl(list<Elements...>)
+{
+    static_assert(all_true<!detect_if<Elements, is_root>...>, "multiply_elements cannot handle roots in the atoms at the moment. use runtime_multiply_elements instead.");
+    return product(impl::array<ValueType, sizeof...(Elements)>{expand_atom<ValueType, Elements>...});
 }
 template <class ValueType, class List>
 constexpr ValueType multiply_elements = multiply_elements_impl<ValueType>(List{});
@@ -263,10 +245,10 @@ constexpr auto runtime_multiply_elements(list<Elements...>)
 } // namespace impl
 //Pull the list type and its generators into the benri namespace,
 //because we need it for constructing units.
-using impl::multiply_lists;
 using impl::divide_lists;
-using impl::pow_list;
 using impl::list;
 using impl::make_fraction_list;
 using impl::make_power_list;
+using impl::multiply_lists;
+using impl::pow_list;
 } // namespace benri

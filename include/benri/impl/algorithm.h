@@ -70,36 +70,6 @@ static_assert(impl::equal(impl::array<int, 3>{1, 2, 3}, impl::array<int, 3>{1, 2
 static_assert(!impl::equal(impl::array<int, 3>{1, 2, 3}, impl::array<int, 3>{3, 2, 1}), "equal({1,2,3},{3,2,1}) should be false.");
 static_assert(!impl::equal(impl::array<int, 3>{1, 2, 3}, impl::array<int, 1>{1}), "equal({1,2,3},{1}) should be false.");
 #pragma endregion
-#pragma region sort
-//custom constexpr sort
-template <class T, size_t N>
-constexpr auto bubble_sort(impl::array<T, N> val, bool reverse = false)
-{
-    for (auto i = size_t{0}; i < N - 1; ++i)
-        for (auto j = size_t{0}; j < N - i - 1; ++j)
-            if (reverse ? val[j] < val[j + 1] : val[j] > val[j + 1])
-                impl::constexpr_swap(val[j], val[j + 1]);
-    return val;
-}
-template <class T, size_t N>
-constexpr auto bubble_sort(impl::array<T, N> val, impl::array<size_t, N> index, bool reverse = false)
-{
-    for (auto i = size_t{0}; i < N - 1; ++i)
-        for (auto j = size_t{0}; j < N - i - 1; ++j)
-            if (reverse ? val[j] < val[j + 1] : val[j] > val[j + 1])
-            {
-                impl::constexpr_swap(val[j], val[j + 1]);
-                impl::constexpr_swap(index[j], index[j + 1]);
-            }
-    return index;
-}
-//TODO: - Put this into a unit test folder.
-//basic tests
-static_assert(impl::equal(impl::bubble_sort(impl::array<int, 3>{3, 5, 1}), impl::array<int, 3>{1, 3, 5}), "{3,5,1} should be {1,3,5} when sorted.");
-static_assert(impl::equal(impl::bubble_sort(impl::array<int, 3>{3, 5, 1}, true), impl::array<int, 3>{5, 3, 1}), "{3,5,1} should be {5,3,1} when sorted in reverse.");
-static_assert(impl::equal(impl::bubble_sort(impl::array<int, 3>{3, 5, 1}, impl::array<size_t, 3>{0, 1, 2}), impl::array<size_t, 3>{2, 0, 1}), "{3,5,1} should be {5,3,1} when sorted.");
-static_assert(impl::equal(impl::bubble_sort(impl::array<int, 3>{3, 5, 1}, impl::array<size_t, 3>{0, 1, 2}, true), impl::array<size_t, 3>{1, 0, 2}), "{3,5,1} should be {5,3,1} when sorted in reverse.");
-#pragma endregion
 #pragma region product
 //The product function calculates the product of all given numbers
 //in a vector type.

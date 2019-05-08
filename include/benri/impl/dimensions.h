@@ -28,73 +28,73 @@ struct degF; //absolute degree fahrenheit
 } // namespace dim
 //si
 template <>
-struct hash<dim::L>
+struct hash_impl<dim::L>
 {
     static constexpr float value = 20;
 }; //length
 template <>
-struct hash<dim::M>
+struct hash_impl<dim::M>
 {
     static constexpr float value = 21;
 }; //mass
 template <>
-struct hash<dim::T>
+struct hash_impl<dim::T>
 {
     static constexpr float value = 22;
 }; //time, duration
 template <>
-struct hash<dim::I>
+struct hash_impl<dim::I>
 {
     static constexpr float value = 23;
 }; //current
 template <>
-struct hash<dim::H>
+struct hash_impl<dim::H>
 {
     static constexpr float value = 24;
 }; //thermodynamic temperature (actually this should be a Θ, but H looks similar)
 template <>
-struct hash<dim::N>
+struct hash_impl<dim::N>
 {
     static constexpr float value = 25;
 }; //amount of substance
 template <>
-struct hash<dim::J>
+struct hash_impl<dim::J>
 {
     static constexpr float value = 26;
 }; //luminous intensity
 //special symbols
 template <>
-struct hash<dim::A>
+struct hash_impl<dim::A>
 {
     static constexpr float value = 27;
 }; //angle
 template <>
-struct hash<dim::C>
+struct hash_impl<dim::C>
 {
     static constexpr float value = 28;
 }; //number of events (count)
 template <>
-struct hash<dim::S>
+struct hash_impl<dim::S>
 {
     static constexpr float value = 29;
 }; //helper for Sievert based units
 template <>
-struct hash<dim::B>
+struct hash_impl<dim::B>
 {
     static constexpr float value = 30;
 }; //amount of data
 template <>
-struct hash<dim::X>
+struct hash_impl<dim::X>
 {
     static constexpr float value = 31;
 }; //screen position
 template <>
-struct hash<dim::degC>
+struct hash_impl<dim::degC>
 {
     static constexpr float value = 32;
 }; //absolute degree celsius
 template <>
-struct hash<dim::degF>
+struct hash_impl<dim::degF>
 {
     static constexpr float value = 33;
 }; //absolute degree fahrenheit
