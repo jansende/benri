@@ -28,13 +28,17 @@ link_unit_point(degree_fahrenheit, fahrenheit);
 } // namespace si
 #pragma region is_compatible definitions
 template <class Prefix>
-struct is_compatible_with_impl<dim::celsius_temperature_t, Prefix, dim::thermodynamic_temperature_t, Prefix> : std::true_type
-{
-};
+struct is_compatible_impl<dim::celsius_temperature_t, Prefix, dim::thermodynamic_temperature_t, Prefix> : std::true_type
+{};
 template <class Prefix>
-struct is_compatible_with_impl<dim::fahrenheit_temperature_t, Prefix, dim::thermodynamic_temperature_t, Prefix> : std::true_type
-{
-};
+struct is_compatible_impl<dim::thermodynamic_temperature_t, Prefix, dim::celsius_temperature_t, Prefix> : std::true_type
+{};
+template <class Prefix>
+struct is_compatible_impl<dim::fahrenheit_temperature_t, Prefix, dim::thermodynamic_temperature_t, Prefix> : std::true_type
+{};
+template <class Prefix>
+struct is_compatible_impl<dim::thermodynamic_temperature_t, Prefix, dim::fahrenheit_temperature_t, Prefix> : std::true_type
+{};
 #pragma endregion
 #pragma region simple_cast / unit_cast overloads
 //conversion overload for quantity points (we need an actual overload, because partial function template specialization is not allowed)

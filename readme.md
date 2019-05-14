@@ -330,12 +330,12 @@ struct nin;
 //For the value all numbers equal or larger 100 can be used. Other values
 //are reserved.
 template <>
-struct hash_impl<dim::pir>
+struct hash<dim::pir>
 {
     static constexpr float value = 100; 
 };
 template <>
-struct hash_impl<dim::nin>
+struct hash<dim::nin>
 {
     static constexpr float value = 101;
 };

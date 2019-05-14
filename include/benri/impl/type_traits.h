@@ -7,5 +7,9 @@
 template <bool...>
 struct bool_pack;
 template <bool... bs>
-constexpr bool all_true = std::is_same<bool_pack<bs..., true>, bool_pack<true, bs...>>::value;
+struct all_true : std::integral_constant<bool, std::is_same<bool_pack<bs..., true>, bool_pack<true, bs...>>::value>
+{
+};
+template <bool... bs>
+constexpr bool all_true_v = all_true<bs...>::value;
 #pragma endregion
