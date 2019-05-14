@@ -72,31 +72,43 @@ using erg_per_gram_t = divide_units<erg_t, gram_t>;
 using gram_per_erg_t = divide_units<gram_t, erg_t>;
 
 //---phase space
-using lemmy_t = divide_units<one_t, multiply_units<gram_t, one_t, astronomical_unit_t, degree_t>>;
+using lemmy_t = divide_units<one_t, multiply_units<gram_t, one_t, astronomical_unit_t, radian_t>>;
 using lemmy_gram_t = multiply_units<gram_t, lemmy_t>;
 using lemmy_one_t = multiply_units<one_t, lemmy_t>;
 using lemmy_astronomical_unit_t = multiply_units<astronomical_unit_t, lemmy_t>;
 using lemmy_degree_t = multiply_units<degree_t, lemmy_t>;
 using lemmy_radian_t = multiply_units<radian_t, lemmy_t>;
-using lemmy_gram_degree_t = multiply_units<lemmy_gram_t, degree_t>;
+using lemmy_gram_radian_t = multiply_units<lemmy_gram_t, radian_t>;
 
 using lemmy_per_year_t = divide_units<lemmy_t, year_t>;
 //---various
-using one_per_astronomical_unit_degree_t = divide_units<one_t, multiply_units<astronomical_unit_t, degree_t>>;
+using one_per_astronomical_unit_radian_t = divide_units<one_t, multiply_units<astronomical_unit_t, radian_t>>;
 using square_gram_t = pow_unit<gram_t, std::ratio<2>>;
 using cubic_astronomical_unit_per_square_year_solar_mass_t = divide_units<pow_unit<astronomical_unit_t, std::ratio<3>>, multiply_units<pow_unit<year_t, std::ratio<2>>, solar_mass_t>>;
 using square_astronomical_unit_per_year_t = divide_units<pow_unit<astronomical_unit_t, std::ratio<2>>, year_t>;
 using square_astronomical_unit_per_square_year_t = divide_units<pow_unit<astronomical_unit_t, std::ratio<2>>, pow_unit<year_t, std::ratio<2>>>;
 using gram_square_astronomical_unit_per_year_t = multiply_units<gram_t, square_astronomical_unit_per_year_t>;
 using gram_square_astronomical_unit_per_square_year_t = multiply_units<gram_t, pow_unit<astronomical_unit_per_year_t, std::ratio<2>>>;
+using square_astronomical_unit_centimetre_per_square_year_gram_t = divide_units<multiply_units<centimetre_t, pow_unit<astronomical_unit_t, std::ratio<2>>>, multiply_units<pow_unit<year_t, std::ratio<2>>, gram_t>>;
+using astronomical_unit_square_centimetre_per_square_year_solar_mass_t = divide_units<multiply_units<astronomical_unit_t, pow_unit<centimetre_t, std::ratio<2>>>, multiply_units<pow_unit<year_t, std::ratio<2>>, solar_mass_t>>;
 
 //---constants
 template <class T>
 constexpr auto gravitational_constant = value_type_cast<T>(simple_cast<cubic_astronomical_unit_per_square_year_solar_mass_t>(constant::gravitational_constant));
 template <class T>
+constexpr auto gravitational_constant_variant1 = value_type_cast<T>(simple_cast<square_astronomical_unit_centimetre_per_square_year_gram_t>(constant::gravitational_constant));
+template <class T>
+constexpr auto gravitational_constant_variant2 = value_type_cast<T>(simple_cast<astronomical_unit_square_centimetre_per_square_year_solar_mass_t>(constant::gravitational_constant));
+template <class T>
 constexpr auto speed_of_light = value_type_cast<T>(simple_cast<astronomical_unit_per_year_t>(constant::speed_of_light));
 template <class T>
 constexpr auto pi_constant = value_type_cast<T>(constant::pi);
+template <class T>
+constexpr auto two_pi_constant = value_type_cast<T>(constant::two_pi);
+template <class T>
+constexpr auto pi_variant = quantity<radian_t, T>{value_type_cast<T>(constant::pi).value()};
+template <class T>
+constexpr auto two_pi_variant = quantity<radian_t, T>{value_type_cast<T>(constant::two_pi).value()};
 } // namespace si
 
 #define implement_stream_operator(NAME, SYMBOL)                                           \
@@ -186,14 +198,14 @@ implement_stream_operator(si::erg_per_gram_t, "erg g^-1");
 implement_stream_operator(si::gram_per_erg_t, "erg^-1 g");
 
 //---phase space
-implement_stream_operator(si::lemmy_t, "deg^-1 g^-1 au^-1");
-implement_stream_operator(si::lemmy_gram_t, "deg^-1 au^-1");
-// implement_stream_operator(si::lemmy_one_t, "deg^-1 g^-1 au^-1");
-implement_stream_operator(si::lemmy_astronomical_unit_t, "deg^-1 g^-1");
-implement_stream_operator(si::lemmy_degree_t, "g^-1 au^-1");
-implement_stream_operator(si::lemmy_radian_t, "rad deg^-1 g^-1 au^-1");
+implement_stream_operator(si::lemmy_t, "rad^-1 g^-1 au^-1");
+implement_stream_operator(si::lemmy_gram_t, "rad^-1 au^-1");
+// implement_stream_operator(si::lemmy_one_t, "rad^-1 g^-1 au^-1");
+implement_stream_operator(si::lemmy_astronomical_unit_t, "rad^-1 g^-1");
+implement_stream_operator(si::lemmy_degree_t, "deg rad^-1 g^-1 au^-1");
+implement_stream_operator(si::lemmy_radian_t, "g^-1 au^-1");
 
-implement_stream_operator(si::lemmy_per_year_t, "deg^-1 g^-1 au^-1 yr^-1");
+implement_stream_operator(si::lemmy_per_year_t, "rad^-1 g^-1 au^-1 yr^-1");
 //---various
 implement_stream_operator(si::square_gram_t, "g^2");
 implement_stream_operator(si::cubic_astronomical_unit_per_square_year_solar_mass_t, "MSol^-2 au^3");
