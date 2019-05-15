@@ -7,18 +7,39 @@
 
 namespace benri
 {
-template <class T>
-[[nodiscard]] constexpr inline auto square(T val) noexcept
+//quantity_point forward declaration
+template <class Unit, class ValueType>
+class quantity_point;
+//quantity forward declaration
+template <class Unit, class ValueType>
+class quantity;
+template <class Unit, class ValueType>
+[[nodiscard]] constexpr inline auto square(quantity<Unit,ValueType> val) noexcept
 {
     return val * val;
 }
-template <class T>
-[[nodiscard]] constexpr inline auto cubic(T val) noexcept
+template <class Unit, class ValueType>
+[[nodiscard]] constexpr inline auto square(quantity_point<Unit,ValueType> val) noexcept
+{
+    return val * val;
+}
+template <class Unit, class ValueType>
+[[nodiscard]] constexpr inline auto cubic(quantity<Unit,ValueType> val) noexcept
 {
     return val * val * val;
 }
-template <class T>
-[[nodiscard]] constexpr inline auto quartic(T val) noexcept
+template <class Unit, class ValueType>
+[[nodiscard]] constexpr inline auto cubic(quantity_point<Unit,ValueType> val) noexcept
+{
+    return val * val * val;
+}
+template <class Unit, class ValueType>
+[[nodiscard]] constexpr inline auto quartic(quantity<Unit,ValueType> val) noexcept
+{
+    return val * val * val * val;
+}
+template <class Unit, class ValueType>
+[[nodiscard]] constexpr inline auto quartic(quantity_point<Unit,ValueType> val) noexcept
 {
     return val * val * val * val;
 }
@@ -32,9 +53,6 @@ template <class T>
 using is_quantity = typename std::enable_if<std::is_same<T, quantity<typename T::unit_type, typename T::value_type>>::value>::type;
 #pragma endregion
 #pragma region quantity class
-//quantity_point forward declaration
-template <class Unit, class ValueType>
-class quantity_point;
 //The quantity type handles physical quantities. It checks the units
 //in calculations and handles conversions, etc. The type in general
 //should be compile time constexpr and if in some context contexpr
