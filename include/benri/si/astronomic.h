@@ -41,7 +41,7 @@ implement_unit(jansky, dim::surface_tension_t, fix(multiply_lists<prefix::yocto_
 namespace constant
 {
 #pragma region astronomical constants
-create_constant(solar_luminosity, prefix::solar_luminosity_t, typename decltype(kilogram * square(metre) / cubic(second) / steradian)::unit_type);
+create_constant(solar_luminosity, prefix::solar_luminosity_t, typename decltype(kilogram * square(metre) * steradian / cubic(second))::unit_type);
 create_constant(solar_mass, prefix::solar_mass_t, kilogram_t);
 create_constant(jupiter_mass, prefix::jupiter_mass_t, kilogram_t);
 create_constant(earth_mass, prefix::earth_mass_t, kilogram_t);
