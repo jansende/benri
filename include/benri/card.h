@@ -91,7 +91,17 @@ using gram_square_astronomical_unit_per_year_t = multiply_units<gram_t, square_a
 using gram_square_astronomical_unit_per_square_year_t = multiply_units<gram_t, pow_unit<astronomical_unit_per_year_t, std::ratio<2>>>;
 using square_astronomical_unit_centimetre_per_square_year_gram_t = divide_units<multiply_units<centimetre_t, pow_unit<astronomical_unit_t, std::ratio<2>>>, multiply_units<pow_unit<year_t, std::ratio<2>>, gram_t>>;
 using astronomical_unit_square_centimetre_per_square_year_solar_mass_t = divide_units<multiply_units<astronomical_unit_t, pow_unit<centimetre_t, std::ratio<2>>>, multiply_units<pow_unit<year_t, std::ratio<2>>, solar_mass_t>>;
-
+using astronomical_unit_square_centimetre_per_square_year_t = divide_units<multiply_units<astronomical_unit_t, pow_unit<centimetre_t, std::ratio<2>>>, pow_unit<year_t, std::ratio<2>>>;
+using gram_square_astronomical_unit_steradian_per_cubic_year_t = divide_units<multiply_units<gram_t, pow_unit<astronomical_unit_t, std::ratio<2>>, steradian_t>, pow_unit<year_t, std::ratio<3>>>;
+using square_astronomical_unit_square_centimetre_per_cubic_year_t = divide_units<multiply_units<pow_unit<astronomical_unit_t, std::ratio<2>>, pow_unit<centimetre_t, std::ratio<2>>>, pow_unit<year_t, std::ratio<3>>>;
+using gram_square_astronomical_unit_per_cubic_year_centimetre_t = divide_units<multiply_units<gram_t, pow_unit<astronomical_unit_t, std::ratio<2>>>, multiply_units<pow_unit<year_t, std::ratio<3>>, centimetre_t>>;
+using gram_square_astronomical_unit_per_cubic_year_t = divide_units<multiply_units<gram_t, pow_unit<astronomical_unit_t, std::ratio<2>>>, pow_unit<year_t, std::ratio<3>>>;
+using gram_astronomical_unit_per_square_year_centimetre_t = divide_units<multiply_units<gram_t, astronomical_unit_t>, multiply_units<pow_unit<year_t, std::ratio<2>>, centimetre_t>>;
+using solar_mass_astronomical_unit_per_square_year_t = divide_units<multiply_units<solar_mass_t, astronomical_unit_t>, pow_unit<year_t, std::ratio<2>>>;
+using astronomical_unit_square_centimetre_per_square_year_gram_t = divide_units<multiply_units<astronomical_unit_t, pow_unit<centimetre_t, std::ratio<2>>>, multiply_units<pow_unit<year_t, std::ratio<2>>, gram_t>>;
+using solar_mass_astronomical_unit_square_centimetre_per_square_year_gram_t = divide_units<multiply_units<solar_mass_t, astronomical_unit_t, pow_unit<centimetre_t, std::ratio<2>>>, multiply_units<pow_unit<year_t, std::ratio<2>>, gram_t>>;
+using solar_mass_astronomical_unit_per_square_year_centimetre_t = divide_units<multiply_units<solar_mass_t, astronomical_unit_t>, multiply_units<pow_unit<year_t, std::ratio<2>>, centimetre_t>>;
+using solar_mass_square_astronomical_unit_square_centimetre_per_cubic_year_gram_t = divide_units<multiply_units<solar_mass_t, pow_unit<astronomical_unit_t,std::ratio<2>>>, multiply_units<pow_unit<year_t, std::ratio<3>>, gram_t>>;
 //---constants
 template <class T>
 constexpr auto gravitational_constant = value_type_cast<T>(simple_cast<cubic_astronomical_unit_per_square_year_solar_mass_t>(constant::gravitational_constant));
@@ -99,6 +109,8 @@ template <class T>
 constexpr auto gravitational_constant_variant1 = value_type_cast<T>(simple_cast<square_astronomical_unit_centimetre_per_square_year_gram_t>(constant::gravitational_constant));
 template <class T>
 constexpr auto gravitational_constant_variant2 = value_type_cast<T>(simple_cast<astronomical_unit_square_centimetre_per_square_year_solar_mass_t>(constant::gravitational_constant));
+template <class T>
+constexpr auto gravitational_constant_variant3 = value_type_cast<T>(simple_cast<astronomical_unit_square_centimetre_per_square_year_gram_t>(constant::gravitational_constant));
 template <class T>
 constexpr auto speed_of_light = value_type_cast<T>(simple_cast<astronomical_unit_per_year_t>(constant::speed_of_light));
 template <class T>
@@ -213,4 +225,20 @@ implement_stream_operator(si::square_astronomical_unit_per_year_t, "au^2 yr^-1")
 implement_stream_operator(si::square_astronomical_unit_per_square_year_t, "au^2 yr^-2");
 implement_stream_operator(si::gram_square_astronomical_unit_per_year_t, "g au^2 yr^-1");
 implement_stream_operator(si::gram_square_astronomical_unit_per_square_year_t, "g au^2 yr^-2");
+implement_stream_operator(si::solar_luminosity_t, "LSol");
+implement_stream_operator(si::steradian_t, "rad^2");
+implement_stream_operator(si::gram_square_astronomical_unit_steradian_per_cubic_year_t, "g au^2 rad^2 yr^-3");
+// implement_stream_operator(si::one_per_astronomical_unit_radian_t, "au^-1 rad^-1"); //same as lemmy_gram_t
+implement_stream_operator(si::square_astronomical_unit_centimetre_per_square_year_gram_t, "au^2 cm yr^-2 g^-1");
+implement_stream_operator(si::astronomical_unit_square_centimetre_per_square_year_solar_mass_t, "au cm^2 yr^-2 MSol^-1");
+implement_stream_operator(si::astronomical_unit_square_centimetre_per_square_year_t, "au cm^2 yr^-2");
+implement_stream_operator(si::square_astronomical_unit_square_centimetre_per_cubic_year_t, "au^2 cm^2 yr^-3");
+implement_stream_operator(si::gram_square_astronomical_unit_per_cubic_year_centimetre_t, "g au^2 yr-3 cm^-1");
+implement_stream_operator(si::gram_square_astronomical_unit_per_cubic_year_t, "g au^2 yr^-3");
+implement_stream_operator(si::gram_astronomical_unit_per_square_year_centimetre_t, "g au yr^-2 cm^-1");
+implement_stream_operator(si::solar_mass_astronomical_unit_per_square_year_t, "MSol au yr^-2");
+implement_stream_operator(si::astronomical_unit_square_centimetre_per_square_year_gram_t, "au cm^2 yr^-2 g^-1");
+implement_stream_operator(si::solar_mass_astronomical_unit_square_centimetre_per_square_year_gram_t, "MSol au cm^2 yr^-2 g^-1");
+implement_stream_operator(si::solar_mass_astronomical_unit_per_square_year_centimetre_t, "MSol au yr^-2 cm^-1");
+implement_stream_operator(si::solar_mass_square_astronomical_unit_square_centimetre_per_cubic_year_gram_t, "MSol au^2 cm^2 yr^-3 g^-1");
 } // namespace benri
