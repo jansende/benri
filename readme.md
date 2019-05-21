@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/jansende/benri.svg?branch=master)](https://travis-ci.com/jansende/benri)
+
 # Introduction
 *benri* is a c++ library for working with physical quantities. Quantities are the combination of a value with a unit. For example: the quantity `1km` consists of the value `1` and the unit `kilometre`. The library allows the definition of arbitrary units, and provides a container type for quantities. The container handles unit conversions and dimensional checking. Furthermore, a replacement for most of the `<cmath>` functions is provided, to easily updated existing code.
 
