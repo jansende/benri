@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/jansende/benri.svg?branch=ace)](https://travis-ci.com/jansende/benri)
+
 # Introduction
 *benri* is a c++ library for working with physical quantities. Quantities are the combination of a value with a unit. For example: the quantity `1km` consists of the value `1` and the unit `kilometre`. The library allows the definition of arbitrary units, and provides a container type for quantities. The container handles unit conversions and dimensional checking. Furthermore, a replacement for most of the `<cmath>` functions is provided, to easily updated existing code.
 
@@ -330,12 +332,12 @@ struct nin;
 //For the value all numbers equal or larger 100 can be used. Other values
 //are reserved.
 template <>
-struct hash<dim::pir>
+struct hash_impl<dim::pir>
 {
     static constexpr float value = 100; 
 };
 template <>
-struct hash<dim::nin>
+struct hash_impl<dim::nin>
 {
     static constexpr float value = 101;
 };
