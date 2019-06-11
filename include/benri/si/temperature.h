@@ -266,4 +266,16 @@ constexpr auto unit_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>
 //     return simple_cast<si::temperature::degree_fahrenheit_t>(rhs);
 // }
 #pragma endregion
+#pragma region helper function
+template <class Unit, class ValueType>
+constexpr auto zero_point(const quantity<Unit, ValueType> &)
+{
+    return quantity_point<Unit, ValueType>{ValueType{0}};
+}
+template <class Unit, class ValueType>
+constexpr auto zero_point(const quantity_point<Unit, ValueType> &)
+{
+    return quantity_point<Unit, ValueType>{ValueType{0}};
+}
+#pragma endregion
 } // namespace benri

@@ -34,17 +34,17 @@ constexpr bool is_quantity_point_v = is_quantity_point<T>::value;
 template <class Unit, class ValueType = Precision>
 class quantity_point
 {
-  public:
+public:
     template <class, class>
     friend class quantity_point;
 
     using value_type = ValueType;
     using unit_type = Unit;
 
-  private:
+private:
     value_type _value;
 
-  public:
+public:
     [[nodiscard]] constexpr inline auto value() const noexcept
     {
         return _value;
@@ -94,11 +94,11 @@ class quantity_point
         return *this;
     }
 
-    [[nodiscard]] friend constexpr inline auto operator+(const quantity<unit_type, value_type> &lhs, const quantity_point &rhs) noexcept
+    [[nodiscard]] friend constexpr inline auto operator+(const quantity<unit_type, value_type> &lhs, const quantity_point &rhs) noexcept -> quantity_point
     {
         return quantity_point{lhs._value + rhs._value};
     }
-    [[nodiscard]] friend constexpr inline auto operator+(const quantity_point &lhs, const quantity<unit_type, value_type> &rhs) noexcept
+    [[nodiscard]] friend constexpr inline auto operator+(const quantity_point &lhs, const quantity<unit_type, value_type> &rhs) noexcept -> quantity_point
     {
         return quantity_point{lhs._value + rhs._value};
     }
@@ -113,11 +113,11 @@ class quantity_point
     {
         return quantity<unit_type, value_type>{lhs._value - rhs._value};
     }
-    [[nodiscard]] friend constexpr inline auto operator-(const quantity<unit_type, value_type> &lhs, const quantity_point &rhs) noexcept
+    [[nodiscard]] friend constexpr inline auto operator-(const quantity<unit_type, value_type> &lhs, const quantity_point &rhs) noexcept -> quantity_point
     {
         return quantity_point{lhs._value - rhs._value};
     }
-    [[nodiscard]] friend constexpr inline auto operator-(const quantity_point &lhs, const quantity<unit_type, value_type> &rhs) noexcept
+    [[nodiscard]] friend constexpr inline auto operator-(const quantity_point &lhs, const quantity<unit_type, value_type> &rhs) noexcept -> quantity_point
     {
         return quantity_point{lhs._value - rhs._value};
     }

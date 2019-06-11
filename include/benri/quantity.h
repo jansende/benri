@@ -14,32 +14,32 @@ class quantity_point;
 template <class Unit, class ValueType>
 class quantity;
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto square(quantity<Unit,ValueType> val) noexcept
+[[nodiscard]] constexpr inline auto square(quantity<Unit, ValueType> val) noexcept
 {
     return val * val;
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto square(quantity_point<Unit,ValueType> val) noexcept
+[[nodiscard]] constexpr inline auto square(quantity_point<Unit, ValueType> val) noexcept
 {
     return val * val;
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto cubic(quantity<Unit,ValueType> val) noexcept
+[[nodiscard]] constexpr inline auto cubic(quantity<Unit, ValueType> val) noexcept
 {
     return val * val * val;
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto cubic(quantity_point<Unit,ValueType> val) noexcept
+[[nodiscard]] constexpr inline auto cubic(quantity_point<Unit, ValueType> val) noexcept
 {
     return val * val * val;
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto quartic(quantity<Unit,ValueType> val) noexcept
+[[nodiscard]] constexpr inline auto quartic(quantity<Unit, ValueType> val) noexcept
 {
     return val * val * val * val;
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto quartic(quantity_point<Unit,ValueType> val) noexcept
+[[nodiscard]] constexpr inline auto quartic(quantity_point<Unit, ValueType> val) noexcept
 {
     return val * val * val * val;
 }
@@ -69,7 +69,7 @@ constexpr bool is_quantity_v = is_quantity<T>::value;
 template <class Unit, class ValueType = Precision>
 class quantity
 {
-  public:
+public:
     template <class, class>
     friend class quantity;
     template <class, class>
@@ -78,10 +78,16 @@ class quantity
     using value_type = ValueType;
     using unit_type = Unit;
 
-  private:
+    friend constexpr inline auto operator+(const quantity<unit_type, value_type> &lhs, const quantity_point<unit_type, value_type> &rhs) noexcept -> quantity_point<unit_type, value_type>;
+    friend constexpr inline auto operator+(const quantity_point<unit_type, value_type> &lhs, const quantity<unit_type, value_type> &rhs) noexcept -> quantity_point<unit_type, value_type>;
+
+    friend constexpr inline auto operator-(const quantity<unit_type, value_type> &lhs, const quantity_point<unit_type, value_type> &rhs) noexcept -> quantity_point<unit_type, value_type>;
+    friend constexpr inline auto operator-(const quantity_point<unit_type, value_type> &lhs, const quantity<unit_type, value_type> &rhs) noexcept -> quantity_point<unit_type, value_type>;
+
+private:
     value_type _value;
 
-  public:
+public:
     [[nodiscard]] constexpr inline auto value() const noexcept
     {
         return _value;
