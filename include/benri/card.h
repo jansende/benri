@@ -81,6 +81,11 @@ using lemmy_radian_t = multiply_units<radian_t, lemmy_t>;
 using lemmy_gram_radian_t = multiply_units<lemmy_gram_t, radian_t>;
 
 using lemmy_per_year_t = divide_units<lemmy_t, year_t>;
+using lemmy_gram_per_year_t = divide_units<lemmy_gram_t, year_t>;
+using lemmy_one_per_year_t = divide_units<lemmy_one_t, year_t>;
+using lemmy_astronomical_unit_per_year_t = divide_units<lemmy_astronomical_unit_t, year_t>;
+using lemmy_degree_per_year_t = divide_units<lemmy_degree_t, year_t>;
+using lemmy_radian_per_year_t = divide_units<lemmy_radian_t, year_t>;
 //---various
 using one_per_astronomical_unit_radian_t = divide_units<one_t, multiply_units<astronomical_unit_t, radian_t>>;
 using square_gram_t = pow_unit<gram_t, std::ratio<2>>;
@@ -218,6 +223,11 @@ implement_stream_operator(si::lemmy_degree_t, "deg rad^-1 g^-1 au^-1");
 implement_stream_operator(si::lemmy_radian_t, "g^-1 au^-1");
 
 implement_stream_operator(si::lemmy_per_year_t, "rad^-1 g^-1 au^-1 yr^-1");
+implement_stream_operator(si::lemmy_gram_per_year_t, "rad^-1 au^-1 yr^-1");
+// implement_stream_operator(si::lemmy_one_per_year_t, "rad^-1 g^-1 au^-1 yr^-1");
+implement_stream_operator(si::lemmy_astronomical_unit_per_year_t, "rad^-1 g^-1 yr^-1");
+implement_stream_operator(si::lemmy_degree_per_year_t, "deg rad^-1 g^-1 au^-1 yr^-1");
+implement_stream_operator(si::lemmy_radian_per_year_t, "g^-1 au^-1 yr^-1");
 //---various
 implement_stream_operator(si::square_gram_t, "g^2");
 implement_stream_operator(si::cubic_astronomical_unit_per_square_year_solar_mass_t, "MSol^-2 au^3");
