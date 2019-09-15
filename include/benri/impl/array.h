@@ -32,7 +32,10 @@ struct array<T, 0>
 #pragma warning(disable : 4100) //we are warned that we are not using index inside the function, but this is on purpose here
 #pragma GCC diagnostic push     //apply the same fix for gcc and clang
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-    constexpr auto &operator[](size_t index) { return data[0]; }
+    constexpr auto &operator[](size_t index)
+    {
+        return data[0];
+    }
     constexpr const auto &operator[](size_t index) const { return data[0]; }
 #pragma GCC diagnostic pop
 #pragma warning(pop)
@@ -48,19 +51,6 @@ struct array<T, 0>
 static_assert(impl::array<int, 0>{}.size() == 0, "impl::array<int,0> should have zero size.");
 static_assert(impl::array<int, 4>{1, 2, 3, 4}.size() == 4, "impl::array<int, 4>{1, 2, 3, 4} should have a size of four.");
 static_assert(impl::array<int, 4>{1, 2, 3, 4}[0] == 1 && impl::array<int, 4>{1, 2, 3, 4}[1] == 2 && impl::array<int, 4>{1, 2, 3, 4}[2] == 3 && impl::array<int, 4>{1, 2, 3, 4}[3] == 4, "impl::array<int, 4>{1, 2, 3, 4} should save the right numbers into the array.");
-#pragma endregion
-#pragma region array generator
-//TODO
-template <class T, size_t N>
-constexpr auto make_index_array_impl()
-{
-    auto val = impl::array<T, N>{};
-    for (auto i = size_t{0}; i < N; ++i)
-        val[i] = static_cast<T>(i);
-    return val;
-}
-template <class T, size_t N>
-constexpr auto make_index_array = make_index_array_impl<T, N>();
 #pragma endregion
 } // namespace impl
 } // namespace benri
