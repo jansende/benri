@@ -12,8 +12,8 @@ project(benri VERSION 0.1.0
 
 #add additional build options
 option(BENRI_CPP17_ENABLED      "Compile using c++17 flags" OFF)
-option(BENRI_UNIT_TESTS_ENABLED "Run Unit Tests"            ON )
-option(BENRI_BUILD_EXAMPLES     "Build Examples"            ON )
+option(BENRI_UNIT_TESTS_ENABLED "Run Unit Tests"            OFF)
+option(BENRI_BUILD_EXAMPLES     "Build Examples"            OFF)
 
 #add library interface
 add_library(benri INTERFACE)
