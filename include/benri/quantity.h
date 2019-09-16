@@ -19,27 +19,12 @@ template <class Unit, class ValueType>
     return val * val;
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto square(quantity_point<Unit, ValueType> val) noexcept
-{
-    return val * val;
-}
-template <class Unit, class ValueType>
 [[nodiscard]] constexpr inline auto cubic(quantity<Unit, ValueType> val) noexcept
 {
     return val * val * val;
 }
 template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto cubic(quantity_point<Unit, ValueType> val) noexcept
-{
-    return val * val * val;
-}
-template <class Unit, class ValueType>
 [[nodiscard]] constexpr inline auto quartic(quantity<Unit, ValueType> val) noexcept
-{
-    return val * val * val * val;
-}
-template <class Unit, class ValueType>
-[[nodiscard]] constexpr inline auto quartic(quantity_point<Unit, ValueType> val) noexcept
 {
     return val * val * val * val;
 }
