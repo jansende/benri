@@ -35,10 +35,11 @@ static_assert(detect_if<unit<list<>, list<>>, is_unit>, "");
 //(The dimension is an empty list.)
 template <class T>
 using is_dimensionless = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, list<>>::value>::type;
-//The is_one function checks if a given unit is a factor of one.
-//(The dimension and the prefix are an empty list.)
+//The one unit is the unit where the dimension and the prefix are empty lists.
+using one = unit<list<>, list<>>;
+//The is_one function checks if a given unit is one.
 template <class T>
-using is_one = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, list<>>::value && std::is_same<typename T::prefix, list<>>::value>::type;
+using is_one = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, typename one::dimensions>::value && std::is_same<typename T::prefix, typename one::prefix>::value>::type;
 #pragma endregion
 #pragma region unit functions
 #pragma region multiplication
