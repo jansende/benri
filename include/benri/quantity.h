@@ -134,11 +134,6 @@ public:
     {
         return quantity{lhs._value + rhs._value};
     }
-    template <class rhsUnit>
-    [[nodiscard]] friend constexpr inline auto operator+(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<unit_type, is_compatible_with, rhsUnit>, quantity>
-    {
-        return quantity{lhs._value + rhs._value};
-    }
     constexpr inline auto operator-=(const quantity &rhs) noexcept
     {
         this->_value -= rhs._value;
@@ -148,20 +143,9 @@ public:
     {
         return quantity{lhs._value - rhs._value};
     }
-    template <class rhsUnit>
-    [[nodiscard]] friend constexpr inline auto operator-(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<unit_type, is_compatible_with, rhsUnit>, quantity>
-    {
-        return quantity{lhs._value - rhs._value};
-    }
 #pragma endregion
 #pragma region multiplication
-    constexpr inline auto &operator*=(const value_type &rhs) noexcept
-    {
-        this->_value *= rhs;
-        return *this;
-    }
-    template <class rhsUnit>
-    constexpr inline auto operator*=(const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<rhsUnit, is_one>, quantity &>
+    constexpr inline auto &operator*=(const quantity<one, value_type> &rhs) noexcept
     {
         this->_value *= rhs.value();
         return *this;
@@ -176,13 +160,7 @@ public:
     {
         return quantity{lhs * rhs._value};
     }
-    constexpr inline auto &operator/=(const value_type &rhs) noexcept
-    {
-        this->_value /= rhs;
-        return *this;
-    }
-    template <class rhsUnit>
-    constexpr inline auto operator/=(const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<rhsUnit, is_one>, quantity &>
+    constexpr inline auto &operator/=(const quantity<one, value_type> &rhs) noexcept
     {
         this->_value /= rhs.value();
         return *this;
@@ -203,17 +181,7 @@ public:
     {
         return lhs._value == rhs._value;
     }
-    template <class rhsUnit>
-    [[nodiscard]] friend constexpr inline auto operator==(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<unit_type, is_compatible_with, rhsUnit>, bool>
-    {
-        return lhs._value == rhs._value;
-    }
     [[nodiscard]] friend constexpr inline auto operator!=(const quantity &lhs, const quantity &rhs) noexcept
-    {
-        return !(lhs == rhs);
-    }
-    template <class rhsUnit>
-    [[nodiscard]] friend constexpr inline auto operator!=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<unit_type, is_compatible_with, rhsUnit>, bool>
     {
         return !(lhs == rhs);
     }
@@ -221,17 +189,7 @@ public:
     {
         return lhs._value < rhs._value;
     }
-    template <class rhsUnit>
-    [[nodiscard]] friend constexpr inline auto operator<(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<unit_type, is_compatible_with, rhsUnit>, bool>
-    {
-        return lhs._value < rhs._value;
-    }
     [[nodiscard]] friend constexpr inline auto operator>(const quantity &lhs, const quantity &rhs) noexcept
-    {
-        return rhs < lhs;
-    }
-    template <class rhsUnit>
-    [[nodiscard]] friend constexpr inline auto operator>(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<unit_type, is_compatible_with, rhsUnit>, bool>
     {
         return rhs < lhs;
     }
@@ -239,17 +197,7 @@ public:
     {
         return !(rhs < lhs);
     }
-    template <class rhsUnit>
-    [[nodiscard]] friend constexpr inline auto operator<=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<unit_type, is_compatible_with, rhsUnit>, bool>
-    {
-        return !(rhs < lhs);
-    }
     [[nodiscard]] friend constexpr inline auto operator>=(const quantity &lhs, const quantity &rhs) noexcept
-    {
-        return !(lhs < rhs);
-    }
-    template <class rhsUnit>
-    [[nodiscard]] friend constexpr inline auto operator>=(const quantity &lhs, const quantity<rhsUnit, value_type> &rhs) noexcept -> std::enable_if_t<detect_if<unit_type, is_compatible_with, rhsUnit>, bool>
     {
         return !(lhs < rhs);
     }
