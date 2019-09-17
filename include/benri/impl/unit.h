@@ -30,13 +30,13 @@ using is_unit = typename std::enable_if<detect_if<T, has_valid_dimensions> && de
 //basic tests
 static_assert(!detect_if<int, is_unit>, "");
 static_assert(!detect_if<unit<double, double>, is_unit>, "");
-static_assert(detect_if<unit<list<>, list<>>, is_unit>, "");
+static_assert(detect_if<unit<sorted_list<>, sorted_list<>>, is_unit>, "");
 //The is_dimensionless function checks if a given unit is dimensionless.
 //(The dimension is an empty list.)
 template <class T>
-using is_dimensionless = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, list<>>::value>::type;
+using is_dimensionless = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, sorted_list<>>::value>::type;
 //The one unit is the unit where the dimension and the prefix are empty lists.
-using one = unit<list<>, list<>>;
+using one = unit<sorted_list<>, sorted_list<>>;
 //The is_one function checks if a given unit is one.
 template <class T>
 using is_one = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, typename one::dimensions>::value && std::is_same<typename T::prefix, typename one::prefix>::value>::type;
@@ -83,6 +83,6 @@ using is_compatible_with = typename std::enable_if<is_compatible_with_impl<typen
 #pragma endregion
 #pragma region remove prefix
 template <class Unit>
-using remove_unit_prefix = unit<typename Unit::dimensions, list<>>;
+using remove_unit_prefix = unit<typename Unit::dimensions, sorted_list<>>;
 #pragma endregion
 } // namespace benri

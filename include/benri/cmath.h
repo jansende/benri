@@ -26,9 +26,9 @@ namespace benri
 template <class Prefix>
 using make_dimensionless = unit<typename dim::dimensionless_t, Prefix>;
 //one_unit creates a dimensionless type from the given Unit
-using one_unit = unit<typename dim::dimensionless_t, list<>>;
+using one_unit = unit<typename dim::dimensionless_t, sorted_list<>>;
 //plane_angle_unit creates an angle type from the given Unit
-using plane_angle_unit = unit<typename dim::plane_angle_t, list<>>;
+using plane_angle_unit = unit<typename dim::plane_angle_t, sorted_list<>>;
 //conversion_type resolves the common type/type promotion for functions.
 template <class lhsQuantity, class rhsQuantity, bool AllowPoints>
 struct conversion_type

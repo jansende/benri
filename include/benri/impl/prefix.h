@@ -58,13 +58,13 @@ struct sidereal_year
 {
     static constexpr Precision value = 3.155815e7;
 };
-using sidereal_year_t = list<atom<sidereal_year>>;
+using sidereal_year_t = sorted_list<atom<sidereal_year>>;
 //tropical year in s
 struct tropical_year
 {
     static constexpr Precision value = 3.155693e7;
 };
-using tropical_year_t = list<atom<tropical_year>>;
+using tropical_year_t = sorted_list<atom<tropical_year>>;
 #pragma endregion
 #pragma region mathematical constants
 struct pi
@@ -73,7 +73,7 @@ struct pi
     //See: https://oeis.org/A000796
     static constexpr Precision value = 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214;
 };
-using pi_t = list<atom<pi>>;
+using pi_t = sorted_list<atom<pi>>;
 //quarter pi
 using quarter_pi_t = multiply_lists<make_fraction_list<1, 4>, pi_t>;
 //half pi
@@ -86,29 +86,29 @@ struct e
     //See: https://oeis.org/A001113
     static constexpr Precision value = 2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852516642742746;
 };
-using e_t = list<atom<e>>;
+using e_t = sorted_list<atom<e>>;
 struct phi
 {
     //golden ratio
     //See: https://oeis.org/A001622
     static constexpr Precision value = 1.61803398874989484820458683436563811772030917980576286213544862270526046281890244970720720418939113748475;
 };
-using phi_t = list<atom<phi>>;
+using phi_t = sorted_list<atom<phi>>;
 struct gamma
 {
     //euler mascheroni constant
     //See: https://oeis.org/A001620
     static constexpr Precision value = 0.577215664901532860606512090082402431042159335939923598805767234884867726777664670936947063291746749;
 };
-using gamma_t = list<atom<gamma>>;
+using gamma_t = sorted_list<atom<gamma>>;
 struct root_two //TODO: rethink!
 {
     //square root of two
     //See: https://oeis.org/A002193
     static constexpr Precision value = 1.41421356237309504880168872420969807856967187537694807317667973799073247846210703885038753432764157;
 };
-using root_two_symbol_t = list<atom<std::ratio<2>, std::ratio<1, 2>>>;
-using root_two_t = list<atom<root_two>>;
+using root_two_symbol_t = sorted_list<atom<std::ratio<2>, std::ratio<1, 2>>>;
+using root_two_t = sorted_list<atom<root_two>>;
 #pragma endregion
 #pragma region physical constants
 //speed of light in m/s (exact, by definition)
@@ -116,7 +116,7 @@ struct speed_of_light
 {
     static constexpr Precision value = 299792458.;
 };
-using speed_of_light_t = list<atom<speed_of_light>>;
+using speed_of_light_t = sorted_list<atom<speed_of_light>>;
 //magnetic constant in H/m (exact, by definition)
 using magnetic_constant_t = multiply_lists<make_fraction_list<2>, two_pi_t, make_fraction_list<1, 10000000>>;
 //electric constant in F/m (exact, by definition)
@@ -126,13 +126,13 @@ struct gravitational_constant //TODO: check value
 {
     static constexpr Precision value = 6.6740831e-11;
 };
-using gravitational_constant_t = list<atom<gravitational_constant>>;
+using gravitational_constant_t = sorted_list<atom<gravitational_constant>>;
 //planck constant in J s
 struct planck_constant
 {
     static constexpr Precision value = 6.62607004081e-34;
 };
-using planck_constant_t = list<atom<planck_constant>>;
+using planck_constant_t = sorted_list<atom<planck_constant>>;
 //reduced planck constant in J s
 using reduced_planck_constant_t = divide_lists<planck_constant_t, two_pi_t>;
 //elementary charge in C
@@ -140,7 +140,7 @@ struct elementary_charge
 {
     static constexpr Precision value = 1.602176620898e-19;
 };
-using elementary_charge_t = list<atom<elementary_charge>>;
+using elementary_charge_t = sorted_list<atom<elementary_charge>>;
 //fine structure constant in 1
 using fine_structure_constant_t = divide_lists<multiply_lists<multiply_lists<elementary_charge_t, elementary_charge_t>, multiply_lists<magnetic_constant_t, speed_of_light_t>>, multiply_lists<make_fraction_list<2>, planck_constant_t>>;
 //inverse fine structure constant in 1
@@ -150,55 +150,55 @@ struct electron_mass
 {
     static constexpr Precision value = 9.1093835611e-31;
 };
-using electron_mass_t = list<atom<electron_mass>>;
+using electron_mass_t = sorted_list<atom<electron_mass>>;
 //proton mass in kg
 struct proton_mass
 {
     static constexpr Precision value = 1.67262189821e-27;
 };
-using proton_mass_t = list<atom<proton_mass>>;
+using proton_mass_t = sorted_list<atom<proton_mass>>;
 //muon mass in kg
 struct muon_mass
 {
     static constexpr Precision value = 1.88353159448e-28;
 };
-using muon_mass_t = list<atom<muon_mass>>;
+using muon_mass_t = sorted_list<atom<muon_mass>>;
 //tau mass in kg
 struct tau_mass
 {
     static constexpr Precision value = 3.1674729e-27;
 };
-using tau_mass_t = list<atom<tau_mass>>;
+using tau_mass_t = sorted_list<atom<tau_mass>>;
 //neutron mass in kg
 struct neutron_mass
 {
     static constexpr Precision value = 1.67492747121 - 27;
 };
-using neutron_mass_t = list<atom<neutron_mass>>;
+using neutron_mass_t = sorted_list<atom<neutron_mass>>;
 //deuteron mass in kg
 struct deuteron_mass
 {
     static constexpr Precision value = 3.34358371941e-27;
 };
-using deuteron_mass_t = list<atom<deuteron_mass>>;
+using deuteron_mass_t = sorted_list<atom<deuteron_mass>>;
 //triton mass in kg
 struct triton_mass
 {
     static constexpr Precision value = 5.00735666562e-27;
 };
-using triton_mass_t = list<atom<triton_mass>>;
+using triton_mass_t = sorted_list<atom<triton_mass>>;
 //helion mass in kg
 struct helion_mass
 {
     static constexpr Precision value = 5.00641270062e-27;
 };
-using helion_mass_t = list<atom<helion_mass>>;
+using helion_mass_t = sorted_list<atom<helion_mass>>;
 //alpha particle mass in kg
 struct alpha_particle_mass
 {
     static constexpr Precision value = 6.64465723082e-27;
 };
-using alpha_particle_mass_t = list<atom<alpha_particle_mass>>;
+using alpha_particle_mass_t = sorted_list<atom<alpha_particle_mass>>;
 //rydberg constant in m⁻¹
 using rydberg_constant_t = divide_lists<multiply_lists<pow_list<fine_structure_constant_t, std::ratio<2>>, electron_mass_t, speed_of_light_t>, multiply_lists<make_fraction_list<2>, planck_constant_t>>;
 //bohr radius in m
@@ -210,7 +210,7 @@ struct avogadro_constant
 {
     static constexpr Precision value = 6.02214085774e23;
 };
-using avogadro_constant_t = list<atom<avogadro_constant>>;
+using avogadro_constant_t = sorted_list<atom<avogadro_constant>>;
 //faraday constant in C/mol
 using faraday_constant_t = multiply_lists<avogadro_constant_t, elementary_charge_t>;
 //molar gas constant in J/(mol K)
@@ -218,7 +218,7 @@ struct molar_gas_constant
 {
     static constexpr Precision value = 8.314459848;
 };
-using molar_gas_constant_t = list<atom<molar_gas_constant>>;
+using molar_gas_constant_t = sorted_list<atom<molar_gas_constant>>;
 //boltzmann constant in J/K
 using boltzmann_constant_t = divide_lists<molar_gas_constant_t, avogadro_constant_t>;
 //stefan-boltzmann constant in W m⁻² K⁻⁴ sr⁻¹
@@ -234,7 +234,7 @@ struct atomic_mass_unit
 {
     static constexpr Precision value = 1.6605388628e-27;
 };
-using atomic_mass_unit_t = list<atom<atomic_mass_unit>>;
+using atomic_mass_unit_t = sorted_list<atom<atomic_mass_unit>>;
 //hartree energy in J
 using hartree_energy_t = divide_lists<pow_list<elementary_charge_t, std::ratio<2>>, multiply_lists<make_fraction_list<4>, pi_t, electric_constant_t, bohr_radius_t>>;
 //conductance quantum in S
@@ -252,7 +252,7 @@ struct astronomical_unit
 {
     static constexpr Precision value = 149597870700.;
 };
-using astronomical_unit_t = list<atom<astronomical_unit>>;
+using astronomical_unit_t = sorted_list<atom<astronomical_unit>>;
 //parsec in m
 using parsec_t = multiply_lists<divide_lists<make_fraction_list<648000>, pi_t>, astronomical_unit_t>;
 //solar mass in kg
@@ -260,25 +260,25 @@ struct solar_mass
 {
     static constexpr Precision value = 1.988474491e30;
 };
-using solar_mass_t = list<atom<solar_mass>>;
+using solar_mass_t = sorted_list<atom<solar_mass>>;
 //solar luminosity in W/sr
 struct solar_luminosity
 {
     static constexpr Precision value = 3.828e26;
 };
-using solar_luminosity_t = list<atom<solar_luminosity>>;
+using solar_luminosity_t = sorted_list<atom<solar_luminosity>>;
 //jupiter mass in kg
 struct jupiter_mass
 {
     static constexpr Precision value = 1.898579334e27;
 };
-using jupiter_mass_t = list<atom<jupiter_mass>>;
+using jupiter_mass_t = sorted_list<atom<jupiter_mass>>;
 //earth mass in kg
 struct earth_mass
 {
     static constexpr Precision value = 6.157296241e24;
 };
-using earth_mass_t = list<atom<earth_mass>>;
+using earth_mass_t = sorted_list<atom<earth_mass>>;
 //angstroem in m
 using angstroem_t = make_power_list<-10>;
 //bohr in m
@@ -286,67 +286,67 @@ struct bohr
 {
     static constexpr Precision value = 0.529177210818e-10;
 };
-using bohr_t = list<atom<bohr>>;
+using bohr_t = sorted_list<atom<bohr>>;
 //nautical mile in m
 struct nautical_mile
 {
     static constexpr Precision value = 1852;
 };
-using nautical_mile_t = list<atom<nautical_mile>>;
+using nautical_mile_t = sorted_list<atom<nautical_mile>>;
 //international mile in m
 struct international_mile
 {
     static constexpr Precision value = 1609.344;
 };
-using international_mile_t = list<atom<international_mile>>;
+using international_mile_t = sorted_list<atom<international_mile>>;
 //yard in m
 struct yard
 {
     static constexpr Precision value = 0.9144;
 };
-using yard_t = list<atom<yard>>;
+using yard_t = sorted_list<atom<yard>>;
 //international foot in m
 struct international_foot
 {
     static constexpr Precision value = 0.3048;
 };
-using international_foot_t = list<atom<international_foot>>;
+using international_foot_t = sorted_list<atom<international_foot>>;
 //inch in m
 struct inch
 {
     static constexpr Precision value = (1. / 39.37);
 };
-using inch_t = list<atom<inch>>;
+using inch_t = sorted_list<atom<inch>>;
 //pound in kg
 struct pound
 {
     static constexpr Precision value = 4.5359237e-1;
 };
-using pound_t = list<atom<pound>>;
+using pound_t = sorted_list<atom<pound>>;
 //ounce in kg
 struct ounce
 {
     static constexpr Precision value = 2.834952e-2;
 };
-using ounce_t = list<atom<ounce>>;
+using ounce_t = sorted_list<atom<ounce>>;
 //kelvin in rankine
 struct rankine
 {
     static constexpr Precision value = 1.8;
 };
-using rankine_t = list<atom<rankine>>;
+using rankine_t = sorted_list<atom<rankine>>;
 //absolute zero in fahrenheit
 struct fahrenheit_zero
 {
     static constexpr Precision value = -459.67;
 };
-using fahrenheit_zero_t = list<atom<fahrenheit_zero>>;
+using fahrenheit_zero_t = sorted_list<atom<fahrenheit_zero>>;
 //absolute zero in celsius
 struct absolute_zero
 {
     static constexpr Precision value = -273.15;
 };
-using absolute_zero_t = list<atom<absolute_zero>>;
+using absolute_zero_t = sorted_list<atom<absolute_zero>>;
 #pragma endregion
 } // namespace prefix
 } // namespace benri
