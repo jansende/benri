@@ -9,6 +9,7 @@ macro(add_test_files TESTNAME)
 endmacro()
 
 add_test_files(benri_tests one.cpp 
+                           constants.cpp
                            quantity.cpp
                            quantity_point.cpp)
 target_link_libraries(benri_tests benri)
