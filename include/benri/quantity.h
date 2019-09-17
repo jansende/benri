@@ -35,7 +35,7 @@ class quantity;
 //The is_quantity function checks if a given type is a quantity
 //object.
 template <class T>
-using is_quantity = typename std::enable_if<std::is_same<T, quantity<typename T::unit_type, typename T::value_type>>::value>::type;
+using is_quantity = typename std::enable_if<std::is_same<std::remove_cv_t<T>, quantity<typename T::unit_type, typename T::value_type>>::value>::type;
 #pragma endregion
 #pragma region quantity class
 //The quantity type handles physical quantities. It checks the units
