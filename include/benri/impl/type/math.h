@@ -1,5 +1,6 @@
 #pragma once
 #include <benri/impl/type/list.h>
+#include <benri/impl/meta/math.h>
 
 namespace benri
 {
@@ -222,15 +223,15 @@ using make_list = decltype(make_list_impl(Sequence{}));
 //The make_factorial_list function generates a list by
 //factorizing a given number.
 template <intmax_t Value>
-using make_factorial_list = make_list<impl::factorization<Value>>;
+using make_factorial_list = make_list<meta::prime_factors<Value>>;
 //The make_fraction_list function generates a list by
 //factorizing a given numerator and denominater.
 template <intmax_t num = 1, intmax_t den = 1>
 using make_fraction_list = divide_lists<make_factorial_list<num>, make_factorial_list<den>>;
 //TODO: - Put this into a unit test folder.
 //Basic tests
-static_assert(std::is_same<make_list<impl::factorization<9>>, sorted_list<atom<std::ratio<3>, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<>, make_list<impl::factorization<9>>>, sorted_list<atom<std::ratio<3>, std::ratio<2>>>>::value, "");
+static_assert(std::is_same<make_list<meta::prime_factors<9>>, sorted_list<atom<std::ratio<3>, std::ratio<2>>>>::value, "");
+static_assert(std::is_same<multiply_lists<list<>, make_list<meta::prime_factors<9>>>, sorted_list<atom<std::ratio<3>, std::ratio<2>>>>::value, "");
 static_assert(std::is_same<make_factorial_list<8>, sorted_list<atom<std::ratio<2>, std::ratio<3>>>>::value, "");
 static_assert(std::is_same<make_fraction_list<1, 8>, sorted_list<atom<std::ratio<2>, std::ratio<-3>>>>::value, "");
 static_assert(std::is_same<make_fraction_list<4, 8>, sorted_list<atom<std::ratio<2>, std::ratio<-1>>>>::value, "");

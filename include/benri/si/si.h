@@ -3,7 +3,7 @@
 #include <benri/quantity_point.h>
 #include <benri/impl/benri/dimensions.h>
 #include <benri/impl/benri/macros.h>
-#include <benri/impl/benri/prefixes.h>
+#include <benri/si/prefixes.h>
 #include <benri/si/base.h>
 
 namespace benri

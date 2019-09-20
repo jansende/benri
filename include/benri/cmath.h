@@ -3,7 +3,6 @@
 #include <benri/quantity_point.h>
 #include <benri/impl/benri/dimensions.h>
 #include <benri/impl/type/list.h>
-#include <benri/impl/meta_math.h>
 #include <benri/impl/benri/unit.h>
 #include <algorithm>
 #include <cmath>

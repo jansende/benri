@@ -1,5 +1,5 @@
 #pragma once
-#include <benri/impl/meta_math.h>
+#include <benri/impl/meta/math.h>
 #include <benri/impl/type/traits.h>
 #include <ratio>
 #include <cmath>
@@ -17,6 +17,8 @@ template <class T, class Power = std::ratio<1>>
 struct atom
 {
     // static_assert(!std::is_same<Power, std::ratio<0>>::value, "Atoms with a Power of 0 are not allowed.");
+    // static_assert(type::detect_if<T, type::is_std_ratio> || type::detect_if<T, type::has_value>, "")
+    static_assert(type::detect_if<Power, type::is_std_ratio>, "Power has to be a std::ratio.");
     using type = T;
     using power = Power;
 };
@@ -24,15 +26,11 @@ struct atom
 //attribute which is a ratio or has a ::value argument.
 template <class T>
 using has_valid_type = typename std::enable_if<type::detect_if<typename T::type, type::is_std_ratio> || type::detect_if<typename T::type, type::has_value>>::type;
-//The has_valid_power function checks if a given type has a ::power
-//attribute which is a ratio.
-template <class T>
-using has_valid_power = typename std::enable_if<type::detect_if<typename T::power, type::is_std_ratio>>::type;
 //The is_atom function checks if a type has a ::type and a ::power
 //attribute. This does not mean, we have an atom type, but we do not
 //care, if we can do the necessary calculations.
 template <class T>
-using is_atom = typename std::enable_if<type::detect_if<T, type::has_type> && type::detect_if<T, has_valid_power>>::type;
+using is_atom = typename std::enable_if<type::detect_if<T, type::has_type>>::type;
 //TODO: - Put this into a unit test folder.
 //Basic tests
 static_assert(!type::detect_if<int, is_atom>, "");
@@ -55,7 +53,7 @@ static_assert(type::detect_if<atom<std::ratio<2>, std::ratio_multiply<std::ratio
 //The expand_atom function takes an atom with a std::ratio type
 //and calculates its value to the power given in the atom.
 template <class T, class Atom>
-constexpr T expand_atom = power<T, typename Atom::type, typename Atom::power>;
+constexpr T expand_atom = meta::pow<T, typename Atom::type, typename Atom::power>;
 //TODO: - Put this into a unit test folder.
 //Basic tests
 static_assert(expand_atom<intmax_t, atom<std::ratio<2>, std::ratio<2>>> == 4, "");
