@@ -61,7 +61,7 @@ static constexpr auto is_prime_impl(const T &number) -> std::enable_if_t<std::is
 template <intmax_t Num>
 constexpr bool is_prime = is_prime_impl(Num);
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(is_prime<0> == false, "0 is not prime.");
 static_assert(is_prime<1> == false, "1 is not prime.");
 static_assert(is_prime<2> == true, "2 is prime.");
@@ -93,7 +93,7 @@ static constexpr auto next_prime_impl(T number) -> std::enable_if_t<std::is_inte
 template <intmax_t Num>
 constexpr intmax_t next_prime = next_prime_impl(Num);
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(next_prime<0> == 2, "2 is the next prime after 0.");
 static_assert(next_prime<1> == 2, "2 is the next prime after 1.");
 static_assert(next_prime<2> == 3, "3 is the next prime after 2.");
@@ -198,7 +198,7 @@ template <intmax_t number>
 using factorization = decltype(factorization_impl<number>(std::make_index_sequence<number_of_factors_impl(number)>{}));
 
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(std::is_same<factorization<1>, std::integer_sequence<intmax_t>>::value, "factorization<1> should be <>.");
 static_assert(std::is_same<factorization<2>, std::integer_sequence<intmax_t, 2>>::value, "factorization<2> should be <2>.");
 static_assert(std::is_same<factorization<17>, std::integer_sequence<intmax_t, 17>>::value, "factorization<17> should be <17>.");

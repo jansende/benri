@@ -1,8 +1,8 @@
 #pragma once
 #include <benri/impl/type/list.h>
-#include <benri/impl/macros.h>
+#include <benri/impl/benri/macros.h>
 #include <benri/impl/type/sort.h>
-#include <benri/impl/unit.h>
+#include <benri/impl/benri/unit.h>
 
 namespace benri
 {

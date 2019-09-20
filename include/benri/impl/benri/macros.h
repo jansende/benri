@@ -3,7 +3,7 @@
 #define fix(...) __VA_ARGS__
 
 #define implement_unit(NAME, DIMENSIONS, PREFIX)                                                  \
-    using NAME##_t = unit<sort<DIMENSIONS>, sort<PREFIX>>;                              \
+    using NAME##_t = unit<type::sort<DIMENSIONS>, type::sort<PREFIX>>;                              \
     [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept            \
     {                                                                                             \
         return quantity<NAME##_t, Precision>{static_cast<Precision>(value)};                      \
@@ -37,9 +37,9 @@
     }
 
 #define create_symbol(NAME, DIMENSIONS, PREFIX) \
-    constexpr auto NAME = quantity<unit<sort<DIMENSIONS>, sort<PREFIX>>>{static_cast<Precision>(1)};
+    constexpr auto NAME = quantity<unit<type::sort<DIMENSIONS>, type::sort<PREFIX>>>{static_cast<Precision>(1)};
 #define create_constant(NAME, VALUE, UNIT) \
     constexpr auto NAME = quantity<UNIT, Precision>{type::multiply_elements<Precision, VALUE>};
 
 #define create_and_register_dimension(NAME, ...) \
-    using NAME##_t = sort<list<__VA_ARGS__>>;
+    using NAME##_t = type::sort<type::list<__VA_ARGS__>>;

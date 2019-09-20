@@ -10,7 +10,7 @@ namespace type
 {
 #pragma region detector
 //Detector idea taken from C++Now 2017 talk of Marshall Clow, called
-//"The 'Detection idiom:' A Better Way to SFINAE"
+//"The 'Detection idiom:' A Better Way to SFINAE".
 //See: https://www.youtube.com/watch?v=U3jGdnRL3KI
 template <class...>
 using voidify = void;

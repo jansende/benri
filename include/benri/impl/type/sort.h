@@ -43,34 +43,35 @@ namespace type
 template <class New, template <class, class> class Comp, class Old>
 struct insert_sort_swap_impl;
 //No element to sort left. We are done.
-template <class...NewTs, template <class, class> class Comp>
-struct insert_sort_swap_impl<sorted_list<NewTs...>,Comp,list<>>
+template <class... NewTs, template <class, class> class Comp>
+struct insert_sort_swap_impl<sorted_list<NewTs...>, Comp, list<>>
 {
     using type = sorted_list<NewTs...>;
 };
 //One element to sort left. We are done.
-template <class...NewTs, template <class, class> class Comp, class OldT>
-struct insert_sort_swap_impl<sorted_list<NewTs...>,Comp,list<OldT>>
+template <class... NewTs, template <class, class> class Comp, class OldT>
+struct insert_sort_swap_impl<sorted_list<NewTs...>, Comp, list<OldT>>
 {
     using type = sorted_list<NewTs..., OldT>;
 };
 //Two elements to sort left. If they are in the wrong order, swap them. We are done.
-template <class...NewTs, template <class, class> class Comp, class FirstOldT, class SecondOldT>
-struct insert_sort_swap_impl<sorted_list<NewTs...>,Comp,list<FirstOldT,SecondOldT>>
+template <class... NewTs, template <class, class> class Comp, class FirstOldT, class SecondOldT>
+struct insert_sort_swap_impl<sorted_list<NewTs...>, Comp, list<FirstOldT, SecondOldT>>
 {
-    using type = std::conditional_t<Comp<FirstOldT,SecondOldT>::value, sorted_list<NewTs..., FirstOldT,SecondOldT>, sorted_list<NewTs..., SecondOldT, FirstOldT>>;
+    using type = std::conditional_t<Comp<FirstOldT, SecondOldT>::value, sorted_list<NewTs..., FirstOldT, SecondOldT>, sorted_list<NewTs..., SecondOldT, FirstOldT>>;
 };
 //More than two elements left to sort. If they are in the wrong order, swap them. Continue.
-template <class...NewTs, template <class, class> class Comp, class FirstOldT, class SecondOldT, class...OldTs>
-struct insert_sort_swap_impl<sorted_list<NewTs...>,Comp,list<FirstOldT,SecondOldT,OldTs...>> : std::conditional_t<Comp<FirstOldT,SecondOldT>::value, insert_sort_swap_impl<sorted_list<NewTs..., FirstOldT,SecondOldT,OldTs...>,Comp,list<>>,
-insert_sort_swap_impl<sorted_list<NewTs...,SecondOldT>,Comp,list<FirstOldT,OldTs...>>>
-{};
+template <class... NewTs, template <class, class> class Comp, class FirstOldT, class SecondOldT, class... OldTs>
+struct insert_sort_swap_impl<sorted_list<NewTs...>, Comp, list<FirstOldT, SecondOldT, OldTs...>> : std::conditional_t<Comp<FirstOldT, SecondOldT>::value, insert_sort_swap_impl<sorted_list<NewTs..., FirstOldT, SecondOldT, OldTs...>, Comp, list<>>,
+                                                                                                                      insert_sort_swap_impl<sorted_list<NewTs..., SecondOldT>, Comp, list<FirstOldT, OldTs...>>>
+{
+};
 //Shortcut with correct initialization
 template <template <class, class> class Comp, class Old>
-using insert_sort_swap = typename insert_sort_swap_impl<sorted_list<>,Comp,Old>::type;
+using insert_sort_swap = typename insert_sort_swap_impl<sorted_list<>, Comp, Old>::type;
 
-static_assert(std::is_same_v<   insert_sort_swap<hash_order,list<int>>,                sorted_list<int>                >, "");
-static_assert(std::is_same_v<   insert_sort_swap<hash_order,list<double,int,float>>,   sorted_list<int,float,double>   >, "");
+static_assert(std::is_same_v<insert_sort_swap<hash_order, list<int>>, sorted_list<int>>, "");
+static_assert(std::is_same_v<insert_sort_swap<hash_order, list<double, int, float>>, sorted_list<int, float, double>>, "");
 
 template <class New, template <class, class> class Comp, class Old>
 struct insertion_sort;
@@ -98,10 +99,10 @@ struct insertion_sort<sorted_list<FirstNewT, NewTs...>, Comp, list<FirstOldT, Ol
 };
 //Shortcut with initialization
 template <class List, template <class, class> class Comp = hash_order>
-using sort = typename insertion_sort<sorted_list<>,Comp,List>::type;
+using sort = typename insertion_sort<sorted_list<>, Comp, List>::type;
 
 #pragma endregion
-//basic tests
+//Basic tests
 static_assert(std::is_same<sorted_list<>, sort<list<>>>::value, "");
 static_assert(std::is_same<sorted_list<int>, sort<list<int>>>::value, "");
 static_assert(std::is_same<sorted_list<int, double>, sort<list<int, double>>>::value, "");
@@ -109,6 +110,5 @@ static_assert(std::is_same<sorted_list<int, double>, sort<list<double, int>>>::v
 static_assert(std::is_same<sorted_list<int, int, double>, sort<list<int, double, int>>>::value, "");
 static_assert(std::is_same<sorted_list<int, float, double>, sort<list<double, float, int>>>::value, "");
 static_assert(std::is_same<sorted_list<atom<int>, atom<float, std::ratio<2>>, atom<double>>, sort<list<atom<double>, atom<float, std::ratio<2>>, atom<int>>>>::value, "");
-} // namespace impl
-using type::sort;
+} // namespace type
 } // namespace benri

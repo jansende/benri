@@ -1,7 +1,7 @@
 #pragma once
 #include <benri/impl/config.h>
 #include <benri/impl/type/list.h>
-#include <benri/impl/unit.h>
+#include <benri/impl/benri/unit.h>
 #pragma GCC diagnostic push                          //fix clang warning for this line
 #pragma GCC diagnostic ignored "-Wreserved-id-macro" //we actually want to define this constant to include M_PI, ...
 #define _USE_MATH_DEFINES
@@ -12,6 +12,7 @@ namespace benri
 {
 namespace prefix
 {
+using type::sorted_list;
 #pragma region si prefixes
 using yocto_t = make_power_list<-24>;
 using zepto_t = make_power_list<-21>;

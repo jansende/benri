@@ -34,7 +34,7 @@ using has_valid_power = typename std::enable_if<type::detect_if<typename T::powe
 template <class T>
 using is_atom = typename std::enable_if<type::detect_if<T, type::has_type> && type::detect_if<T, has_valid_power>>::type;
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(!type::detect_if<int, is_atom>, "");
 static_assert(type::detect_if<atom<double>, is_atom>, "");
 static_assert(type::detect_if<atom<std::ratio<3, 7>>, is_atom>, "");
@@ -45,7 +45,7 @@ static_assert(type::detect_if<atom<std::ratio<3>>, is_atom>, "");
 template <class T>
 using is_root = typename std::enable_if<type::detect_if<T, is_atom> && (T::power::den != 1)>::type;
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(!type::detect_if<atom<std::ratio<2>, std::ratio<2>>, is_root>, "");
 static_assert(!type::detect_if<atom<std::ratio<2>, std::ratio<-2>>, is_root>, "");
 static_assert(type::detect_if<atom<std::ratio<2>, std::ratio<3, 5>>, is_root>, "");
@@ -57,7 +57,7 @@ static_assert(type::detect_if<atom<std::ratio<2>, std::ratio_multiply<std::ratio
 template <class T, class Atom>
 constexpr T expand_atom = power<T, typename Atom::type, typename Atom::power>;
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(expand_atom<intmax_t, atom<std::ratio<2>, std::ratio<2>>> == 4, "");
 static_assert(expand_atom<double, atom<std::ratio<2>, std::ratio<-2>>> == 1. / 4., "");
 //The runtime_expand_atom_impl function implements the actual power calcu-
