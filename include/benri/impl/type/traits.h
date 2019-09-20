@@ -127,6 +127,17 @@ struct is_std_ratio_impl<std::ratio<Num, Den>> : std::true_type
 };
 template <class T>
 using is_std_ratio = typename std::enable_if<is_std_ratio_impl<T>::value>::type;
+//Check if a type is std::ratio with an integer value (no ratio).
+template <class T>
+using is_integer_ratio = typename std::enable_if_t<
+    detect_if<T, is_std_ratio> &&
+    (T::den == 1)>;
+//Basic tests
+static_assert(type::detect_if<std::ratio<2>, is_integer_ratio>, "2 is an integer.");
+static_assert(type::detect_if<std::ratio<-2>, is_integer_ratio>, "-2 is an integer.");
+static_assert(!type::detect_if<std::ratio<3, 5>, is_integer_ratio>, "3/5 is not an integer.");
+static_assert(!type::detect_if<std::ratio<5, 3>, is_integer_ratio>, "5/3 is not an integer.");
+static_assert(type::detect_if<std::ratio<5, 5>, is_integer_ratio>, "5/5 is an integer.");
 //Check if a type has a ::type attribute using SFINAE.
 template <class T>
 using has_type = typename T::type;

@@ -161,7 +161,7 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto simple_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity_point<ResultUnit, ArgumentValueType>>
 {
-    constexpr auto factor = type::multiply_elements<ArgumentValueType, divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>>;
+    constexpr auto factor = expand_prefix_list<ArgumentValueType, divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>>;
     return quantity_point<ResultUnit, ArgumentValueType>{rhs._value * factor};
 }
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
@@ -179,7 +179,7 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto unit_cast(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity_point<ResultUnit, ArgumentValueType>>
 {
-    const auto factor = type::runtime_multiply_elements<ArgumentValueType>(divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>{});
+    const auto factor = runtime_expand_prefix_list<ArgumentValueType>(divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>{});
     return quantity_point<ResultUnit, ArgumentValueType>{rhs._value * factor};
 }
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
@@ -199,7 +199,7 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto remove_prefix(const quantity_point<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity_point<remove_unit_prefix<ArgumentUnit>, ResultValueType>
 {
     using PrefixType = typename ArgumentUnit::prefix;
-    const auto factor = type::runtime_multiply_elements<ResultValueType>(PrefixType{});
+    const auto factor = runtime_expand_prefix_list<ResultValueType>(PrefixType{});
     return quantity_point<remove_unit_prefix<ArgumentUnit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * factor};
 }
 template <class ArgumentUnit, class ArgumentValueType>

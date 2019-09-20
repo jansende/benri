@@ -2,6 +2,7 @@
 #include <benri/impl/type/list.h>
 #include <benri/impl/meta/math.h>
 
+
 namespace benri
 {
 namespace type
@@ -268,32 +269,6 @@ static_assert(std::is_same<make_power_list<2>, make_fraction_list<100>>::value, 
 static_assert(std::is_same<make_power_list<0>, make_fraction_list<1>>::value, "");
 static_assert(std::is_same<make_power_list<-2>, make_fraction_list<1, 100>>::value, "");
 static_assert(std::is_same<make_power_list<1>, make_fraction_list<10>>::value, "");
-#pragma endregion
-#pragma region expansion
-//The multiply_elements function calculates the factor given by expanding
-//and multiplying all atoms in the list.
-template <class ValueType, class... Elements>
-constexpr auto multiply_elements_impl(sorted_list<Elements...>)
-{
-    static_assert(all_true<!detect_if<Elements, is_root>...>, "multiply_elements cannot handle roots in the atoms at the moment. use runtime_multiply_elements instead.");
-    return meta::accumulate(meta::array<ValueType, sizeof...(Elements)>{expand_prefix<ValueType, Elements>...}, ValueType{1}, std::multiplies<ValueType>());
-}
-template <class ValueType, class List>
-constexpr ValueType multiply_elements = multiply_elements_impl<ValueType>(List{});
-//TODO: - Put this into a unit test folder.
-//Basic tests
-static_assert(multiply_elements<intmax_t, make_fraction_list<8>> == 8, "");
-static_assert(multiply_elements<double, make_fraction_list<1, 8>> == 1. / 8., "");
-//The runtime_multiply_elements function calculates the factor given by expan-
-//ding and multiplying all atoms in the list. However, this is done at
-//runtime rather than compile time. The reason being, that std::pow is
-//not constexpr. Still, the whole function is marked constexpr to be for-
-//ward compatible with a constexpr std::pow implementation.
-template <class ValueType, class... Elements>
-constexpr auto runtime_multiply_elements(sorted_list<Elements...>)
-{
-    return meta::accumulate(meta::array<ValueType, sizeof...(Elements)>{runtime_expand_prefix<ValueType, Elements>()...}, ValueType{1}, std::multiplies<ValueType>());
-};
 #pragma endregion
 } // namespace type
 using type::divide_lists;
