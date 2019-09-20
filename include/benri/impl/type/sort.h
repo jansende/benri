@@ -109,6 +109,6 @@ static_assert(std::is_same<sorted_list<int, double>, sort<list<int, double>>>::v
 static_assert(std::is_same<sorted_list<int, double>, sort<list<double, int>>>::value, "");
 static_assert(std::is_same<sorted_list<int, int, double>, sort<list<int, double, int>>>::value, "");
 static_assert(std::is_same<sorted_list<int, float, double>, sort<list<double, float, int>>>::value, "");
-static_assert(std::is_same<sorted_list<atom<int>, atom<float, std::ratio<2>>, atom<double>>, sort<list<atom<double>, atom<float, std::ratio<2>>, atom<int>>>>::value, "");
+static_assert(std::is_same<sorted_list<impl::dim<int>, impl::dim<float, std::ratio<2>>, impl::dim<double>>, sort<list<impl::dim<double>, impl::dim<float, std::ratio<2>>, impl::dim<int>>>>::value, "");
 } // namespace type
 } // namespace benri

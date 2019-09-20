@@ -103,7 +103,7 @@ namespace dim
 #pragma endregion
 #pragma region atom helper
 template <class Dimension, intmax_t Power = 1>
-using helper = atom<Dimension, std::ratio<Power>>;
+using helper = impl::dim<Dimension, std::ratio<Power>>;
 #pragma endregion
 #pragma region base dimensions
 create_and_register_dimension(length, helper<L>);

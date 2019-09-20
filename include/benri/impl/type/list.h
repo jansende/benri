@@ -11,13 +11,15 @@ namespace type
 template <class... Elements>
 struct list
 {
-    static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
+    //TODO: Move the check into math.
+    // static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
 };
 //Special name for sorted type lists.
 template <class... Elements>
 struct sorted_list
 {
-    static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
+    //TODO: Move the check into math.
+    // static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
 };
 #pragma endregion
 #pragma region functions
@@ -37,8 +39,8 @@ constexpr auto concat_impl(list<lhsElements...>, list<rhsElements...>)
 template <class lhs, class rhs>
 using concat = decltype(concat_impl(lhs{}, rhs{}));
 //Basic tests
-static_assert(std::is_same<concat<list<atom<int>>, list<>>, list<atom<int>>>::value, "type::concat<list<int>, list<>> should be list<int>.");
-static_assert(std::is_same<concat<list<atom<int>, atom<float>, atom<bool>>, list<atom<int>, atom<float>>>, list<atom<int>, atom<float>, atom<bool>, atom<int>, atom<float>>>::value, "type::concat<list<int, float>, list<int, float>> should be list<int, float, int, float>.");
+static_assert(std::is_same<concat<list<int>, list<>>, list<int>>::value, "type::concat<list<int>, list<>> is list<int>.");
+static_assert(std::is_same<concat<list<int, float, bool>, list<int, float>>, list<int, float, bool, int, float>>::value, "type::concat<list<int, float, bool>, list<int, float>> is list<int, float, bool, int, float>.");
 #pragma endregion
 } // namespace type
 } // namespace benri
