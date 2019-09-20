@@ -1,8 +1,7 @@
 #pragma once
-#include <benri/impl/array.h>
-#include <benri/impl/algorithm.h>
-#include <benri/impl/type_traits.h>
-#include <benri/impl/detector.h>
+#include <benri/impl/meta/array.h>
+#include <benri/impl/meta/algorithm.h>
+#include <benri/impl/type/traits.h>
 #include <ratio>
 #include <utility>
 
@@ -10,27 +9,16 @@ namespace benri
 {
 namespace impl
 {
-#pragma region ::value helper
-//The has_static_constexpr_value function checks if a type has a
-//static constexpr ::value attribute using SFINAE.
-template <class T>
-using has_static_constexpr_value = decltype(T::value);
-#pragma endregion
-#pragma region ratio helper
-//The is_std_ratio checks if a given type is a std::ratio.
-template <class T>
-using is_std_ratio = typename std::enable_if<std::is_same<T, std::ratio<T::num, T::den>>::value>::type;
-#pragma endregion
 #pragma region compile time pow
 //The power_impl function implements the actual power calculation for
 //the power function. It handles two cases: the case of std::ratio as
 //the Base type, and a Base with a static constexpr ::value for it.
 template <class T, class Base, class Exponent>
-constexpr auto power_impl() -> std::enable_if_t<!detect_if<Base, is_std_ratio>, T>
+constexpr auto power_impl() -> std::enable_if_t<!type::detect_if<Base, type::is_std_ratio>, T>
 {
     //handle constants
-    static_assert(detect_if<Base, has_static_constexpr_value>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Base is neither a std::ratio nor a static constexpr ::value type");
-    static_assert(detect_if<Exponent, is_std_ratio>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
+    static_assert(type::detect_if<Base, type::has_value>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Base is neither a std::ratio nor a static constexpr ::value type");
+    static_assert(type::detect_if<Exponent, type::is_std_ratio>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
     static_assert(Exponent::den == 1, "power is only able to calculate integer powers, roots are not supported.");
     auto val = T(Base::value);
     auto exponent = Exponent::num >= 0 ? Exponent::num : -Exponent::num;
@@ -41,10 +29,10 @@ constexpr auto power_impl() -> std::enable_if_t<!detect_if<Base, is_std_ratio>, 
     return Exponent::num >= 0 ? (val) : (1 / val);
 }
 template <class T, class Base, class Exponent>
-constexpr auto power_impl() -> std::enable_if_t<detect_if<Base, is_std_ratio>, T>
+constexpr auto power_impl() -> std::enable_if_t<type::detect_if<Base, type::is_std_ratio>, T>
 {
     //handle ratios
-    static_assert(detect_if<Exponent, is_std_ratio>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
+    static_assert(type::detect_if<Exponent, type::is_std_ratio>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
     static_assert(Exponent::den == 1, "power is only able to calculate integer powers, roots are not supported.");
     auto num = T(Base::num);
     auto den = T(Base::den);
@@ -73,7 +61,7 @@ static constexpr auto is_prime_impl(const T &number) -> std::enable_if_t<std::is
 template <intmax_t Num>
 constexpr bool is_prime = is_prime_impl(Num);
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(is_prime<0> == false, "0 is not prime.");
 static_assert(is_prime<1> == false, "1 is not prime.");
 static_assert(is_prime<2> == true, "2 is prime.");
@@ -105,7 +93,7 @@ static constexpr auto next_prime_impl(T number) -> std::enable_if_t<std::is_inte
 template <intmax_t Num>
 constexpr intmax_t next_prime = next_prime_impl(Num);
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(next_prime<0> == 2, "2 is the next prime after 0.");
 static_assert(next_prime<1> == 2, "2 is the next prime after 1.");
 static_assert(next_prime<2> == 3, "3 is the next prime after 2.");
@@ -165,7 +153,7 @@ static_assert(number_of_factors<15> == 2, "");
 template <size_t N>
 constexpr auto factorization_factors(intmax_t number)
 {
-    auto factors = impl::array<intmax_t, N>{};
+    auto factors = meta::array<intmax_t, N>{};
     auto counter = size_t{0};
     for (auto test = intmax_t{2}; number > 1;)
     {
@@ -182,22 +170,22 @@ constexpr auto factorization_factors(intmax_t number)
     }
     return factors;
 }
-static_assert(impl::equal(factorization_factors<0>(0), impl::array<intmax_t, 0>{}), "");
-static_assert(impl::equal(factorization_factors<0>(1), impl::array<intmax_t, 0>{}), "");
-static_assert(impl::equal(factorization_factors<1>(2), impl::array<intmax_t, 1>{2}), "");
-static_assert(impl::equal(factorization_factors<1>(3), impl::array<intmax_t, 1>{3}), "");
-static_assert(impl::equal(factorization_factors<2>(4), impl::array<intmax_t, 2>{2, 2}), "");
-static_assert(impl::equal(factorization_factors<1>(5), impl::array<intmax_t, 1>{5}), "");
-static_assert(impl::equal(factorization_factors<2>(6), impl::array<intmax_t, 2>{2, 3}), "");
-static_assert(impl::equal(factorization_factors<1>(7), impl::array<intmax_t, 1>{7}), "");
-static_assert(impl::equal(factorization_factors<3>(8), impl::array<intmax_t, 3>{2, 2, 2}), "");
-static_assert(impl::equal(factorization_factors<2>(9), impl::array<intmax_t, 2>{3, 3}), "");
-static_assert(impl::equal(factorization_factors<2>(10), impl::array<intmax_t, 2>{2, 5}), "");
-static_assert(impl::equal(factorization_factors<1>(11), impl::array<intmax_t, 1>{11}), "");
-static_assert(impl::equal(factorization_factors<3>(12), impl::array<intmax_t, 3>{2, 2, 3}), "");
-static_assert(impl::equal(factorization_factors<1>(13), impl::array<intmax_t, 1>{13}), "");
-static_assert(impl::equal(factorization_factors<2>(14), impl::array<intmax_t, 2>{2, 7}), "");
-static_assert(impl::equal(factorization_factors<2>(15), impl::array<intmax_t, 2>{3, 5}), "");
+static_assert(meta::equal(factorization_factors<0>(0), meta::array<intmax_t, 0>{}), "");
+static_assert(meta::equal(factorization_factors<0>(1), meta::array<intmax_t, 0>{}), "");
+static_assert(meta::equal(factorization_factors<1>(2), meta::array<intmax_t, 1>{2}), "");
+static_assert(meta::equal(factorization_factors<1>(3), meta::array<intmax_t, 1>{3}), "");
+static_assert(meta::equal(factorization_factors<2>(4), meta::array<intmax_t, 2>{2, 2}), "");
+static_assert(meta::equal(factorization_factors<1>(5), meta::array<intmax_t, 1>{5}), "");
+static_assert(meta::equal(factorization_factors<2>(6), meta::array<intmax_t, 2>{2, 3}), "");
+static_assert(meta::equal(factorization_factors<1>(7), meta::array<intmax_t, 1>{7}), "");
+static_assert(meta::equal(factorization_factors<3>(8), meta::array<intmax_t, 3>{2, 2, 2}), "");
+static_assert(meta::equal(factorization_factors<2>(9), meta::array<intmax_t, 2>{3, 3}), "");
+static_assert(meta::equal(factorization_factors<2>(10), meta::array<intmax_t, 2>{2, 5}), "");
+static_assert(meta::equal(factorization_factors<1>(11), meta::array<intmax_t, 1>{11}), "");
+static_assert(meta::equal(factorization_factors<3>(12), meta::array<intmax_t, 3>{2, 2, 3}), "");
+static_assert(meta::equal(factorization_factors<1>(13), meta::array<intmax_t, 1>{13}), "");
+static_assert(meta::equal(factorization_factors<2>(14), meta::array<intmax_t, 2>{2, 7}), "");
+static_assert(meta::equal(factorization_factors<2>(15), meta::array<intmax_t, 2>{3, 5}), "");
 
 //The factorization function computes the prime factors of a given
 //number, and returns them as an integer_sequence.
@@ -210,7 +198,7 @@ template <intmax_t number>
 using factorization = decltype(factorization_impl<number>(std::make_index_sequence<number_of_factors_impl(number)>{}));
 
 //TODO: - Put this into a unit test folder.
-//basic tests
+//Basic tests
 static_assert(std::is_same<factorization<1>, std::integer_sequence<intmax_t>>::value, "factorization<1> should be <>.");
 static_assert(std::is_same<factorization<2>, std::integer_sequence<intmax_t, 2>>::value, "factorization<2> should be <2>.");
 static_assert(std::is_same<factorization<17>, std::integer_sequence<intmax_t, 17>>::value, "factorization<17> should be <17>.");

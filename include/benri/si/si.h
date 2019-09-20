@@ -1,9 +1,9 @@
 #pragma once
 #include <benri/quantity.h>
 #include <benri/quantity_point.h>
-#include <benri/impl/dimensions.h>
-#include <benri/impl/macros.h>
-#include <benri/impl/prefix.h>
+#include <benri/impl/benri/dimensions.h>
+#include <benri/impl/benri/macros.h>
+#include <benri/impl/benri/prefixes.h>
 #include <benri/si/base.h>
 
 namespace benri

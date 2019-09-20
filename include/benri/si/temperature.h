@@ -1,9 +1,9 @@
 #pragma once
 #include <benri/quantity.h>
 #include <benri/quantity_point.h>
-#include <benri/impl/dimensions.h>
-#include <benri/impl/macros.h>
-#include <benri/impl/prefix.h>
+#include <benri/impl/benri/dimensions.h>
+#include <benri/impl/benri/macros.h>
+#include <benri/impl/benri/prefixes.h>
 #include <benri/si/base.h>
 
 namespace benri
@@ -155,23 +155,23 @@ constexpr auto unit_cast(const quantity_point<si::temperature::degree_rankine_t,
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::thermodynamic_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto unit_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::thermodynamic_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
 }
 //kelvin to celsius
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(const quantity<unit<dim::thermodynamic_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::celsius_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto unit_cast(const quantity<unit<dim::thermodynamic_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::celsius_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
 }
 // //celsius to rankine
 // template <class ResultUnit, class Prefix, class ValueType>
@@ -199,45 +199,45 @@ constexpr auto unit_cast(const quantity<unit<dim::thermodynamic_temperature_t, P
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(const quantity<unit<dim::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::thermodynamic_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto unit_cast(const quantity<unit<dim::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::thermodynamic_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
 }
 //kelvin to fahrenheit
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(const quantity<unit<dim::thermodynamic_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::fahrenheit_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto unit_cast(const quantity<unit<dim::thermodynamic_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::fahrenheit_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
 }
 //fahrenheit to celsius
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(const quantity<unit<dim::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::celsius_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto unit_cast(const quantity<unit<dim::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::celsius_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
 }
 //celsius to fahrenheit
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::fahrenheit_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::multiply_elements<ValueType, divide_lists<Prefix, typename ResultUnit::prefix>>};
 }
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto unit_cast(const quantity<unit<dim::celsius_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dim::fahrenheit_temperature_t>::value, quantity<ResultUnit, ValueType>>
 {
-    return quantity<ResultUnit, ValueType>{rhs.value() * impl::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
+    return quantity<ResultUnit, ValueType>{rhs.value() * type::runtime_multiply_elements<ValueType>(divide_lists<Prefix, typename ResultUnit::prefix>{})};
 }
 // //fahrenheit to rankine
 // template <class ResultUnit, class Prefix, class ValueType>

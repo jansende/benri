@@ -1,7 +1,8 @@
 #pragma once
-#include <benri/impl/list.h>
-#include <benri/impl/sorting.h>
-#include <benri/impl/detector.h>
+#include <benri/impl/type/list.h>
+#include <benri/impl/type/sort.h>
+#include <benri/impl/type/math.h>
+#include <benri/impl/type/traits.h>
 
 namespace benri
 {
@@ -10,36 +11,20 @@ namespace benri
 template <class Dimensions, class Prefix>
 struct unit
 {
+    static_assert(type::detect_if<Dimensions, type::is_sorted_list>, "Dimensions has to be a sorted_list.");
+    static_assert(type::detect_if<Prefix, type::is_sorted_list>, "Prefix has to be a sorted_list.");
     using dimensions = Dimensions;
     using prefix = Prefix;
 };
-//The has_valid_dimensions function checks if a given type has a ::dimensions
-//attribute which is a list.
-template <class T>
-using has_valid_dimensions = typename std::enable_if<detect_if<typename T::dimensions, impl::is_list>>::type;
-//The has_valid_prefix function checks if a given type has a ::prefix
-//attribute which is a list.
-template <class T>
-using has_valid_prefix = typename std::enable_if<detect_if<typename T::prefix, impl::is_list>>::type;
-//The is_unit function checks if a type has a ::dimensions and a ::prefix
-//attribute. This does not mean, we have an unit type, but we do not
-//care, as we can do the necessary calculations.
-template <class T>
-using is_unit = typename std::enable_if<detect_if<T, has_valid_dimensions> && detect_if<T, has_valid_prefix>>::type;
-//TODO: - Put this into a unit test folder.
-//basic tests
-static_assert(!detect_if<int, is_unit>, "");
-static_assert(!detect_if<unit<double, double>, is_unit>, "");
-static_assert(detect_if<unit<sorted_list<>, sorted_list<>>, is_unit>, "");
-//The is_dimensionless function checks if a given unit is dimensionless.
-//(The dimension is an empty list.)
-template <class T>
-using is_dimensionless = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, sorted_list<>>::value>::type;
 //The one unit is the unit where the dimension and the prefix are empty lists.
-using one = unit<sorted_list<>, sorted_list<>>;
+using one = unit<type::sorted_list<>, type::sorted_list<>>;
+//The is_dimensionless function checks if a given unit is dimensionless.
 //The is_one function checks if a given unit is one.
 template <class T>
-using is_one = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, typename one::dimensions>::value && std::is_same<typename T::prefix, typename one::prefix>::value>::type;
+using is_one = typename std::enable_if<type::detect_if<T, type::is_unit> && std::is_same<typename T::dimensions, typename one::dimensions>::value && std::is_same<typename T::prefix, typename one::prefix>::value>::type;
+//(The dimension is an empty list.)
+template <class T>
+using is_dimensionless = typename std::enable_if<type::detect_if<T, type::is_unit> && std::is_same<typename T::dimensions, type::sorted_list<>>::value>::type;
 #pragma endregion
 #pragma region unit functions
 #pragma region multiplication
@@ -49,16 +34,16 @@ struct multiply_units_impl
 {
 };
 template <class...Dimensions, class...Prefixes>
-struct multiply_units_impl<list<Dimensions...>,list<Prefixes...>>
+struct multiply_units_impl<type::list<Dimensions...>,type::list<Prefixes...>>
 {
     using type = unit<multiply_lists<Dimensions...>,multiply_lists<Prefixes...>>;
 };
 template <class...Dimensions, class...Prefixes, class Unit, class... Rest>
-struct multiply_units_impl<list<Dimensions...>,list<Prefixes...>,Unit, Rest...> : multiply_units_impl<list<Dimensions...,typename Unit::dimensions>,list<Prefixes...,typename Unit::prefix>,Rest...>
+struct multiply_units_impl<type::list<Dimensions...>,type::list<Prefixes...>,Unit, Rest...> : multiply_units_impl<type::list<Dimensions...,typename Unit::dimensions>,type::list<Prefixes...,typename Unit::prefix>,Rest...>
 {
 };
 template <class... Lists>
-using multiply_units = typename multiply_units_impl<list<>,list<>,Lists...>::type;
+using multiply_units = typename multiply_units_impl<type::list<>,type::list<>,Lists...>::type;
 #pragma endregion
 #pragma region power
 //The pow_unit function applies a given power to a unit.
@@ -83,6 +68,6 @@ using is_compatible_with = typename std::enable_if<is_compatible_with_impl<typen
 #pragma endregion
 #pragma region remove prefix
 template <class Unit>
-using remove_unit_prefix = unit<typename Unit::dimensions, sorted_list<>>;
+using remove_unit_prefix = unit<typename Unit::dimensions, type::sorted_list<>>;
 #pragma endregion
 } // namespace benri
