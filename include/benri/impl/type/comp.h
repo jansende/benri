@@ -1,6 +1,7 @@
 #pragma once
 #include <benri/impl/type/list.h>
-#include <benri/impl/atom.h>
+#include <benri/impl/dimension.h>
+#include <benri/impl/prefix.h>
 
 namespace benri
 {
@@ -75,32 +76,32 @@ struct atom_hash_value
     //TODO
 };
 template <intmax_t num, intmax_t den, class Power>
-struct atom_hash_value<impl::dim<std::ratio<num, den>, Power>, false>
+struct atom_hash_value<dim<std::ratio<num, den>, Power>, false>
 {
     static constexpr float value = static_cast<float>(num) / static_cast<float>(den);
 };
 template <class T, class Power>
-struct atom_hash_value<impl::dim<T, Power>, false>
+struct atom_hash_value<dim<T, Power>, false>
 {
     static constexpr float value = hash_impl<T>::value;
 };
 template <class T, class Power>
-struct atom_hash_value<impl::dim<T, Power>, true>
+struct atom_hash_value<dim<T, Power>, true>
 {
     static constexpr float value = static_cast<float>(T::value);
 };
 template <intmax_t num, intmax_t den, class Power>
-struct atom_hash_value<impl::pre<std::ratio<num, den>, Power>, false>
+struct atom_hash_value<pre<std::ratio<num, den>, Power>, false>
 {
     static constexpr float value = static_cast<float>(num) / static_cast<float>(den);
 };
 template <class T, class Power>
-struct atom_hash_value<impl::pre<T, Power>, false>
+struct atom_hash_value<pre<T, Power>, false>
 {
     static constexpr float value = hash_impl<T>::value;
 };
 template <class T, class Power>
-struct atom_hash_value<impl::pre<T, Power>, true>
+struct atom_hash_value<pre<T, Power>, true>
 {
     static constexpr float value = static_cast<float>(T::value);
 };
@@ -110,25 +111,25 @@ struct atom_hash
     //TODO
 };
 template <class T, class Power>
-struct atom_hash<impl::dim<T, Power>>
+struct atom_hash<dim<T, Power>>
 {
-    static constexpr float value = atom_hash_value<impl::dim<T, Power>, type::detect_if<T, type::has_value>>::value;
+    static constexpr float value = atom_hash_value<dim<T, Power>, type::detect_if<T, type::has_value>>::value;
 };
 template <class T, class Power>
-struct atom_hash<impl::pre<T, Power>>
+struct atom_hash<pre<T, Power>>
 {
-    static constexpr float value = atom_hash_value<impl::pre<T, Power>, type::detect_if<T, type::has_value>>::value;
+    static constexpr float value = atom_hash_value<pre<T, Power>, type::detect_if<T, type::has_value>>::value;
 };
 
 template <class T, class Power>
-struct hash_impl<impl::dim<T, Power>>
+struct hash_impl<dim<T, Power>>
 {
-    static constexpr float value = atom_hash<impl::dim<T, Power>>::value;
+    static constexpr float value = atom_hash<dim<T, Power>>::value;
 };
 template <class T, class Power>
-struct hash_impl<impl::pre<T, Power>>
+struct hash_impl<pre<T, Power>>
 {
-    static constexpr float value = atom_hash<impl::pre<T, Power>>::value;
+    static constexpr float value = atom_hash<pre<T, Power>>::value;
 };
 template <class T>
 constexpr float hash = hash_impl<T>::value;

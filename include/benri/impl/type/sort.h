@@ -1,7 +1,8 @@
 #pragma once
 #include <benri/impl/meta/algorithm.h>
 #include <benri/impl/meta/array.h>
-#include <benri/impl/atom.h>
+#include <benri/impl/dimension.h>
+#include <benri/impl/prefix.h>
 #include <benri/impl/type/list.h>
 #include <benri/impl/type/traits.h>
 #include <benri/impl/type/comp.h>
@@ -109,6 +110,6 @@ static_assert(std::is_same<sorted_list<int, double>, sort<list<int, double>>>::v
 static_assert(std::is_same<sorted_list<int, double>, sort<list<double, int>>>::value, "");
 static_assert(std::is_same<sorted_list<int, int, double>, sort<list<int, double, int>>>::value, "");
 static_assert(std::is_same<sorted_list<int, float, double>, sort<list<double, float, int>>>::value, "");
-static_assert(std::is_same<sorted_list<impl::dim<int>, impl::dim<float, std::ratio<2>>, impl::dim<double>>, sort<list<impl::dim<double>, impl::dim<float, std::ratio<2>>, impl::dim<int>>>>::value, "");
+static_assert(std::is_same<sorted_list<dim<int>, dim<float, std::ratio<2>>, dim<double>>, sort<list<dim<double>, dim<float, std::ratio<2>>, dim<int>>>>::value, "");
 } // namespace type
 } // namespace benri

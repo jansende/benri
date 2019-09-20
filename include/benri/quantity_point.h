@@ -1,8 +1,7 @@
 #pragma once
 #include <benri/quantity.h>
 #include <benri/impl/config.h>
-#include <benri/impl/benri/dimensions.h>
-#include <benri/impl/benri/unit.h>
+#include <benri/impl/unit.h>
 #include <cmath>
 #include <type_traits>
 

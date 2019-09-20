@@ -1,12 +1,12 @@
 #pragma once
 #include <benri/impl/type/list.h>
-#include <benri/impl/benri/macros.h>
 #include <benri/impl/type/sort.h>
-#include <benri/impl/benri/unit.h>
+#include <benri/impl/unit.h>
+#include <benri/si/macros.h>
 
 namespace benri
 {
-namespace dim
+namespace dimension
 {
 #pragma region dimension symbols
 //si
@@ -28,82 +28,82 @@ struct degF; //absolute degree fahrenheit
 } // namespace dim
 //si
 template <>
-struct hash_impl<dim::L>
+struct hash_impl<dimension::L>
 {
     static constexpr float value = 20;
 }; //length
 template <>
-struct hash_impl<dim::M>
+struct hash_impl<dimension::M>
 {
     static constexpr float value = 21;
 }; //mass
 template <>
-struct hash_impl<dim::T>
+struct hash_impl<dimension::T>
 {
     static constexpr float value = 22;
 }; //time, duration
 template <>
-struct hash_impl<dim::I>
+struct hash_impl<dimension::I>
 {
     static constexpr float value = 23;
 }; //current
 template <>
-struct hash_impl<dim::H>
+struct hash_impl<dimension::H>
 {
     static constexpr float value = 24;
 }; //thermodynamic temperature (actually this should be a Θ, but H looks similar)
 template <>
-struct hash_impl<dim::N>
+struct hash_impl<dimension::N>
 {
     static constexpr float value = 25;
 }; //amount of substance
 template <>
-struct hash_impl<dim::J>
+struct hash_impl<dimension::J>
 {
     static constexpr float value = 26;
 }; //luminous intensity
 //special symbols
 template <>
-struct hash_impl<dim::A>
+struct hash_impl<dimension::A>
 {
     static constexpr float value = 27;
 }; //angle
 template <>
-struct hash_impl<dim::C>
+struct hash_impl<dimension::C>
 {
     static constexpr float value = 28;
 }; //number of events (count)
 template <>
-struct hash_impl<dim::S>
+struct hash_impl<dimension::S>
 {
     static constexpr float value = 29;
 }; //helper for Sievert based units
 template <>
-struct hash_impl<dim::B>
+struct hash_impl<dimension::B>
 {
     static constexpr float value = 30;
 }; //amount of data
 template <>
-struct hash_impl<dim::X>
+struct hash_impl<dimension::X>
 {
     static constexpr float value = 31;
 }; //screen position
 template <>
-struct hash_impl<dim::degC>
+struct hash_impl<dimension::degC>
 {
     static constexpr float value = 32;
 }; //absolute degree celsius
 template <>
-struct hash_impl<dim::degF>
+struct hash_impl<dimension::degF>
 {
     static constexpr float value = 33;
 }; //absolute degree fahrenheit
-namespace dim
+namespace dimension
 {
 #pragma endregion
 #pragma region atom helper
 template <class Dimension, intmax_t Power = 1>
-using helper = impl::dim<Dimension, std::ratio<Power>>;
+using helper = dim<Dimension, std::ratio<Power>>;
 #pragma endregion
 #pragma region base dimensions
 create_and_register_dimension(length, helper<L>);

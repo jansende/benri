@@ -1,5 +1,4 @@
 #pragma once
-#include <benri/impl/atom.h>
 #include <benri/impl/type/traits.h>
 
 namespace benri

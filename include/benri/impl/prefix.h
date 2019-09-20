@@ -6,17 +6,7 @@
 
 namespace benri
 {
-namespace impl
-{
-#pragma region atom type
-//Container type for saving dimensions with their associated power.
-template <class T, class Power = std::ratio<1>>
-struct dim
-{
-    static_assert(type::detect_if<Power, type::is_std_ratio>, "Power has to be a std::ratio.");
-    using type = T;
-    using power = Power;
-};
+#pragma region prefix type
 //Container type for saving prefixes with their associated power.
 template <class T, class Power = std::ratio<1>>
 struct pre
@@ -26,36 +16,22 @@ struct pre
     using type = T;
     using power = Power;
 };
-//The has_valid_type function checks if a given type has a ::type
-//attribute which is a ratio or has a ::value argument.
-template <class T>
-using has_valid_type = typename std::enable_if<type::detect_if<typename T::type, type::is_std_ratio> || type::detect_if<typename T::type, type::has_value>>::type;
-//The is_atom function checks if a type has a ::type and a ::power
-//attribute. This does not mean, we have an atom type, but we do not
-//care, if we can do the necessary calculations.
-template <class T>
-using is_atom = typename std::enable_if<type::detect_if<T, type::has_type>>::type;
-template <class T>
-using is_prefix = is_atom<T>;
-//TODO: - Put this into a unit test folder.
-//Basic tests
-static_assert(!type::detect_if<int, is_atom>, "");
-static_assert(type::detect_if<dim<double>, is_atom>, "");
-static_assert(type::detect_if<dim<std::ratio<3, 7>>, is_atom>, "");
-static_assert(type::detect_if<dim<std::ratio<3>>, is_atom>, "");
 #pragma endregion
-#pragma region expansion
+#pragma region prefix expansion functions
+
+
+
 //The is_root function checks if a given atom has a root power.
 template <class T>
-using is_root = typename std::enable_if<type::detect_if<T, is_atom> && (T::power::den != 1)>::type;
+using is_root = typename std::enable_if<type::detect_if<T, type::is_prefix> && (T::power::den != 1)>::type;
 //TODO: - Put this into a unit test folder.
 //Basic tests
-static_assert(!type::detect_if<dim<std::ratio<2>, std::ratio<2>>, is_root>, "");
-static_assert(!type::detect_if<dim<std::ratio<2>, std::ratio<-2>>, is_root>, "");
-static_assert(type::detect_if<dim<std::ratio<2>, std::ratio<3, 5>>, is_root>, "");
-static_assert(!type::detect_if<dim<std::ratio<2>, std::ratio_multiply<std::ratio<2>, std::ratio<1, 2>>>, is_root>, "");
-static_assert(!type::detect_if<dim<std::ratio<2>, std::ratio_multiply<std::ratio<16>, std::ratio<1, 2>>>, is_root>, "");
-static_assert(type::detect_if<dim<std::ratio<2>, std::ratio_multiply<std::ratio<16>, std::ratio<1, 3>>>, is_root>, "");
+static_assert(!type::detect_if<pre<std::ratio<2>, std::ratio<2>>, is_root>, "");
+static_assert(!type::detect_if<pre<std::ratio<2>, std::ratio<-2>>, is_root>, "");
+static_assert(type::detect_if<pre<std::ratio<2>, std::ratio<3, 5>>, is_root>, "");
+static_assert(!type::detect_if<pre<std::ratio<2>, std::ratio_multiply<std::ratio<2>, std::ratio<1, 2>>>, is_root>, "");
+static_assert(!type::detect_if<pre<std::ratio<2>, std::ratio_multiply<std::ratio<16>, std::ratio<1, 2>>>, is_root>, "");
+static_assert(type::detect_if<pre<std::ratio<2>, std::ratio_multiply<std::ratio<16>, std::ratio<1, 3>>>, is_root>, "");
 //The expand_prefix function takes an prefix with a std::ratio type
 //and calculates its value to the power given in the prefix.
 template <class T, class Prefix>
@@ -87,10 +63,8 @@ constexpr auto runtime_expand_prefix_impl() -> std::enable_if_t<type::detect_if<
 template <class T, class Prefix>
 constexpr auto runtime_expand_prefix()
 {
-    static_assert(type::detect_if<Prefix, is_prefix>, "runtime_expand_prefix takes a value type and an prefix, but your Prefix is not an prefix.");
-    static_assert(type::detect_if<Prefix, has_valid_type>, "runtime_expand_prefix requires the ::type of your Prefix to be std::ratio or have a constexpr ::value.");
+    static_assert(type::detect_if<Prefix, type::is_prefix>, "runtime_expand_prefix takes a value type and an prefix, but your Prefix is not an prefix.");
     return runtime_expand_prefix_impl<T, Prefix>();
 };
 #pragma endregion
-} // namespace impl
 } // namespace benri

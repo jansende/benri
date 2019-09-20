@@ -49,6 +49,10 @@ struct sorted_list;
 } // namespace type
 template <class Dimension, class Prefix>
 struct unit;
+template <class T, class Power>
+struct dim;
+template <class T, class Power>
+struct pre;
 namespace type
 {
 #pragma endregion
@@ -90,6 +94,28 @@ struct is_unit_impl<unit<Dimension, Prefix>> : std::true_type
 };
 template <class T>
 using is_unit = std::enable_if_t<is_unit_impl<T>::value>;
+//Check if a type is a dimension.
+template <class>
+struct is_dimension_impl : std::false_type
+{
+};
+template <class T, class Power>
+struct is_dimension_impl<dim<T, Power>> : std::true_type
+{
+};
+template <class T>
+using is_dimension = std::enable_if_t<is_dimension_impl<T>::value>;
+//Check if a type is a prefix.
+template <class>
+struct is_prefix_impl : std::false_type
+{
+};
+template <class T, class Power>
+struct is_prefix_impl<pre<T, Power>> : std::true_type
+{
+};
+template <class T>
+using is_prefix = std::enable_if_t<is_prefix_impl<T>::value>;
 //Check if a type is std::ratio.
 template <class>
 struct is_std_ratio_impl : std::false_type
