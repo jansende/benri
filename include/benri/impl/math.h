@@ -2,12 +2,17 @@
 #include <benri/impl/type/list.h>
 #include <benri/impl/meta/math.h>
 
-
 namespace benri
 {
 namespace type
 {
-#pragma region multiplication
+//In the following we have functions which act on prefixes and dimensions exactly the same.
+//However, we will have to specialize on the types to reduce the number of template para-
+//meters. Whenever we can either have a prefix or a dimension, we will call this entity a
+//atom.
+
+
+#pragma region functions
 //The add_to_first_atom function searches the first matching
 //atom in a list, and updating it. If it does not exist, the
 //entry is added to the end of the list.
@@ -176,17 +181,14 @@ static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<int>, dim<boo
 static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<bool>, dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "");
 static_assert(std::is_same<multiply_lists<list<dim<bool>, dim<int>>, list<dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "");
 static_assert(std::is_same<multiply_lists<list<dim<int>, dim<bool>>, list<dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "");
-#pragma endregion
-#pragma region power
-//The pow_list function adds a given power to every atom in a
-//list.
+//Function for raising prefixes/dimensions by a given Power.
 template <class AtomT, class AtomPower, class Power>
 constexpr auto pow_atom_impl(dim<AtomT, AtomPower>, Power) -> dim<AtomT, std::ratio_multiply<AtomPower, Power>>;
 template <class AtomT, class AtomPower, class Power>
 constexpr auto pow_atom_impl(pre<AtomT, AtomPower>, Power) -> pre<AtomT, std::ratio_multiply<AtomPower, Power>>;
 template <class Atom, class Power>
 using pow_atom = decltype(pow_atom_impl(Atom{}, Power{}));
-
+//Function for raising lists by a given Power.
 template <class... Elements, class Power>
 constexpr auto pow_list_impl(sorted_list<Elements...>, Power) -> std::conditional_t<std::is_same<Power, std::ratio<0>>::value, sorted_list<>, sorted_list<pow_atom<Elements, Power>...>>;
 template <class... Elements, class Power>
@@ -209,8 +211,6 @@ static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::rat
 static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>, std::ratio<-2>>, sorted_list<dim<std::ratio<3>, std::ratio<-2>>, dim<std::ratio<5>, std::ratio<-2>>>>::value, "");
 static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>, std::ratio<1, 3>>, sorted_list<dim<std::ratio<3>, std::ratio<1, 3>>, dim<std::ratio<5>, std::ratio<1, 3>>>>::value, "");
 static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>, std::ratio<-1, 3>>, sorted_list<dim<std::ratio<3>, std::ratio<-1, 3>>, dim<std::ratio<5>, std::ratio<-1, 3>>>>::value, "");
-#pragma endregion
-#pragma region division
 //The divide_lists function combines the atoms in two lists,
 //by multiplying the left side with the inverse of the right
 //side.
@@ -235,45 +235,36 @@ static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>, dim<std::ratio<
 static_assert(std::is_same<divide_lists<list<>, list<dim<std::ratio<3>, std::ratio<2>>>>, sorted_list<dim<std::ratio<3>, std::ratio<-2>>>>::value, "");
 static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>>, list<dim<std::ratio<3>, std::ratio<2>>>>, sorted_list<dim<std::ratio<3>, std::ratio<-1>>>>::value, "");
 #pragma endregion
-#pragma endregion
-#pragma region list generators
-//The make_list function generates a list of atoms from an integer_sequence.
-//we multiply with an empty list, to accumulate all the factors together
+#pragma region generators
+//Function for generating a prefix list from a std::integer_sequence.
+//(We multiply with an empty sorted_list to accumulate the prefixes together.)
 template <class ValueType, ValueType... Integers>
-constexpr auto make_list_impl(std::integer_sequence<ValueType, Integers...>) -> multiply_lists<sorted_list<>, list<pre<std::ratio<Integers>>...>>;
+constexpr auto make_list_impl(std::integer_sequence<ValueType, Integers...>)
+    -> multiply_lists<sorted_list<>, list<pre<std::ratio<Integers>>...>>;
 template <class Sequence>
 using make_list = decltype(make_list_impl(Sequence{}));
-//The make_factorial_list function generates a list by
-//factorizing a given number.
-template <intmax_t Value>
-using make_factorial_list = make_list<meta::prime_factors<Value>>;
-//The make_fraction_list function generates a list by
-//factorizing a given numerator and denominater.
+//Basic tests
+static_assert(std::is_same<make_list<meta::prime_factors<6>>, sorted_list<pre<std::ratio<2>>, pre<std::ratio<3>>>>::value, "make_list<prime_factor<6>> is list<pre<2>, pre<3>>.");
+static_assert(std::is_same<make_list<meta::prime_factors<8>>, sorted_list<pre<std::ratio<2>, std::ratio<3>>>>::value, "make_list<prime_factor<8>> is list<pre<2, 3>>.");
+static_assert(std::is_same<make_list<meta::prime_factors<9>>, sorted_list<pre<std::ratio<3>, std::ratio<2>>>>::value, "make_list<prime_factor<9>> is list<pre<3, 2>>.");
+//Function for generating a prefix from a given numerator and denominater.
 template <intmax_t num = 1, intmax_t den = 1>
-using make_fraction_list = divide_lists<make_factorial_list<num>, make_factorial_list<den>>;
-//TODO: - Put this into a unit test folder.
+using make_prefix = divide_lists<
+    make_list<meta::prime_factors<num>>,
+    make_list<meta::prime_factors<den>>>;
 //Basic tests
-static_assert(std::is_same<make_list<meta::prime_factors<9>>, sorted_list<pre<std::ratio<3>, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<>, make_list<meta::prime_factors<9>>>, sorted_list<pre<std::ratio<3>, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<make_factorial_list<8>, sorted_list<pre<std::ratio<2>, std::ratio<3>>>>::value, "");
-static_assert(std::is_same<make_fraction_list<1, 8>, sorted_list<pre<std::ratio<2>, std::ratio<-3>>>>::value, "");
-static_assert(std::is_same<make_fraction_list<4, 8>, sorted_list<pre<std::ratio<2>, std::ratio<-1>>>>::value, "");
-static_assert(std::is_same<make_fraction_list<5, 3>, sorted_list<pre<std::ratio<3>, std::ratio<-1>>, pre<std::ratio<5>>>>::value, "");
-//The make_power_list function generates a list which
-//represents 10^Power.
+static_assert(std::is_same<make_prefix<8>, sorted_list<pre<std::ratio<2>, std::ratio<3>>>>::value, "type::make_prefix<8> is list<pre<2, 3>>.");
+static_assert(std::is_same<make_prefix<1, 8>, sorted_list<pre<std::ratio<2>, std::ratio<-3>>>>::value, "type::make_prefix<1, 8> is list<pre<2, -3>>.");
+static_assert(std::is_same<make_prefix<4, 8>, sorted_list<pre<std::ratio<2>, std::ratio<-1>>>>::value, "type::make_prefix<4, 8> is list<pre<2, -1>>.");
+static_assert(std::is_same<make_prefix<5, 3>, sorted_list<pre<std::ratio<3>, std::ratio<-1>>, pre<std::ratio<5>>>>::value, "type::make_prefix<5, 3> is list<pre<3, -1>, pre<5>>.");
+//Shortcut for generating prefixes of 10^Power.
 template <intmax_t Power>
-using make_power_list = pow_list<make_fraction_list<10>, std::ratio<Power>>;
-//TODO: - Put this into a unit test folder.
+using make_prefix_pow10 = pow_list<make_prefix<10>, std::ratio<Power>>;
 //Basic tests
-static_assert(std::is_same<make_power_list<2>, make_fraction_list<100>>::value, "");
-static_assert(std::is_same<make_power_list<0>, make_fraction_list<1>>::value, "");
-static_assert(std::is_same<make_power_list<-2>, make_fraction_list<1, 100>>::value, "");
-static_assert(std::is_same<make_power_list<1>, make_fraction_list<10>>::value, "");
+static_assert(std::is_same<make_prefix_pow10<2>, make_prefix<100>>::value, "type::make_prefix_pow10<2> is same as type::make_prefix<100>.");
+static_assert(std::is_same<make_prefix_pow10<0>, make_prefix<1>>::value, "type::make_prefix_pow10<0> is same as type::make_prefix<1>.");
+static_assert(std::is_same<make_prefix_pow10<-2>, make_prefix<1, 100>>::value, "type::make_prefix_pow10<-2> is same as type::make_prefix<1, 100>.");
+static_assert(std::is_same<make_prefix_pow10<1>, make_prefix<10>>::value, "type::make_prefix_pow10<1> is same as type::make_prefix<10>.");
 #pragma endregion
 } // namespace type
-using type::divide_lists;
-using type::make_fraction_list;
-using type::make_power_list;
-using type::multiply_lists;
-using type::pow_list;
 } // namespace benri

@@ -77,7 +77,7 @@ public:
     template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
     friend constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>;
     template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
-    friend constexpr inline auto remove_prefix(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity<remove_unit_prefix<ArgumentUnit>, ResultValueType>;
+    friend constexpr inline auto remove_prefix(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity<drop_unit_prefix<ArgumentUnit>, ResultValueType>;
 #pragma endregion
 #pragma region rule of three
     //default constructor
@@ -86,9 +86,9 @@ public:
     explicit constexpr inline quantity(const value_type &value) noexcept : _value(value) {}
     explicit constexpr inline quantity(value_type &&value) noexcept : _value(std::move(value)) {}
     //implicit constructor
-    template <class Dummy = void, typename = std::enable_if_t<type::detect_if<unit_type, is_one>, Dummy>>
+    template <class Dummy = void, typename = std::enable_if_t<type::detect_if<unit_type, type::is_one>, Dummy>>
     constexpr inline quantity(const value_type &value) noexcept : _value(value) {}
-    template <class Dummy = void, typename = std::enable_if_t<type::detect_if<unit_type, is_one>, Dummy>>
+    template <class Dummy = void, typename = std::enable_if_t<type::detect_if<unit_type, type::is_one>, Dummy>>
     constexpr inline quantity(value_type &&value) noexcept : _value(std::move(value)) {}
     template <class rhsUnit, class Dummy = void, typename = std::enable_if_t<type::detect_if<unit_type, is_compatible_with, rhsUnit>, Dummy>>
     constexpr inline quantity(const quantity<rhsUnit, value_type> &rhs) noexcept : _value(rhs._value) {}
@@ -106,7 +106,7 @@ public:
     //move assignment
     constexpr inline quantity &operator=(quantity &&) noexcept = default;
     //explicit type conversion
-    template <class Dummy = value_type, typename = std::enable_if_t<type::detect_if<unit_type, is_one>, Dummy>>
+    template <class Dummy = value_type, typename = std::enable_if_t<type::detect_if<unit_type, type::is_one>, Dummy>>
     [[nodiscard]] constexpr inline explicit operator value_type() const noexcept
     {
         return _value;
@@ -230,7 +230,7 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>
 {
-    constexpr auto factor = expand_prefix_list<ArgumentValueType, divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>>;
+    constexpr auto factor = expand_prefix_list<ArgumentValueType, type::divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>>;
     return quantity<ResultUnit, ArgumentValueType>{rhs._value * factor};
 }
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
@@ -248,7 +248,7 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>
 {
-    const auto factor = runtime_expand_prefix_list<ArgumentValueType>(divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>{});
+    const auto factor = runtime_expand_prefix_list<ArgumentValueType>(type::divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>{});
     return quantity<ResultUnit, ArgumentValueType>{rhs._value * factor};
 }
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
@@ -265,11 +265,11 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 //Furthermore, you can provide a ResultValueType for the function, in the case that
 //the transformation would lead to conversion errors.
 template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto remove_prefix(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity<remove_unit_prefix<ArgumentUnit>, ResultValueType>
+[[nodiscard]] constexpr inline auto remove_prefix(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity<drop_unit_prefix<ArgumentUnit>, ResultValueType>
 {
     using PrefixType = typename ArgumentUnit::prefix;
     const auto factor = runtime_expand_prefix_list<ResultValueType>(PrefixType{});
-    return quantity<remove_unit_prefix<ArgumentUnit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * factor};
+    return quantity<drop_unit_prefix<ArgumentUnit>, ResultValueType>{static_cast<ResultValueType>(rhs._value) * factor};
 }
 template <class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto remove_prefix(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept

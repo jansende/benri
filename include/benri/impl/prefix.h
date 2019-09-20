@@ -18,7 +18,7 @@ struct pre
     using power = Power;
 };
 #pragma endregion
-#pragma region prefix expansion functions
+#pragma region expansion functions
 //Function for expanding prefixes. It takes the value from T and raises it to the value
 //stored in Power. (Can only handle integer values for Power.)
 template <class T, class Prefix>

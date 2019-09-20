@@ -29,10 +29,10 @@ implement_unit(erg, dimension::energy_t, fix(multiply_lists<prefix::nano_t, pref
 implement_unit(dyne, dimension::force_t, fix(multiply_lists<prefix::micro_t, prefix::deca_t>));
 #pragma endregion
 #pragma region magnetic field strength
-implement_unit(oersted, dimension::magnetic_field_strength_t, fix(divide_lists<prefix::kilo_t, multiply_lists<make_fraction_list<4>, prefix::pi_t>>));
+implement_unit(oersted, dimension::magnetic_field_strength_t, fix(divide_lists<prefix::kilo_t, multiply_lists<make_prefix<4>, prefix::pi_t>>));
 #pragma endregion
 #pragma region luminance
-implement_unit(stilb, dimension::luminance_t, make_power_list<-4>);
+implement_unit(stilb, dimension::luminance_t, make_prefix_pow10<-4>);
 #pragma endregion
 } // namespace cgs
 } // namespace si

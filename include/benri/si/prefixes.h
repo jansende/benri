@@ -9,37 +9,37 @@ namespace prefix
 {
 //List of prefixes and constant values used to define units.
 #pragma region si prefixes
-using yocto_t = make_power_list<-24>;
-using zepto_t = make_power_list<-21>;
-using atto_t = make_power_list<-18>;
-using femto_t = make_power_list<-15>;
-using pico_t = make_power_list<-12>;
-using nano_t = make_power_list<-9>;
-using micro_t = make_power_list<-6>;
-using milli_t = make_power_list<-3>;
-using centi_t = make_power_list<-2>;
-using deci_t = make_power_list<-1>;
-using one_t = make_power_list<0>;
-using deca_t = make_power_list<1>;
-using hecto_t = make_power_list<2>;
-using kilo_t = make_power_list<3>;
-using mega_t = make_power_list<6>;
-using giga_t = make_power_list<9>;
-using tera_t = make_power_list<12>;
-using peta_t = make_power_list<15>;
-using exa_t = make_power_list<18>;
-using zetta_t = make_power_list<21>;
-using yotta_t = make_power_list<24>;
+using yocto_t = type::make_prefix_pow10<-24>;
+using zepto_t = type::make_prefix_pow10<-21>;
+using atto_t = type::make_prefix_pow10<-18>;
+using femto_t = type::make_prefix_pow10<-15>;
+using pico_t = type::make_prefix_pow10<-12>;
+using nano_t = type::make_prefix_pow10<-9>;
+using micro_t = type::make_prefix_pow10<-6>;
+using milli_t = type::make_prefix_pow10<-3>;
+using centi_t = type::make_prefix_pow10<-2>;
+using deci_t = type::make_prefix_pow10<-1>;
+using one_t = type::make_prefix_pow10<0>;
+using deca_t = type::make_prefix_pow10<1>;
+using hecto_t = type::make_prefix_pow10<2>;
+using kilo_t = type::make_prefix_pow10<3>;
+using mega_t = type::make_prefix_pow10<6>;
+using giga_t = type::make_prefix_pow10<9>;
+using tera_t = type::make_prefix_pow10<12>;
+using peta_t = type::make_prefix_pow10<15>;
+using exa_t = type::make_prefix_pow10<18>;
+using zetta_t = type::make_prefix_pow10<21>;
+using yotta_t = type::make_prefix_pow10<24>;
 #pragma endregion
 #pragma region data prefixes
-using kibi_t = make_fraction_list<1024>;
-using mebi_t = make_fraction_list<1048576>;
-using gibi_t = make_fraction_list<1073741824>;
-using tebi_t = make_fraction_list<1099511627776>;
-using pebi_t = make_fraction_list<1125899906842624>;
-using exbi_t = multiply_lists<pebi_t, kibi_t>;
-using zebi_t = multiply_lists<pebi_t, mebi_t>;
-using yobi_t = multiply_lists<pebi_t, gibi_t>;
+using kibi_t = type::make_prefix<1024>;
+using mebi_t = type::make_prefix<1048576>;
+using gibi_t = type::make_prefix<1073741824>;
+using tebi_t = type::make_prefix<1099511627776>;
+using pebi_t = type::make_prefix<1125899906842624>;
+using exbi_t = type::multiply_lists<pebi_t, kibi_t>;
+using zebi_t = type::multiply_lists<pebi_t, mebi_t>;
+using yobi_t = type::multiply_lists<pebi_t, gibi_t>;
 #pragma endregion
 #pragma region math constants
 //Archimedes constant.
@@ -49,9 +49,9 @@ struct pi
     static constexpr Precision value = 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214;
 };
 using pi_t = type::sorted_list<pre<pi>>;
-using quarter_pi_t = multiply_lists<make_fraction_list<1, 4>, pi_t>;
-using half_pi_t = multiply_lists<make_fraction_list<1, 2>, pi_t>;
-using two_pi_t = multiply_lists<make_fraction_list<2>, pi_t>;
+using quarter_pi_t = type::multiply_lists<type::make_prefix<1, 4>, pi_t>;
+using half_pi_t = type::multiply_lists<type::make_prefix<1, 2>, pi_t>;
+using two_pi_t = type::multiply_lists<type::make_prefix<2>, pi_t>;
 //Euler constant.
 struct e
 {
@@ -90,9 +90,9 @@ struct speed_of_light
 };
 using speed_of_light_t = type::sorted_list<pre<speed_of_light>>;
 //Magnetic constant in Henry per metre (exact, by definition).
-using magnetic_constant_t = multiply_lists<make_fraction_list<2>, two_pi_t, make_fraction_list<1, 10000000>>;
+using magnetic_constant_t = type::multiply_lists<type::make_prefix<2>, two_pi_t, type::make_prefix<1, 10000000>>;
 //Electric constant in Farad per metre (exact, by definition).
-using electric_constant_t = divide_lists<make_fraction_list<1>, multiply_lists<magnetic_constant_t, pow_list<speed_of_light_t, std::ratio<2>>>>;
+using electric_constant_t = type::divide_lists<type::make_prefix<1>, type::multiply_lists<magnetic_constant_t, type::pow_list<speed_of_light_t, std::ratio<2>>>>;
 //Gravitational constant in Newton square metre per kilogram
 struct gravitational_constant //TODO: check value
 {
@@ -106,7 +106,7 @@ struct planck_constant
 };
 using planck_constant_t = type::sorted_list<pre<planck_constant>>;
 //Reduced planck constant in Joule seconds.
-using reduced_planck_constant_t = divide_lists<planck_constant_t, two_pi_t>;
+using reduced_planck_constant_t = type::divide_lists<planck_constant_t, two_pi_t>;
 //Elementary charge in Coulomb.
 struct elementary_charge
 {
@@ -114,9 +114,9 @@ struct elementary_charge
 };
 using elementary_charge_t = type::sorted_list<pre<elementary_charge>>;
 //Fine structure constant.
-using fine_structure_constant_t = divide_lists<multiply_lists<multiply_lists<elementary_charge_t, elementary_charge_t>, multiply_lists<magnetic_constant_t, speed_of_light_t>>, multiply_lists<make_fraction_list<2>, planck_constant_t>>;
+using fine_structure_constant_t = type::divide_lists<type::multiply_lists<type::multiply_lists<elementary_charge_t, elementary_charge_t>, type::multiply_lists<magnetic_constant_t, speed_of_light_t>>, type::multiply_lists<type::make_prefix<2>, planck_constant_t>>;
 //Inverse fine structure constant.
-using inverse_fine_structure_constant_t = divide_lists<make_fraction_list<1>, fine_structure_constant_t>;
+using inverse_fine_structure_constant_t = type::divide_lists<type::make_prefix<1>, fine_structure_constant_t>;
 //Electron mass in kilogram.
 struct electron_mass
 {
@@ -172,11 +172,11 @@ struct alpha_particle_mass
 };
 using alpha_particle_mass_t = type::sorted_list<pre<alpha_particle_mass>>;
 //Rydberg constant in one per metre.
-using rydberg_constant_t = divide_lists<multiply_lists<pow_list<fine_structure_constant_t, std::ratio<2>>, electron_mass_t, speed_of_light_t>, multiply_lists<make_fraction_list<2>, planck_constant_t>>;
+using rydberg_constant_t = type::divide_lists<type::multiply_lists<type::pow_list<fine_structure_constant_t, std::ratio<2>>, electron_mass_t, speed_of_light_t>, type::multiply_lists<type::make_prefix<2>, planck_constant_t>>;
 //Bohr radius in metre.
-using bohr_radius_t = divide_lists<fine_structure_constant_t, multiply_lists<make_fraction_list<4>, pi_t, rydberg_constant_t>>;
+using bohr_radius_t = type::divide_lists<fine_structure_constant_t, type::multiply_lists<type::make_prefix<4>, pi_t, rydberg_constant_t>>;
 //Bohr magneton in Joule per Tesla.
-using bohr_magneton_t = divide_lists<multiply_lists<elementary_charge_t, reduced_planck_constant_t>, multiply_lists<make_fraction_list<2>, electron_mass_t>>;
+using bohr_magneton_t = type::divide_lists<type::multiply_lists<elementary_charge_t, reduced_planck_constant_t>, type::multiply_lists<type::make_prefix<2>, electron_mass_t>>;
 //Avogadro constant in one per mol.
 struct avogadro_constant
 {
@@ -184,7 +184,7 @@ struct avogadro_constant
 };
 using avogadro_constant_t = type::sorted_list<pre<avogadro_constant>>;
 //Faraday constant in Coulomb per mol.
-using faraday_constant_t = multiply_lists<avogadro_constant_t, elementary_charge_t>;
+using faraday_constant_t = type::multiply_lists<avogadro_constant_t, elementary_charge_t>;
 //Molar gas constant in Joule per mole Kelvin.
 struct molar_gas_constant
 {
@@ -192,15 +192,15 @@ struct molar_gas_constant
 };
 using molar_gas_constant_t = type::sorted_list<pre<molar_gas_constant>>;
 //Boltzmann constant in Joule per Kelvin.
-using boltzmann_constant_t = divide_lists<molar_gas_constant_t, avogadro_constant_t>;
+using boltzmann_constant_t = type::divide_lists<molar_gas_constant_t, avogadro_constant_t>;
 //Stefan-Boltzmann constant in Watt per square metre quartic Kelvin steradian
-using stefan_boltzmann_constant_t = divide_lists<multiply_lists<pow_list<pi_t, std::ratio<2>>, pow_list<boltzmann_constant_t, std::ratio<4>>>, multiply_lists<make_fraction_list<60>, pow_list<reduced_planck_constant_t, std::ratio<3>>, pow_list<speed_of_light_t, std::ratio<2>>>>;
+using stefan_boltzmann_constant_t = type::divide_lists<type::multiply_lists<type::pow_list<pi_t, std::ratio<2>>, type::pow_list<boltzmann_constant_t, std::ratio<4>>>, type::multiply_lists<type::make_prefix<60>, type::pow_list<reduced_planck_constant_t, std::ratio<3>>, type::pow_list<speed_of_light_t, std::ratio<2>>>>;
 //Magnetic flux quantum in Weber.
-using magnetic_flux_quantum_t = divide_lists<planck_constant_t, multiply_lists<make_fraction_list<2>, elementary_charge_t>>;
+using magnetic_flux_quantum_t = type::divide_lists<planck_constant_t, type::multiply_lists<type::make_prefix<2>, elementary_charge_t>>;
 //Josephson constant in Hertz per Volt.
-using josephson_constant_t = divide_lists<multiply_lists<make_fraction_list<2>, elementary_charge_t>, planck_constant_t>;
+using josephson_constant_t = type::divide_lists<type::multiply_lists<type::make_prefix<2>, elementary_charge_t>, planck_constant_t>;
 //von Klitzing constant in Ohm.
-using von_klitzing_constant_t = divide_lists<planck_constant_t, pow_list<elementary_charge_t, std::ratio<2>>>;
+using von_klitzing_constant_t = type::divide_lists<planck_constant_t, type::pow_list<elementary_charge_t, std::ratio<2>>>;
 //Atomic mass unit in kilogram.
 struct atomic_mass_unit
 {
@@ -208,24 +208,24 @@ struct atomic_mass_unit
 };
 using atomic_mass_unit_t = type::sorted_list<pre<atomic_mass_unit>>;
 //Hartree energy in Joule.
-using hartree_energy_t = divide_lists<pow_list<elementary_charge_t, std::ratio<2>>, multiply_lists<make_fraction_list<4>, pi_t, electric_constant_t, bohr_radius_t>>;
+using hartree_energy_t = type::divide_lists<type::pow_list<elementary_charge_t, std::ratio<2>>, type::multiply_lists<type::make_prefix<4>, pi_t, electric_constant_t, bohr_radius_t>>;
 //Conductance quantum in Siemens.
-using conductance_quantum_t = divide_lists<multiply_lists<make_fraction_list<2>, pow_list<elementary_charge_t, std::ratio<2>>>, planck_constant_t>;
+using conductance_quantum_t = type::divide_lists<type::multiply_lists<type::make_prefix<2>, type::pow_list<elementary_charge_t, std::ratio<2>>>, planck_constant_t>;
 //Inverse conductance quantum in Ohm.
-using inverse_conductance_quantum_t = divide_lists<make_fraction_list<1>, conductance_quantum_t>;
+using inverse_conductance_quantum_t = type::divide_lists<type::make_prefix<1>, conductance_quantum_t>;
 //Vacuum impedance in Ohm.
-using vacuum_impedance_t = multiply_lists<magnetic_constant_t, speed_of_light_t>;
+using vacuum_impedance_t = type::multiply_lists<magnetic_constant_t, speed_of_light_t>;
 //Nuclear magneton in Joule per Tesla.
-using nuclear_magneton_t = divide_lists<multiply_lists<elementary_charge_t, reduced_planck_constant_t>, multiply_lists<make_fraction_list<2>, proton_mass_t>>;
+using nuclear_magneton_t = type::divide_lists<type::multiply_lists<elementary_charge_t, reduced_planck_constant_t>, type::multiply_lists<type::make_prefix<2>, proton_mass_t>>;
 #pragma endregion
 #pragma region time
-using second_t = make_fraction_list<>;
-using minute_t = multiply_lists<second_t, make_fraction_list<60>>;
-using hour_t = multiply_lists<minute_t, make_fraction_list<60>>;
-using day_t = multiply_lists<hour_t, make_fraction_list<24>>;
-using week_t = multiply_lists<day_t, make_fraction_list<7>>;
-using month_t = multiply_lists<day_t, make_fraction_list<30>>;
-using year_t = multiply_lists<day_t, make_fraction_list<36525, 100>>;
+using second_t = type::make_prefix<>;
+using minute_t = type::multiply_lists<second_t, type::make_prefix<60>>;
+using hour_t = type::multiply_lists<minute_t, type::make_prefix<60>>;
+using day_t = type::multiply_lists<hour_t, type::make_prefix<24>>;
+using week_t = type::multiply_lists<day_t, type::make_prefix<7>>;
+using month_t = type::multiply_lists<day_t, type::make_prefix<30>>;
+using year_t = type::multiply_lists<day_t, type::make_prefix<36525, 100>>;
 //Sidereal year in seconds.
 struct sidereal_year
 {
@@ -267,7 +267,7 @@ struct astronomical_unit
 };
 using astronomical_unit_t = type::sorted_list<pre<astronomical_unit>>;
 //Parsec in metre.
-using parsec_t = multiply_lists<divide_lists<make_fraction_list<648000>, pi_t>, astronomical_unit_t>;
+using parsec_t = type::multiply_lists<type::divide_lists<type::make_prefix<648000>, pi_t>, astronomical_unit_t>;
 //Solar mass in kilogram.
 struct solar_mass
 {
@@ -295,7 +295,7 @@ using earth_mass_t = type::sorted_list<pre<earth_mass>>;
 #pragma endregion
 #pragma region non-si
 //Ångström in metre.
-using angstroem_t = make_power_list<-10>;
+using angstroem_t = type::make_prefix_pow10<-10>;
 //Bohr in metre.
 struct bohr
 {

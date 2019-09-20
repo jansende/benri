@@ -14,8 +14,8 @@ implement_unit(metre, dimension::length_t, prefix::one_t);
 #pragma endregion
 #pragma region mass
 implement_unit(gram, dimension::mass_t, prefix::milli_t);
-implement_unit(kilogram, dimension::mass_t, fix(multiply_lists<prefix::kilo_t, prefix::milli_t>));
-implement_unit(tonne, dimension::mass_t, fix(multiply_lists<prefix::mega_t, prefix::milli_t>));
+implement_unit(kilogram, dimension::mass_t, fix(type::multiply_lists<prefix::kilo_t, prefix::milli_t>));
+implement_unit(tonne, dimension::mass_t, fix(type::multiply_lists<prefix::mega_t, prefix::milli_t>));
 #pragma endregion
 #pragma region time
 implement_unit(second, dimension::time_t, prefix::one_t);
@@ -35,7 +35,7 @@ implement_unit(candela, dimension::luminous_intensity_t, prefix::one_t);
 #pragma endregion
 #pragma region plane angle
 implement_unit(radian, dimension::plane_angle_t, prefix::one_t);
-implement_unit(degree, dimension::plane_angle_t, fix(multiply_lists<prefix::pi_t, make_fraction_list<1, 180>>));
+implement_unit(degree, dimension::plane_angle_t, fix(type::multiply_lists<prefix::pi_t, type::make_prefix<1, 180>>));
 #pragma endregion
 #pragma region solid angle
 implement_unit(steradian, dimension::solid_angle_t, prefix::one_t);
@@ -142,7 +142,7 @@ create_symbol(root_two, dimension::dimensionless_t, prefix::root_two_symbol_t);
 create_symbol(speed_of_light, dimension::velocity_t, prefix::speed_of_light_t);
 create_symbol(magnetic_constant, dimension::permeability_t, prefix::magnetic_constant_t);
 create_symbol(electric_constant, dimension::permittivity_t, prefix::electric_constant_t);
-create_symbol(gravitational_constant, fix(multiply_lists<dimension::force_t, divide_lists<dimension::area_t, pow_list<dimension::mass_t, std::ratio<2>>>>), prefix::gravitational_constant_t);
+create_symbol(gravitational_constant, fix(type::multiply_lists<dimension::force_t, type::divide_lists<dimension::area_t, type::pow_list<dimension::mass_t, std::ratio<2>>>>), prefix::gravitational_constant_t);
 create_symbol(planck_constant, dimension::action_t, prefix::planck_constant_t);
 create_symbol(reduced_planck_constant, dimension::action_t, prefix::reduced_planck_constant_t);
 create_symbol(elementary_charge, dimension::electric_charge_t, prefix::elementary_charge_t);
@@ -159,21 +159,21 @@ create_symbol(helion_mass, dimension::mass_t, prefix::helion_mass_t);
 create_symbol(alpha_particle_mass, dimension::mass_t, prefix::alpha_particle_mass_t);
 create_symbol(rydberg_constant, dimension::wavenumber_t, prefix::rydberg_constant_t);
 create_symbol(bohr_radius, dimension::length_t, prefix::bohr_radius_t);
-create_symbol(bohr_magneton, fix(divide_lists<dimension::energy_t, dimension::magnetic_flux_density_t>), prefix::bohr_magneton_t);
-create_symbol(avogadro_constant, fix(divide_lists<dimension::dimensionless_t, dimension::amount_of_substance_t>), prefix::avogadro_constant_t);
-create_symbol(faraday_constant, fix(divide_lists<dimension::electric_charge_t, dimension::amount_of_substance_t>), prefix::faraday_constant_t);
+create_symbol(bohr_magneton, fix(type::divide_lists<dimension::energy_t, dimension::magnetic_flux_density_t>), prefix::bohr_magneton_t);
+create_symbol(avogadro_constant, fix(type::divide_lists<dimension::dimensionless_t, dimension::amount_of_substance_t>), prefix::avogadro_constant_t);
+create_symbol(faraday_constant, fix(type::divide_lists<dimension::electric_charge_t, dimension::amount_of_substance_t>), prefix::faraday_constant_t);
 create_symbol(molar_gas_constant, dimension::molar_heat_capacity_t, prefix::molar_gas_constant_t);
 create_symbol(boltzmann_constant, dimension::heat_capacity_t, prefix::boltzmann_constant_t);
-create_symbol(stefan_boltzmann_constant, fix(divide_lists<dimension::power_t, multiply_lists<dimension::area_t, pow_list<dimension::thermodynamic_temperature_t, std::ratio<4>>, dimension::solid_angle_t>>), prefix::stefan_boltzmann_constant_t);
+create_symbol(stefan_boltzmann_constant, fix(type::divide_lists<dimension::power_t, type::multiply_lists<dimension::area_t, type::pow_list<dimension::thermodynamic_temperature_t, std::ratio<4>>, dimension::solid_angle_t>>), prefix::stefan_boltzmann_constant_t);
 create_symbol(magnetic_flux_quantum, dimension::magnetic_flux_t, prefix::magnetic_flux_quantum_t);
-create_symbol(josephson_constant, fix(divide_lists<dimension::dimensionless_t, dimension::magnetic_flux_t>), prefix::josephson_constant_t);
+create_symbol(josephson_constant, fix(type::divide_lists<dimension::dimensionless_t, dimension::magnetic_flux_t>), prefix::josephson_constant_t);
 create_symbol(von_klitzing_constant, dimension::electric_resistance_t, prefix::von_klitzing_constant_t);
 create_symbol(atomic_mass_unit, dimension::mass_t, prefix::atomic_mass_unit_t);
 create_symbol(hartree_energy, dimension::energy_t, prefix::hartree_energy_t);
 create_symbol(conductance_quantum, dimension::electric_conductance_t, prefix::conductance_quantum_t);
 create_symbol(inverse_conductance_quantum, dimension::electric_resistance_t, prefix::inverse_conductance_quantum_t);
 create_symbol(vacuum_impedance, dimension::electric_resistance_t, prefix::vacuum_impedance_t);
-create_symbol(nuclear_magneton, fix(divide_lists<dimension::energy_t, dimension::magnetic_flux_density_t>), prefix::nuclear_magneton_t);
+create_symbol(nuclear_magneton, fix(type::divide_lists<dimension::energy_t, dimension::magnetic_flux_density_t>), prefix::nuclear_magneton_t);
 #pragma endregion
 } // namespace symbol
 #pragma endregion

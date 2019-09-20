@@ -31,17 +31,17 @@ implement_unit(month, dimension::time_t, prefix::month_t);
 implement_unit(year, dimension::time_t, prefix::year_t);
 implement_unit(sidereal_year, dimension::time_t, prefix::sidereal_year_t);
 implement_unit(tropical_year, dimension::time_t, prefix::tropical_year_t);
-implement_unit(natural_unit_of_time, dimension::time_t, fix(divide_lists<prefix::reduced_planck_constant_t, multiply_lists<prefix::electron_mass_t, pow_list<prefix::speed_of_light_t, std::ratio<2>>>>));
-implement_unit(atomic_unit_of_time, dimension::time_t, fix(divide_lists<prefix::reduced_planck_constant_t, prefix::hartree_energy_t>));
+implement_unit(natural_unit_of_time, dimension::time_t, fix(type::divide_lists<prefix::reduced_planck_constant_t, type::multiply_lists<prefix::electron_mass_t, type::pow_list<prefix::speed_of_light_t, std::ratio<2>>>>));
+implement_unit(atomic_unit_of_time, dimension::time_t, fix(type::divide_lists<prefix::reduced_planck_constant_t, prefix::hartree_energy_t>));
 #pragma endregion
 #pragma region area
-implement_unit(hectare, dimension::area_t, make_fraction_list<10000>);
+implement_unit(hectare, dimension::area_t, type::make_prefix<10000>);
 #pragma endregion
 #pragma region volume
 implement_unit(litre, dimension::volume_t, prefix::milli_t);
 #pragma endregion
 #pragma region plane angle
-implement_unit(gon, dimension::plane_angle_t, fix(multiply_lists<prefix::pi_t, make_fraction_list<1, 200>>));
+implement_unit(gon, dimension::plane_angle_t, fix(type::multiply_lists<prefix::pi_t, type::make_prefix<1, 200>>));
 implement_unit(revolution, dimension::plane_angle_t, prefix::two_pi_t);
 #pragma endregion
 #pragma region frequency
@@ -64,7 +64,7 @@ implement_unit(pascal, dimension::pressure_t, prefix::one_t);
 #define pascal BENRI_PASCAL
 #undef BENRI_PASCAL
 #endif
-implement_unit(bar, dimension::pressure_t, make_power_list<5>);
+implement_unit(bar, dimension::pressure_t, type::make_prefix_pow10<5>);
 #pragma endregion
 #pragma region energy
 implement_unit(joule, dimension::energy_t, prefix::one_t);
