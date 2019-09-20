@@ -1,6 +1,6 @@
 #pragma once
-#include <benri/impl/array.h>
-#include <benri/impl/algorithm.h>
+#include <benri/impl/meta/array.h>
+#include <benri/impl/meta/algorithm.h>
 #include <benri/impl/type_traits.h>
 #include <benri/impl/detector.h>
 #include <ratio>
@@ -165,7 +165,7 @@ static_assert(number_of_factors<15> == 2, "");
 template <size_t N>
 constexpr auto factorization_factors(intmax_t number)
 {
-    auto factors = impl::array<intmax_t, N>{};
+    auto factors = meta::array<intmax_t, N>{};
     auto counter = size_t{0};
     for (auto test = intmax_t{2}; number > 1;)
     {
@@ -182,22 +182,22 @@ constexpr auto factorization_factors(intmax_t number)
     }
     return factors;
 }
-static_assert(impl::equal(factorization_factors<0>(0), impl::array<intmax_t, 0>{}), "");
-static_assert(impl::equal(factorization_factors<0>(1), impl::array<intmax_t, 0>{}), "");
-static_assert(impl::equal(factorization_factors<1>(2), impl::array<intmax_t, 1>{2}), "");
-static_assert(impl::equal(factorization_factors<1>(3), impl::array<intmax_t, 1>{3}), "");
-static_assert(impl::equal(factorization_factors<2>(4), impl::array<intmax_t, 2>{2, 2}), "");
-static_assert(impl::equal(factorization_factors<1>(5), impl::array<intmax_t, 1>{5}), "");
-static_assert(impl::equal(factorization_factors<2>(6), impl::array<intmax_t, 2>{2, 3}), "");
-static_assert(impl::equal(factorization_factors<1>(7), impl::array<intmax_t, 1>{7}), "");
-static_assert(impl::equal(factorization_factors<3>(8), impl::array<intmax_t, 3>{2, 2, 2}), "");
-static_assert(impl::equal(factorization_factors<2>(9), impl::array<intmax_t, 2>{3, 3}), "");
-static_assert(impl::equal(factorization_factors<2>(10), impl::array<intmax_t, 2>{2, 5}), "");
-static_assert(impl::equal(factorization_factors<1>(11), impl::array<intmax_t, 1>{11}), "");
-static_assert(impl::equal(factorization_factors<3>(12), impl::array<intmax_t, 3>{2, 2, 3}), "");
-static_assert(impl::equal(factorization_factors<1>(13), impl::array<intmax_t, 1>{13}), "");
-static_assert(impl::equal(factorization_factors<2>(14), impl::array<intmax_t, 2>{2, 7}), "");
-static_assert(impl::equal(factorization_factors<2>(15), impl::array<intmax_t, 2>{3, 5}), "");
+static_assert(meta::equal(factorization_factors<0>(0), meta::array<intmax_t, 0>{}), "");
+static_assert(meta::equal(factorization_factors<0>(1), meta::array<intmax_t, 0>{}), "");
+static_assert(meta::equal(factorization_factors<1>(2), meta::array<intmax_t, 1>{2}), "");
+static_assert(meta::equal(factorization_factors<1>(3), meta::array<intmax_t, 1>{3}), "");
+static_assert(meta::equal(factorization_factors<2>(4), meta::array<intmax_t, 2>{2, 2}), "");
+static_assert(meta::equal(factorization_factors<1>(5), meta::array<intmax_t, 1>{5}), "");
+static_assert(meta::equal(factorization_factors<2>(6), meta::array<intmax_t, 2>{2, 3}), "");
+static_assert(meta::equal(factorization_factors<1>(7), meta::array<intmax_t, 1>{7}), "");
+static_assert(meta::equal(factorization_factors<3>(8), meta::array<intmax_t, 3>{2, 2, 2}), "");
+static_assert(meta::equal(factorization_factors<2>(9), meta::array<intmax_t, 2>{3, 3}), "");
+static_assert(meta::equal(factorization_factors<2>(10), meta::array<intmax_t, 2>{2, 5}), "");
+static_assert(meta::equal(factorization_factors<1>(11), meta::array<intmax_t, 1>{11}), "");
+static_assert(meta::equal(factorization_factors<3>(12), meta::array<intmax_t, 3>{2, 2, 3}), "");
+static_assert(meta::equal(factorization_factors<1>(13), meta::array<intmax_t, 1>{13}), "");
+static_assert(meta::equal(factorization_factors<2>(14), meta::array<intmax_t, 2>{2, 7}), "");
+static_assert(meta::equal(factorization_factors<2>(15), meta::array<intmax_t, 2>{3, 5}), "");
 
 //The factorization function computes the prime factors of a given
 //number, and returns them as an integer_sequence.

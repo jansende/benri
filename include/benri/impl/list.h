@@ -1,6 +1,6 @@
 #pragma once
-#include <benri/impl/algorithm.h>
-#include <benri/impl/array.h>
+#include <benri/impl/meta/algorithm.h>
+#include <benri/impl/meta/array.h>
 #include <benri/impl/atom.h>
 #include <benri/impl/meta_math.h>
 #include <benri/impl/sorting.h>
@@ -339,7 +339,7 @@ template <class ValueType, class... Elements>
 constexpr auto multiply_elements_impl(sorted_list<Elements...>)
 {
     static_assert(all_true<!detect_if<Elements, is_root>...>, "multiply_elements cannot handle roots in the atoms at the moment. use runtime_multiply_elements instead.");
-    return product(impl::array<ValueType, sizeof...(Elements)>{expand_atom<ValueType, Elements>...});
+    return meta::accumulate(meta::array<ValueType, sizeof...(Elements)>{expand_atom<ValueType, Elements>...}, ValueType{1}, std::multiplies<ValueType>());
 }
 template <class ValueType, class List>
 constexpr ValueType multiply_elements = multiply_elements_impl<ValueType>(List{});
@@ -355,7 +355,7 @@ static_assert(multiply_elements<double, make_fraction_list<1, 8>> == 1. / 8., ""
 template <class ValueType, class... Elements>
 constexpr auto runtime_multiply_elements(sorted_list<Elements...>)
 {
-    return product(impl::array<ValueType, sizeof...(Elements)>{runtime_expand_atom<ValueType, Elements>()...});
+    return meta::accumulate(meta::array<ValueType, sizeof...(Elements)>{runtime_expand_atom<ValueType, Elements>()...}, ValueType{1}, std::multiplies<ValueType>());
 };
 #pragma endregion
 } // namespace impl
