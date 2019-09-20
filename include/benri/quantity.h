@@ -74,9 +74,9 @@ public:
     template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
     friend constexpr inline auto value_type_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity<ArgumentUnit, ResultValueType>;
     template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
-    friend constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, is_unit>, quantity<ResultUnit, ArgumentValueType>>;
+    friend constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>;
     template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
-    friend constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, is_unit>, quantity<ResultUnit, ArgumentValueType>>;
+    friend constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>;
     template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
     friend constexpr inline auto remove_prefix(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity<remove_unit_prefix<ArgumentUnit>, ResultValueType>;
 #pragma endregion
@@ -229,7 +229,7 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
 //compile time. However, the implementation has a restriction, that it is
 //not compatible with roots of units.
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, is_unit>, quantity<ResultUnit, ArgumentValueType>>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>
 {
     constexpr auto factor = type::multiply_elements<ArgumentValueType, divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>>;
     return quantity<ResultUnit, ArgumentValueType>{rhs._value * factor};
@@ -247,7 +247,7 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 //marked constexpr, to be forward compatible with a constexpr std::pow
 //implementation.
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, is_unit>, quantity<ResultUnit, ArgumentValueType>>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>
 {
     const auto factor = type::runtime_multiply_elements<ArgumentValueType>(divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>{});
     return quantity<ResultUnit, ArgumentValueType>{rhs._value * factor};

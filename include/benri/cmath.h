@@ -410,7 +410,7 @@ template <class Unit, class ValueType>
 //pow<std::ratio<1,2>> or using integers pow<1,2>. With the denominator being
 //optional: pow<std::ratio<2>> = pow<2>.
 template <class Exponent, class baseUnit, class ValueType>
-[[nodiscard]] constexpr inline auto pow(const quantity<baseUnit, ValueType> base) noexcept -> std::enable_if_t<type::detect_if<Exponent, impl::is_std_ratio>, quantity<pow_unit<baseUnit, Exponent>, ValueType>>
+[[nodiscard]] constexpr inline auto pow(const quantity<baseUnit, ValueType> base) noexcept -> std::enable_if_t<type::detect_if<Exponent, type::is_std_ratio>, quantity<pow_unit<baseUnit, Exponent>, ValueType>>
 {
     using ResultType = decltype(std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den)));
     return quantity<pow_unit<baseUnit, Exponent>, ResultType>{std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den))};

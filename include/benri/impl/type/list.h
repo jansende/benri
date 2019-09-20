@@ -3,7 +3,7 @@
 #include <benri/impl/meta/array.h>
 #include <benri/impl/atom.h>
 #include <benri/impl/meta_math.h>
-#include <benri/impl/type/sorting.h>
+#include <benri/impl/type/sort.h>
 #include <benri/impl/type/traits.h>
 #include <cmath>
 
@@ -18,6 +18,7 @@ struct list
 {
     static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
 };
+//Special name for sorted type lists.
 template <class... Elements>
 struct sorted_list
 {
@@ -26,30 +27,17 @@ struct sorted_list
 #pragma endregion
 #pragma region list functions
 #pragma region concat
-//The concat function lets you concatenate two or more lists.
+//Function for concatenating two or more lists.
 template <class... lhsElements, class... rhsElements>
-constexpr auto concat_impl(sorted_list<lhsElements...>, sorted_list<rhsElements...>)
-{
-    return list<lhsElements..., rhsElements...>{};
-}
+constexpr auto concat_impl(sorted_list<lhsElements...>, sorted_list<rhsElements...>) -> list<lhsElements..., rhsElements...>;
 template <class... lhsElements, class... rhsElements>
-constexpr auto concat_impl(list<lhsElements...>, sorted_list<rhsElements...>)
-{
-    return list<lhsElements..., rhsElements...>{};
-}
+constexpr auto concat_impl(list<lhsElements...>, sorted_list<rhsElements...>) -> list<lhsElements..., rhsElements...>;
 template <class... lhsElements, class... rhsElements>
-constexpr auto concat_impl(sorted_list<lhsElements...>, list<rhsElements...>)
-{
-    return list<lhsElements..., rhsElements...>{};
-}
+constexpr auto concat_impl(sorted_list<lhsElements...>, list<rhsElements...>) -> list<lhsElements..., rhsElements...>;
 template <class... lhsElements, class... rhsElements>
-constexpr auto concat_impl(list<lhsElements...>, list<rhsElements...>)
-{
-    return list<lhsElements..., rhsElements...>{};
-}
+constexpr auto concat_impl(list<lhsElements...>, list<rhsElements...>) -> list<lhsElements..., rhsElements...>;
 template <class lhs, class rhs>
 using concat = decltype(concat_impl(lhs{}, rhs{}));
-//TODO: - Put this into a unit test folder.
 //basic tests
 static_assert(std::is_same<concat<list<atom<int>>, list<>>, list<atom<int>>>::value, "");
 static_assert(std::is_same<concat<list<atom<int>, atom<float>, atom<bool>>, list<atom<int>, atom<float>>>, list<atom<int>, atom<float>, atom<bool>, atom<int>, atom<float>>>::value, "");
@@ -214,15 +202,9 @@ template <class Atom, class Power>
 using pow_atom = atom<typename Atom::type, std::ratio_multiply<typename Atom::power, Power>>;
 
 template <class... Elements, class Power>
-constexpr auto pow_list_impl(sorted_list<Elements...>, Power)
-{
-    return std::conditional_t<std::is_same<Power, std::ratio<0>>::value, sorted_list<>, sorted_list<pow_atom<Elements, Power>...>>{};
-}
+constexpr auto pow_list_impl(sorted_list<Elements...>, Power) -> std::conditional_t<std::is_same<Power, std::ratio<0>>::value, sorted_list<>, sorted_list<pow_atom<Elements, Power>...>>;
 template <class... Elements, class Power>
-constexpr auto pow_list_impl(list<Elements...>, Power)
-{
-    return std::conditional_t<std::is_same<Power, std::ratio<0>>::value, list<>, list<pow_atom<Elements, Power>...>>{};
-}
+constexpr auto pow_list_impl(list<Elements...>, Power) -> std::conditional_t<std::is_same<Power, std::ratio<0>>::value, list<>, list<pow_atom<Elements, Power>...>>;
 template <class List, class Power>
 using pow_list = decltype(pow_list_impl(List{}, Power{}));
 //TODO: - Put this into a unit test folder.
@@ -270,12 +252,9 @@ static_assert(std::is_same<divide_lists<list<atom<std::ratio<3>>>, list<atom<std
 #pragma endregion
 #pragma region list generators
 //The make_list function generates a list of atoms from an integer_sequence.
+//we multiply with an empty list, to accumulate all the factors together
 template <class ValueType, ValueType... Integers>
-constexpr auto make_list_impl(std::integer_sequence<ValueType, Integers...>)
-{
-    //we multiply with an empty list, to accumulate all the factors together
-    return multiply_lists<sorted_list<>, list<atom<std::ratio<Integers>>...>>{};
-};
+constexpr auto make_list_impl(std::integer_sequence<ValueType, Integers...>) -> multiply_lists<sorted_list<>, list<atom<std::ratio<Integers>>...>>;
 template <class Sequence>
 using make_list = decltype(make_list_impl(Sequence{}));
 //The make_factorial_list function generates a list by

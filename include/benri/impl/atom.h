@@ -20,23 +20,19 @@ struct atom
     using type = T;
     using power = Power;
 };
-//The has_type function checks if a type has the ::type attribute
-//using SFINAE.
-template <class T>
-using has_type = typename T::type;
 //The has_valid_type function checks if a given type has a ::type
 //attribute which is a ratio or has a ::value argument.
 template <class T>
-using has_valid_type = typename std::enable_if<type::detect_if<typename T::type, is_std_ratio> || type::detect_if<typename T::type, has_static_constexpr_value>>::type;
+using has_valid_type = typename std::enable_if<type::detect_if<typename T::type, type::is_std_ratio> || type::detect_if<typename T::type, type::has_value>>::type;
 //The has_valid_power function checks if a given type has a ::power
 //attribute which is a ratio.
 template <class T>
-using has_valid_power = typename std::enable_if<type::detect_if<typename T::power, is_std_ratio>>::type;
+using has_valid_power = typename std::enable_if<type::detect_if<typename T::power, type::is_std_ratio>>::type;
 //The is_atom function checks if a type has a ::type and a ::power
 //attribute. This does not mean, we have an atom type, but we do not
 //care, if we can do the necessary calculations.
 template <class T>
-using is_atom = typename std::enable_if<type::detect_if<T, has_type> && type::detect_if<T, has_valid_power>>::type;
+using is_atom = typename std::enable_if<type::detect_if<T, type::has_type> && type::detect_if<T, has_valid_power>>::type;
 //TODO: - Put this into a unit test folder.
 //basic tests
 static_assert(!type::detect_if<int, is_atom>, "");
@@ -68,13 +64,13 @@ static_assert(expand_atom<double, atom<std::ratio<2>, std::ratio<-2>>> == 1. / 4
 //lation for the runtime_expand_atom function. It handles two cases: the
 //case of std::ratio as the atom::type, and a constexpr value for it.
 template <class T, class Atom>
-constexpr auto runtime_expand_atom_impl() -> std::enable_if_t<!type::detect_if<typename Atom::type, is_std_ratio>, T>
+constexpr auto runtime_expand_atom_impl() -> std::enable_if_t<!type::detect_if<typename Atom::type, type::is_std_ratio>, T>
 {
     //handle constants
     return std::pow(T(Atom::type::value), T(Atom::power::num) / T(Atom::power::den));
 };
 template <class T, class Atom>
-constexpr auto runtime_expand_atom_impl() -> std::enable_if_t<type::detect_if<typename Atom::type, is_std_ratio>, T>
+constexpr auto runtime_expand_atom_impl() -> std::enable_if_t<type::detect_if<typename Atom::type, type::is_std_ratio>, T>
 {
     //handle ratios
     return std::pow(T(Atom::type::num) / T(Atom::type::den), T(Atom::power::num) / T(Atom::power::den));
