@@ -173,28 +173,6 @@ constexpr auto unit_cast(const quantity<unit<dimension::thermodynamic_temperatur
 {
     return quantity<ResultUnit, ValueType>{rhs.value() * runtime_expand_prefix_list<ValueType>(type::divide_lists<Prefix, typename ResultUnit::prefix>{})};
 }
-// //celsius to rankine
-// template <class ResultUnit, class Prefix, class ValueType>
-// constexpr auto simple_cast(const quantity<si::temperature::degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value, quantity<si::temperature::degree_rankine_t, ValueType>>
-// {
-//     return simple_cast<si::temperature::degree_rankine_t>(simple_cast<si::degree_kelvin_t>(rhs));
-// }
-// template <class ResultUnit, class Prefix, class ValueType>
-// constexpr auto unit_cast(const quantity<si::temperature::degree_celsius_t, ValueType> &rhs) -> std::enable_if_t<std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value, quantity<si::temperature::degree_rankine_t, ValueType>>
-// {
-//     return simple_cast<si::temperature::degree_rankine_t>(rhs);
-// }
-// //rankine to celsius
-// template <class ResultUnit, class Prefix, class ValueType>
-// constexpr auto simple_cast(const quantity<si::temperature::degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value, quantity<si::temperature::degree_celsius_t, ValueType>>
-// {
-//     return simple_cast<si::temperature::degree_celsius_t>(simple_cast<si::degree_kelvin_t>(rhs));
-// }
-// template <class ResultUnit, class Prefix, class ValueType>
-// constexpr auto unit_cast(const quantity<si::temperature::degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value, quantity<si::temperature::degree_celsius_t, ValueType>>
-// {
-//     return simple_cast<si::temperature::degree_celsius_t>(rhs);
-// }
 //fahrenheit to kelvin
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(const quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType> &rhs) -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, dimension::thermodynamic_temperature_t>::value, quantity<ResultUnit, ValueType>>
@@ -239,28 +217,6 @@ constexpr auto unit_cast(const quantity<unit<dimension::celsius_temperature_t, P
 {
     return quantity<ResultUnit, ValueType>{rhs.value() * runtime_expand_prefix_list<ValueType>(type::divide_lists<Prefix, typename ResultUnit::prefix>{})};
 }
-// //fahrenheit to rankine
-// template <class ResultUnit, class Prefix, class ValueType>
-// constexpr auto simple_cast(const quantity<si::temperature::degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value, quantity<si::temperature::degree_rankine_t, ValueType>>
-// {
-//     return simple_cast<si::temperature::degree_rankine_t>(simple_cast<si::degree_kelvin_t>(rhs));
-// }
-// template <class ResultUnit, class Prefix, class ValueType>
-// constexpr auto unit_cast(const quantity<si::temperature::degree_fahrenheit_t, ValueType> &rhs) -> std::enable_if_t<std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value, quantity<si::temperature::degree_rankine_t, ValueType>>
-// {
-//     return simple_cast<si::temperature::degree_rankine_t>(rhs);
-// }
-// //rankine to fahrenheit
-// template <class ResultUnit, class Prefix, class ValueType>
-// constexpr auto simple_cast(const quantity<si::temperature::degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value, quantity<si::temperature::degree_fahrenheit_t, ValueType>>
-// {
-//     return simple_cast<si::temperature::degree_fahrenheit_t>(simple_cast<si::degree_kelvin_t>(rhs));
-// }
-// template <class ResultUnit, class Prefix, class ValueType>
-// constexpr auto unit_cast(const quantity<si::temperature::degree_rankine_t, ValueType> &rhs) -> std::enable_if_t<std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value, quantity<si::temperature::degree_fahrenheit_t, ValueType>>
-// {
-//     return simple_cast<si::temperature::degree_fahrenheit_t>(rhs);
-// }
 #pragma endregion
 #pragma region helper function
 template <class Unit, class ValueType>

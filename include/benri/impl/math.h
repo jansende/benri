@@ -10,76 +10,84 @@ namespace type
 //However, we will have to specialize on the types to reduce the number of template para-
 //meters. Whenever we can either have a prefix or a dimension, we will call this entity a
 //atom.
-
-
 #pragma region functions
-//The add_to_first_atom function searches the first matching
-//atom in a list, and updating it. If it does not exist, the
-//entry is added to the end of the list.
+//Function for updating a type list with a given atom. The atom is either combined with
+//an existing one, or added at the end.
+//(We have to duplicate code to deal with both sorted and unsorted type lists. This helps
+//us to not sort the list later on.)
 template <class List, class Atom>
-struct add_to_first_atom_impl
+struct emplace_impl
 {
     static_assert(detect_if<List, is_list>, "List needs to be type::list.");
     static_assert(detect_if<Atom, is_dimension> || detect_if<Atom, is_prefix>, "Atom needs to be dim or pre.");
     using type = void;
 };
 template <class Atom>
-struct add_to_first_atom_impl<sorted_list<>, Atom>
+struct emplace_impl<sorted_list<>, Atom>
 {
     static_assert(detect_if<Atom, is_dimension> || detect_if<Atom, is_prefix>, "Atom needs to be dim or pre.");
     using type = sorted_list<Atom>;
 };
 template <class Atom>
-struct add_to_first_atom_impl<list<>, Atom>
+struct emplace_impl<list<>, Atom>
 {
     static_assert(detect_if<Atom, is_dimension> || detect_if<Atom, is_prefix>, "Atom needs to be dim or pre.");
     using type = list<Atom>;
 };
 template <class T, class lhsPower, class rhsPower, class... RestElements>
-struct add_to_first_atom_impl<sorted_list<dim<T, lhsPower>, RestElements...>, dim<T, rhsPower>>
+struct emplace_impl<sorted_list<dim<T, lhsPower>, RestElements...>, dim<T, rhsPower>>
 {
     using type = sorted_list<dim<T, std::ratio_add<lhsPower, rhsPower>>, RestElements...>;
 };
 template <class T, class lhsPower, class rhsPower, class... RestElements>
-struct add_to_first_atom_impl<sorted_list<pre<T, lhsPower>, RestElements...>, pre<T, rhsPower>>
+struct emplace_impl<sorted_list<pre<T, lhsPower>, RestElements...>, pre<T, rhsPower>>
 {
     using type = sorted_list<pre<T, std::ratio_add<lhsPower, rhsPower>>, RestElements...>;
 };
 template <class T, class lhsPower, class rhsPower, class... RestElements>
-struct add_to_first_atom_impl<list<dim<T, lhsPower>, RestElements...>, dim<T, rhsPower>>
+struct emplace_impl<list<dim<T, lhsPower>, RestElements...>, dim<T, rhsPower>>
 {
     using type = list<dim<T, std::ratio_add<lhsPower, rhsPower>>, RestElements...>;
 };
 template <class T, class lhsPower, class rhsPower, class... RestElements>
-struct add_to_first_atom_impl<list<pre<T, lhsPower>, RestElements...>, pre<T, rhsPower>>
+struct emplace_impl<list<pre<T, lhsPower>, RestElements...>, pre<T, rhsPower>>
 {
     using type = list<pre<T, std::ratio_add<lhsPower, rhsPower>>, RestElements...>;
 };
 template <class FirstElement, class... RestElements, class Atom>
-struct add_to_first_atom_impl<sorted_list<FirstElement, RestElements...>, Atom>
+struct emplace_impl<sorted_list<FirstElement, RestElements...>, Atom>
 {
     static_assert(detect_if<Atom, is_dimension> || detect_if<Atom, is_prefix>, "Atom needs to be dim or pre.");
-    using type = concat<sorted_list<FirstElement>, typename add_to_first_atom_impl<sorted_list<RestElements...>, Atom>::type>;
+    using type = concat<sorted_list<FirstElement>,
+                        typename emplace_impl<sorted_list<RestElements...>, Atom>::type>;
 };
 template <class FirstElement, class... RestElements, class Atom>
-struct add_to_first_atom_impl<list<FirstElement, RestElements...>, Atom>
+struct emplace_impl<list<FirstElement, RestElements...>, Atom>
 {
     static_assert(detect_if<Atom, is_dimension> || detect_if<Atom, is_prefix>, "Atom needs to be dim or pre.");
-    using type = concat<list<FirstElement>, typename add_to_first_atom_impl<list<RestElements...>, Atom>::type>;
+    using type = concat<list<FirstElement>,
+                        typename emplace_impl<list<RestElements...>, Atom>::type>;
 };
 template <class List, class Atom>
-using add_to_first_atom = typename add_to_first_atom_impl<List, Atom>::type;
-//TODO: - Put this into a unit test folder.
+using emplace = typename emplace_impl<List, Atom>::type;
 //Basic tests
-static_assert(std::is_same<add_to_first_atom<list<>, dim<int>>, list<dim<int>>>::value, "");
-static_assert(std::is_same<add_to_first_atom<list<dim<bool>>, dim<int>>, list<dim<bool>, dim<int>>>::value, "");
-static_assert(std::is_same<add_to_first_atom<list<dim<int>>, dim<int>>, list<dim<int, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<add_to_first_atom<list<dim<int>, dim<bool>>, dim<int>>, list<dim<int, std::ratio<2>>, dim<bool>>>::value, "");
-static_assert(std::is_same<add_to_first_atom<list<dim<bool>, dim<int>>, dim<int>>, list<dim<bool>, dim<int, std::ratio<2>>>>::value, "");
-//The remove_zero_powers function removes all atom with a power of zero from the list.
+static_assert(std::is_same<emplace<list<>, dim<int>>, list<dim<int>>>::value, "type::emplace<list<>, dim<int>> is list<dim<int>>.");
+static_assert(std::is_same<emplace<sorted_list<>, dim<int>>, sorted_list<dim<int>>>::value, "type::emplace<list<>, dim<int>> is list<dim<int>>.");
+static_assert(std::is_same<emplace<list<dim<bool>>, dim<int>>, list<dim<bool>, dim<int>>>::value, "type::emplace<list<dim<bool>>, dim<int>> is list<dim<bool>, dim<int>>.");
+static_assert(std::is_same<emplace<sorted_list<dim<bool>>, dim<int>>, list<dim<bool>, dim<int>>>::value, "type::emplace<list<dim<bool>>, dim<int>> is list<dim<bool>, dim<int>>.");
+static_assert(std::is_same<emplace<list<dim<int>>, dim<int>>, list<dim<int, std::ratio<2>>>>::value, "type::emplace<list<dim<int>>, dim<int>> is list<dim<int, 2>>.");
+static_assert(std::is_same<emplace<sorted_list<dim<int>>, dim<int>>, sorted_list<dim<int, std::ratio<2>>>>::value, "type::emplace<list<dim<int>>, dim<int>> is list<dim<int, 2>>.");
+static_assert(std::is_same<emplace<list<dim<int>, dim<bool>>, dim<int>>, list<dim<int, std::ratio<2>>, dim<bool>>>::value, "type::emplace<list<dim<int>, dim<bool>>, dim<int>> is list<dim<int, 2>, dim<bool>>.");
+static_assert(std::is_same<emplace<sorted_list<dim<int>, dim<bool>>, dim<int>>, sorted_list<dim<int, std::ratio<2>>, dim<bool>>>::value, "type::emplace<list<dim<int>, dim<bool>>, dim<int>> is list<dim<int, 2>, dim<bool>>.");
+static_assert(std::is_same<emplace<list<dim<int>, dim<int>>, dim<int>>, list<dim<int, std::ratio<2>>, dim<int>>>::value, "type::emplace<list<dim<int>, dim<int>>, dim<int>> is list<dim<int, 2>, dim<int>>.");
+static_assert(std::is_same<emplace<sorted_list<dim<int>, dim<int>>, dim<int>>, sorted_list<dim<int, std::ratio<2>>, dim<int>>>::value, "type::emplace<list<dim<int>, dim<int>>, dim<int>> is list<dim<int, 2>, dim<int>>.");
+//Function for removing atom with a power of zero.
+//(We have to duplicate code to deal with both sorted and unsorted type lists. This helps
+//us to not sort the list later on.)
 template <class Result, class List>
 struct remove_zero_powers_impl
 {
+    static_assert(detect_if<List, is_list>, "List needs to be type::list.");
 };
 template <class... NewTs>
 struct remove_zero_powers_impl<list<NewTs...>, list<>>
@@ -92,46 +100,57 @@ struct remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<>>
     using type = sorted_list<NewTs...>;
 };
 template <class... NewTs, class OldT, class... OldTs>
-struct remove_zero_powers_impl<list<NewTs...>, list<OldT, OldTs...>> : remove_zero_powers_impl<list<NewTs..., OldT>, list<OldTs...>>
+struct remove_zero_powers_impl<list<NewTs...>, list<OldT, OldTs...>>
+    : remove_zero_powers_impl<list<NewTs..., OldT>, list<OldTs...>>
 {
 };
 template <class... NewTs, class OldT, class... OldTs>
-struct remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<OldT, OldTs...>> : remove_zero_powers_impl<sorted_list<NewTs..., OldT>, sorted_list<OldTs...>>
+struct remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<OldT, OldTs...>>
+    : remove_zero_powers_impl<sorted_list<NewTs..., OldT>, sorted_list<OldTs...>>
 {
 };
 template <class... NewTs, class T, class... OldTs>
-struct remove_zero_powers_impl<list<NewTs...>, list<dim<T, std::ratio<0>>, OldTs...>> : remove_zero_powers_impl<list<NewTs...>, list<OldTs...>>
+struct remove_zero_powers_impl<list<NewTs...>, list<dim<T, std::ratio<0>>, OldTs...>>
+    : remove_zero_powers_impl<list<NewTs...>, list<OldTs...>>
 {
 };
 template <class... NewTs, class T, class... OldTs>
-struct remove_zero_powers_impl<list<NewTs...>, list<pre<T, std::ratio<0>>, OldTs...>> : remove_zero_powers_impl<list<NewTs...>, list<OldTs...>>
+struct remove_zero_powers_impl<list<NewTs...>, list<pre<T, std::ratio<0>>, OldTs...>>
+    : remove_zero_powers_impl<list<NewTs...>, list<OldTs...>>
 {
 };
 template <class... NewTs, class T, class... OldTs>
-struct remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<dim<T, std::ratio<0>>, OldTs...>> : remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<OldTs...>>
+struct remove_zero_powers_impl<sorted_list<NewTs...>,
+                               sorted_list<dim<T, std::ratio<0>>, OldTs...>>
+    : remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<OldTs...>>
 {
 };
 template <class... NewTs, class T, class... OldTs>
-struct remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<pre<T, std::ratio<0>>, OldTs...>> : remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<OldTs...>>
+struct remove_zero_powers_impl<sorted_list<NewTs...>,
+                               sorted_list<pre<T, std::ratio<0>>, OldTs...>>
+    : remove_zero_powers_impl<sorted_list<NewTs...>, sorted_list<OldTs...>>
 {
 };
-
 template <class List>
-using remove_zero_powers = typename remove_zero_powers_impl<std::conditional_t<detect_if<List, is_sorted_list>, sorted_list<>, list<>>, List>::type;
-//TODO: - Put this into a unit test folder.
+using remove_zero_powers = typename remove_zero_powers_impl<
+    std::conditional_t<detect_if<List, is_sorted_list>, sorted_list<>, list<>>,
+    List>::type;
 //Basic tests
-static_assert(std::is_same<remove_zero_powers<list<>>, list<>>::value, "");
-static_assert(std::is_same<remove_zero_powers<sorted_list<>>, sorted_list<>>::value, "");
-static_assert(std::is_same<remove_zero_powers<list<dim<bool>>>, list<dim<bool>>>::value, "");
-static_assert(std::is_same<remove_zero_powers<sorted_list<dim<bool>>>, sorted_list<dim<bool>>>::value, "");
-static_assert(std::is_same<remove_zero_powers<list<dim<bool>, dim<int>>>, list<dim<bool>, dim<int>>>::value, "");
-static_assert(std::is_same<remove_zero_powers<sorted_list<dim<bool>, dim<int>>>, sorted_list<dim<bool>, dim<int>>>::value, "");
-static_assert(std::is_same<remove_zero_powers<list<dim<bool, std::ratio<0>>>>, list<>>::value, "");
-static_assert(std::is_same<remove_zero_powers<sorted_list<dim<bool, std::ratio<0>>>>, sorted_list<>>::value, "");
-static_assert(std::is_same<remove_zero_powers<list<dim<bool>, dim<int, std::ratio<0>>>>, list<dim<bool>>>::value, "");
-static_assert(std::is_same<remove_zero_powers<sorted_list<dim<bool>, dim<int, std::ratio<0>>>>, sorted_list<dim<bool>>>::value, "");
-//The multiply_lists function combines the atoms in two lists,
-//by adding the power of atoms with the same type.
+static_assert(std::is_same<remove_zero_powers<list<>>, list<>>::value, "type::remove_zero_powers<list<>> is list<>.");
+static_assert(std::is_same<remove_zero_powers<sorted_list<>>, sorted_list<>>::value, "type::remove_zero_powers<list<>> is list<>.");
+static_assert(std::is_same<remove_zero_powers<list<dim<bool>>>, list<dim<bool>>>::value, "type::remove_zero_powers<list<dim<bool>>> is list<dim<bool>>.");
+static_assert(std::is_same<remove_zero_powers<sorted_list<dim<bool>>>, sorted_list<dim<bool>>>::value, "type::remove_zero_powers<list<dim<bool>>> is list<dim<bool>>.");
+static_assert(std::is_same<remove_zero_powers<list<dim<bool>, dim<int>>>, list<dim<bool>, dim<int>>>::value, "type::remove_zero_powers<list<dim<bool>, dim<int>>> is list<dim<bool>, dim<int>>.");
+static_assert(std::is_same<remove_zero_powers<sorted_list<dim<bool>, dim<int>>>, sorted_list<dim<bool>, dim<int>>>::value, "type::remove_zero_powers<list<dim<bool>, dim<int>>> is list<dim<bool>, dim<int>>.");
+static_assert(std::is_same<remove_zero_powers<list<dim<bool, std::ratio<0>>>>, list<>>::value, "type::remove_zero_powers<list<dim<bool, 0>, dim<int>>> is list<>.");
+static_assert(std::is_same<remove_zero_powers<sorted_list<dim<bool, std::ratio<0>>>>, sorted_list<>>::value, "type::remove_zero_powers<list<dim<bool, 0>, dim<int>>> is list<>.");
+static_assert(std::is_same<remove_zero_powers<list<dim<bool>, dim<int, std::ratio<0>>>>, list<dim<bool>>>::value, "type::remove_zero_powers<list<dim<bool>, dim<int, 0>>> is list<dim<bool>>.");
+static_assert(std::is_same<remove_zero_powers<sorted_list<dim<bool>, dim<int, std::ratio<0>>>>, sorted_list<dim<bool>>>::value, "type::remove_zero_powers<list<dim<bool>, dim<int, 0>>> is list<dim<bool>>.");
+//Function for multiplying two or more lists. Lists are multiplied by emplacing elements
+//into one another. Atom generated with a power of 0 get removed. Result is sorted at the
+//end.
+//(We have to duplicate code to deal with both sorted and unsorted type lists. This helps
+//us to not sort the list later on.)
 template <class... Lists>
 struct multiply_lists_impl
 {
@@ -149,91 +168,95 @@ struct multiply_lists_impl<lhsList, list<>>
 template <class lhsList, class rhsElement>
 struct multiply_lists_impl<lhsList, sorted_list<rhsElement>>
 {
-    using type = add_to_first_atom<lhsList, rhsElement>;
+    using type = emplace<lhsList, rhsElement>;
 };
 template <class lhsList, class rhsElement>
 struct multiply_lists_impl<lhsList, list<rhsElement>>
 {
-    using type = add_to_first_atom<lhsList, rhsElement>;
+    using type = emplace<lhsList, rhsElement>;
 };
 template <class lhsList, class rhsFirstElement, class... rhsRestElements>
-struct multiply_lists_impl<lhsList, sorted_list<rhsFirstElement, rhsRestElements...>> : multiply_lists_impl<add_to_first_atom<lhsList, rhsFirstElement>, sorted_list<rhsRestElements...>>
+struct multiply_lists_impl<lhsList, sorted_list<rhsFirstElement, rhsRestElements...>>
+    : multiply_lists_impl<emplace<lhsList, rhsFirstElement>, sorted_list<rhsRestElements...>>
 {
 };
 template <class lhsList, class rhsFirstElement, class... rhsRestElements>
-struct multiply_lists_impl<lhsList, list<rhsFirstElement, rhsRestElements...>> : multiply_lists_impl<add_to_first_atom<lhsList, rhsFirstElement>, list<rhsRestElements...>>
+struct multiply_lists_impl<lhsList, list<rhsFirstElement, rhsRestElements...>>
+    : multiply_lists_impl<emplace<lhsList, rhsFirstElement>, list<rhsRestElements...>>
 {
 };
 template <class lhsList, class rhsList, class... RestLists>
-struct multiply_lists_impl<lhsList, rhsList, RestLists...> : multiply_lists_impl<typename multiply_lists_impl<lhsList, rhsList>::type, RestLists...>
+struct multiply_lists_impl<lhsList, rhsList, RestLists...>
+    : multiply_lists_impl<typename multiply_lists_impl<lhsList, rhsList>::type, RestLists...>
 {
 };
 template <class... Lists>
-using multiply_lists = sort<remove_zero_powers<typename multiply_lists_impl<Lists...>::type>>;
-//TODO: - Put this into a unit test folder.
+using multiply_lists = sort<remove_zero_powers<
+    typename multiply_lists_impl<Lists...>::type>>;
 //Basic tests
-static_assert(std::is_same<multiply_lists<list<>, list<dim<int>>>, sorted_list<dim<int>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<dim<int>>, list<>>, sorted_list<dim<int>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<bool>>>, sorted_list<dim<bool>, dim<int>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<int>>>, sorted_list<dim<int, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<int, std::ratio<-1>>>>, sorted_list<>>::value, "");
-static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<int>, dim<bool>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<bool>, dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<dim<bool>, dim<int>>, list<dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<dim<int>, dim<bool>>, list<dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "");
+static_assert(std::is_same<multiply_lists<list<>, list<dim<int>>>, sorted_list<dim<int>>>::value, "type::multiply_lists<list<>, list<dim<int>>> is list<dim<int>>.");
+static_assert(std::is_same<multiply_lists<list<dim<int>>, list<>>, sorted_list<dim<int>>>::value, "type::multiply_lists<list<dim<int>>, list<>> is list<dim<int>>.");
+static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<bool>>>, sorted_list<dim<bool>, dim<int>>>::value, "type::multiply_lists<list<dim<int>>, list<dim<bool>>> is list<dim<bool>, dim<int>>.");
+static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<int>>>, sorted_list<dim<int, std::ratio<2>>>>::value, "type::multiply_lists<list<dim<int>>, list<dim<int>>> is list<dim<int, 2>>.");
+static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<int, std::ratio<-1>>>>, sorted_list<>>::value, "type::multiply_lists<list<dim<int>>, list<dim<int, -1>>> is list<>.");
+static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<int>, dim<bool>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "type::multiply_lists<list<dim<int>>, list<dim<int>, dim<bool>>> is list<dim<bool>, dim<int, 2>>.");
+static_assert(std::is_same<multiply_lists<list<dim<int>>, list<dim<bool>, dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "type::multiply_lists<list<dim<int>>, list<dim<bool>, dim<int>>> is list<dim<bool>, dim<int, 2>>.");
+static_assert(std::is_same<multiply_lists<list<dim<bool>, dim<int>>, list<dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "type::multiply_lists<list<dim<bool>, dim<int>>, list<dim<int>>> is list<dim<bool>, dim<int, 2>>.");
+static_assert(std::is_same<multiply_lists<list<dim<int>, dim<bool>>, list<dim<int>>>, sorted_list<dim<bool>, dim<int, std::ratio<2>>>>::value, "type::multiply_lists<list<dim<int>, dim<bool>>, list<dim<int>>> is list<dim<bool>, dim<int, 2>>.");
 //Function for raising prefixes/dimensions by a given Power.
 template <class AtomT, class AtomPower, class Power>
-constexpr auto pow_atom_impl(dim<AtomT, AtomPower>, Power) -> dim<AtomT, std::ratio_multiply<AtomPower, Power>>;
+constexpr auto pow_atom_impl(dim<AtomT, AtomPower>, Power)
+    -> dim<AtomT, std::ratio_multiply<AtomPower, Power>>;
 template <class AtomT, class AtomPower, class Power>
-constexpr auto pow_atom_impl(pre<AtomT, AtomPower>, Power) -> pre<AtomT, std::ratio_multiply<AtomPower, Power>>;
+constexpr auto pow_atom_impl(pre<AtomT, AtomPower>, Power)
+    -> pre<AtomT, std::ratio_multiply<AtomPower, Power>>;
 template <class Atom, class Power>
 using pow_atom = decltype(pow_atom_impl(Atom{}, Power{}));
 //Function for raising lists by a given Power.
 template <class... Elements, class Power>
-constexpr auto pow_list_impl(sorted_list<Elements...>, Power) -> std::conditional_t<std::is_same<Power, std::ratio<0>>::value, sorted_list<>, sorted_list<pow_atom<Elements, Power>...>>;
+constexpr auto pow_list_impl(sorted_list<Elements...>, Power)
+    -> std::conditional_t<std::is_same<Power, std::ratio<0>>::value,
+                          sorted_list<>,
+                          sorted_list<pow_atom<Elements, Power>...>>;
 template <class... Elements, class Power>
-constexpr auto pow_list_impl(list<Elements...>, Power) -> std::conditional_t<std::is_same<Power, std::ratio<0>>::value, list<>, list<pow_atom<Elements, Power>...>>;
+constexpr auto pow_list_impl(list<Elements...>, Power)
+    -> std::conditional_t<std::is_same<Power, std::ratio<0>>::value,
+                          list<>,
+                          list<pow_atom<Elements, Power>...>>;
 template <class List, class Power>
 using pow_list = decltype(pow_list_impl(List{}, Power{}));
-//TODO: - Put this into a unit test folder.
 //Basic tests
-static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<2>>, sorted_list<>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<-2>>, sorted_list<>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<1, 3>>, sorted_list<>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<-1, 3>>, sorted_list<>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<5>>>, std::ratio<1>>, sorted_list<dim<std::ratio<5>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<5>>>, std::ratio<2>>, sorted_list<dim<std::ratio<5>, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<5>>>, std::ratio<-2>>, sorted_list<dim<std::ratio<5>, std::ratio<-2>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<5>>>, std::ratio<1, 3>>, sorted_list<dim<std::ratio<5>, std::ratio<1, 3>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<5>>>, std::ratio<-1, 3>>, sorted_list<dim<std::ratio<5>, std::ratio<-1, 3>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>, std::ratio<1>>, sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>, std::ratio<2>>, sorted_list<dim<std::ratio<3>, std::ratio<2>>, dim<std::ratio<5>, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>, std::ratio<-2>>, sorted_list<dim<std::ratio<3>, std::ratio<-2>>, dim<std::ratio<5>, std::ratio<-2>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>, std::ratio<1, 3>>, sorted_list<dim<std::ratio<3>, std::ratio<1, 3>>, dim<std::ratio<5>, std::ratio<1, 3>>>>::value, "");
-static_assert(std::is_same<pow_list<sorted_list<dim<std::ratio<3>>, dim<std::ratio<5>>>, std::ratio<-1, 3>>, sorted_list<dim<std::ratio<3>, std::ratio<-1, 3>>, dim<std::ratio<5>, std::ratio<-1, 3>>>>::value, "");
+static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<1>>, sorted_list<>>::value, "type::pow_list<list<>, 1> is list<>.");
+static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<2>>, sorted_list<>>::value, "type::pow_list<list<>, 2> is list<>.");
+static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<-2>>, sorted_list<>>::value, "type::pow_list<list<>, -2> is list<>.");
+static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<1, 3>>, sorted_list<>>::value, "type::pow_list<list<>, 1/3> is list<>.");
+static_assert(std::is_same<pow_list<sorted_list<>, std::ratio<-1, 3>>, sorted_list<>>::value, "type::pow_list<list<>, -1/3> is list<>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>>>, std::ratio<1>>, sorted_list<pre<std::ratio<5>>>>::value, "type::pow_list<list<pre<5>>, 1> is list<pre<5>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>>>, std::ratio<2>>, sorted_list<pre<std::ratio<5>, std::ratio<2>>>>::value, "type::pow_list<list<pre<5>>, 2> is list<pre<5, 2>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>>>, std::ratio<-2>>, sorted_list<pre<std::ratio<5>, std::ratio<-2>>>>::value, "type::pow_list<list<pre<5>>, -2> is list<pre<5, -2>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>>>, std::ratio<1, 3>>, sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>>::value, "type::pow_list<list<pre<5>>, 1/3> is list<pre<5, 1/3>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>>>, std::ratio<-1, 3>>, sorted_list<pre<std::ratio<5>, std::ratio<-1, 3>>>>::value, "type::pow_list<list<pre<5>>, -1/3> is list<pre<5, -1/3>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>, std::ratio<1>>, sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>>::value, "type::pow_list<list<pre<5, 1/3>>, 1> is list<pre<5, 1/3>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>, std::ratio<2>>, sorted_list<pre<std::ratio<5>, std::ratio<2, 3>>>>::value, "type::pow_list<list<pre<5, 1/3>>, 2> is list<pre<5, 2/3>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>, std::ratio<-2>>, sorted_list<pre<std::ratio<5>, std::ratio<-2, 3>>>>::value, "type::pow_list<list<pre<5, 1/3>>, -2> is list<pre<5, -2/3>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>, std::ratio<3>>, sorted_list<pre<std::ratio<5>>>>::value, "type::pow_list<list<pre<5, 1/3>>, 3> is list<pre<5>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>, std::ratio<-3>>, sorted_list<pre<std::ratio<5>, std::ratio<-1>>>>::value, "type::pow_list<list<pre<5, 1/3>>, 3> is list<pre<5, -1>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>, std::ratio<1, 3>>, sorted_list<pre<std::ratio<5>, std::ratio<1, 9>>>>::value, "type::pow_list<list<pre<5, 1/3>>, 1/3> is list<pre<5, 1/3>>.");
+static_assert(std::is_same<pow_list<sorted_list<pre<std::ratio<5>, std::ratio<1, 3>>>, std::ratio<-1, 3>>, sorted_list<pre<std::ratio<5>, std::ratio<-1, 9>>>>::value, "type::pow_list<list<pre<5, 1/3>>, -1/3> is list<pre<5, -1/3>>.");
 //The divide_lists function combines the atoms in two lists,
 //by multiplying the left side with the inverse of the right
 //side.
 template <class lhsList, class rhsList>
 using divide_lists = multiply_lists<lhsList, pow_list<rhsList, std::ratio<-1>>>;
-//TODO: - Put this into a unit test folder.
 //Basic tests
-static_assert(std::is_same<divide_lists<list<>, list<dim<int>>>, sorted_list<dim<int, std::ratio<-1>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<int>>, list<>>, sorted_list<dim<int>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<int>>, list<dim<bool>>>, sorted_list<dim<bool, std::ratio<-1>>, dim<int>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<int>>, list<dim<int>>>, sorted_list<>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<int>>, list<dim<int>, dim<bool>>>, sorted_list<dim<bool, std::ratio<-1>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<int>>, list<dim<bool>, dim<int>>>, sorted_list<dim<bool, std::ratio<-1>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<int>, dim<bool>>, list<dim<int>>>, sorted_list<dim<bool>>>::value, "");
-static_assert(std::is_same<divide_lists<list<>, list<dim<std::ratio<3>>>>, sorted_list<dim<std::ratio<3>, std::ratio<-1>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>>, list<>>, sorted_list<dim<std::ratio<3>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>>, list<dim<std::ratio<7>>>>, sorted_list<dim<std::ratio<3>>, dim<std::ratio<7>, std::ratio<-1>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>>, list<dim<std::ratio<3>>>>, sorted_list<>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>>, list<dim<std::ratio<3>>, dim<std::ratio<7>>>>, sorted_list<dim<std::ratio<7>, std::ratio<-1>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>>, list<dim<std::ratio<7>>, dim<std::ratio<3>>>>, sorted_list<dim<std::ratio<7>, std::ratio<-1>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>, dim<std::ratio<7>>>, list<dim<std::ratio<3>>>>, sorted_list<dim<std::ratio<7>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<>, list<dim<std::ratio<3>, std::ratio<2>>>>, sorted_list<dim<std::ratio<3>, std::ratio<-2>>>>::value, "");
-static_assert(std::is_same<divide_lists<list<dim<std::ratio<3>>>, list<dim<std::ratio<3>, std::ratio<2>>>>, sorted_list<dim<std::ratio<3>, std::ratio<-1>>>>::value, "");
+static_assert(std::is_same<divide_lists<list<>, list<>>, sorted_list<>>::value, "type::divide_lists<list<>, list<>> us list<>.");
+static_assert(std::is_same<divide_lists<list<>, list<dim<int>>>, sorted_list<dim<int, std::ratio<-1>>>>::value, "type::divide_lists<list<>, list<dim<int>>> us list<dim<int,-1>>.");
+static_assert(std::is_same<divide_lists<list<dim<int>>, list<>>, sorted_list<dim<int>>>::value, "type::divide_lists<list<dim<int>>, list<>> us list<dim<int>>.");
+static_assert(std::is_same<divide_lists<list<dim<int>>, list<dim<bool>>>, sorted_list<dim<bool, std::ratio<-1>>, dim<int>>>::value, "type::divide_lists<list<dim<int>>, list<dim<bool>>> us list<dim<int>, dim<bool, -1>>.");
+static_assert(std::is_same<divide_lists<list<dim<int>>, list<dim<int>>>, sorted_list<>>::value, "type::divide_lists<list<dim<int>>, list<dim<int>>> us list<>.");
+static_assert(std::is_same<divide_lists<list<dim<int>>, list<dim<int>, dim<bool>>>, sorted_list<dim<bool, std::ratio<-1>>>>::value, "type::divide_lists<list<dim<int>>, list<dim<int>, dim<bool>>> us list<dim<bool, -1>>.");
+static_assert(std::is_same<divide_lists<list<dim<int>>, list<dim<bool>, dim<int>>>, sorted_list<dim<bool, std::ratio<-1>>>>::value, "type::divide_lists<list<dim<int>>, list<dim<bool>, dim<int>>> us list<dim<bool, -1>>.");
+static_assert(std::is_same<divide_lists<list<dim<int>, dim<bool>>, list<dim<int>>>, sorted_list<dim<bool>>>::value, "type::divide_lists<list<dim<int>, dim<bool>>, list<dim<int>>> us list<dim<bool>>.");
 #pragma endregion
 #pragma region generators
 //Function for generating a prefix list from a std::integer_sequence.

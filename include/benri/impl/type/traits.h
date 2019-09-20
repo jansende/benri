@@ -152,7 +152,7 @@ struct is_std_ratio_impl<std::ratio<Num, Den>> : std::true_type
 {
 };
 template <class T>
-using is_std_ratio = typename std::enable_if<is_std_ratio_impl<T>::value>::type;
+using is_std_ratio = typename std::enable_if_t<is_std_ratio_impl<T>::value>;
 //Check if a type is std::ratio with an integer value (no ratio).
 template <class T>
 using is_integer_ratio = typename std::enable_if_t<
