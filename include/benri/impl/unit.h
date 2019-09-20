@@ -1,7 +1,7 @@
 #pragma once
-#include <benri/impl/list.h>
-#include <benri/impl/sorting.h>
-#include <benri/impl/detector.h>
+#include <benri/impl/type/list.h>
+#include <benri/impl/type/sorting.h>
+#include <benri/impl/type/traits.h>
 
 namespace benri
 {
@@ -16,30 +16,30 @@ struct unit
 //The has_valid_dimensions function checks if a given type has a ::dimensions
 //attribute which is a list.
 template <class T>
-using has_valid_dimensions = typename std::enable_if<detect_if<typename T::dimensions, impl::is_list>>::type;
+using has_valid_dimensions = typename std::enable_if<type::detect_if<typename T::dimensions, type::is_list>>::type;
 //The has_valid_prefix function checks if a given type has a ::prefix
 //attribute which is a list.
 template <class T>
-using has_valid_prefix = typename std::enable_if<detect_if<typename T::prefix, impl::is_list>>::type;
+using has_valid_prefix = typename std::enable_if<type::detect_if<typename T::prefix, type::is_list>>::type;
 //The is_unit function checks if a type has a ::dimensions and a ::prefix
 //attribute. This does not mean, we have an unit type, but we do not
 //care, as we can do the necessary calculations.
 template <class T>
-using is_unit = typename std::enable_if<detect_if<T, has_valid_dimensions> && detect_if<T, has_valid_prefix>>::type;
+using is_unit = typename std::enable_if<type::detect_if<T, has_valid_dimensions> && type::detect_if<T, has_valid_prefix>>::type;
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(!detect_if<int, is_unit>, "");
-static_assert(!detect_if<unit<double, double>, is_unit>, "");
-static_assert(detect_if<unit<sorted_list<>, sorted_list<>>, is_unit>, "");
+static_assert(!type::detect_if<int, is_unit>, "");
+static_assert(!type::detect_if<unit<double, double>, is_unit>, "");
+static_assert(type::detect_if<unit<sorted_list<>, sorted_list<>>, is_unit>, "");
 //The is_dimensionless function checks if a given unit is dimensionless.
 //(The dimension is an empty list.)
 template <class T>
-using is_dimensionless = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, sorted_list<>>::value>::type;
+using is_dimensionless = typename std::enable_if<type::detect_if<T, is_unit> && std::is_same<typename T::dimensions, sorted_list<>>::value>::type;
 //The one unit is the unit where the dimension and the prefix are empty lists.
 using one = unit<sorted_list<>, sorted_list<>>;
 //The is_one function checks if a given unit is one.
 template <class T>
-using is_one = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, typename one::dimensions>::value && std::is_same<typename T::prefix, typename one::prefix>::value>::type;
+using is_one = typename std::enable_if<type::detect_if<T, is_unit> && std::is_same<typename T::dimensions, typename one::dimensions>::value && std::is_same<typename T::prefix, typename one::prefix>::value>::type;
 #pragma endregion
 #pragma region unit functions
 #pragma region multiplication

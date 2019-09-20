@@ -1,8 +1,7 @@
 #pragma once
 #include <benri/impl/meta/array.h>
 #include <benri/impl/meta/algorithm.h>
-#include <benri/impl/type_traits.h>
-#include <benri/impl/detector.h>
+#include <benri/impl/type/traits.h>
 #include <ratio>
 #include <utility>
 
@@ -26,11 +25,11 @@ using is_std_ratio = typename std::enable_if<std::is_same<T, std::ratio<T::num, 
 //the power function. It handles two cases: the case of std::ratio as
 //the Base type, and a Base with a static constexpr ::value for it.
 template <class T, class Base, class Exponent>
-constexpr auto power_impl() -> std::enable_if_t<!detect_if<Base, is_std_ratio>, T>
+constexpr auto power_impl() -> std::enable_if_t<!type::detect_if<Base, is_std_ratio>, T>
 {
     //handle constants
-    static_assert(detect_if<Base, has_static_constexpr_value>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Base is neither a std::ratio nor a static constexpr ::value type");
-    static_assert(detect_if<Exponent, is_std_ratio>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
+    static_assert(type::detect_if<Base, has_static_constexpr_value>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Base is neither a std::ratio nor a static constexpr ::value type");
+    static_assert(type::detect_if<Exponent, is_std_ratio>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
     static_assert(Exponent::den == 1, "power is only able to calculate integer powers, roots are not supported.");
     auto val = T(Base::value);
     auto exponent = Exponent::num >= 0 ? Exponent::num : -Exponent::num;
@@ -41,10 +40,10 @@ constexpr auto power_impl() -> std::enable_if_t<!detect_if<Base, is_std_ratio>, 
     return Exponent::num >= 0 ? (val) : (1 / val);
 }
 template <class T, class Base, class Exponent>
-constexpr auto power_impl() -> std::enable_if_t<detect_if<Base, is_std_ratio>, T>
+constexpr auto power_impl() -> std::enable_if_t<type::detect_if<Base, is_std_ratio>, T>
 {
     //handle ratios
-    static_assert(detect_if<Exponent, is_std_ratio>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
+    static_assert(type::detect_if<Exponent, is_std_ratio>, "power takes a value type, a std::ratio or a static constexpr ::value type, and another std::ratios, but Exponent is not a std::ratio");
     static_assert(Exponent::den == 1, "power is only able to calculate integer powers, roots are not supported.");
     auto num = T(Base::num);
     auto den = T(Base::den);

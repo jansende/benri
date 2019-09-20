@@ -2,7 +2,7 @@
 #include <benri/quantity.h>
 #include <benri/quantity_point.h>
 #include <benri/impl/dimensions.h>
-#include <benri/impl/list.h>
+#include <benri/impl/type/list.h>
 #include <benri/impl/meta_math.h>
 #include <benri/impl/unit.h>
 #include <algorithm>
@@ -59,8 +59,8 @@ struct conversion_type<quantity_point<lhsUnit, ValueType>, ValueType, true>
 template <class lhsUnit, class rhsUnit, class ValueType, bool AllowPoints>
 struct conversion_type<quantity<lhsUnit, ValueType>, quantity<rhsUnit, ValueType>, AllowPoints>
 {
-    static_assert(std::is_same<lhsUnit, rhsUnit>::value || detect_if<lhsUnit, is_compatible_with, rhsUnit>, "all arguments have to have the same or compatible units.");
-    using type = std::conditional_t<std::is_same<lhsUnit, rhsUnit>::value || detect_if<lhsUnit, is_compatible_with, rhsUnit>, quantity<lhsUnit, ValueType>, void>;
+    static_assert(std::is_same<lhsUnit, rhsUnit>::value || type::detect_if<lhsUnit, is_compatible_with, rhsUnit>, "all arguments have to have the same or compatible units.");
+    using type = std::conditional_t<std::is_same<lhsUnit, rhsUnit>::value || type::detect_if<lhsUnit, is_compatible_with, rhsUnit>, quantity<lhsUnit, ValueType>, void>;
 };
 template <class lhsUnit, class rhsUnit, class ValueType>
 struct conversion_type<quantity_point<lhsUnit, ValueType>, quantity_point<rhsUnit, ValueType>, true>
@@ -229,37 +229,37 @@ template <class yUnit, class ValueType>
 //The fma function combines a multiplication and addition operation of the quantities
 //x, y, z. The result is x*y+z. The units of x*y and z must be equal.
 template <class xUnit, class yUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<multiply_units<xUnit, yUnit>, zUnit>::value || detect_if<multiply_units<xUnit, yUnit>, is_compatible_with, zUnit>, quantity<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<multiply_units<xUnit, yUnit>, zUnit>::value || type::detect_if<multiply_units<xUnit, yUnit>, is_compatible_with, zUnit>, quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
     return quantity<zUnit, ResultType>{std::fma(x.value(), y.value(), z.value())};
 }
 template <class xUnit, class yUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<multiply_units<xUnit, yUnit>, zUnit>::value || detect_if<multiply_units<xUnit, yUnit>, is_compatible_with, zUnit>, quantity_point<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<multiply_units<xUnit, yUnit>, zUnit>::value || type::detect_if<multiply_units<xUnit, yUnit>, is_compatible_with, zUnit>, quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
     return quantity_point<zUnit, ResultType>{std::fma(x.value(), y.value(), z.value())};
 }
 template <class yUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<yUnit, zUnit>::value || detect_if<yUnit, is_compatible_with, zUnit>, quantity<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<yUnit, zUnit>::value || type::detect_if<yUnit, is_compatible_with, zUnit>, quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
     return quantity<zUnit, ResultType>{std::fma(x, y.value(), z.value())};
 }
 template <class yUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<yUnit, zUnit>::value || detect_if<yUnit, is_compatible_with, zUnit>, quantity_point<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<yUnit, zUnit>::value || type::detect_if<yUnit, is_compatible_with, zUnit>, quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
     return quantity_point<zUnit, ResultType>{std::fma(x, y.value(), z.value())};
 }
 template <class xUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<xUnit, zUnit>::value || detect_if<xUnit, is_compatible_with, zUnit>, quantity<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<xUnit, zUnit>::value || type::detect_if<xUnit, is_compatible_with, zUnit>, quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
     return quantity<zUnit, ResultType>{std::fma(x.value(), y, z.value())};
 }
 template <class xUnit, class zUnit, class ValueType>
-[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<xUnit, zUnit>::value || detect_if<xUnit, is_compatible_with, zUnit>, quantity_point<zUnit, ValueType>>
+[[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y, const quantity_point<zUnit, ValueType> z) noexcept -> std::enable_if_t<std::is_same<xUnit, zUnit>::value || type::detect_if<xUnit, is_compatible_with, zUnit>, quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
     return quantity_point<zUnit, ResultType>{std::fma(x.value(), y, z.value())};
@@ -410,7 +410,7 @@ template <class Unit, class ValueType>
 //pow<std::ratio<1,2>> or using integers pow<1,2>. With the denominator being
 //optional: pow<std::ratio<2>> = pow<2>.
 template <class Exponent, class baseUnit, class ValueType>
-[[nodiscard]] constexpr inline auto pow(const quantity<baseUnit, ValueType> base) noexcept -> std::enable_if_t<detect_if<Exponent, impl::is_std_ratio>, quantity<pow_unit<baseUnit, Exponent>, ValueType>>
+[[nodiscard]] constexpr inline auto pow(const quantity<baseUnit, ValueType> base) noexcept -> std::enable_if_t<type::detect_if<Exponent, impl::is_std_ratio>, quantity<pow_unit<baseUnit, Exponent>, ValueType>>
 {
     using ResultType = decltype(std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den)));
     return quantity<pow_unit<baseUnit, Exponent>, ResultType>{std::pow(base.value(), ValueType(Exponent::num) / ValueType(Exponent::den))};

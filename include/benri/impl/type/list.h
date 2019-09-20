@@ -3,53 +3,26 @@
 #include <benri/impl/meta/array.h>
 #include <benri/impl/atom.h>
 #include <benri/impl/meta_math.h>
-#include <benri/impl/sorting.h>
-#include <benri/impl/type_traits.h>
+#include <benri/impl/type/sorting.h>
+#include <benri/impl/type/traits.h>
 #include <cmath>
 
 namespace benri
 {
-namespace impl
+namespace type
 {
 #pragma region list type
-//The list type saves arbitrary numbers of atoms, and handles mathematical
-//functions on them.
-template <class... Elements>
-struct sorted_list
-{
-    static_assert(all_true<detect_if<Elements, is_atom>...>, "all elements of a list need to be atoms.");
-};
+//Type list used to store dimensions and prefixes.
 template <class... Elements>
 struct list
 {
-    static_assert(all_true<detect_if<Elements, is_atom>...>, "all elements of a list need to be atoms.");
-};
-
-template <class>
-struct is_list_impl : std::false_type
-{
+    static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
 };
 template <class... Elements>
-struct is_list_impl<sorted_list<Elements...>> : std::true_type
+struct sorted_list
 {
+    static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
 };
-template <class... Elements>
-struct is_list_impl<list<Elements...>> : std::true_type
-{
-};
-template <class T>
-using is_list = typename std::enable_if<is_list_impl<T>::value>::type;
-
-template <class>
-struct is_sorted_list_impl : std::false_type
-{
-};
-template <class... Elements>
-struct is_sorted_list_impl<sorted_list<Elements...>> : std::true_type
-{
-};
-template <class T>
-using is_sorted_list = typename std::enable_if<is_sorted_list_impl<T>::value>::type;
 #pragma endregion
 #pragma region list functions
 #pragma region concat
@@ -89,19 +62,19 @@ template <class List, class Atom>
 struct add_to_first_atom_impl
 {
     static_assert(detect_if<List, is_list>, "the lhs of add_to_first_atom needs to be a list.");
-    static_assert(detect_if<Atom, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<Atom, impl::is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = void;
 };
 template <class Atom>
 struct add_to_first_atom_impl<sorted_list<>, Atom>
 {
-    static_assert(detect_if<Atom, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<Atom, impl::is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = sorted_list<Atom>;
 };
 template <class Atom>
 struct add_to_first_atom_impl<list<>, Atom>
 {
-    static_assert(detect_if<Atom, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<Atom, impl::is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = list<Atom>;
 };
 template <class T, class lhsPower, class rhsPower, class... RestElements>
@@ -117,13 +90,13 @@ struct add_to_first_atom_impl<list<atom<T, lhsPower>, RestElements...>, atom<T, 
 template <class FirstElement, class... RestElements, class Atom>
 struct add_to_first_atom_impl<sorted_list<FirstElement, RestElements...>, Atom>
 {
-    static_assert(detect_if<Atom, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<Atom, impl::is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = concat<sorted_list<FirstElement>, typename add_to_first_atom_impl<sorted_list<RestElements...>, Atom>::type>;
 };
 template <class FirstElement, class... RestElements, class Atom>
 struct add_to_first_atom_impl<list<FirstElement, RestElements...>, Atom>
 {
-    static_assert(detect_if<Atom, is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
+    static_assert(detect_if<Atom, impl::is_atom>, "the rhs of add_to_first_atom needs to be an atom.");
     using type = concat<list<FirstElement>, typename add_to_first_atom_impl<list<RestElements...>, Atom>::type>;
 };
 template <class List, class Atom>
@@ -308,15 +281,15 @@ using make_list = decltype(make_list_impl(Sequence{}));
 //The make_factorial_list function generates a list by
 //factorizing a given number.
 template <intmax_t Value>
-using make_factorial_list = make_list<factorization<Value>>;
+using make_factorial_list = make_list<impl::factorization<Value>>;
 //The make_fraction_list function generates a list by
 //factorizing a given numerator and denominater.
 template <intmax_t num = 1, intmax_t den = 1>
 using make_fraction_list = divide_lists<make_factorial_list<num>, make_factorial_list<den>>;
 //TODO: - Put this into a unit test folder.
 //basic tests
-static_assert(std::is_same<make_list<factorization<9>>, sorted_list<atom<std::ratio<3>, std::ratio<2>>>>::value, "");
-static_assert(std::is_same<multiply_lists<list<>, make_list<factorization<9>>>, sorted_list<atom<std::ratio<3>, std::ratio<2>>>>::value, "");
+static_assert(std::is_same<make_list<impl::factorization<9>>, sorted_list<atom<std::ratio<3>, std::ratio<2>>>>::value, "");
+static_assert(std::is_same<multiply_lists<list<>, make_list<impl::factorization<9>>>, sorted_list<atom<std::ratio<3>, std::ratio<2>>>>::value, "");
 static_assert(std::is_same<make_factorial_list<8>, sorted_list<atom<std::ratio<2>, std::ratio<3>>>>::value, "");
 static_assert(std::is_same<make_fraction_list<1, 8>, sorted_list<atom<std::ratio<2>, std::ratio<-3>>>>::value, "");
 static_assert(std::is_same<make_fraction_list<4, 8>, sorted_list<atom<std::ratio<2>, std::ratio<-1>>>>::value, "");
@@ -338,8 +311,8 @@ static_assert(std::is_same<make_power_list<1>, make_fraction_list<10>>::value, "
 template <class ValueType, class... Elements>
 constexpr auto multiply_elements_impl(sorted_list<Elements...>)
 {
-    static_assert(all_true<!detect_if<Elements, is_root>...>, "multiply_elements cannot handle roots in the atoms at the moment. use runtime_multiply_elements instead.");
-    return meta::accumulate(meta::array<ValueType, sizeof...(Elements)>{expand_atom<ValueType, Elements>...}, ValueType{1}, std::multiplies<ValueType>());
+    static_assert(all_true<!detect_if<Elements, impl::is_root>...>, "multiply_elements cannot handle roots in the atoms at the moment. use runtime_multiply_elements instead.");
+    return meta::accumulate(meta::array<ValueType, sizeof...(Elements)>{impl::expand_atom<ValueType, Elements>...}, ValueType{1}, std::multiplies<ValueType>());
 }
 template <class ValueType, class List>
 constexpr ValueType multiply_elements = multiply_elements_impl<ValueType>(List{});
@@ -355,17 +328,17 @@ static_assert(multiply_elements<double, make_fraction_list<1, 8>> == 1. / 8., ""
 template <class ValueType, class... Elements>
 constexpr auto runtime_multiply_elements(sorted_list<Elements...>)
 {
-    return meta::accumulate(meta::array<ValueType, sizeof...(Elements)>{runtime_expand_atom<ValueType, Elements>()...}, ValueType{1}, std::multiplies<ValueType>());
+    return meta::accumulate(meta::array<ValueType, sizeof...(Elements)>{impl::runtime_expand_atom<ValueType, Elements>()...}, ValueType{1}, std::multiplies<ValueType>());
 };
 #pragma endregion
 } // namespace impl
 //Pull the list type and its generators into the benri namespace,
 //because we need it for constructing units.
-using impl::divide_lists;
-using impl::sorted_list;
-using impl::list;
-using impl::make_fraction_list;
-using impl::make_power_list;
-using impl::multiply_lists;
-using impl::pow_list;
+using type::divide_lists;
+using type::sorted_list;
+using type::list;
+using type::make_fraction_list;
+using type::make_power_list;
+using type::multiply_lists;
+using type::pow_list;
 } // namespace benri

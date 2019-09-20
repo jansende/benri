@@ -2,13 +2,13 @@
 #include <benri/impl/meta/algorithm.h>
 #include <benri/impl/meta/array.h>
 #include <benri/impl/atom.h>
-#include <benri/impl/list.h>
-#include <benri/impl/detector.h>
+#include <benri/impl/type/list.h>
+#include <benri/impl/type/traits.h>
 #include <cstdlib>
 
 namespace benri
 {
-namespace impl
+namespace type
 {
 template <class... Elements>
 struct sorted_list;
@@ -108,7 +108,7 @@ struct atom_hash
 template <class T, class Power>
 struct atom_hash<atom<T, Power>>
 {
-    static constexpr float value = atom_hash_value<atom<T, Power>, detect_if<T, impl::has_static_constexpr_value>>::value;
+    static constexpr float value = atom_hash_value<atom<T, Power>, type::detect_if<T, impl::has_static_constexpr_value>>::value;
 };
 
 template <class T, class Power>
@@ -119,7 +119,7 @@ struct hash_impl<atom<T, Power>>
 template <class T>
 constexpr float hash = hash_impl<T>::value;
 #pragma endregion
-namespace impl
+namespace type
 {
 #pragma region sorting function
 //hash_order is our standard ordering function
@@ -223,5 +223,5 @@ static_assert(std::is_same<sorted_list<int, int, double>, sort<list<int, double,
 static_assert(std::is_same<sorted_list<int, float, double>, sort<list<double, float, int>>>::value, "");
 static_assert(std::is_same<sorted_list<atom<int>, atom<float, std::ratio<2>>, atom<double>>, sort<list<atom<double>, atom<float, std::ratio<2>>, atom<int>>>>::value, "");
 } // namespace impl
-using impl::sort;
+using type::sort;
 } // namespace benri

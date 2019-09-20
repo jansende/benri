@@ -39,7 +39,7 @@
 #define create_symbol(NAME, DIMENSIONS, PREFIX) \
     constexpr auto NAME = quantity<unit<sort<DIMENSIONS>, sort<PREFIX>>>{static_cast<Precision>(1)};
 #define create_constant(NAME, VALUE, UNIT) \
-    constexpr auto NAME = quantity<UNIT, Precision>{impl::multiply_elements<Precision, VALUE>};
+    constexpr auto NAME = quantity<UNIT, Precision>{type::multiply_elements<Precision, VALUE>};
 
 #define create_and_register_dimension(NAME, ...) \
     using NAME##_t = sort<list<__VA_ARGS__>>;
