@@ -19,7 +19,7 @@ int main()
 {
     using namespace benri::si;
     using namespace benri::si::temperature;
-    using benri::simple_cast;
+    using namespace benri::casts;
 
     //get sensor data
     auto indoor = get_indoor_temperature();

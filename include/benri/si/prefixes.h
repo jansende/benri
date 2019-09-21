@@ -114,7 +114,12 @@ struct elementary_charge
 };
 using elementary_charge_t = type::sorted_list<pre<elementary_charge>>;
 //Fine structure constant.
-using fine_structure_constant_t = type::divide_lists<type::multiply_lists<type::multiply_lists<elementary_charge_t, elementary_charge_t>, type::multiply_lists<magnetic_constant_t, speed_of_light_t>>, type::multiply_lists<type::make_prefix<2>, planck_constant_t>>;
+using fine_structure_constant_symbol_t = type::divide_lists<type::multiply_lists<type::multiply_lists<elementary_charge_t, elementary_charge_t>, type::multiply_lists<magnetic_constant_t, speed_of_light_t>>, type::multiply_lists<type::make_prefix<2>, planck_constant_t>>;
+struct fine_structure_constant
+{
+    static constexpr Precision value = expand_prefix_list<Precision, fine_structure_constant_symbol_t>;
+};
+using fine_structure_constant_t = type::sorted_list<pre<fine_structure_constant>>;
 //Inverse fine structure constant.
 using inverse_fine_structure_constant_t = type::divide_lists<type::make_prefix<1>, fine_structure_constant_t>;
 //Electron mass in kilogram.
@@ -194,7 +199,27 @@ using molar_gas_constant_t = type::sorted_list<pre<molar_gas_constant>>;
 //Boltzmann constant in Joule per Kelvin.
 using boltzmann_constant_t = type::divide_lists<molar_gas_constant_t, avogadro_constant_t>;
 //Stefan-Boltzmann constant in Watt per square metre quartic Kelvin steradian
-using stefan_boltzmann_constant_t = type::divide_lists<type::multiply_lists<type::pow_list<pi_t, std::ratio<2>>, type::pow_list<boltzmann_constant_t, std::ratio<4>>>, type::multiply_lists<type::make_prefix<60>, type::pow_list<reduced_planck_constant_t, std::ratio<3>>, type::pow_list<speed_of_light_t, std::ratio<2>>>>;
+using stefan_boltzmann_constant_symbol_t =
+    type::divide_lists<
+        type::multiply_lists<
+            type::pow_list<pi_t, std::ratio<2>>,
+            type::pow_list<boltzmann_constant_t, std::ratio<4>>>,
+        type::multiply_lists<
+            type::make_prefix<60>,
+            type::pow_list<reduced_planck_constant_t, std::ratio<3>>,
+            type::pow_list<speed_of_light_t, std::ratio<2>>>>;
+struct stefan_boltzmann_constant_helper
+{
+    static constexpr Precision value = expand_prefix_list<Precision, type::divide_lists<boltzmann_constant_t, reduced_planck_constant_t>>;
+};
+struct stefan_boltzmann_constant
+{
+    static constexpr Precision value = expand_prefix_list<Precision, type::divide_lists<type::pow_list<pi_t, std::ratio<2>>, type::make_prefix<60>>> *
+                                       expand_prefix_list<Precision, type::pow_list<type::sorted_list<pre<stefan_boltzmann_constant_helper>>, std::ratio<3>>> *
+                                       expand_prefix_list<Precision, boltzmann_constant_t> *
+                                       expand_prefix_list<Precision, speed_of_light_t>;
+};
+using stefan_boltzmann_constant_t = type::sorted_list<pre<stefan_boltzmann_constant>>;
 //Magnetic flux quantum in Weber.
 using magnetic_flux_quantum_t = type::divide_lists<planck_constant_t, type::multiply_lists<type::make_prefix<2>, elementary_charge_t>>;
 //Josephson constant in Hertz per Volt.

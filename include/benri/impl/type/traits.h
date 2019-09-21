@@ -115,12 +115,12 @@ template <class T>
 using is_one = typename std::enable_if_t<
     detect_if<T, is_unit> &&
     detect_if<typename T::prefix, is_empty_list> &&
-    detect_if<typename T::dimensions, is_empty_list>>;
+    detect_if<typename T::dimension, is_empty_list>>;
 //Check if a type is a unit without dimension using SFINAE.
 template <class T>
 using is_dimensionless = typename std::enable_if_t<
     detect_if<T, is_unit> &&
-    detect_if<typename T::dimensions, is_empty_list>>;
+    detect_if<typename T::dimension, is_empty_list>>;
 //Check if a type is a dimension using SFINAE.
 template <class>
 struct is_dimension_impl : std::false_type

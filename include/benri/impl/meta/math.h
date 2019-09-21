@@ -20,7 +20,7 @@ constexpr auto power_impl(Base value, std::ratio<ExponentNum, 1>) -> std::enable
     {
         val *= static_cast<T>(value);
     }
-    return ExponentNum >= 0 ? (val) : (1 / val);
+    return ExponentNum >= 0 ? (val) : (T{1} / val);
 }
 template <class T, class Base, intmax_t ExponentNum>
 constexpr auto power_impl(Base, std::ratio<ExponentNum, 1>) -> std::enable_if_t<type::detect_if<Base, type::has_value>, T>

@@ -26,7 +26,8 @@ auto weighting_factor(radiation_type radiation)
 template <class T>
 auto equivalent_dose(benri::quantity<benri::si::gray_t, T> absorbed_dose, radiation_type radiation)
 {
-    return absorbed_dose * benri::value_type_cast<T>(weighting_factor(radiation));
+    using namespace benri::casts;
+    return absorbed_dose * value_type_cast<T>(weighting_factor(radiation));
 }
 
 int main()

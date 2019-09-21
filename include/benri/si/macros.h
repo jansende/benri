@@ -2,44 +2,44 @@
 
 #define fix(...) __VA_ARGS__
 
-#define implement_unit(NAME, DIMENSIONS, PREFIX)                                                  \
-    using NAME##_t = unit<type::sort<DIMENSIONS>, type::sort<PREFIX>>;                              \
+#define implement_unit(NAME, DIMENSION, PREFIX)                                                  \
+    using NAME##_t = benri::unit<benri::type::sort<DIMENSION>, benri::type::sort<PREFIX>>;       \
     [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept            \
     {                                                                                             \
-        return quantity<NAME##_t, Precision>{static_cast<Precision>(value)};                      \
+        return benri::quantity<NAME##_t, benri::Precision>{static_cast<benri::Precision>(value)}; \
     }                                                                                             \
     [[nodiscard]] constexpr inline auto operator"" _##NAME(unsigned long long int value) noexcept \
     {                                                                                             \
-        return quantity<NAME##_t, Precision>{static_cast<Precision>(value)};                      \
+        return benri::quantity<NAME##_t, benri::Precision>{static_cast<benri::Precision>(value)}; \
     }                                                                                             \
-    constexpr auto NAME = quantity<NAME##_t, Precision>{static_cast<Precision>(1)};
+    constexpr auto NAME = benri::quantity<NAME##_t, benri::Precision>{static_cast<benri::Precision>(1)};
 
 #define link_unit(NAME, ALIAS)                                                                    \
     using NAME##_t = ALIAS##_t;                                                                   \
     [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept            \
     {                                                                                             \
-        return quantity<NAME##_t>{static_cast<Precision>(value)};                                 \
+        return benri::quantity<NAME##_t>{static_cast<benri::Precision>(value)};                   \
     }                                                                                             \
     [[nodiscard]] constexpr inline auto operator"" _##NAME(unsigned long long int value) noexcept \
     {                                                                                             \
-        return quantity<NAME##_t>{static_cast<Precision>(value)};                                 \
+        return benri::quantity<NAME##_t>{static_cast<benri::Precision>(value)};                   \
     }                                                                                             \
     constexpr auto NAME = ALIAS;
 #define link_unit_point(NAME, ALIAS)                                                              \
     using NAME##_t = ALIAS##_t;                                                                   \
     [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept            \
     {                                                                                             \
-        return quantity_point<NAME##_t>{static_cast<Precision>(value)};                           \
+        return benri::quantity_point<NAME##_t>{static_cast<benri::Precision>(value)};             \
     }                                                                                             \
     [[nodiscard]] constexpr inline auto operator"" _##NAME(unsigned long long int value) noexcept \
     {                                                                                             \
-        return quantity_point<NAME##_t>{static_cast<Precision>(value)};                           \
+        return benri::quantity_point<NAME##_t>{static_cast<benri::Precision>(value)};             \
     }
 
-#define create_symbol(NAME, DIMENSIONS, PREFIX) \
-    constexpr auto NAME = quantity<unit<type::sort<DIMENSIONS>, type::sort<PREFIX>>>{static_cast<Precision>(1)};
+#define create_symbol(NAME, DIMENSION, PREFIX) \
+    constexpr auto NAME = benri::quantity<benri::unit<benri::type::sort<DIMENSION>, benri::type::sort<PREFIX>>>{static_cast<benri::Precision>(1)};
 #define create_constant(NAME, VALUE, UNIT) \
-    constexpr auto NAME = quantity<UNIT, Precision>{expand_prefix_list<Precision, VALUE>};
+    constexpr auto NAME = benri::quantity<UNIT, benri::Precision>{benri::expand_prefix_list<benri::Precision, VALUE>};
 
 #define create_and_register_dimension(NAME, ...) \
-    using NAME##_t = type::sort<type::list<__VA_ARGS__>>;
+    using NAME##_t = benri::type::sort<benri::type::list<__VA_ARGS__>>;

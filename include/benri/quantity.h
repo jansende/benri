@@ -73,9 +73,9 @@ public:
     template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
     friend constexpr inline auto value_type_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity<ArgumentUnit, ResultValueType>;
     template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
-    friend constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>;
+    friend constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimension, typename ArgumentUnit::dimension>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>;
     template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
-    friend constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>;
+    friend constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimension, typename ArgumentUnit::dimension>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>;
     template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
     friend constexpr inline auto remove_prefix(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> quantity<drop_unit_prefix<ArgumentUnit>, ResultValueType>;
 #pragma endregion
@@ -228,7 +228,7 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
 //compile time. However, the implementation has a restriction, that it is
 //not compatible with roots of units.
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>
+[[nodiscard]] constexpr inline auto simple_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimension, typename ArgumentUnit::dimension>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>
 {
     constexpr auto factor = expand_prefix_list<ArgumentValueType, type::divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>>;
     return quantity<ResultUnit, ArgumentValueType>{rhs._value * factor};
@@ -246,7 +246,7 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 //marked constexpr, to be forward compatible with a constexpr std::pow
 //implementation.
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimensions, typename ArgumentUnit::dimensions>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>
+[[nodiscard]] constexpr inline auto unit_cast(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept -> std::enable_if_t<std::is_same<typename ResultUnit::dimension, typename ArgumentUnit::dimension>::value && type::detect_if<ResultUnit, type::is_unit>, quantity<ResultUnit, ArgumentValueType>>
 {
     const auto factor = runtime_expand_prefix_list<ArgumentValueType>(type::divide_lists<typename ArgumentUnit::prefix, typename ResultUnit::prefix>{});
     return quantity<ResultUnit, ArgumentValueType>{rhs._value * factor};
@@ -275,6 +275,15 @@ template <class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto remove_prefix(const quantity<ArgumentUnit, ArgumentValueType> &rhs) noexcept
 {
     return remove_prefix<ArgumentValueType>(rhs);
+}
+#pragma endregion
+#pragma region argument dependent lookup helper
+namespace casts 
+{
+    using benri::value_type_cast;
+    using benri::simple_cast;
+    using benri::unit_cast;
+    using benri::remove_prefix;
 }
 #pragma endregion
 } // namespace benri

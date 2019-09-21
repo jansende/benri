@@ -146,7 +146,7 @@ create_symbol(gravitational_constant, fix(type::multiply_lists<dimension::force_
 create_symbol(planck_constant, dimension::action_t, prefix::planck_constant_t);
 create_symbol(reduced_planck_constant, dimension::action_t, prefix::reduced_planck_constant_t);
 create_symbol(elementary_charge, dimension::electric_charge_t, prefix::elementary_charge_t);
-create_symbol(fine_structure_constant, dimension::dimensionless_t, prefix::fine_structure_constant_t);
+create_symbol(fine_structure_constant, dimension::dimensionless_t, prefix::fine_structure_constant_symbol_t);
 create_symbol(inverse_fine_structure_constant, dimension::dimensionless_t, prefix::inverse_fine_structure_constant_t);
 create_symbol(electron_mass, dimension::mass_t, prefix::electron_mass_t);
 create_symbol(proton_mass, dimension::mass_t, prefix::proton_mass_t);

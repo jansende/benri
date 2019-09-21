@@ -22,3 +22,26 @@
 - [ ] Write an explanation for affine types.
 - [ ] Document the is_compatible trickery.
 - [ ] Research the right value for the solar luminosity.
+- [ ] Begin semantic versioning.
+- [ ] Add type traits for benri types.
+- [ ] Write documentation.
+
+# Roadmap
+----------------------------------------
+### 0.x.x
+Future versions of *benri* might implement:
+- `<chrono>` support
+- `<algorithm>` support
+- compile time math
+- doxygen documentation
+- extensive unit tests
+- appveyor support
+
+
+
+format docs
+format tables
+write about type lists
+
+rename dimensions to dimension
+add chrono
