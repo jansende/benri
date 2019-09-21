@@ -16,6 +16,7 @@ implement_unit(international_mile, dimension::length_t, prefix::international_mi
 implement_unit(yard, dimension::length_t, prefix::yard_t);
 implement_unit(international_foot, dimension::length_t, prefix::international_foot_t);
 implement_unit(inch, dimension::length_t, prefix::inch_t);
+implement_unit(smoot, dimension::length_t, prefix::smoot_t);
 #pragma endregion
 #pragma region area
 implement_unit(barn, dimension::area_t, type::make_prefix_pow10<-28>);

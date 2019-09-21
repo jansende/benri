@@ -293,7 +293,7 @@ struct earth_mass
 };
 using earth_mass_t = type::sorted_list<pre<earth_mass>>;
 #pragma endregion
-#pragma region non-si
+#pragma region non - si
 //Ångström in metre.
 using angstroem_t = type::make_prefix_pow10<-10>;
 //Bohr in metre.
@@ -344,6 +344,19 @@ struct ounce
     static constexpr Precision value = 2.834952e-2;
 };
 using ounce_t = type::sorted_list<pre<ounce>>;
+//Smoot in metre.
+struct smoot
+{
+    static constexpr Precision value = 1.708;
+};
+using smoot_t = type::sorted_list<pre<smoot>>;
+//Speed of cherry blossoms falling in centimetre per second.
+struct sakura
+{
+    //See: 秒速5センチメートル
+    static constexpr Precision value = 5.;
+};
+using sakura_t = type::sorted_list<pre<sakura>>;
 #pragma endregion
 } // namespace prefix
 } // namespace benri
