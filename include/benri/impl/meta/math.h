@@ -13,9 +13,8 @@ namespace meta
 // std::ratios or struct with a ::value attribute. Currently only integer powers
 // are supported.
 template <class T, class Base, intmax_t ExponentNum>
-constexpr auto power_impl(Base value, std::ratio<ExponentNum, 1>)
-    -> std::enable_if_t<std::is_integral<Base>::value || std::is_floating_point_v<Base>,
-                        T>
+constexpr auto power_impl(Base value, std::ratio<ExponentNum, 1>) -> std::enable_if_t<
+    std::is_integral<Base>::value || std::is_floating_point<Base>::value, T>
 {
     auto val      = static_cast<T>(value);
     auto exponent = ExponentNum >= 0 ? ExponentNum : -ExponentNum;

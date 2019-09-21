@@ -87,10 +87,11 @@ struct insert_sort_swap_impl<sorted_list<NewTs...>, Comp,
 template <template <class, class> class Comp, class Old>
 using insert_sort_swap = typename insert_sort_swap_impl<sorted_list<>, Comp, Old>::type;
 // Basics test
-static_assert(std::is_same_v<insert_sort_swap<type_order, list<int>>, sorted_list<int>>,
-              "type::insert_sort_swap<list<int>> is list<int>.");
-static_assert(std::is_same_v<insert_sort_swap<type_order, list<double, int, float>>,
-                             sorted_list<int, float, double>>,
+static_assert(
+    std::is_same<insert_sort_swap<type_order, list<int>>, sorted_list<int>>::value,
+    "type::insert_sort_swap<list<int>> is list<int>.");
+static_assert(std::is_same<insert_sort_swap<type_order, list<double, int, float>>,
+                           sorted_list<int, float, double>>::value,
               "type::insert_sort_swap<list<double, int, float>> is list<int, float, "
               "double>.");
 

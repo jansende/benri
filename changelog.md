@@ -1,8 +1,12 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## 0.1.1
+Minor patch.
+- Some C++17 type_traits were used by mistake.
+
 ## 0.1.0
-Version 0.1.0 provides the first complete user experience. The following functionalities have been implemented:
+First complete user experience. Among others, the following basic functions have been implemented:
 - SI units
 - Astronomical units
 - CGS units
