@@ -2,139 +2,123 @@
 #include <benri/impl/type/list.h>
 #include <benri/impl/dimension.h>
 #include <benri/impl/prefix.h>
+#include <benri/impl/meta/string.h>
 
 namespace benri
 {
-#pragma region hash function
+#pragma region type hash
+//Function for ordering types.
 template <class T>
-struct hash_impl
+struct type_hash_impl
 {
+    //We implicitly assume that types which are not specialized, provide a ::value attribute.
+    static constexpr float value = static_cast<float>(T::value);
 };
 template <>
-struct hash_impl<bool>
+struct type_hash_impl<bool>
 {
     static constexpr float value = 1;
 };
 template <>
-struct hash_impl<short int>
+struct type_hash_impl<short int>
 {
     static constexpr float value = 2;
 };
 template <>
-struct hash_impl<unsigned short int>
+struct type_hash_impl<unsigned short int>
 {
     static constexpr float value = 3;
 };
 template <>
-struct hash_impl<int>
+struct type_hash_impl<int>
 {
     static constexpr float value = 4;
 };
 template <>
-struct hash_impl<unsigned int>
+struct type_hash_impl<unsigned int>
 {
     static constexpr float value = 5;
 };
 template <>
-struct hash_impl<long int>
+struct type_hash_impl<long int>
 {
     static constexpr float value = 6;
 };
 template <>
-struct hash_impl<unsigned long int>
+struct type_hash_impl<unsigned long int>
 {
     static constexpr float value = 7;
 };
 template <>
-struct hash_impl<long long int>
+struct type_hash_impl<long long int>
 {
     static constexpr float value = 8;
 };
 template <>
-struct hash_impl<unsigned long long int>
+struct type_hash_impl<unsigned long long int>
 {
     static constexpr float value = 9;
 };
 template <>
-struct hash_impl<char>
+struct type_hash_impl<char>
 {
     static constexpr float value = 10;
 };
 template <>
-struct hash_impl<float>
+struct type_hash_impl<float>
 {
     static constexpr float value = 11;
 };
 template <>
-struct hash_impl<double>
+struct type_hash_impl<double>
 {
     static constexpr float value = 12;
 };
-template <class Atom, bool hasValue>
-struct atom_hash_value
+template <intmax_t Num, intmax_t Den>
+struct type_hash_impl<std::ratio<Num, Den>>
 {
-    //TODO
+    static constexpr float value = static_cast<float>(Num) / static_cast<float>(Den);
 };
-template <intmax_t num, intmax_t den, class Power>
-struct atom_hash_value<dim<std::ratio<num, den>, Power>, false>
+template <intmax_t Num, intmax_t Den, class Power>
+struct type_hash_impl<dim<std::ratio<Num, Den>, Power>>
 {
-    static constexpr float value = static_cast<float>(num) / static_cast<float>(den);
-};
-template <class T, class Power>
-struct atom_hash_value<dim<T, Power>, false>
-{
-    static constexpr float value = hash_impl<T>::value;
+    static constexpr float value = type_hash_impl<std::ratio<Num, Den>>::value;
 };
 template <class T, class Power>
-struct atom_hash_value<dim<T, Power>, true>
+struct type_hash_impl<dim<T, Power>>
 {
-    static constexpr float value = static_cast<float>(T::value);
+    //Unpack.
+    static constexpr float value = type_hash_impl<T>::value;
 };
-template <intmax_t num, intmax_t den, class Power>
-struct atom_hash_value<pre<std::ratio<num, den>, Power>, false>
+template <intmax_t Num, intmax_t Den, class Power>
+struct type_hash_impl<pre<std::ratio<Num, Den>, Power>>
 {
-    static constexpr float value = static_cast<float>(num) / static_cast<float>(den);
-};
-template <class T, class Power>
-struct atom_hash_value<pre<T, Power>, false>
-{
-    static constexpr float value = hash_impl<T>::value;
+    static constexpr float value = type_hash_impl<std::ratio<Num, Den>>::value;
 };
 template <class T, class Power>
-struct atom_hash_value<pre<T, Power>, true>
+struct type_hash_impl<pre<T, Power>>
 {
-    static constexpr float value = static_cast<float>(T::value);
-};
-template <class Atom>
-struct atom_hash
-{
-    //TODO
-};
-template <class T, class Power>
-struct atom_hash<dim<T, Power>>
-{
-    static constexpr float value = atom_hash_value<dim<T, Power>, type::detect_if<T, type::has_value>>::value;
-};
-template <class T, class Power>
-struct atom_hash<pre<T, Power>>
-{
-    static constexpr float value = atom_hash_value<pre<T, Power>, type::detect_if<T, type::has_value>>::value;
-};
-
-template <class T, class Power>
-struct hash_impl<dim<T, Power>>
-{
-    static constexpr float value = atom_hash<dim<T, Power>>::value;
-};
-template <class T, class Power>
-struct hash_impl<pre<T, Power>>
-{
-    static constexpr float value = atom_hash<pre<T, Power>>::value;
+    //Unpack.
+    static constexpr float value = type_hash_impl<T>::value;
 };
 template <class T>
-constexpr float hash = hash_impl<T>::value;
-//hash_order is our standard ordering function
+constexpr float type_hash = type_hash_impl<T>::value;
+#pragma endregion
+#pragma region type ordering
 template <class L, class R>
-using hash_order = std::integral_constant<bool, hash<L> < hash<R>>;
+struct type_order : std::integral_constant<bool, (type_hash<L> < type_hash<R>)>
+{
+};
+//Everything is smaller than dimensions.
+template <class L, class T, class Power>
+struct type_order<L, dim<T, Power>> : std::true_type
+{
+};
+//Dimensions are ordered by their ::name.
+template <class LT, class LPower, class RT, class RPower>
+struct type_order<dim<LT, LPower>, dim<RT, RPower>>
+    : std::integral_constant<bool, (meta::strcmp(LT::name, RT::name) < 0)>
+{
+};
 #pragma endregion
 } // namespace benri

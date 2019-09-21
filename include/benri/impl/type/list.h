@@ -10,15 +10,11 @@ namespace type
 template <class... Elements>
 struct list
 {
-    //TODO: Move the check into math.
-    // static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
 };
 //Special name for sorted type lists.
 template <class... Elements>
 struct sorted_list
 {
-    //TODO: Move the check into math.
-    // static_assert(all_true<detect_if<Elements, impl::is_atom>...>, "all elements of a list need to be atoms.");
 };
 #pragma endregion
 #pragma region functions

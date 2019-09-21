@@ -437,6 +437,7 @@ auto print(benri::quantity<benri::si::hour_t, ValueType> value)
 *benri* allows its users to define new base dimensions and seemlessly use them together with the already existing ones:
 ```c++
 #include <benri/impl/dimensions.h>
+#include <benri/impl/meta/string.h>
 
 //We need to go into the benri namespace, otherwise the compiler complains.
 namespace benri
@@ -445,29 +446,19 @@ namespace benri
 namespace dim
 {
 //add a pirate (pir) dimension and a ninja (nin) dimension
-struct pir;
-struct nin;
-} // namespace dim
-
-//The following overload need to be provided, because benri internally sorts
-//the dimensions by the value of this function.
-//For the value all numbers equal or larger 100 can be used. Other values
-//are reserved.
-template <>
-struct hash_impl<dimension::pir>
+struct pir
 {
-    static constexpr float value = 100; 
+    //The name values need to be provided because benri internally sorts the dimensions by
+    //their name.
+    static constexpr benri::meta::static_string name = "pir";
 };
-template <>
-struct hash_impl<dimension::nin>
+struct nin
 {
-    static constexpr float value = 101;
+    static constexpr benri::meta::static_string name = "nin";
 };
-
 //The dimensions can be registered in the benri namespace using macros.
 //This has to be done inside the dim namespace.
-namespace dim
-{
+
 //Singular dimensions
 create_and_register_dimension(pirate, helper<pir>);
 create_and_register_dimension(ninja, helper<nin>);

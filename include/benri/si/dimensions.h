@@ -10,96 +10,63 @@ namespace dimension
 {
 #pragma region dimension symbols
 //si
-struct L; //length
-struct M; //mass
-struct T; //time, duration
-struct I; //current
-struct H; //thermodynamic temperature (actually this should be a Θ, but H looks similar)
-struct N; //amount of substance
-struct J; //luminous intensity
-//special symbols
-struct A;    //angle
-struct C;    //number of events (count)
-struct S;    //helper for Sievert based units
-struct B;    //amount of data
-struct X;    //screen position
-struct degC; //absolute degree celsius
-struct degF; //absolute degree fahrenheit
-} // namespace dim
-//si
-template <>
-struct hash_impl<dimension::L>
+struct L
 {
-    static constexpr float value = 20;
+    static constexpr auto name = meta::static_string{"L"};
 }; //length
-template <>
-struct hash_impl<dimension::M>
+struct M
 {
-    static constexpr float value = 21;
+    static constexpr auto name = meta::static_string{"M"};
 }; //mass
-template <>
-struct hash_impl<dimension::T>
+struct T
 {
-    static constexpr float value = 22;
+    static constexpr auto name = meta::static_string{"T"};
 }; //time, duration
-template <>
-struct hash_impl<dimension::I>
+struct I
 {
-    static constexpr float value = 23;
+    static constexpr auto name = meta::static_string{"I"};
 }; //current
-template <>
-struct hash_impl<dimension::H>
+struct H
 {
-    static constexpr float value = 24;
+    static constexpr auto name = meta::static_string{"H"};
 }; //thermodynamic temperature (actually this should be a Θ, but H looks similar)
-template <>
-struct hash_impl<dimension::N>
+struct N
 {
-    static constexpr float value = 25;
+    static constexpr auto name = meta::static_string{"N"};
 }; //amount of substance
-template <>
-struct hash_impl<dimension::J>
+struct J
 {
-    static constexpr float value = 26;
+    static constexpr auto name = meta::static_string{"J"};
 }; //luminous intensity
 //special symbols
-template <>
-struct hash_impl<dimension::A>
+struct A
 {
-    static constexpr float value = 27;
+    static constexpr auto name = meta::static_string{"A"};
 }; //angle
-template <>
-struct hash_impl<dimension::C>
+struct C
 {
-    static constexpr float value = 28;
+    static constexpr auto name = meta::static_string{"C"};
 }; //number of events (count)
-template <>
-struct hash_impl<dimension::S>
+struct S
 {
-    static constexpr float value = 29;
+    static constexpr auto name = meta::static_string{"S"};
 }; //helper for Sievert based units
-template <>
-struct hash_impl<dimension::B>
+struct B
 {
-    static constexpr float value = 30;
+    static constexpr auto name = meta::static_string{"B"};
 }; //amount of data
-template <>
-struct hash_impl<dimension::X>
+struct X
 {
-    static constexpr float value = 31;
+    static constexpr auto name = meta::static_string{"X"};
 }; //screen position
-template <>
-struct hash_impl<dimension::degC>
+struct degC
 {
-    static constexpr float value = 32;
+    static constexpr auto name = meta::static_string{"degC"};
 }; //absolute degree celsius
-template <>
-struct hash_impl<dimension::degF>
+struct degF
 {
-    static constexpr float value = 33;
+    static constexpr auto name = meta::static_string{"degF"};
 }; //absolute degree fahrenheit
-namespace dimension
-{
 #pragma endregion
 #pragma region atom helper
 template <class Dimension, intmax_t Power = 1>
@@ -193,5 +160,5 @@ create_and_register_dimension(crackle, helper<L>, helper<T, -5>);
 create_and_register_dimension(pop, helper<L>, helper<T, -6>);
 create_and_register_dimension(massloss, helper<M>, helper<T, -1>);
 #pragma endregion
-} // namespace dim
+} // namespace dimension
 } // namespace benri

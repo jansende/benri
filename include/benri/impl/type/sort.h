@@ -85,8 +85,8 @@ struct insert_sort_swap_impl<sorted_list<NewTs...>, Comp,
 template <template <class, class> class Comp, class Old>
 using insert_sort_swap = typename insert_sort_swap_impl<sorted_list<>, Comp, Old>::type;
 //Basics test
-static_assert(std::is_same_v<insert_sort_swap<hash_order, list<int>>, sorted_list<int>>, "type::insert_sort_swap<list<int>> is list<int>.");
-static_assert(std::is_same_v<insert_sort_swap<hash_order, list<double, int, float>>, sorted_list<int, float, double>>, "type::insert_sort_swap<list<double, int, float>> is list<int, float, double>.");
+static_assert(std::is_same_v<insert_sort_swap<type_order, list<int>>, sorted_list<int>>, "type::insert_sort_swap<list<int>> is list<int>.");
+static_assert(std::is_same_v<insert_sort_swap<type_order, list<double, int, float>>, sorted_list<int, float, double>>, "type::insert_sort_swap<list<double, int, float>> is list<int, float, double>.");
 
 template <class New, template <class, class> class Comp, class Old>
 struct insertion_sort_impl;
@@ -119,7 +119,7 @@ struct insertion_sort_impl<sorted_list<FirstNewT, NewTs...>, Comp,
           list<OldTs...>>
 {
 };
-template <class List, template <class, class> class Comp = hash_order>
+template <class List, template <class, class> class Comp = type_order>
 using insertion_sort = typename insertion_sort_impl<sorted_list<>, Comp, List>::type;
 //Basic tests
 static_assert(std::is_same<sorted_list<>, insertion_sort<list<>>>::value, "type::insertion_sort<list<>> is list<>.");
@@ -130,8 +130,8 @@ static_assert(std::is_same<sorted_list<int, int, double>, insertion_sort<list<in
 static_assert(std::is_same<sorted_list<int, float, double>, insertion_sort<list<double, float, int>>>::value, "type::insertion_sort<list<double, float, int>> is list<int, float, double>.");
 #pragma endregion
 #pragma region global settings
-//We use insertion sort with hash_ordering right now.
-template <class List, template <class, class> class Comp = hash_order>
+//We use insertion sort right now.
+template <class List, template <class, class> class Comp = type_order>
 using sort = insertion_sort<List, Comp>;
 //Basic tests
 static_assert(std::is_same<sorted_list<>, sort<list<>>>::value, "type::sort<list<>> is list<>.");

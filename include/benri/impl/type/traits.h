@@ -3,6 +3,7 @@
 #include <ratio>
 #include <benri/impl/meta/array.h>
 #include <benri/impl/meta/algorithm.h>
+#include <benri/impl/meta/string.h>
 
 namespace benri
 {
@@ -57,7 +58,7 @@ namespace type
 {
 #pragma endregion
 #pragma region type traits
-//Check if a type is a either a list or a sorted_list.
+//Check if a type is a either a list or a sorted_list using SFINAE.
 template <class>
 struct is_list_impl : std::false_type
 {
@@ -72,7 +73,7 @@ struct is_list_impl<list<Elements...>> : std::true_type
 };
 template <class T>
 using is_list = std::enable_if_t<is_list_impl<T>::value>;
-//Check if a type is a either a empty list or a empty sorted_list.
+//Check if a type is a either a empty list or a empty sorted_list using SFINAE.
 template <class>
 struct is_empty_list_impl : std::false_type
 {
@@ -87,7 +88,7 @@ struct is_empty_list_impl<list<>> : std::true_type
 };
 template <class T>
 using is_empty_list = std::enable_if_t<is_empty_list_impl<T>::value>;
-//Check if a type is a sorted_list.
+//Check if a type is a sorted_list using SFINAE.
 template <class>
 struct is_sorted_list_impl : std::false_type
 {
@@ -98,7 +99,7 @@ struct is_sorted_list_impl<sorted_list<Elements...>> : std::true_type
 };
 template <class T>
 using is_sorted_list = std::enable_if_t<is_sorted_list_impl<T>::value>;
-//Check if a type is a unit.
+//Check if a type is a unit using SFINAE.
 template <class>
 struct is_unit_impl : std::false_type
 {
@@ -109,18 +110,18 @@ struct is_unit_impl<unit<Dimension, Prefix>> : std::true_type
 };
 template <class T>
 using is_unit = std::enable_if_t<is_unit_impl<T>::value>;
-//Check if a type is a unit without prefix and dimension.
+//Check if a type is a unit without prefix and dimension using SFINAE.
 template <class T>
 using is_one = typename std::enable_if_t<
     detect_if<T, is_unit> &&
     detect_if<typename T::prefix, is_empty_list> &&
     detect_if<typename T::dimensions, is_empty_list>>;
-//Check if a type is a unit without dimension.
+//Check if a type is a unit without dimension using SFINAE.
 template <class T>
 using is_dimensionless = typename std::enable_if_t<
     detect_if<T, is_unit> &&
     detect_if<typename T::dimensions, is_empty_list>>;
-//Check if a type is a dimension.
+//Check if a type is a dimension using SFINAE.
 template <class>
 struct is_dimension_impl : std::false_type
 {
@@ -131,7 +132,7 @@ struct is_dimension_impl<dim<T, Power>> : std::true_type
 };
 template <class T>
 using is_dimension = std::enable_if_t<is_dimension_impl<T>::value>;
-//Check if a type is a prefix.
+//Check if a type is a prefix using SFINAE.
 template <class>
 struct is_prefix_impl : std::false_type
 {
@@ -142,7 +143,7 @@ struct is_prefix_impl<pre<T, Power>> : std::true_type
 };
 template <class T>
 using is_prefix = std::enable_if_t<is_prefix_impl<T>::value>;
-//Check if a type is std::ratio.
+//Check if a type is std::ratio using SFINAE.
 template <class>
 struct is_std_ratio_impl : std::false_type
 {
@@ -153,7 +154,7 @@ struct is_std_ratio_impl<std::ratio<Num, Den>> : std::true_type
 };
 template <class T>
 using is_std_ratio = typename std::enable_if_t<is_std_ratio_impl<T>::value>;
-//Check if a type is std::ratio with an integer value (no ratio).
+//Check if a type is std::ratio with an integer value (no ratio) using SFINAE.
 template <class T>
 using is_integer_ratio = typename std::enable_if_t<
     detect_if<T, is_std_ratio> &&
@@ -173,6 +174,20 @@ using has_name = decltype(T::name);
 //Check if a type has a static constexpr ::value attribute using SFINAE.
 template <class T>
 using has_value = decltype(T::value);
+//Check if a type is meta::array using SFINAE.
+template <class>
+struct is_array_impl : std::false_type
+{
+};
+template <class T, size_t N>
+struct is_array_impl<meta::array<T, N>> : std::true_type
+{
+};
+template <class T>
+using is_array = std::enable_if_t<is_array_impl<std::remove_cv_t<T>>::value>;
+//Check if a type is meta::static_string using SFINAE.
+template <class T>
+using is_static_string = std::enable_if_t<std::is_same<std::remove_cv_t<T>, meta::static_string>::value>;
 #pragma endregion
 } // namespace type
 } // namespace benri
