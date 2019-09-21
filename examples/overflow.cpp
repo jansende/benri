@@ -1,5 +1,5 @@
 #include <iostream>
-#define BENRI_PRECISION float //set the standard value_type to float
+#define BENRI_PRECISION float // set the standard value_type to float
 #include <benri/si/si.h>
 
 int main()
@@ -9,8 +9,8 @@ int main()
     using namespace benri::casts;
 
     auto constant_relation = float{};
-    auto symbol_relation = float{};
-    //constant variant
+    auto symbol_relation   = float{};
+    // constant variant
     {
         auto impulse_a = constant::planck_constant / 7e5_metre;
         auto impulse_b = constant::planck_constant / 3e2_metre;
@@ -19,7 +19,7 @@ int main()
         std::cout << "constant: " << constant_relation << "\n";
     }
 
-    //symbol variant
+    // symbol variant
     {
         auto impulse_a = symbol::planck_constant / 7e5_metre;
         auto impulse_b = symbol::planck_constant / 3e2_metre;

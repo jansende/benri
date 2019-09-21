@@ -14,17 +14,18 @@ auto weighting_factor(radiation_type radiation)
 
     switch (radiation)
     {
-    case radiation_type::alpha:
-        return 1_sievert_per_gray;
-    case radiation_type::beta:
-        return 20_sievert_per_gray;
-    case radiation_type::protons:
-        return 2_sievert_per_gray;
+        case radiation_type::alpha:
+            return 1_sievert_per_gray;
+        case radiation_type::beta:
+            return 20_sievert_per_gray;
+        case radiation_type::protons:
+            return 2_sievert_per_gray;
     }
 }
 
 template <class T>
-auto equivalent_dose(benri::quantity<benri::si::gray_t, T> absorbed_dose, radiation_type radiation)
+auto equivalent_dose(benri::quantity<benri::si::gray_t, T> absorbed_dose,
+                     radiation_type                        radiation)
 {
     using namespace benri::casts;
     return absorbed_dose * value_type_cast<T>(weighting_factor(radiation));
@@ -34,10 +35,10 @@ int main()
 {
     using namespace benri::si;
 
-    //calculate dose
+    // calculate dose
     auto dose = equivalent_dose(10_gray, radiation_type::alpha);
-    std::wcout
-        << "You received " << dose.value() << "Sv of alpha radiation.\n"
-        << ((dose > 20_sievert) ? "You will die." : "You are probably fine.") << '\n'
-        << std::flush;
+    std::wcout << "You received " << dose.value() << "Sv of alpha radiation.\n"
+               << ((dose > 20_sievert) ? "You will die." : "You are probably fine.")
+               << '\n'
+               << std::flush;
 }

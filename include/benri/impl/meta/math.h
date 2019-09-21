@@ -1,20 +1,23 @@
 #pragma once
-#include <type_traits>
-#include <ratio>
 #include <benri/impl/type/traits.h>
+#include <ratio>
+#include <type_traits>
 
 namespace benri
 {
 namespace meta
 {
 #pragma region powers
-//Function for calculating powers of a given base value at compile time. Powers are
-//std::ratio types. Base values can be integral or floating point values, std::ratios or
-//struct with a ::value attribute. Currently only integer powers are supported.
+// Function for calculating powers of a given base value at compile time. Powers
+// are std::ratio types. Base values can be integral or floating point values,
+// std::ratios or struct with a ::value attribute. Currently only integer powers
+// are supported.
 template <class T, class Base, intmax_t ExponentNum>
-constexpr auto power_impl(Base value, std::ratio<ExponentNum, 1>) -> std::enable_if_t<std::is_integral<Base>::value || std::is_floating_point_v<Base>, T>
+constexpr auto power_impl(Base value, std::ratio<ExponentNum, 1>)
+    -> std::enable_if_t<std::is_integral<Base>::value || std::is_floating_point_v<Base>,
+                        T>
 {
-    auto val = static_cast<T>(value);
+    auto val      = static_cast<T>(value);
     auto exponent = ExponentNum >= 0 ? ExponentNum : -ExponentNum;
     for (; exponent > 1; --exponent)
     {
@@ -23,7 +26,8 @@ constexpr auto power_impl(Base value, std::ratio<ExponentNum, 1>) -> std::enable
     return ExponentNum >= 0 ? (val) : (T{1} / val);
 }
 template <class T, class Base, intmax_t ExponentNum>
-constexpr auto power_impl(Base, std::ratio<ExponentNum, 1>) -> std::enable_if_t<type::detect_if<Base, type::has_value>, T>
+constexpr auto power_impl(Base, std::ratio<ExponentNum, 1>)
+    -> std::enable_if_t<type::detect_if<Base, type::has_value>, T>
 {
     return power_impl<T>(Base::value, std::ratio<ExponentNum, 1>{});
 }
@@ -31,8 +35,8 @@ constexpr auto power_impl(Base, std::ratio<ExponentNum, 1>) -> std::enable_if_t<
 template <class T, intmax_t BaseNum, intmax_t BaseDen, intmax_t ExponentNum>
 constexpr auto power_impl(std::ratio<BaseNum, BaseDen>, std::ratio<ExponentNum, 1>) -> T
 {
-    auto num = static_cast<T>(BaseNum);
-    auto den = static_cast<T>(BaseDen);
+    auto num      = static_cast<T>(BaseNum);
+    auto den      = static_cast<T>(BaseDen);
     auto exponent = ExponentNum >= 0 ? ExponentNum : -ExponentNum;
     for (; exponent > 1; --exponent)
     {
@@ -43,25 +47,26 @@ constexpr auto power_impl(std::ratio<BaseNum, BaseDen>, std::ratio<ExponentNum, 
 }
 template <class T, class Base, class Exponent>
 constexpr T pow = power_impl<T>(Base{}, Exponent{});
-//Basic tests
-static_assert(pow<float,std::ratio<1,2>,std::ratio<2>> == 0.25f, "pow<1/2, 2> is 1/4.");
-static_assert(pow<float,std::ratio<3>,std::ratio<5>> == 243.f, "pow<3, 5> is 243.");
+// Basic tests
+static_assert(pow<float, std::ratio<1, 2>, std::ratio<2>> == 0.25f,
+              "pow<1/2, 2> is 1/4.");
+static_assert(pow<float, std::ratio<3>, std::ratio<5>> == 243.f, "pow<3, 5> is 243.");
 #pragma endregion
 #pragma region prime numbers
-//Function for checking if a number is prime.
+// Function for checking if a number is prime.
 template <class T>
-static constexpr auto is_prime_impl(const T &number)
+static constexpr auto is_prime_impl(const T& number)
     -> std::enable_if_t<std::is_integral<T>::value, bool>
 {
     auto test = T{2};
     for (; test * test <= number && number % test != 0; ++test)
         ;
-    //Negative numbers are never prime.
+    // Negative numbers are never prime.
     return number <= 1 ? false : test * test > number;
 }
 template <intmax_t Num>
 constexpr bool is_prime = is_prime_impl(Num);
-//Basic tests
+// Basic tests
 static_assert(is_prime<0> == false, "0 is not prime.");
 static_assert(is_prime<1> == false, "1 is not prime.");
 static_assert(is_prime<2> == true, "2 is prime.");
@@ -81,10 +86,11 @@ static_assert(is_prime<15> == false, "15 is not prime.");
 static_assert(is_prime<19> == true, "19 is prime.");
 static_assert(is_prime<100> == false, "100 is not prime.");
 static_assert(is_prime<293339> == true, "293339 is prime.");
-//Function for calculating the next prime after a given number. (The given number does not
-//have to be prime.)
+// Function for calculating the next prime after a given number. (The given
+// number does not have to be prime.)
 template <class T>
-constexpr auto next_prime_impl(T number) -> std::enable_if_t<std::is_integral<T>::value, T>
+constexpr auto next_prime_impl(T number)
+    -> std::enable_if_t<std::is_integral<T>::value, T>
 {
     for (++number; !is_prime_impl(number); ++number)
         ;
@@ -92,7 +98,7 @@ constexpr auto next_prime_impl(T number) -> std::enable_if_t<std::is_integral<T>
 }
 template <intmax_t Num>
 constexpr intmax_t next_prime = next_prime_impl(Num);
-//Basic tests
+// Basic tests
 static_assert(next_prime<0> == 2, "2 is the next prime after 0.");
 static_assert(next_prime<1> == 2, "2 is the next prime after 1.");
 static_assert(next_prime<2> == 3, "3 is the next prime after 2.");
@@ -112,7 +118,7 @@ static_assert(next_prime<15> == 17, "17 is the next prime after 15.");
 static_assert(next_prime<17> == 19, "19 is the next prime after 17.");
 #pragma endregion
 #pragma region prime prime_factors
-//Function for calculating the number of prime factors for a given number.
+// Function for calculating the number of prime factors for a given number.
 constexpr auto number_of_prime_factors_impl(intmax_t number) -> size_t
 {
     auto counter = size_t{0};
@@ -132,7 +138,7 @@ constexpr auto number_of_prime_factors_impl(intmax_t number) -> size_t
 }
 template <intmax_t Num>
 constexpr size_t number_of_prime_factors = number_of_prime_factors_impl(Num);
-//Basic tests
+// Basic tests
 static_assert(number_of_prime_factors<0> == 0, "0 has no prime factors.");
 static_assert(number_of_prime_factors<1> == 0, "1 has no prime factors.");
 static_assert(number_of_prime_factors<2> == 1, "2 has one prime factor.");
@@ -151,8 +157,8 @@ static_assert(number_of_prime_factors<14> == 2, "14 has two prime factors");
 static_assert(number_of_prime_factors<15> == 2, "15 has two prime factors.");
 static_assert(number_of_prime_factors<64> == 6, "64 has six prime factors.");
 static_assert(number_of_prime_factors<100> == 4, "100 has four prime factors.");
-//Function for calculating the prime factors of a given number. Due to compile time
-//constraints the number of prime factors has to be given in advance.
+// Function for calculating the prime factors of a given number. Due to compile
+// time constraints the number of prime factors has to be given in advance.
 template <size_t N>
 constexpr auto prime_factors_impl(intmax_t number) -> meta::array<intmax_t, N>
 {
@@ -173,44 +179,75 @@ constexpr auto prime_factors_impl(intmax_t number) -> meta::array<intmax_t, N>
     }
     return factors;
 }
-//Basic tests
-static_assert(meta::equal(prime_factors_impl<0>(0), meta::array<intmax_t, 0>{}), "0 has no prime factors.");
-static_assert(meta::equal(prime_factors_impl<0>(1), meta::array<intmax_t, 0>{}), "1 has no prime factors.");
-static_assert(meta::equal(prime_factors_impl<1>(2), meta::array<intmax_t, 1>{2}), "2 has prime factor {2}.");
-static_assert(meta::equal(prime_factors_impl<1>(3), meta::array<intmax_t, 1>{3}), "3 has prime factor {3}.");
-static_assert(meta::equal(prime_factors_impl<2>(4), meta::array<intmax_t, 2>{2, 2}), "4 has prime factors {2, 2}.");
-static_assert(meta::equal(prime_factors_impl<1>(5), meta::array<intmax_t, 1>{5}), "5 has prime factor {5}.");
-static_assert(meta::equal(prime_factors_impl<2>(6), meta::array<intmax_t, 2>{2, 3}), "6 has prime factors {2, 3}.");
-static_assert(meta::equal(prime_factors_impl<1>(7), meta::array<intmax_t, 1>{7}), "7 has prime factor {7}.");
-static_assert(meta::equal(prime_factors_impl<3>(8), meta::array<intmax_t, 3>{2, 2, 2}), "8 has prime factors {2, 2, 2}.");
-static_assert(meta::equal(prime_factors_impl<2>(9), meta::array<intmax_t, 2>{3, 3}), "9 has prime factors {3, 3}.");
-static_assert(meta::equal(prime_factors_impl<2>(10), meta::array<intmax_t, 2>{2, 5}), "10 has prime factors {2, 5}.");
-static_assert(meta::equal(prime_factors_impl<1>(11), meta::array<intmax_t, 1>{11}), "11 has prime factor {11}.");
-static_assert(meta::equal(prime_factors_impl<3>(12), meta::array<intmax_t, 3>{2, 2, 3}), "12 has prime factors {2, 2, 3}.");
-static_assert(meta::equal(prime_factors_impl<1>(13), meta::array<intmax_t, 1>{13}), "13 has prime factor {13}.");
-static_assert(meta::equal(prime_factors_impl<2>(14), meta::array<intmax_t, 2>{2, 7}), "14 has prime factors {2, 7}.");
-static_assert(meta::equal(prime_factors_impl<2>(15), meta::array<intmax_t, 2>{3, 5}), "15 has prime factors {3, 5}.");
-static_assert(meta::equal(prime_factors_impl<6>(64), meta::array<intmax_t, 6>{2, 2, 2, 2, 2, 2}), "64 has prime factors {2, 2, 2, 2, 2, 2}.");
-static_assert(meta::equal(prime_factors_impl<4>(100), meta::array<intmax_t, 4>{2, 2, 5, 5}), "100 has prime factors {2, 2, 5, 5}.");
-//Helper function for putting the calculate prime factors into a std::integer_sequence.
+// Basic tests
+static_assert(meta::equal(prime_factors_impl<0>(0), meta::array<intmax_t, 0>{}),
+              "0 has no prime factors.");
+static_assert(meta::equal(prime_factors_impl<0>(1), meta::array<intmax_t, 0>{}),
+              "1 has no prime factors.");
+static_assert(meta::equal(prime_factors_impl<1>(2), meta::array<intmax_t, 1>{2}),
+              "2 has prime factor {2}.");
+static_assert(meta::equal(prime_factors_impl<1>(3), meta::array<intmax_t, 1>{3}),
+              "3 has prime factor {3}.");
+static_assert(meta::equal(prime_factors_impl<2>(4), meta::array<intmax_t, 2>{2, 2}),
+              "4 has prime factors {2, 2}.");
+static_assert(meta::equal(prime_factors_impl<1>(5), meta::array<intmax_t, 1>{5}),
+              "5 has prime factor {5}.");
+static_assert(meta::equal(prime_factors_impl<2>(6), meta::array<intmax_t, 2>{2, 3}),
+              "6 has prime factors {2, 3}.");
+static_assert(meta::equal(prime_factors_impl<1>(7), meta::array<intmax_t, 1>{7}),
+              "7 has prime factor {7}.");
+static_assert(meta::equal(prime_factors_impl<3>(8), meta::array<intmax_t, 3>{2, 2, 2}),
+              "8 has prime factors {2, 2, 2}.");
+static_assert(meta::equal(prime_factors_impl<2>(9), meta::array<intmax_t, 2>{3, 3}),
+              "9 has prime factors {3, 3}.");
+static_assert(meta::equal(prime_factors_impl<2>(10), meta::array<intmax_t, 2>{2, 5}),
+              "10 has prime factors {2, 5}.");
+static_assert(meta::equal(prime_factors_impl<1>(11), meta::array<intmax_t, 1>{11}),
+              "11 has prime factor {11}.");
+static_assert(meta::equal(prime_factors_impl<3>(12), meta::array<intmax_t, 3>{2, 2, 3}),
+              "12 has prime factors {2, 2, 3}.");
+static_assert(meta::equal(prime_factors_impl<1>(13), meta::array<intmax_t, 1>{13}),
+              "13 has prime factor {13}.");
+static_assert(meta::equal(prime_factors_impl<2>(14), meta::array<intmax_t, 2>{2, 7}),
+              "14 has prime factors {2, 7}.");
+static_assert(meta::equal(prime_factors_impl<2>(15), meta::array<intmax_t, 2>{3, 5}),
+              "15 has prime factors {3, 5}.");
+static_assert(meta::equal(prime_factors_impl<6>(64),
+                          meta::array<intmax_t, 6>{2, 2, 2, 2, 2, 2}),
+              "64 has prime factors {2, 2, 2, 2, 2, 2}.");
+static_assert(meta::equal(prime_factors_impl<4>(100),
+                          meta::array<intmax_t, 4>{2, 2, 5, 5}),
+              "100 has prime factors {2, 2, 5, 5}.");
+// Helper function for putting the calculate prime factors into a
+// std::integer_sequence.
 template <intmax_t number, size_t... Index>
 constexpr auto prime_factors_to_integer_sequence(std::integer_sequence<size_t, Index...>)
 {
-    return std::integer_sequence<
-        intmax_t,
-        prime_factors_impl<sizeof...(Index)>(number)[Index]...>{};
+    return std::integer_sequence<intmax_t, prime_factors_impl<sizeof...(Index)>(
+                                               number)[Index]...>{};
 };
 template <intmax_t number>
 using prime_factors = decltype(prime_factors_to_integer_sequence<number>(
     std::make_index_sequence<number_of_prime_factors<number>>{}));
-//Basic tests
-static_assert(std::is_same<prime_factors<1>, std::integer_sequence<intmax_t>>::value, "prime_factors<1> is <>.");
-static_assert(std::is_same<prime_factors<2>, std::integer_sequence<intmax_t, 2>>::value, "prime_factors<2> is <2>.");
-static_assert(std::is_same<prime_factors<4>, std::integer_sequence<intmax_t, 2, 2>>::value, "prime_factors<4> is <2, 2>.");
-static_assert(std::is_same<prime_factors<6>, std::integer_sequence<intmax_t, 2, 3>>::value, "prime_factors<6> is <2, 3>.");
-static_assert(std::is_same<prime_factors<8>, std::integer_sequence<intmax_t, 2, 2, 2>>::value, "prime_factors<8> is <2, 2, 2>.");
-static_assert(std::is_same<prime_factors<17>, std::integer_sequence<intmax_t, 17>>::value, "prime_factors<17> is <17>.");
-static_assert(std::is_same<prime_factors<30>, std::integer_sequence<intmax_t, 2, 3, 5>>::value, "prime_factors<30> is <2, 3, 5>.");
+// Basic tests
+static_assert(std::is_same<prime_factors<1>, std::integer_sequence<intmax_t>>::value,
+              "prime_factors<1> is <>.");
+static_assert(std::is_same<prime_factors<2>, std::integer_sequence<intmax_t, 2>>::value,
+              "prime_factors<2> is <2>.");
+static_assert(
+    std::is_same<prime_factors<4>, std::integer_sequence<intmax_t, 2, 2>>::value,
+    "prime_factors<4> is <2, 2>.");
+static_assert(
+    std::is_same<prime_factors<6>, std::integer_sequence<intmax_t, 2, 3>>::value,
+    "prime_factors<6> is <2, 3>.");
+static_assert(
+    std::is_same<prime_factors<8>, std::integer_sequence<intmax_t, 2, 2, 2>>::value,
+    "prime_factors<8> is <2, 2, 2>.");
+static_assert(std::is_same<prime_factors<17>, std::integer_sequence<intmax_t, 17>>::value,
+              "prime_factors<17> is <17>.");
+static_assert(
+    std::is_same<prime_factors<30>, std::integer_sequence<intmax_t, 2, 3, 5>>::value,
+    "prime_factors<30> is <2, 3, 5>.");
 #pragma endregion
 } // namespace meta
 } // namespace benri

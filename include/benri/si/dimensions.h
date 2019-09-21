@@ -9,64 +9,65 @@ namespace benri
 namespace dimension
 {
 #pragma region dimension symbols
-//si
+// si
 struct L
 {
     static constexpr auto name = meta::static_string{"L"};
-}; //length
+}; // length
 struct M
 {
     static constexpr auto name = meta::static_string{"M"};
-}; //mass
+}; // mass
 struct T
 {
     static constexpr auto name = meta::static_string{"T"};
-}; //time, duration
+}; // time, duration
 struct I
 {
     static constexpr auto name = meta::static_string{"I"};
-}; //current
+}; // current
 struct H
 {
     static constexpr auto name = meta::static_string{"H"};
-}; //thermodynamic temperature (actually this should be a Θ, but H looks similar)
+}; // thermodynamic temperature (actually this should be a Θ, but H looks
+   // similar)
 struct N
 {
     static constexpr auto name = meta::static_string{"N"};
-}; //amount of substance
+}; // amount of substance
 struct J
 {
     static constexpr auto name = meta::static_string{"J"};
-}; //luminous intensity
-//special symbols
+}; // luminous intensity
+// special symbols
 struct A
 {
     static constexpr auto name = meta::static_string{"A"};
-}; //angle
+}; // angle
 struct C
 {
     static constexpr auto name = meta::static_string{"C"};
-}; //number of events (count)
+}; // number of events (count)
 struct S
 {
     static constexpr auto name = meta::static_string{"S"};
-}; //helper for Sievert based units
+}; // helper for Sievert based units
 struct B
 {
     static constexpr auto name = meta::static_string{"B"};
-}; //amount of data
+}; // amount of data
 struct X
 {
     static constexpr auto name = meta::static_string{"X"};
-}; //screen position
+}; // screen position
 struct degC
 {
     static constexpr auto name = meta::static_string{"degC"};
-}; //absolute degree celsius
+}; // absolute degree celsius
 struct degF
 {
     static constexpr auto name = meta::static_string{"degF"};
-}; //absolute degree fahrenheit
+}; // absolute degree fahrenheit
 #pragma endregion
 #pragma region atom helper
 template <class Dimension, intmax_t Power = 1>
@@ -110,16 +111,24 @@ create_and_register_dimension(pressure, helper<L, -1>, helper<M>, helper<T, -2>)
 create_and_register_dimension(energy, helper<L, 2>, helper<M>, helper<T, -2>);
 create_and_register_dimension(power, helper<L, 2>, helper<M>, helper<T, -3>);
 create_and_register_dimension(electric_charge, helper<T>, helper<I>);
-create_and_register_dimension(electric_potential, helper<L, 2>, helper<M>, helper<T, -3>, helper<I, -1>);
-create_and_register_dimension(capacitance, helper<L, -2>, helper<M, -1>, helper<T, 4>, helper<I, 2>);
-create_and_register_dimension(electric_resistance, helper<L, 2>, helper<M>, helper<T, -3>, helper<I, -2>);
-create_and_register_dimension(electric_conductance, helper<L, -2>, helper<M, -1>, helper<T, 3>, helper<I, 2>);
-create_and_register_dimension(magnetic_flux, helper<L, 2>, helper<M>, helper<T, -2>, helper<I, -1>);
-create_and_register_dimension(magnetic_flux_density, helper<M>, helper<T, -2>, helper<I, -1>);
-create_and_register_dimension(inductance, helper<L, 2>, helper<M>, helper<T, -2>, helper<I, -2>);
+create_and_register_dimension(electric_potential, helper<L, 2>, helper<M>, helper<T, -3>,
+                              helper<I, -1>);
+create_and_register_dimension(capacitance, helper<L, -2>, helper<M, -1>, helper<T, 4>,
+                              helper<I, 2>);
+create_and_register_dimension(electric_resistance, helper<L, 2>, helper<M>, helper<T, -3>,
+                              helper<I, -2>);
+create_and_register_dimension(electric_conductance, helper<L, -2>, helper<M, -1>,
+                              helper<T, 3>, helper<I, 2>);
+create_and_register_dimension(magnetic_flux, helper<L, 2>, helper<M>, helper<T, -2>,
+                              helper<I, -1>);
+create_and_register_dimension(magnetic_flux_density, helper<M>, helper<T, -2>,
+                              helper<I, -1>);
+create_and_register_dimension(inductance, helper<L, 2>, helper<M>, helper<T, -2>,
+                              helper<I, -2>);
 create_and_register_dimension(luminous_flux, helper<J>, helper<A, 2>);
 create_and_register_dimension(illuminance, helper<L, -2>, helper<J>, helper<A, 2>);
-create_and_register_dimension(luminosity, helper<L, 2>, helper<M>, helper<T, -3>, helper<A, 2>);
+create_and_register_dimension(luminosity, helper<L, 2>, helper<M>, helper<T, -3>,
+                              helper<A, 2>);
 create_and_register_dimension(activity_of_radionuclide, helper<T, -1>, helper<C>);
 create_and_register_dimension(absorbed_dose, helper<L, 2>, helper<T, -2>);
 create_and_register_dimension(dose_equivalent, helper<S>, helper<L, 2>, helper<T, -2>);
@@ -130,29 +139,42 @@ create_and_register_dimension(surface_tension, helper<M>, helper<T, -2>);
 create_and_register_dimension(angular_velocity, helper<T, -1>, helper<A>);
 create_and_register_dimension(angular_acceleration, helper<T, -2>, helper<A>);
 create_and_register_dimension(heat_flux_density, helper<M>, helper<T, -3>);
-create_and_register_dimension(heat_capacity, helper<L, 2>, helper<M>, helper<T, -2>, helper<H, -1>);
-create_and_register_dimension(specific_heat_capacity, helper<L, 2>, helper<T, -2>, helper<H, -1>);
-create_and_register_dimension(thermal_conductivity, helper<L>, helper<M>, helper<T, -3>, helper<H, -1>);
-create_and_register_dimension(electric_field_strength, helper<L>, helper<M>, helper<T, -3>, helper<I, -1>);
-create_and_register_dimension(electric_charge_density, helper<L, -3>, helper<T>, helper<I>);
+create_and_register_dimension(heat_capacity, helper<L, 2>, helper<M>, helper<T, -2>,
+                              helper<H, -1>);
+create_and_register_dimension(specific_heat_capacity, helper<L, 2>, helper<T, -2>,
+                              helper<H, -1>);
+create_and_register_dimension(thermal_conductivity, helper<L>, helper<M>, helper<T, -3>,
+                              helper<H, -1>);
+create_and_register_dimension(electric_field_strength, helper<L>, helper<M>,
+                              helper<T, -3>, helper<I, -1>);
+create_and_register_dimension(electric_charge_density, helper<L, -3>, helper<T>,
+                              helper<I>);
 create_and_register_dimension(electric_flux_density, helper<L, -2>, helper<T>, helper<I>);
-create_and_register_dimension(permittivity, helper<L, -3>, helper<M, -1>, helper<T, 4>, helper<I, 2>);
-create_and_register_dimension(permeability, helper<L>, helper<M>, helper<T, -2>, helper<I, -2>);
-create_and_register_dimension(molar_energy, helper<L, 2>, helper<M>, helper<T, -2>, helper<N, -1>);
-create_and_register_dimension(molar_heat_capacity, helper<L, 2>, helper<M>, helper<T, -2>, helper<H, -1>, helper<N, -1>);
+create_and_register_dimension(permittivity, helper<L, -3>, helper<M, -1>, helper<T, 4>,
+                              helper<I, 2>);
+create_and_register_dimension(permeability, helper<L>, helper<M>, helper<T, -2>,
+                              helper<I, -2>);
+create_and_register_dimension(molar_energy, helper<L, 2>, helper<M>, helper<T, -2>,
+                              helper<N, -1>);
+create_and_register_dimension(molar_heat_capacity, helper<L, 2>, helper<M>, helper<T, -2>,
+                              helper<H, -1>, helper<N, -1>);
 create_and_register_dimension(radioactive_exposure, helper<M, -1>, helper<T>, helper<I>);
 create_and_register_dimension(absorbed_dose_rate, helper<L, 2>, helper<T, -3>);
 create_and_register_dimension(radiance, helper<M>, helper<T, -3>, helper<A, 2>);
-create_and_register_dimension(catalytic_activity_concentration, helper<L, -3>, helper<T, -1>, helper<N>);
+create_and_register_dimension(catalytic_activity_concentration, helper<L, -3>,
+                              helper<T, -1>, helper<N>);
 create_and_register_dimension(action, helper<L, 2>, helper<M>, helper<T, -1>);
 create_and_register_dimension(kinematic_viscosity, helper<L, 2>, helper<T, -1>);
 create_and_register_dimension(data_bandwitdth, helper<T, -1>, helper<B>);
 create_and_register_dimension(screen_area, helper<X, 2>);
-create_and_register_dimension(electric_conductivity, helper<L, -3>, helper<M, -1>, helper<T, 3>, helper<I, 2>);
-create_and_register_dimension(electric_resistivity, helper<L, 3>, helper<M>, helper<T, -3>, helper<I, -2>);
+create_and_register_dimension(electric_conductivity, helper<L, -3>, helper<M, -1>,
+                              helper<T, 3>, helper<I, 2>);
+create_and_register_dimension(electric_resistivity, helper<L, 3>, helper<M>,
+                              helper<T, -3>, helper<I, -2>);
 create_and_register_dimension(momentum, helper<L>, helper<M>, helper<T, -1>);
 create_and_register_dimension(angular_momentum, helper<L, 2>, helper<M>);
-create_and_register_dimension(moment_of_inertia, helper<L, 2>, helper<M>, helper<T, -1>, helper<A>);
+create_and_register_dimension(moment_of_inertia, helper<L, 2>, helper<M>, helper<T, -1>,
+                              helper<A>);
 create_and_register_dimension(absement, helper<L>, helper<T>);
 create_and_register_dimension(jerk, helper<L>, helper<T, -3>);
 create_and_register_dimension(snap, helper<L>, helper<T, -4>);

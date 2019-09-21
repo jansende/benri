@@ -22,16 +22,20 @@ implement_unit(smoot, dimension::length_t, prefix::smoot_t);
 implement_unit(barn, dimension::area_t, type::make_prefix_pow10<-28>);
 #pragma endregion
 #pragma region mass
-implement_unit(carat, dimension::mass_t, fix(type::multiply_lists<type::make_prefix<2>, type::make_prefix_pow10<-4>>));
+implement_unit(
+    carat, dimension::mass_t,
+    fix(type::multiply_lists<type::make_prefix<2>, type::make_prefix_pow10<-4>>));
 implement_unit(pound, dimension::mass_t, prefix::pound_t);
 implement_unit(ounce, dimension::mass_t, prefix::ounce_t);
 #pragma endregion
 #pragma region velocity
-implement_unit(knot, dimension::velocity_t, fix(type::divide_lists<prefix::nautical_mile_t, prefix::hour_t>));
+implement_unit(knot, dimension::velocity_t,
+               fix(type::divide_lists<prefix::nautical_mile_t, prefix::hour_t>));
 #pragma endregion
 #pragma region pressure
 implement_unit(torr, dimension::pressure_t, fix(type::make_prefix<101325, 760>));
-implement_unit(millimeter_of_mercury, dimension::pressure_t, fix(type::make_prefix<133322, 1000>));
+implement_unit(millimeter_of_mercury, dimension::pressure_t,
+               fix(type::make_prefix<133322, 1000>));
 implement_unit(atmosphere, dimension::pressure_t, type::make_prefix<101325>);
 #pragma endregion
 } // namespace imperial

@@ -1,17 +1,18 @@
 #pragma once
-#include <benri/impl/type/list.h>
 #include <benri/impl/dimension.h>
-#include <benri/impl/prefix.h>
 #include <benri/impl/meta/string.h>
+#include <benri/impl/prefix.h>
+#include <benri/impl/type/list.h>
 
 namespace benri
 {
 #pragma region type hash
-//Function for ordering types.
+// Function for ordering types.
 template <class T>
 struct type_hash_impl
 {
-    //We implicitly assume that types which are not specialized, provide a ::value attribute.
+    // We implicitly assume that types which are not specialized, provide a
+    // ::value attribute.
     static constexpr float value = static_cast<float>(T::value);
 };
 template <>
@@ -87,7 +88,7 @@ struct type_hash_impl<dim<std::ratio<Num, Den>, Power>>
 template <class T, class Power>
 struct type_hash_impl<dim<T, Power>>
 {
-    //Unpack.
+    // Unpack.
     static constexpr float value = type_hash_impl<T>::value;
 };
 template <intmax_t Num, intmax_t Den, class Power>
@@ -98,7 +99,7 @@ struct type_hash_impl<pre<std::ratio<Num, Den>, Power>>
 template <class T, class Power>
 struct type_hash_impl<pre<T, Power>>
 {
-    //Unpack.
+    // Unpack.
     static constexpr float value = type_hash_impl<T>::value;
 };
 template <class T>
@@ -109,15 +110,15 @@ template <class L, class R>
 struct type_order : std::integral_constant<bool, (type_hash<L> < type_hash<R>)>
 {
 };
-//Everything is smaller than dimensions.
+// Everything is smaller than dimensions.
 template <class L, class T, class Power>
 struct type_order<L, dim<T, Power>> : std::true_type
 {
 };
-//Dimensions are ordered by their ::name.
+// Dimensions are ordered by their ::name.
 template <class LT, class LPower, class RT, class RPower>
-struct type_order<dim<LT, LPower>, dim<RT, RPower>>
-    : std::integral_constant<bool, (meta::strcmp(LT::name, RT::name) < 0)>
+struct type_order<dim<LT, LPower>, dim<RT, RPower>> :
+    std::integral_constant<bool, (meta::strcmp(LT::name, RT::name) < 0)>
 {
 };
 #pragma endregion

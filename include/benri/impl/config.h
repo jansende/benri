@@ -7,13 +7,13 @@ using Precision = double;
 #else
 using Precision = BENRI_PRECISION;
 #endif
-//Fix for msvc. clang and gcc handle [[nodiscard]] just fine, even when not in c++17 mode,
-//but msvc will not compile.
+// Fix for msvc. clang and gcc handle [[nodiscard]] just fine, even when not in
+// c++17 mode, but msvc will not compile.
 #ifdef _WIN32
 #if __cplusplus >= 201703L
-//Everything alright, nothing to do.
+// Everything alright, nothing to do.
 #else
-//Remove the nodiscard attribute.
+// Remove the nodiscard attribute.
 #define nodiscard
 #endif
 #endif
