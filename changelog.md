@@ -1,11 +1,10 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
-## 0.1.1
-Minor patch.
-- Some C++17 type_traits were used by mistake.
+## v0.1.1 - Minor patch
+- Some C++17 type_traits were used by mistake instead of the C++14 one.
 
-## 0.1.0
+## v0.1.0 - First release
 First complete user experience. Among others, the following basic functions have been implemented:
 - SI units
 - Astronomical units
