@@ -1,9 +1,9 @@
 #pragma once
 #include <benri/quantity.h>
 #include <benri/quantity_point.h>
-#include <benri/impl/dimensions.h>
-#include <benri/impl/macros.h>
-#include <benri/impl/prefix.h>
+#include <benri/si/dimensions.h>
+#include <benri/si/macros.h>
+#include <benri/si/prefixes.h>
 
 namespace benri
 {
@@ -20,7 +20,7 @@ implement_unit(pixel, dimension::screen_area_t, prefix::one_t);
 #pragma endregion
 #pragma region amount of data
 implement_unit(byte, dimension::amount_of_data_t, prefix::one_t);
-implement_unit(bit, dimension::amount_of_data_t, fix(make_prefix<1, 8>));
+implement_unit(bit, dimension::amount_of_data_t, fix(type::make_prefix<1, 8>));
 #pragma endregion
 #pragma region prefixes
 implement_unit(kibi, dimension::dimensionless_t, prefix::kibi_t);
