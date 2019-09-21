@@ -24,6 +24,21 @@ matrix:
       - cmake --build . -- -j 2
 
   - os: linux
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - g++-7
+    env:
+      - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    before_install:
+        - eval "${MATRIX_EVAL}"
+    script:
+      - cmake -DBENRI_UNIT_TESTS_ENABLED=ON -DBENRI_BUILD_EXAMPLES=ON .
+      - cmake --build . -- -j 2
+
+  - os: linux
     dist: bionic
     addons:
       apt:
@@ -37,7 +52,26 @@ matrix:
       - cmake -DBENRI_CPP17_ENABLED=ON -DBENRI_UNIT_TESTS_ENABLED=ON -DBENRI_BUILD_EXAMPLES=ON .
       - cmake --build . -- -j2
 
+  - os: linux
+    dist: bionic
+    addons:
+      apt:
+        packages:
+          - clang-7
+    env:
+      - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7"
+    before_install:
+        - eval "${MATRIX_EVAL}"
+    script:
+      - cmake -DBENRI_UNIT_TESTS_ENABLED=ON -DBENRI_BUILD_EXAMPLES=ON .
+      - cmake --build . -- -j2
+
   - os: windows
     script:
       - cmake -DBENRI_CPP17_ENABLED=ON -DBENRI_UNIT_TESTS_ENABLED=ON -DBENRI_BUILD_EXAMPLES=ON -Dgtest_force_shared_crt=ON .
+      - cmake --build .
+
+  - os: windows
+    script:
+      - cmake -DBENRI_UNIT_TESTS_ENABLED=ON -DBENRI_BUILD_EXAMPLES=ON -Dgtest_force_shared_crt=ON .
       - cmake --build .
