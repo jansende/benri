@@ -1,6 +1,9 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v0.1.2 - Minor patch
+- Fixed floating point conversion warning inside static_assert.
+
 ## v0.1.1 - Minor patch
 - Some C++17 type_traits were used by mistake instead of the C++14 one.
 

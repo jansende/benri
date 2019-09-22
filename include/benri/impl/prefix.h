@@ -82,7 +82,7 @@ static_assert(expand_prefix_list<
                   intmax_t, type::sorted_list<pre<std::ratio<2>, std::ratio<3>>>> == 8,
               "expand_prefix_list<pre<2,3>> is 8.");
 static_assert(
-    expand_prefix_list<float,
+    expand_prefix_list<double,
                        type::sorted_list<pre<std::ratio<2>, std::ratio<-3>>>> == 1. / 8.,
     "expand_prefix_list<pre<2,-3>> is 1/8.");
 static_assert(
@@ -90,8 +90,8 @@ static_assert(
                                                    pre<std::ratio<7>>>> == 28,
     "expand_prefix_list<pre<2,2>,pre<7>> is 28.");
 static_assert(
-    expand_prefix_list<float, type::sorted_list<pre<std::ratio<2>, std::ratio<-2>>,
-                                                pre<std::ratio<7>>>> == 1.75f,
+    expand_prefix_list<double, type::sorted_list<pre<std::ratio<2>, std::ratio<-2>>,
+                                                pre<std::ratio<7>>>> == 1.75,
     "expand_prefix_list<pre<2,-2>,pre<7>> is 1.75.");
 // Function for expanding a list of prefixes at runtime.
 template <class ValueType, class... Elements>
