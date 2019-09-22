@@ -1,88 +1,55 @@
 #pragma once
-#include <benri/impl/list.h>
-#include <benri/impl/sorting.h>
-#include <benri/impl/detector.h>
+#include <benri/impl/math.h>
+#include <benri/impl/type/list.h>
+#include <benri/impl/type/sort.h>
+#include <benri/impl/type/traits.h>
 
 namespace benri
 {
 #pragma region unit type
-//The unit type saves the dimensions and prefix of a physical unit.
-template <class Dimensions, class Prefix>
+// Container type for saving units.
+template <class Dimension, class Prefix>
 struct unit
 {
-    using dimensions = Dimensions;
-    using prefix = Prefix;
+    static_assert(type::detect_if<Dimension, type::is_sorted_list>,
+                  "Dimension has to be a sorted_list.");
+    static_assert(type::detect_if<Prefix, type::is_sorted_list>,
+                  "Prefix has to be a sorted_list.");
+    using dimension = Dimension;
+    using prefix    = Prefix;
 };
-//The has_valid_dimensions function checks if a given type has a ::dimensions
-//attribute which is a list.
-template <class T>
-using has_valid_dimensions = typename std::enable_if<detect_if<typename T::dimensions, impl::is_list>>::type;
-//The has_valid_prefix function checks if a given type has a ::prefix
-//attribute which is a list.
-template <class T>
-using has_valid_prefix = typename std::enable_if<detect_if<typename T::prefix, impl::is_list>>::type;
-//The is_unit function checks if a type has a ::dimensions and a ::prefix
-//attribute. This does not mean, we have an unit type, but we do not
-//care, as we can do the necessary calculations.
-template <class T>
-using is_unit = typename std::enable_if<detect_if<T, has_valid_dimensions> && detect_if<T, has_valid_prefix>>::type;
-//TODO: - Put this into a unit test folder.
-//basic tests
-static_assert(!detect_if<int, is_unit>, "");
-static_assert(!detect_if<unit<double, double>, is_unit>, "");
-static_assert(detect_if<unit<sorted_list<>, sorted_list<>>, is_unit>, "");
-//The is_dimensionless function checks if a given unit is dimensionless.
-//(The dimension is an empty list.)
-template <class T>
-using is_dimensionless = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, sorted_list<>>::value>::type;
-//The one unit is the unit where the dimension and the prefix are empty lists.
-using one = unit<sorted_list<>, sorted_list<>>;
-//The is_one function checks if a given unit is one.
-template <class T>
-using is_one = typename std::enable_if<detect_if<T, is_unit> && std::is_same<typename T::dimensions, typename one::dimensions>::value && std::is_same<typename T::prefix, typename one::prefix>::value>::type;
+// Shortcut for the unit without prefix and dimension.
+using one = unit<type::sorted_list<>, type::sorted_list<>>;
 #pragma endregion
-#pragma region unit functions
-#pragma region multiplication
-//The multiply_units function multiplies two units.
-template <class Dimensions, class Prefixes, class... Units>
-struct multiply_units_impl
-{
-};
-template <class...Dimensions, class...Prefixes>
-struct multiply_units_impl<list<Dimensions...>,list<Prefixes...>>
-{
-    using type = unit<multiply_lists<Dimensions...>,multiply_lists<Prefixes...>>;
-};
-template <class...Dimensions, class...Prefixes, class Unit, class... Rest>
-struct multiply_units_impl<list<Dimensions...>,list<Prefixes...>,Unit, Rest...> : multiply_units_impl<list<Dimensions...,typename Unit::dimensions>,list<Prefixes...,typename Unit::prefix>,Rest...>
-{
-};
-template <class... Lists>
-using multiply_units = typename multiply_units_impl<list<>,list<>,Lists...>::type;
-#pragma endregion
-#pragma region power
-//The pow_unit function applies a given power to a unit.
+#pragma region type functions
+// Function for multiplying two or more units.
+template <class... Units>
+using multiply_units = unit<type::multiply_lists<typename Units::dimension...>,
+                            type::multiply_lists<typename Units::prefix...>>;
+// Function for raising units by a given Power.
 template <class Unit, class Power>
-using pow_unit = unit<pow_list<typename Unit::dimensions, Power>, pow_list<typename Unit::prefix, Power>>;
-#pragma endregion
-#pragma region division
-//The divide_units function divide two units.
+using pow_unit = unit<type::pow_list<typename Unit::dimension, Power>,
+                      type::pow_list<typename Unit::prefix, Power>>;
+// Function for dividing two units.
 template <class lhsUnit, class rhsUnit>
-using divide_units = unit<divide_lists<typename lhsUnit::dimensions, typename rhsUnit::dimensions>, divide_lists<typename lhsUnit::prefix, typename rhsUnit::prefix>>;
-#pragma endregion
-#pragma endregion
-#pragma region unit compatibility checker
-//The is_compatible function checks if two units should be handled
-//as if they are equivalent, even if they are not.
-template <class LDimensions, class LPrefix, class RDimensions, class RPrefix>
-struct is_compatible_with_impl : std::false_type
+using divide_units = multiply_units<lhsUnit, pow_unit<rhsUnit, std::ratio<-1>>>;
+// Helper for handling units as equivalent even if the types are not.
+template <class LDimension, class LPrefix, class RDimension, class RPrefix>
+struct is_compatible : std::false_type
 {
 };
+template <class LDimension, class LPrefix, class RDimension, class RPrefix>
+constexpr bool is_compatible_v =
+    is_compatible<LDimension, LPrefix, RDimension, RPrefix>::value;
+
 template <class L, class R>
-using is_compatible_with = typename std::enable_if<is_compatible_with_impl<typename L::dimensions, typename L::prefix, typename R::dimensions, typename R::prefix>::value || is_compatible_with_impl<typename R::dimensions, typename R::prefix, typename L::dimensions, typename L::prefix>::value>::type;
-#pragma endregion
-#pragma region remove prefix
+using is_compatible_with = typename std::enable_if_t<
+    is_compatible_v<
+        typename L::dimension, typename L::prefix, typename R::dimension,
+        typename R::
+            prefix> || is_compatible_v<typename R::dimension, typename R::prefix, typename L::dimension, typename L::prefix>>;
+// Helper for removing a units prefix.
 template <class Unit>
-using remove_unit_prefix = unit<typename Unit::dimensions, sorted_list<>>;
+using drop_unit_prefix = unit<typename Unit::dimension, type::sorted_list<>>;
 #pragma endregion
 } // namespace benri

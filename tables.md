@@ -259,7 +259,7 @@ The following astronomical constants are implemented in `benri/si/astronomic.h`.
 
 # Dimensions
 ## Table of base dimensions
-The following base dimensions are implemented in `benri/impl/dimensions.h`. They can be accessed with `benri::dim::NAME`.
+The following base dimensions are implemented in `benri/impl/dimensions.h`. They can be accessed with `benri::dimension::NAME`.
  
 | Name                                 | Symbol | benri name |
 |:-------------------------------------|:-------|:-----------|
@@ -279,7 +279,7 @@ The following base dimensions are implemented in `benri/impl/dimensions.h`. They
 | degree Fahrenheit                    | °F     | degF       |
 
 ## Table of derived dimensions
-The following derived dimensions are implemented in `benri/impl/dimensions.h`. They can be accessed with `benri::dim::NAME`.
+The following derived dimensions are implemented in `benri/impl/dimensions.h`. They can be accessed with `benri::dimension::NAME`.
  
 | Name                                 | benri name |
 |:-------------------------------------|:-----------|
@@ -287,7 +287,7 @@ The following derived dimensions are implemented in `benri/impl/dimensions.h`. T
 
 # Prefixes
 ## Table of SI prefixes
-The following SI prefixes are implemented in `benri/si/base.h`. They can be accessed with `benri::dim::NAME`.
+The following SI prefixes are implemented in `benri/si/base.h`. They can be accessed with `benri::dimension::NAME`.
 
 | Name   | Symbol | Value  | benri name |
 |:-------|:-------|:-------|:-----------|
@@ -314,7 +314,7 @@ The following SI prefixes are implemented in `benri/si/base.h`. They can be acce
 | yotta  | Y      | 10²⁴   | yotta      |
 
 ## Table of data prefixes
-The following computer science prefixes are implemented in `benri/si/data.h`. They can be accessed with `benri::dim::NAME`.
+The following computer science prefixes are implemented in `benri/si/data.h`. They can be accessed with `benri::dimension::NAME`.
 
 | Name   | Symbol | Value  | benri name |
 |:-------|:-------|:-------|:-----------|

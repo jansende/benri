@@ -8,7 +8,8 @@ macro(add_test_files TESTNAME)
     set_target_properties(${TESTNAME} PROPERTIES FOLDER test)
 endmacro()
 
-add_test_files(benri_tests one.cpp 
+add_test_files(benri_tests everything.cpp
+                           one.cpp 
                            constants.cpp
                            quantity.cpp
                            quantity_point.cpp)
