@@ -1,6 +1,9 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v0.1.3 - Minor patch
+- Improved cmake settings.
+
 ## v0.1.2 - Minor patch
 - Fixed floating point conversion warning inside static_assert.
 
