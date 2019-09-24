@@ -28,16 +28,82 @@ link_unit_point(degree_fahrenheit, fahrenheit);
 #pragma endregion
 } // namespace temperature
 } // namespace si
-#pragma region is_compatible definitions
-template <class Prefix>
-struct is_compatible<dimension::celsius_temperature_t, Prefix,
-                     dimension::thermodynamic_temperature_t, Prefix> : std::true_type
+#pragma region convert definitions
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>>
 {
+    constexpr auto operator()(
+        const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
 };
-template <class Prefix>
-struct is_compatible<dimension::fahrenheit_temperature_t, Prefix,
-                     dimension::thermodynamic_temperature_t, Prefix> : std::true_type
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>>
 {
+    constexpr auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>&
+            rhs) -> quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
+};
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>>
+{
+    constexpr auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
+};
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>>
+{
+    constexpr auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>&
+            rhs) -> quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
 };
 #pragma endregion
 #pragma region simple_cast / unit_cast overloads

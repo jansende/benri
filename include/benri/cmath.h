@@ -63,11 +63,11 @@ struct conversion_type<quantity<lhsUnit, ValueType>, quantity<rhsUnit, ValueType
                        AllowPoints>
 {
     static_assert(std::is_same<lhsUnit, rhsUnit>::value
-                      || type::detect_if<lhsUnit, is_compatible_with, rhsUnit>,
+                      || type::detect_if<lhsUnit, is_convertible_into, rhsUnit>,
                   "all arguments have to have the same or compatible units.");
     using type =
         std::conditional_t<std::is_same<lhsUnit, rhsUnit>::value
-                               || type::detect_if<lhsUnit, is_compatible_with, rhsUnit>,
+                               || type::detect_if<lhsUnit, is_convertible_into, rhsUnit>,
                            quantity<lhsUnit, ValueType>, void>;
 };
 template <class lhsUnit, class rhsUnit, class ValueType>
@@ -284,7 +284,7 @@ template <class xUnit, class yUnit, class zUnit, class ValueType>
                                         const quantity<zUnit, ValueType> z) noexcept
     -> std::enable_if_t<
         std::is_same<multiply_units<xUnit, yUnit>, zUnit>::value
-            || type::detect_if<multiply_units<xUnit, yUnit>, is_compatible_with, zUnit>,
+            || type::detect_if<multiply_units<xUnit, yUnit>, is_convertible_into, zUnit>,
         quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
@@ -296,7 +296,7 @@ template <class xUnit, class yUnit, class zUnit, class ValueType>
                                         const quantity_point<zUnit, ValueType> z) noexcept
     -> std::enable_if_t<
         std::is_same<multiply_units<xUnit, yUnit>, zUnit>::value
-            || type::detect_if<multiply_units<xUnit, yUnit>, is_compatible_with, zUnit>,
+            || type::detect_if<multiply_units<xUnit, yUnit>, is_convertible_into, zUnit>,
         quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y.value(), z.value()));
@@ -306,7 +306,7 @@ template <class yUnit, class zUnit, class ValueType>
 [[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y,
                                         const quantity<zUnit, ValueType> z) noexcept
     -> std::enable_if_t<std::is_same<yUnit, zUnit>::value
-                            || type::detect_if<yUnit, is_compatible_with, zUnit>,
+                            || type::detect_if<yUnit, is_convertible_into, zUnit>,
                         quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
@@ -316,7 +316,7 @@ template <class yUnit, class zUnit, class ValueType>
 [[nodiscard]] constexpr inline auto fma(ValueType x, const quantity<yUnit, ValueType> y,
                                         const quantity_point<zUnit, ValueType> z) noexcept
     -> std::enable_if_t<std::is_same<yUnit, zUnit>::value
-                            || type::detect_if<yUnit, is_compatible_with, zUnit>,
+                            || type::detect_if<yUnit, is_convertible_into, zUnit>,
                         quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x, y.value(), z.value()));
@@ -326,7 +326,7 @@ template <class xUnit, class zUnit, class ValueType>
 [[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y,
                                         const quantity<zUnit, ValueType> z) noexcept
     -> std::enable_if_t<std::is_same<xUnit, zUnit>::value
-                            || type::detect_if<xUnit, is_compatible_with, zUnit>,
+                            || type::detect_if<xUnit, is_convertible_into, zUnit>,
                         quantity<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y, z.value()));
@@ -336,7 +336,7 @@ template <class xUnit, class zUnit, class ValueType>
 [[nodiscard]] constexpr inline auto fma(const quantity<xUnit, ValueType> x, ValueType y,
                                         const quantity_point<zUnit, ValueType> z) noexcept
     -> std::enable_if_t<std::is_same<xUnit, zUnit>::value
-                            || type::detect_if<xUnit, is_compatible_with, zUnit>,
+                            || type::detect_if<xUnit, is_convertible_into, zUnit>,
                         quantity_point<zUnit, ValueType>>
 {
     using ResultType = decltype(std::fma(x.value(), y, z.value()));

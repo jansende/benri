@@ -1,6 +1,12 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v1.0.0 - New type conversion system
+- Replaced the `is_compatible` with the new `convert` struct.
+- The struct still provides a check if units should be implicitely convertible.
+- It now additionally handles the actual conversion.
+- This now allows us to interact with non *benri* types.
+
 ## v0.2.0 - Improved temperatures
 - Added unit test for temperature conversion.
 - Added unit test for affine units (via temperatures).

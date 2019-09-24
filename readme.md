@@ -771,25 +771,36 @@ unti<mega * newton>::prefix = list<pre<2, 6>, dim<5, 6>>;
 A side effect of the prefix type list, is that it is possible to store symbolic factors
 for the prefix.
 
-## The `is_compatible` helper
-Inside *benri* units are compared via their type list. If two types do not have the same
-type list, they are not the same. However, this is not always preferred. To overcome this
-behaviour, *benri* additionally checks if two units should be considered the same via the
-`is_compatible_with` function. For example, this is necessary for temperatures, where a
-`quantity_point` of K can be converted to a quantity of °K although both units do not have
-the same type.
+## The `is_convertible_into` helper
+Inside *benri* quantities are compared via their unit type list. If two types do not have
+the same type list, they are not the same. However, this is not always preferred. To
+overcome this behaviour, *benri* additionally checks if two quantities should be
+considered the same via the `is_convertible_into` function. For example, this is necessary
+for temperatures, where a `quantity_point` of K can be converted to a quantity of °K
+although both units do not have the same type.
 
-Units can be added to `is_compatible_with` function by overloading the `is_compatible`
-object:
+Quantities can be added to `is_convertible_into` function by overloading the `convert`
+object. It is used for the actual conversion as well:
 
 ```c++
-template <class Prefix>
-struct is_compatible<dimension::celsius_temperature_t, Prefix, dimension::thermodynamic_temperature_t, Prefix> : std::true_type
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>>
 {
-};
-template <class Prefix>
-struct is_compatible<dimension::fahrenheit_temperature_t, Prefix, dimension::thermodynamic_temperature_t, Prefix> : std::true_type
-{
+    constexpr auto operator()(
+        const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
 };
 ```
 

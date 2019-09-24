@@ -34,20 +34,13 @@ using pow_unit = unit<type::pow_list<typename Unit::dimension, Power>,
 template <class lhsUnit, class rhsUnit>
 using divide_units = multiply_units<lhsUnit, pow_unit<rhsUnit, std::ratio<-1>>>;
 // Helper for handling units as equivalent even if the types are not.
-template <class LDimension, class LPrefix, class RDimension, class RPrefix>
-struct is_compatible : std::false_type
+template <class From, class To>
+struct convert
 {
 };
-template <class LDimension, class LPrefix, class RDimension, class RPrefix>
-constexpr bool is_compatible_v =
-    is_compatible<LDimension, LPrefix, RDimension, RPrefix>::value;
+template <class From, class To>
+using is_convertible_into = decltype(convert<From, To>{}(From{}));
 
-template <class L, class R>
-using is_compatible_with = typename std::enable_if_t<
-    is_compatible_v<
-        typename L::dimension, typename L::prefix, typename R::dimension,
-        typename R::
-            prefix> || is_compatible_v<typename R::dimension, typename R::prefix, typename L::dimension, typename L::prefix>>;
 // Helper for removing a units prefix.
 template <class Unit>
 using drop_unit_prefix = unit<typename Unit::dimension, type::sorted_list<>>;

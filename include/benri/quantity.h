@@ -52,6 +52,8 @@ class quantity
     friend class quantity;
     template <class, class>
     friend class quantity_point;
+    template <class, class>
+    friend struct convert;
 
     using value_type = ValueType;
     using unit_type  = Unit;
@@ -116,29 +118,28 @@ class quantity
     {
     }
     // implicit constructor
-    template <class Dummy = void, typename = std::enable_if_t<
-                                      type::detect_if<unit_type, type::is_one>, Dummy>>
-    constexpr inline quantity(const value_type& value) noexcept : _value(value)
-    {
-    }
-    template <class Dummy = void, typename = std::enable_if_t<
-                                      type::detect_if<unit_type, type::is_one>, Dummy>>
-    constexpr inline quantity(value_type&& value) noexcept : _value(std::move(value))
-    {
-    }
-    template <class rhsUnit, class Dummy = void,
+    template <class Other, class Dummy = void,
               typename = std::enable_if_t<
-                  type::detect_if<unit_type, is_compatible_with, rhsUnit>, Dummy>>
-    constexpr inline quantity(const quantity<rhsUnit, value_type>& rhs) noexcept :
-        _value(rhs._value)
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    constexpr inline quantity(const Other& rhs) noexcept :
+        quantity(convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs))
     {
     }
-    template <class rhsUnit, class Dummy = void,
+    template <class Other, class Dummy = void,
               typename = std::enable_if_t<
-                  type::detect_if<unit_type, is_compatible_with, rhsUnit>, Dummy>>
-    constexpr inline quantity(quantity<rhsUnit, value_type>&& rhs) noexcept :
-        _value(std::move(rhs._value))
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    constexpr inline quantity(Other&& rhs) noexcept :
+        quantity(std::move(convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(
+            std::move(rhs))))
     {
+    }
+
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<quantity, is_convertible_into, Other>, Dummy>>
+    [[nodiscard]] constexpr inline explicit operator Other() const noexcept
+    {
+        return convert<std::remove_cv_t<quantity>, std::remove_cv_t<Other>>{}(*this);
     }
 
     // copy constructor
@@ -182,6 +183,15 @@ class quantity
     {
         return quantity{lhs._value + rhs._value};
     }
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    [[nodiscard]] friend constexpr inline auto operator+(const quantity& lhs,
+                                                         const Other&    rhs) noexcept
+    {
+        return lhs + convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs);
+    }
+
     constexpr inline auto operator-=(const quantity& rhs) noexcept
     {
         this->_value -= rhs._value;
@@ -191,6 +201,14 @@ class quantity
                                                          const quantity& rhs) noexcept
     {
         return quantity{lhs._value - rhs._value};
+    }
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    [[nodiscard]] friend constexpr inline auto operator-(const quantity& lhs,
+                                                         const Other&    rhs) noexcept
+    {
+        return lhs - convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs);
     }
 #pragma endregion
 #pragma region multiplication
@@ -242,30 +260,78 @@ class quantity
     {
         return lhs._value == rhs._value;
     }
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    [[nodiscard]] friend constexpr inline auto operator==(const quantity& lhs,
+                                                          const Other&    rhs) noexcept
+    {
+        return lhs == convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs);
+    }
     [[nodiscard]] friend constexpr inline auto operator!=(const quantity& lhs,
                                                           const quantity& rhs) noexcept
     {
         return !(lhs == rhs);
+    }
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    [[nodiscard]] friend constexpr inline auto operator!=(const quantity& lhs,
+                                                          const Other&    rhs) noexcept
+    {
+        return lhs != convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs);
     }
     [[nodiscard]] friend constexpr inline auto operator<(const quantity& lhs,
                                                          const quantity& rhs) noexcept
     {
         return lhs._value < rhs._value;
     }
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    [[nodiscard]] friend constexpr inline auto operator<(const quantity& lhs,
+                                                         const Other&    rhs) noexcept
+    {
+        return lhs < convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs);
+    }
     [[nodiscard]] friend constexpr inline auto operator>(const quantity& lhs,
                                                          const quantity& rhs) noexcept
     {
         return rhs < lhs;
+    }
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    [[nodiscard]] friend constexpr inline auto operator>(const quantity& lhs,
+                                                         const Other&    rhs) noexcept
+    {
+        return lhs > convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs);
     }
     [[nodiscard]] friend constexpr inline auto operator<=(const quantity& lhs,
                                                           const quantity& rhs) noexcept
     {
         return !(rhs < lhs);
     }
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    [[nodiscard]] friend constexpr inline auto operator<=(const quantity& lhs,
+                                                          const Other&    rhs) noexcept
+    {
+        return lhs <= convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs);
+    }
     [[nodiscard]] friend constexpr inline auto operator>=(const quantity& lhs,
                                                           const quantity& rhs) noexcept
     {
         return !(lhs < rhs);
+    }
+    template <class Other, class Dummy = void,
+              typename = std::enable_if_t<
+                  type::detect_if<Other, is_convertible_into, quantity>, Dummy>>
+    [[nodiscard]] friend constexpr inline auto operator>=(const quantity& lhs,
+                                                          const Other&    rhs) noexcept
+    {
+        return lhs >= convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity>>{}(rhs);
     }
 #pragma endregion
 #pragma endregion
@@ -288,6 +354,19 @@ template <class lhsUnit, class rhsUnit, class rhsValueType>
     return quantity<divide_units<lhsUnit, rhsUnit>, rhsValueType>{lhs._value
                                                                   / rhs._value};
 }
+// Conversion operator for the unit without prefix and dimension
+template <class ValueType>
+struct convert<ValueType, quantity<one, ValueType>>
+{
+    constexpr auto operator()(const ValueType& rhs) -> quantity<one, ValueType>
+    {
+        return quantity<one, ValueType>{rhs};
+    }
+    constexpr auto operator()(ValueType&& rhs) -> quantity<one, ValueType>
+    {
+        return quantity<one, ValueType>{std::move(rhs)};
+    }
+};
 #pragma region casting functions
 // The value_type_cast function lets you cast the value_type of a quantity
 // to another value_type.
