@@ -12,5 +12,6 @@ add_test_files(benri_tests everything.cpp
                            one.cpp 
                            constants.cpp
                            quantity.cpp
-                           quantity_point.cpp)
+                           quantity_point.cpp
+                           temperature.cpp)
 target_link_libraries(benri_tests benri)

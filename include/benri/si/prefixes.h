@@ -7,6 +7,11 @@ namespace benri
 {
 namespace prefix
 {
+struct zero
+{
+    static constexpr Precision value = 0.0;
+};
+using zero_t = type::sorted_list<pre<zero>>;
 // List of prefixes and constant values used to define units.
 #pragma region si prefixes
 using yocto_t = type::make_prefix_pow10<-24>;
@@ -320,6 +325,12 @@ struct absolute_zero
     static constexpr Precision value = -273.15;
 };
 using absolute_zero_t = type::sorted_list<pre<absolute_zero>>;
+// Absolute zero in degree Fahrenheit.
+struct freezing_point
+{
+    static constexpr Precision value = 32.0;
+};
+using freezing_point_t = type::sorted_list<pre<freezing_point>>;
 #pragma endregion
 #pragma region astronomic
 // Astronomical unit in metre.

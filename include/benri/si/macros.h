@@ -50,6 +50,13 @@
 #define create_constant(NAME, VALUE, UNIT)                         \
     constexpr auto NAME = benri::quantity<UNIT, benri::Precision>{ \
         benri::expand_prefix_list<benri::Precision, VALUE>};
+#define create_symbol_point(NAME, DIMENSION, PREFIX, VALUE)                    \
+    constexpr auto NAME = benri::quantity_point<                               \
+        benri::unit<benri::type::sort<DIMENSION>, benri::type::sort<PREFIX>>>{ \
+        benri::expand_prefix_list<benri::Precision, VALUE>};
+#define create_constant_point(NAME, VALUE, UNIT)                         \
+    constexpr auto NAME = benri::quantity_point<UNIT, benri::Precision>{ \
+        benri::expand_prefix_list<benri::Precision, VALUE>};
 
 #define create_and_register_dimension(NAME, ...) \
     using NAME##_t = benri::type::sort<benri::type::list<__VA_ARGS__>>;

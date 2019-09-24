@@ -42,7 +42,9 @@ struct is_compatible<dimension::fahrenheit_temperature_t, Prefix,
 #pragma endregion
 #pragma region simple_cast / unit_cast overloads
 // conversion overload for quantity points (we need an actual overload, because
-// partial function template specialization is not allowed) celsius to kelvin
+// partial function template specialization is not allowed)
+
+// celsius to kelvin
 template <class ResultUnit, class ValueType>
 constexpr auto
     simple_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType>& rhs)
@@ -86,8 +88,10 @@ constexpr auto
             std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value,
             quantity_point<si::temperature::degree_rankine_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_rankine_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_rankine_t, ValueType>{
+        rhs.value() * static_cast<ValueType>(prefix::rankine::value)
+        - static_cast<ValueType>(prefix::absolute_zero::value)
+              * static_cast<ValueType>(prefix::rankine::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -106,8 +110,9 @@ constexpr auto
             std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
             quantity_point<si::temperature::degree_celsius_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_celsius_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_celsius_t, ValueType>{
+        rhs.value() / static_cast<ValueType>(prefix::rankine::value)
+        + static_cast<ValueType>(prefix::absolute_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -126,8 +131,9 @@ constexpr auto simple_cast(
                         quantity_point<si::degree_kelvin_t, ValueType>>
 {
     return quantity_point<si::degree_kelvin_t, ValueType>{
-        (rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value))
-        / static_cast<ValueType>(prefix::rankine::value)};
+        rhs.value() / static_cast<ValueType>(prefix::rankine::value)
+        - static_cast<ValueType>(prefix::fahrenheit_zero::value)
+              / static_cast<ValueType>(prefix::rankine::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -164,8 +170,9 @@ constexpr auto simple_cast(
         std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
         quantity_point<si::temperature::degree_celsius_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_celsius_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_celsius_t, ValueType>{
+        (rhs.value() - static_cast<ValueType>(prefix::freezing_point::value))
+        / static_cast<ValueType>(prefix::rankine::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -184,8 +191,11 @@ constexpr auto
             std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
             quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_fahrenheit_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_fahrenheit_t, ValueType>{
+        rhs.value() * static_cast<ValueType>(prefix::rankine::value)
+        + static_cast<ValueType>(prefix::fahrenheit_zero::value)
+        - static_cast<ValueType>(prefix::rankine::value)
+              * static_cast<ValueType>(prefix::absolute_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -204,8 +214,8 @@ constexpr auto simple_cast(
         std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value,
         quantity_point<si::temperature::degree_rankine_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_rankine_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_rankine_t, ValueType>{
+        rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -224,8 +234,8 @@ constexpr auto
             std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
             quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_fahrenheit_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_fahrenheit_t, ValueType>{
+        rhs.value() + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -239,7 +249,9 @@ constexpr auto
 #pragma endregion
 #pragma region simple_cast / unit_cast overloads
 // conversion overload for quantities (we need an actual overload, because
-// partial function template specialization is not allowed) celsius to kelvin
+// partial function template specialization is not allowed)
+
+// celsius to kelvin
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(
     const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)

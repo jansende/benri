@@ -1,6 +1,11 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v0.2.0 - Improved temperatures
+- Added unit test for temperature conversion.
+- Added unit test for affine units (via temperatures).
+- Added the `absolute_zero` constant.
+
 ## v0.1.3 - Minor patch
 - Improved cmake settings.
 
