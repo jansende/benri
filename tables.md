@@ -31,8 +31,10 @@
 |                                                                      | SI              |                  | hour                                | h         | 1 h = 60 min = 3 600 s                         |
 |                                                                      | SI              |                  | day                                 | d         | 1 d = 24 h = 86 400 s                          |
 |                                                                      | SI              |                  | week                                | w         | 1 w = 7 d = 604 800 s                          |
-|                                                                      | SI              |                  | month                               |           | 1 month = 30 d = 2 592 000 s                   |
-|                                                                      | SI              |                  | year                                | yr        | 1 yr = 365.25 d = 3.155 760×10⁷ s              |
+|                                                                      | SI              |                  | calendar month                      |           | 1 calendar month = 30 d = 2 592 000 s          |
+|                                                                      | SI              |                  | calendar year                       |           | 1 calendar yr = 365.25 d = 3.155 760×10⁷ s     |
+|                                                                      | SI              |                  | (gregorian) month                   |           | 1 month = 1/12 yr = 2629746 s                  |
+|                                                                      | SI              |                  | (gregorian) year                    | yr        | 1 yr = 365.25 d = 3.155 695 2×10⁷ s            |
 |                                                                      | extra           |                  | sidereal year                       |           | 1 sidereal year = 3.155 815×10⁷ s              |
 |                                                                      | extra           |                  | tropical year                       |           | 1 tropical year = 3.155 693×10⁷ s              |
 |                                                                      | extra           |                  | natural unit of time                | ħ/(m_e c²)| 1 ħ/(m_e c²) = 1.288 088 6677(86)×10⁻²¹ s      |

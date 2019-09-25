@@ -27,8 +27,10 @@ implement_unit(minute, dimension::time_t, prefix::minute_t);
 implement_unit(hour, dimension::time_t, prefix::hour_t);
 implement_unit(day, dimension::time_t, prefix::day_t);
 implement_unit(week, dimension::time_t, prefix::week_t);
-implement_unit(month, dimension::time_t, prefix::month_t);
-implement_unit(year, dimension::time_t, prefix::year_t);
+implement_unit(gregorian_month, dimension::time_t, prefix::month_t);
+implement_unit(gregorian_year, dimension::time_t, prefix::year_t);
+link_unit(month, gregorian_month);
+link_unit(year, gregorian_year);
 implement_unit(sidereal_year, dimension::time_t, prefix::sidereal_year_t);
 implement_unit(tropical_year, dimension::time_t, prefix::tropical_year_t);
 implement_unit(
