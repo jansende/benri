@@ -1,6 +1,12 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v2.0.1 - Second release
+This is the second full release of *benri*. The library was improved by adding `<chrono>`
+support, fixing bugs and implementing more unit tests. Besides quality of life updates,
+bug fixing, and more unit tests, this seems to be the final version of *benri*. No further,
+compatibility breaking upgrades are planned for the future.
+
 ## v2.0.0 - `<chrono>` support
 - *benri* now supports interaction with the `<chrono>` library.
 - In order to be forward-compatible with the C++20 version of `<chrono>`, the month and
