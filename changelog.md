@@ -1,6 +1,12 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v1.0.1 - Patch
+- Fixed a long existing bug in `simple_cast` which prevented converting `quantity_point`.
+- Fixed the `is_quantity_point` falsely taking into account cv-qualifiers.
+- Fixed non benri types not being converted into `quantity` when using `quantity_point`
+  math.
+
 ## v1.0.0 - New type conversion system
 - Replaced the `is_compatible` with the new `convert` struct.
 - The struct still provides a check if units should be implicitly convertible.
