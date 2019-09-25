@@ -3,7 +3,7 @@
 
 ## v1.0.0 - New type conversion system
 - Replaced the `is_compatible` with the new `convert` struct.
-- The struct still provides a check if units should be implicitely convertible.
+- The struct still provides a check if units should be implicitly convertible.
 - It now additionally handles the actual conversion.
 - This now allows us to interact with non *benri* types.
 
@@ -22,7 +22,8 @@
 - Some C++17 type_traits were used by mistake instead of the C++14 one.
 
 ## v0.1.0 - First release
-First complete user experience. Among others, the following basic functions have been implemented:
+First complete user experience. Among others, the following basic functions have been
+implemented:
 - SI units
 - Astronomical units
 - CGS units
