@@ -18,6 +18,22 @@
     }                                                                                  \
     constexpr auto NAME =                                                              \
         benri::quantity<NAME##_t, benri::Precision>{static_cast<benri::Precision>(1)};
+#define implement_unit_point(NAME, DIMENSION, PREFIX)                                  \
+    using NAME##_t =                                                                   \
+        benri::unit<benri::type::sort<DIMENSION>, benri::type::sort<PREFIX>>;          \
+    [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept \
+    {                                                                                  \
+        return benri::quantity_point<NAME##_t, benri::Precision>{                      \
+            static_cast<benri::Precision>(value)};                                     \
+    }                                                                                  \
+    [[nodiscard]] constexpr inline auto operator"" _##NAME(                            \
+        unsigned long long int value) noexcept                                         \
+    {                                                                                  \
+        return benri::quantity_point<NAME##_t, benri::Precision>{                      \
+            static_cast<benri::Precision>(value)};                                     \
+    }                                                                                  \
+    constexpr auto NAME = benri::quantity_point<NAME##_t, benri::Precision>{           \
+        static_cast<benri::Precision>(1)};
 
 #define link_unit(NAME, ALIAS)                                                         \
     using NAME##_t = ALIAS##_t;                                                        \
@@ -49,6 +65,13 @@
         static_cast<benri::Precision>(1)};
 #define create_constant(NAME, VALUE, UNIT)                         \
     constexpr auto NAME = benri::quantity<UNIT, benri::Precision>{ \
+        benri::expand_prefix_list<benri::Precision, VALUE>};
+#define create_symbol_point(NAME, DIMENSION, PREFIX, VALUE)                    \
+    constexpr auto NAME = benri::quantity_point<                               \
+        benri::unit<benri::type::sort<DIMENSION>, benri::type::sort<PREFIX>>>{ \
+        benri::expand_prefix_list<benri::Precision, VALUE>};
+#define create_constant_point(NAME, VALUE, UNIT)                         \
+    constexpr auto NAME = benri::quantity_point<UNIT, benri::Precision>{ \
         benri::expand_prefix_list<benri::Precision, VALUE>};
 
 #define create_and_register_dimension(NAME, ...) \

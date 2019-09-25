@@ -7,6 +7,11 @@ namespace benri
 {
 namespace prefix
 {
+struct zero
+{
+    static constexpr Precision value = 0.0;
+};
+using zero_t = type::sorted_list<pre<zero>>;
 // List of prefixes and constant values used to define units.
 #pragma region si prefixes
 using yocto_t = type::make_prefix_pow10<-24>;
@@ -281,13 +286,17 @@ using nuclear_magneton_t = type::divide_lists<
     type::multiply_lists<type::make_prefix<2>, proton_mass_t>>;
 #pragma endregion
 #pragma region time
-using second_t = type::make_prefix<>;
-using minute_t = type::multiply_lists<second_t, type::make_prefix<60>>;
-using hour_t   = type::multiply_lists<minute_t, type::make_prefix<60>>;
-using day_t    = type::multiply_lists<hour_t, type::make_prefix<24>>;
-using week_t   = type::multiply_lists<day_t, type::make_prefix<7>>;
-using month_t  = type::multiply_lists<day_t, type::make_prefix<30>>;
-using year_t   = type::multiply_lists<day_t, type::make_prefix<36525, 100>>;
+using second_t          = type::make_prefix<>;
+using minute_t          = type::multiply_lists<second_t, type::make_prefix<60>>;
+using hour_t            = type::multiply_lists<minute_t, type::make_prefix<60>>;
+using day_t             = type::multiply_lists<hour_t, type::make_prefix<24>>;
+using week_t            = type::multiply_lists<day_t, type::make_prefix<7>>;
+using gregorian_month_t = type::make_prefix<2629746>;
+using gregorian_year_t  = type::make_prefix<31556952>;
+using calendar_month_t  = type::multiply_lists<day_t, type::make_prefix<30>>;
+using calendar_year_t   = type::multiply_lists<day_t, type::make_prefix<36525, 100>>;
+using month_t           = gregorian_month_t;
+using year_t            = gregorian_year_t;
 // Sidereal year in seconds.
 struct sidereal_year
 {
@@ -320,6 +329,12 @@ struct absolute_zero
     static constexpr Precision value = -273.15;
 };
 using absolute_zero_t = type::sorted_list<pre<absolute_zero>>;
+// Absolute zero in degree Fahrenheit.
+struct freezing_point
+{
+    static constexpr Precision value = 32.0;
+};
+using freezing_point_t = type::sorted_list<pre<freezing_point>>;
 #pragma endregion
 #pragma region astronomic
 // Astronomical unit in metre.

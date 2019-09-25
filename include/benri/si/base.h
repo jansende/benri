@@ -159,6 +159,8 @@ create_constant(vacuum_impedance, prefix::vacuum_impedance_t,
                                   / square(ampere))::unit_type);
 create_constant(nuclear_magneton, prefix::nuclear_magneton_t,
                 typename decltype(square(metre) * ampere)::unit_type);
+create_constant_point(absolute_zero, prefix::zero_t,
+                      typename decltype(kelvin)::unit_type);
 #pragma endregion
 } // namespace constant
 #pragma endregion
@@ -250,6 +252,8 @@ create_symbol(
     nuclear_magneton,
     fix(type::divide_lists<dimension::energy_t, dimension::magnetic_flux_density_t>),
     prefix::nuclear_magneton_t);
+create_symbol_point(absolute_zero, dimension::thermodynamic_temperature_t, prefix::one_t,
+                    prefix::zero_t);
 #pragma endregion
 } // namespace symbol
 #pragma endregion

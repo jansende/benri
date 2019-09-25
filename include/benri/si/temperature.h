@@ -28,21 +28,89 @@ link_unit_point(degree_fahrenheit, fahrenheit);
 #pragma endregion
 } // namespace temperature
 } // namespace si
-#pragma region is_compatible definitions
-template <class Prefix>
-struct is_compatible<dimension::celsius_temperature_t, Prefix,
-                     dimension::thermodynamic_temperature_t, Prefix> : std::true_type
+#pragma region convert definitions
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>>
 {
+    constexpr auto operator()(
+        const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
 };
-template <class Prefix>
-struct is_compatible<dimension::fahrenheit_temperature_t, Prefix,
-                     dimension::thermodynamic_temperature_t, Prefix> : std::true_type
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>>
 {
+    constexpr auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>&
+            rhs) -> quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
+};
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>>
+{
+    constexpr auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
+};
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>>
+{
+    constexpr auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>&
+            rhs) -> quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
 };
 #pragma endregion
 #pragma region simple_cast / unit_cast overloads
 // conversion overload for quantity points (we need an actual overload, because
-// partial function template specialization is not allowed) celsius to kelvin
+// partial function template specialization is not allowed)
+
+// celsius to kelvin
 template <class ResultUnit, class ValueType>
 constexpr auto
     simple_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType>& rhs)
@@ -86,8 +154,10 @@ constexpr auto
             std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value,
             quantity_point<si::temperature::degree_rankine_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_rankine_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_rankine_t, ValueType>{
+        rhs.value() * static_cast<ValueType>(prefix::rankine::value)
+        - static_cast<ValueType>(prefix::absolute_zero::value)
+              * static_cast<ValueType>(prefix::rankine::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -106,8 +176,9 @@ constexpr auto
             std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
             quantity_point<si::temperature::degree_celsius_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_celsius_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_celsius_t, ValueType>{
+        rhs.value() / static_cast<ValueType>(prefix::rankine::value)
+        + static_cast<ValueType>(prefix::absolute_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -126,8 +197,9 @@ constexpr auto simple_cast(
                         quantity_point<si::degree_kelvin_t, ValueType>>
 {
     return quantity_point<si::degree_kelvin_t, ValueType>{
-        (rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value))
-        / static_cast<ValueType>(prefix::rankine::value)};
+        rhs.value() / static_cast<ValueType>(prefix::rankine::value)
+        - static_cast<ValueType>(prefix::fahrenheit_zero::value)
+              / static_cast<ValueType>(prefix::rankine::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -164,8 +236,9 @@ constexpr auto simple_cast(
         std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
         quantity_point<si::temperature::degree_celsius_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_celsius_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_celsius_t, ValueType>{
+        (rhs.value() - static_cast<ValueType>(prefix::freezing_point::value))
+        / static_cast<ValueType>(prefix::rankine::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -184,8 +257,11 @@ constexpr auto
             std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
             quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_fahrenheit_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_fahrenheit_t, ValueType>{
+        rhs.value() * static_cast<ValueType>(prefix::rankine::value)
+        + static_cast<ValueType>(prefix::fahrenheit_zero::value)
+        - static_cast<ValueType>(prefix::rankine::value)
+              * static_cast<ValueType>(prefix::absolute_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -204,8 +280,8 @@ constexpr auto simple_cast(
         std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value,
         quantity_point<si::temperature::degree_rankine_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_rankine_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_rankine_t, ValueType>{
+        rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -224,8 +300,8 @@ constexpr auto
             std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
             quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
 {
-    return simple_cast<si::temperature::degree_fahrenheit_t>(
-        simple_cast<si::degree_kelvin_t>(rhs));
+    return quantity_point<si::temperature::degree_fahrenheit_t, ValueType>{
+        rhs.value() + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
 }
 template <class ResultUnit, class ValueType>
 constexpr auto
@@ -239,7 +315,9 @@ constexpr auto
 #pragma endregion
 #pragma region simple_cast / unit_cast overloads
 // conversion overload for quantities (we need an actual overload, because
-// partial function template specialization is not allowed) celsius to kelvin
+// partial function template specialization is not allowed)
+
+// celsius to kelvin
 template <class ResultUnit, class Prefix, class ValueType>
 constexpr auto simple_cast(
     const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)

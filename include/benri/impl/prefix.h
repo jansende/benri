@@ -91,7 +91,7 @@ static_assert(
     "expand_prefix_list<pre<2,2>,pre<7>> is 28.");
 static_assert(
     expand_prefix_list<double, type::sorted_list<pre<std::ratio<2>, std::ratio<-2>>,
-                                                pre<std::ratio<7>>>> == 1.75,
+                                                 pre<std::ratio<7>>>> == 1.75,
     "expand_prefix_list<pre<2,-2>,pre<7>> is 1.75.");
 // Function for expanding a list of prefixes at runtime.
 template <class ValueType, class... Elements>

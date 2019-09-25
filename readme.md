@@ -587,6 +587,90 @@ int main()
 }
 ```
 
+## `<chrono>` support
+Without some help, *benri* cannot interact with the `<chrono>` library because the types
+provided are different. However, by including the `benri/chrono.h` header *benri* gets the
+necessary conversion operators. (`benri/chrono.h` includes `<chrono>` as well.) 
+
+With `benri/chrono.h` included:
++ `std::chrono::duration` acts like a `benri::quantity` and
++ `std::chrono::time_point` acts like a `benri::quantity_point`.
++ Within expression `<chrono>` types are converted to *benri* types automatically. (The
+  result of such mixed expression is always a *benri* type.)
+
+**WARNING**: The same caveats as for *benri* types apply to `<chrono>`! Quantities with 
+different units or value types do no interact. This can get be confusing because *benri*
+uses `double` as its default value type whereas `<chrono>` uses integer values. If your
+code does not compile, you probably forgot to cast to the right value type.
+
+In addition to these type conversions, `benri/chrono.h` provides:
++ Three new dimensions: `system_clock_t`, `steady_clock_t`, and `high_resolution_clock_t`.
+  These dimension are named similar to the clocks provided by the `<chrono>` library.
+  However, whereas `std::chrono::high_resolution_clock` might alias to one of the other
+  types, within in *benri*  it is always distinct.
++ Three new constants/symbols `system_epoch`, `steady_epoch`, and `high_resolution_epoch`.
+  These represent the zero point for each clock.
++ A range of `quantity_point` literals called `TIME_since_CLOCK`, where `TIME` can be
+  `seconds`, `hours`, `days`, `weeks`, `months`, or `years` and `CLOCK` either
+  `system_epoch`, `steady_epoch`, or `high_resolution_epoch`. For example:
+  `42_seconds_since_system_epoch`.
++ The `now<Clock, Unit, ValueType>()` template function, which manages the annoying casts
+  involved to construct a *benri* time point with the `<chrono>` now function. `Clock` is
+  a `<chrono>` clock type, `Unit` is an optional *benri* time unit, and `ValueType` an
+  optional value type. If no `Unit` is defined, the default unit of the clock is used. The
+  default for the `ValueType` is the same as for all *benri* types.
+
+A short example on how *benri* interacts with `<chrono>`.
+```c++
+#include <benri/chrono.h>
+#include <benri/si/si.h>
+#include <benri/si/temperature.h>
+#include <chrono>
+#include <iostream>
+#include <random>
+
+using namespace benri::si;
+
+class tnt
+{
+  public:
+    tnt(const benri::quantity<second_t> fuse_time);
+    auto ignite(benri::quantity_point<seconds_since_system_epoch_t> now) -> void;
+    auto ignited() -> bool;
+    auto exploded(benri::quantity_point<seconds_since_system_epoch_t> now) -> bool;
+    auto fuse_left(benri::quantity_point<seconds_since_system_epoch_t> now) -> benri::quantity<second_t>;   
+};
+
+int main()
+{
+    using namespace benri::si;
+
+    auto fuse_time = double{};
+    std::cout << "Enter fuse time in seconds: ";
+    std::cin >> fuse_time;
+    auto bomb = tnt{fuse_time * second};
+    std::cout << "Bomb successfully created!\n"
+              << "Ignited the fuse.\n"
+              << "Starting Countdown...\n";
+
+    auto now = benri::now<std::chrono::system_clock, seconds_since_system_epoch_t>();
+    bomb.ignite(now);
+
+    for (auto counter = static_cast<int>(bomb.fuse_left(now).value());
+         !bomb.exploded(now);
+         now = benri::now<std::chrono::system_clock, seconds_since_system_epoch_t>())
+    {
+        if (static_cast<int>(bomb.fuse_left(now).value()) < counter)
+        {
+            if (counter == 30 || counter == 20 || counter <= 10)
+                std::cout << counter << "s\n";
+            counter--;
+        }
+    }
+    std::cout << "KABOOMM!!\n";
+}
+```
+
 ## Known bugs
  - The unit pascal might conflict with the `pascal` macro set in some windows headers.
  - msvc can have exorbitantly longer compile times than clang and gcc, especially for
@@ -634,6 +718,7 @@ benri/ #main git repo
             prefixes.h      #si prefixes and constant values
             si.h            #all of the si units
             temperature.h   #temperature units and conversion functions
+        chrono.h            #<chrono> support functions
         cmath.h             #implementation of all cmath functions
         quantity_point.h    #affine point
         quantity.h          #the standard quantity type
@@ -771,25 +856,36 @@ unti<mega * newton>::prefix = list<pre<2, 6>, dim<5, 6>>;
 A side effect of the prefix type list, is that it is possible to store symbolic factors
 for the prefix.
 
-## The `is_compatible` helper
-Inside *benri* units are compared via their type list. If two types do not have the same
-type list, they are not the same. However, this is not always preferred. To overcome this
-behaviour, *benri* additionally checks if two units should be considered the same via the
-`is_compatible_with` function. For example, this is necessary for temperatures, where a
-`quantity_point` of K can be converted to a quantity of °K although both units do not have
-the same type.
+## The `is_convertible_into` helper
+Inside *benri* quantities are compared via their unit type list. If two types do not have
+the same type list, they are not the same. However, this is not always preferred. To
+overcome this behaviour, *benri* additionally checks if two quantities should be
+considered the same via the `is_convertible_into` function. For example, this is necessary
+for temperatures, where a `quantity_point` of K can be converted to a quantity of °K
+although both units do not have the same type.
 
-Units can be added to `is_compatible_with` function by overloading the `is_compatible`
-object:
+Quantities can be added to `is_convertible_into` function by overloading the `convert`
+object. It is used for the actual conversion as well:
 
 ```c++
-template <class Prefix>
-struct is_compatible<dimension::celsius_temperature_t, Prefix, dimension::thermodynamic_temperature_t, Prefix> : std::true_type
+template <class Prefix, class ValueType>
+struct convert<quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>,
+               quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>>
 {
-};
-template <class Prefix>
-struct is_compatible<dimension::fahrenheit_temperature_t, Prefix, dimension::thermodynamic_temperature_t, Prefix> : std::true_type
-{
+    constexpr auto operator()(
+        const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            rhs._value};
+    }
+    constexpr auto operator()(
+        quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>&& rhs)
+        -> quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>{
+            std::move(rhs._value)};
+    }
 };
 ```
 
@@ -820,7 +916,7 @@ different quantity libraries:
 | arbitrary prefix conversions⁵    | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :x:                                                   | :heavy_check_mark:                                                | :x:                                            |
 | symbolic computation⁶            | :heavy_check_mark:                         | :x:                                                                      | :x:                                                   | :x:                                                               | :x:                                            |
 | `<cmath>`  functions             | :heavy_check_mark:                         | :heavy_check_mark:                                                       | :heavy_check_mark:                                    | :x:                                                               | :x:                                            |
-| `<chrono>` interoperability      | :x:                                        | :x:                                                                      | :heavy_check_mark:                                    | :x:                                                               | :x:                                            |
+| `<chrono>` interoperability      | :heavy_check_mark:                         | :x:                                                                      | :heavy_check_mark:                                    | :x:                                                               | :x:                                            |
 | `<iostream>` functions           | :x:                                        | :heavy_check_mark:                                                       | (:heavy_check_mark:)                                  | (:heavy_check_mark:)                                              | :x:                                            |
 | `<boost>` required               | :x:                                        | :heavy_check_mark:                                                       | :x:                                                   | :x:                                                               | :x:                                            |
 | minimum c++ version              | `c++14`                                    | `c++98`                                                                  | `c++14`                                               | `c++11`                                                           | `c++20`                                        |
