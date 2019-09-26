@@ -72,12 +72,20 @@ matrix:
 
   - stage: "msvc c++17"
     os: windows
+    env:
+      - MATRIX_EVAL="CC=CL.exe && CXX=CL.exe"
+    before_install:
+        - eval "${MATRIX_EVAL}"
     script:
       - cmake -DBENRI_CPP17_ENABLED=ON -DBENRI_UNIT_TESTS_ENABLED=ON -DBENRI_BUILD_EXAMPLES=ON -Dgtest_force_shared_crt=ON .
       - cmake --build .
 
   - stage: "msvc c++14"
     os: windows
+    env:
+      - MATRIX_EVAL="CC=CL.exe && CXX=CL.exe"
+    before_install:
+        - eval "${MATRIX_EVAL}"
     script:
       - cmake -DBENRI_UNIT_TESTS_ENABLED=ON -DBENRI_BUILD_EXAMPLES=ON -Dgtest_force_shared_crt=ON .
       - cmake --build .
