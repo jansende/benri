@@ -128,12 +128,6 @@ class quantity_point
                                 std::remove_cv_t<quantity<unit_type, value_type>>>{}(rhs);
     }
 
-    [[nodiscard]] friend constexpr inline auto
-        operator+(const quantity<unit_type, value_type>& lhs,
-                  const quantity_point&                  rhs) noexcept -> quantity_point
-    {
-        return quantity_point{lhs._value + rhs._value};
-    }
     template <
         class Other, class Dummy = void,
         typename = std::enable_if_t<
@@ -147,8 +141,8 @@ class quantity_point
                + rhs;
     }
     [[nodiscard]] friend constexpr inline auto
-        operator+(const quantity_point&                  lhs,
-                  const quantity<unit_type, value_type>& rhs) noexcept -> quantity_point
+        operator+(const quantity<unit_type, value_type>& lhs,
+                  const quantity_point&                  rhs) noexcept -> quantity_point
     {
         return quantity_point{lhs._value + rhs._value};
     }
@@ -164,6 +158,12 @@ class quantity_point
         return lhs
                + convert<std::remove_cv_t<Other>,
                          std::remove_cv_t<quantity<unit_type, value_type>>>{}(rhs);
+    }
+    [[nodiscard]] friend constexpr inline auto
+        operator+(const quantity_point&                  lhs,
+                  const quantity<unit_type, value_type>& rhs) noexcept -> quantity_point
+    {
+        return quantity_point{lhs._value + rhs._value};
     }
 
     constexpr inline auto operator-=(const quantity<unit_type, value_type>& rhs) noexcept
