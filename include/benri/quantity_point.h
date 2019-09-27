@@ -7,17 +7,6 @@
 
 namespace benri
 {
-#pragma region quantity_point class helpers
-// quantity_point forward declaration
-template <class Unit, class ValueType>
-class quantity_point;
-// The is_quantity_point function checks if a given type is a quantity_point
-// object.
-template <class T>
-using is_quantity_point = typename std::enable_if<std::is_same<
-    std::remove_cv_t<T>,
-    quantity_point<typename T::unit_type, typename T::value_type>>::value>::type;
-#pragma endregion
 #pragma region quantity_point class
 // The quantity_point type handles physical quantities. It checks the units
 // in calculations and handles conversions, etc. The type in general
@@ -362,7 +351,7 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto
     simple_cast(const quantity_point<ArgumentUnit, ArgumentValueType>& rhs) noexcept
-    -> std::enable_if_t<type::detect_if<ResultUnit, is_quantity_point>,
+    -> std::enable_if_t<type::detect_if<ResultUnit, type::is_quantity_point>,
                         quantity_point<typename ResultUnit::unit_type, ArgumentValueType>>
 {
     return simple_cast<typename ResultUnit::unit_type>(rhs);
@@ -389,7 +378,7 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto
     unit_cast(const quantity_point<ArgumentUnit, ArgumentValueType>& rhs) noexcept
-    -> std::enable_if_t<type::detect_if<ResultUnit, is_quantity_point>,
+    -> std::enable_if_t<type::detect_if<ResultUnit, type::is_quantity_point>,
                         quantity_point<typename ResultUnit::unit_type, ArgumentValueType>>
 {
     return unit_cast<typename ResultUnit::unit_type>(rhs);

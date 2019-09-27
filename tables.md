@@ -11,7 +11,7 @@
 |                                                                      | extra           |                  | atomic unit of length, bohr         | a₀        | 1 a₀ = 0.529 177 2108(18)×10⁻¹⁰ m              |
 |                                                                      | extra           |                  | ångström                            | Å         | 1 Å = 10⁻¹⁰ m                                  |
 |                                                                      | imperial        |                  | nautical mile                       | M         | 1 M = 1852 m                                   |
-|                                                                      | imperial        |                  | international mile                  | mi        | 1 mi = 5280 ft = 1609.344 m                    |
+|                                                                      | imperial        |                  | mile, international mile            | mi        | 1 mi = 5280 ft = 1609.344 m                    |
 |                                                                      | imperial        |                  | yard                                | yd        | 1 yd = 0.9144 m                                |
 |                                                                      | imperial        |                  | international foot                  | ', ft     | 1 ft = 0.3048 m                                |
 |                                                                      | imperial        |                  | inch                                | ", in     | 39.37 in = 1 m                                 |

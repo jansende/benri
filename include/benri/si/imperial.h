@@ -13,6 +13,7 @@ namespace imperial
 #pragma region length
 implement_unit(nautical_mile, dimension::length_t, prefix::nautical_mile_t);
 implement_unit(international_mile, dimension::length_t, prefix::international_mile_t);
+link_unit(mile, international_mile);
 implement_unit(yard, dimension::length_t, prefix::yard_t);
 implement_unit(international_foot, dimension::length_t, prefix::international_foot_t);
 implement_unit(inch, dimension::length_t, prefix::inch_t);
