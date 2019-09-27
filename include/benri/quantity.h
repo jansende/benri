@@ -27,17 +27,6 @@ template <class Unit, class ValueType>
 {
     return val * val * val * val;
 }
-#pragma region quantity class helpers
-// quantity forward declaration
-template <class Unit, class ValueType>
-class quantity;
-// The is_quantity function checks if a given type is a quantity
-// object.
-template <class T>
-using is_quantity = typename std::enable_if<
-    std::is_same<std::remove_cv_t<T>,
-                 quantity<typename T::unit_type, typename T::value_type>>::value>::type;
-#pragma endregion
 #pragma region quantity class
 // The quantity type handles physical quantities. It checks the units
 // in calculations and handles conversions, etc. The type in general
@@ -400,7 +389,7 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto
     simple_cast(const quantity<ArgumentUnit, ArgumentValueType>& rhs) noexcept
-    -> std::enable_if_t<type::detect_if<ResultUnit, is_quantity>,
+    -> std::enable_if_t<type::detect_if<ResultUnit, type::is_quantity>,
                         quantity<typename ResultUnit::unit_type, ArgumentValueType>>
 {
     return simple_cast<typename ResultUnit::unit_type>(rhs);
@@ -427,7 +416,7 @@ template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 template <class ResultUnit, class ArgumentUnit, class ArgumentValueType>
 [[nodiscard]] constexpr inline auto
     unit_cast(const quantity<ArgumentUnit, ArgumentValueType>& rhs) noexcept
-    -> std::enable_if_t<type::detect_if<ResultUnit, is_quantity>,
+    -> std::enable_if_t<type::detect_if<ResultUnit, type::is_quantity>,
                         quantity<typename ResultUnit::unit_type, ArgumentValueType>>
 {
     return unit_cast<typename ResultUnit::unit_type>(rhs);
