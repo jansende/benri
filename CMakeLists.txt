@@ -29,6 +29,11 @@ else()
     target_compile_features(benri INTERFACE cxx_std_14)
 endif()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    #disable unknown pragma warnings (msvc complains about gcc/clang pragmas)
+    target_compile_options(benri INTERFACE /wd4068)
+endif()
+
 #add unit tests
 if(BENRI_UNIT_TESTS_ENABLED)
     #googletest is taken from the submodule --> https://cliutils.gitlab.io/modern-cmake/chapters/testing/googletest.html

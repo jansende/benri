@@ -207,12 +207,12 @@ using has_dimension = std::enable_if_t<
     std::is_same<typename Quantity::unit_type::dimension, Dimension>::value>;
 // Check if a quantity or quantity_pointer has the given unit.
 template <class Quantity, class Unit>
-using has_unit_type = std::enable_if_t<
-    std::is_same<typename Quantity::unit_type, Unit>::value>;
+using has_unit_type =
+    std::enable_if_t<std::is_same<typename Quantity::unit_type, Unit>::value>;
 // Check if a quantity or quantity_pointer has the given value type.
 template <class Quantity, class ValueType>
-using has_value_type = std::enable_if_t<
-    std::is_same<typename Quantity::value_type, ValueType>::value>;
+using has_value_type =
+    std::enable_if_t<std::is_same<typename Quantity::value_type, ValueType>::value>;
 #pragma endregion
 } // namespace type
 } // namespace benri
