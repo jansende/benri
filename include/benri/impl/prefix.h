@@ -27,10 +27,14 @@ struct pre
 template <class T, class Prefix>
 constexpr T expand_prefix = meta::pow<T, typename Prefix::type, typename Prefix::power>;
 // Basic tests
+#pragma GCC diagnostic push // Fix gcc/clang warnings.
+// We actually want a == comparison here.
+#pragma GCC diagnostic ignored "-Wfloat-equal"
 static_assert(expand_prefix<intmax_t, pre<std::ratio<2>, std::ratio<2>>> == 4,
               "expand_prefix<pre<2,2>> is 4.");
 static_assert(expand_prefix<double, pre<std::ratio<2>, std::ratio<-2>>> == 1. / 4.,
               "expand_prefix<pre<2,-2>> is 1/4.");
+#pragma GCC diagnostic pop
 // Function for expanding prefixes. It takes the value from T and raises it to
 // the value stored in Power. (Can take any value for Power, but has to do the
 // calculation at runtime.)
@@ -78,6 +82,10 @@ constexpr auto expand_prefix_list_impl(type::sorted_list<Elements...>)
 template <class ValueType, class List>
 constexpr ValueType expand_prefix_list = expand_prefix_list_impl<ValueType>(List{});
 // Basic tests
+// Basic tests
+#pragma GCC diagnostic push // Fix gcc/clang warnings.
+// We actually want a == comparison here.
+#pragma GCC diagnostic ignored "-Wfloat-equal"
 static_assert(expand_prefix_list<
                   intmax_t, type::sorted_list<pre<std::ratio<2>, std::ratio<3>>>> == 8,
               "expand_prefix_list<pre<2,3>> is 8.");
@@ -93,6 +101,7 @@ static_assert(
     expand_prefix_list<double, type::sorted_list<pre<std::ratio<2>, std::ratio<-2>>,
                                                  pre<std::ratio<7>>>> == 1.75,
     "expand_prefix_list<pre<2,-2>,pre<7>> is 1.75.");
+#pragma GCC diagnostic pop
 // Function for expanding a list of prefixes at runtime.
 template <class ValueType, class... Elements>
 constexpr auto runtime_expand_prefix_list(type::sorted_list<Elements...>)

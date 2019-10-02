@@ -16,7 +16,6 @@ struct array
     using value_type = T;
     T data[N > 1 ? N : 1]; // We need to make sure to have some data, to not break
                            // for N == 0.
-    constexpr array() = default;
     constexpr auto&       operator[](size_t index) { return data[index]; }
     constexpr const auto& operator[](size_t index) const { return data[index]; }
     constexpr auto        size() const { return N; }
