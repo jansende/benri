@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/jansende/benri/blob/master/license.md)
+
 [![Build Status](https://travis-ci.com/jansende/benri.svg?branch=master)](https://travis-ci.com/jansende/benri)
 
 # Introduction
