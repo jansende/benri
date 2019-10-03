@@ -39,7 +39,9 @@ struct convert
 {
 };
 template <class From, class To>
-using is_convertible_into = decltype(convert<From, To>{}(From{}));
+using is_convertible_into =
+    decltype(convert<std::remove_cv_t<From>, std::remove_cv_t<To>>{}(
+        std::declval<std::remove_cv_t<From>>()));
 
 // Helper for removing a units prefix.
 template <class Unit>
