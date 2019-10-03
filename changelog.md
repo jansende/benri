@@ -20,9 +20,9 @@ compatibility breaking upgrades are planned for the future.
 - In order to be forward-compatible with the C++20 version of `<chrono>`, the month and
   year types had to be be modified:
   + `month_t` is now `calendar_month_t` with a length of 2.592×10⁶ s.
-  + `year_t` is now `calendar_year_t` with a length of 3.155 760×10⁷ s
+  + `year_t` is now `calendar_year_t` with a length of 3.155 760×10⁷ s.
   + `month_t` maps now to the new `gregorian_month_t` with a length of 2.629 746×10⁶ s.
-  + `year_t` maps now to the new `gregorian_year_t` with a length of 3.155 695 2×10⁷ s
+  + `year_t` maps now to the new `gregorian_year_t` with a length of 3.155 695 2×10⁷ s.
   + Because `lightyear_t` is a function of `year_t` it slightly changes as well.
 
 ## v1.0.1 - Patch
