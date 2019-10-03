@@ -100,235 +100,243 @@ using get_clock_dimension = std::conditional_t<
 #pragma region chrono conversions
 // std::chrono::duration to quantity
 template <class Period, class ValueType>
-struct convert<
-    std::chrono::duration<ValueType, Period>,
-    quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-             ValueType>>
+struct convert<std::chrono::duration<ValueType, Period>,
+               quantity<unit<dimension::time_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>>
 {
     constexpr auto operator()(const std::chrono::duration<ValueType, Period>& rhs)
-        -> quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
+        -> quantity<unit<dimension::time_t,
+                         decltype(type::make_prefix<Period::num, Period::den>{})>,
                     ValueType>
     {
-        return quantity<
-            unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>{rhs.count()};
+        return quantity<unit<dimension::time_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>{rhs.count()};
+    }
+    constexpr auto operator()(std::chrono::duration<ValueType, Period>&& rhs) -> quantity<
+        unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,
+        ValueType>
+    {
+        return quantity<unit<dimension::time_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>{rhs.count()};
+    }
+};
+template <class Period, class ValueType>
+struct convert<std::chrono::duration<ValueType, Period>,
+               quantity<unit<dimension::system_clock_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>>
+{
+    constexpr auto operator()(const std::chrono::duration<ValueType, Period>& rhs)
+        -> quantity<unit<dimension::system_clock_t,
+                         decltype(type::make_prefix<Period::num, Period::den>{})>,
+                    ValueType>
+    {
+        return quantity<unit<dimension::system_clock_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>{rhs.count()};
     }
     constexpr auto operator()(std::chrono::duration<ValueType, Period>&& rhs)
-        -> quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
+        -> quantity<unit<dimension::system_clock_t,
+                         decltype(type::make_prefix<Period::num, Period::den>{})>,
                     ValueType>
     {
-        return quantity<
-            unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>{rhs.count()};
+        return quantity<unit<dimension::system_clock_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>{rhs.count()};
     }
 };
 template <class Period, class ValueType>
-struct convert<
-    std::chrono::duration<ValueType, Period>,
-    quantity<unit<dimension::system_clock_t, type::make_prefix<Period::num, Period::den>>,
-             ValueType>>
+struct convert<std::chrono::duration<ValueType, Period>,
+               quantity<unit<dimension::steady_clock_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>>
 {
     constexpr auto operator()(const std::chrono::duration<ValueType, Period>& rhs)
-        -> quantity<
-            unit<dimension::system_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>
+        -> quantity<unit<dimension::steady_clock_t,
+                         decltype(type::make_prefix<Period::num, Period::den>{})>,
+                    ValueType>
     {
-        return quantity<
-            unit<dimension::system_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>{rhs.count()};
+        return quantity<unit<dimension::steady_clock_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>{rhs.count()};
     }
-    constexpr auto operator()(std::chrono::duration<ValueType, Period>&& rhs) -> quantity<
-        unit<dimension::system_clock_t, type::make_prefix<Period::num, Period::den>>,
-        ValueType>
+    constexpr auto operator()(std::chrono::duration<ValueType, Period>&& rhs)
+        -> quantity<unit<dimension::steady_clock_t,
+                         decltype(type::make_prefix<Period::num, Period::den>{})>,
+                    ValueType>
     {
-        return quantity<
-            unit<dimension::system_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>{rhs.count()};
-    }
-};
-template <class Period, class ValueType>
-struct convert<
-    std::chrono::duration<ValueType, Period>,
-    quantity<unit<dimension::steady_clock_t, type::make_prefix<Period::num, Period::den>>,
-             ValueType>>
-{
-    constexpr auto operator()(const std::chrono::duration<ValueType, Period>& rhs)
-        -> quantity<
-            unit<dimension::steady_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>
-    {
-        return quantity<
-            unit<dimension::steady_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>{rhs.count()};
-    }
-    constexpr auto operator()(std::chrono::duration<ValueType, Period>&& rhs) -> quantity<
-        unit<dimension::steady_clock_t, type::make_prefix<Period::num, Period::den>>,
-        ValueType>
-    {
-        return quantity<
-            unit<dimension::steady_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>{rhs.count()};
+        return quantity<unit<dimension::steady_clock_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>{rhs.count()};
     }
 };
 template <class Period, class ValueType>
 struct convert<std::chrono::duration<ValueType, Period>,
                quantity<unit<dimension::high_resolution_clock_t,
-                             type::make_prefix<Period::num, Period::den>>,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
                         ValueType>>
 {
     constexpr auto operator()(const std::chrono::duration<ValueType, Period>& rhs)
         -> quantity<unit<dimension::high_resolution_clock_t,
-                         type::make_prefix<Period::num, Period::den>>,
+                         decltype(type::make_prefix<Period::num, Period::den>{})>,
                     ValueType>
     {
         return quantity<unit<dimension::high_resolution_clock_t,
-                             type::make_prefix<Period::num, Period::den>>,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
                         ValueType>{rhs.count()};
     }
     constexpr auto operator()(std::chrono::duration<ValueType, Period>&& rhs)
         -> quantity<unit<dimension::high_resolution_clock_t,
-                         type::make_prefix<Period::num, Period::den>>,
+                         decltype(type::make_prefix<Period::num, Period::den>{})>,
                     ValueType>
     {
         return quantity<unit<dimension::high_resolution_clock_t,
-                             type::make_prefix<Period::num, Period::den>>,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
                         ValueType>{rhs.count()};
     }
 };
 // quantity to std::chrono::duration
 template <class Period, class ValueType>
-struct convert<
-    quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-             ValueType>,
-    std::chrono::duration<ValueType, Period>>
+struct convert<quantity<unit<dimension::time_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>,
+               std::chrono::duration<ValueType, Period>>
 {
+    constexpr auto operator()(
+        const quantity<unit<dimension::time_t,
+                            decltype(type::make_prefix<Period::num, Period::den>{})>,
+                       ValueType>& rhs) -> std::chrono::duration<ValueType, Period>
+    {
+        return std::chrono::duration<ValueType, Period>{rhs._value};
+    }
     constexpr auto
-        operator()(const quantity<
-                   unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-                   ValueType>& rhs) -> std::chrono::duration<ValueType, Period>
-    {
-        return std::chrono::duration<ValueType, Period>{rhs._value};
-    }
-    constexpr auto operator()(
-        quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-                 ValueType>&& rhs) -> std::chrono::duration<ValueType, Period>
+        operator()(quantity<unit<dimension::time_t,
+                                 decltype(type::make_prefix<Period::num, Period::den>{})>,
+                            ValueType>&& rhs) -> std::chrono::duration<ValueType, Period>
     {
         return std::chrono::duration<ValueType, Period>{std::move(rhs._value)};
     }
 };
 template <class Period, class ValueType>
-struct convert<
-    quantity<unit<dimension::system_clock_t, type::make_prefix<Period::num, Period::den>>,
-             ValueType>,
-    std::chrono::duration<ValueType, Period>>
+struct convert<quantity<unit<dimension::system_clock_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>,
+               std::chrono::duration<ValueType, Period>>
 {
     constexpr auto operator()(
-        const quantity<
-            unit<dimension::system_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>& rhs) -> std::chrono::duration<ValueType, Period>
+        const quantity<unit<dimension::system_clock_t,
+                            decltype(type::make_prefix<Period::num, Period::den>{})>,
+                       ValueType>& rhs) -> std::chrono::duration<ValueType, Period>
     {
         return std::chrono::duration<ValueType, Period>{rhs._value};
     }
-    constexpr auto operator()(
-        quantity<
-            unit<dimension::system_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>&& rhs) -> std::chrono::duration<ValueType, Period>
+    constexpr auto
+        operator()(quantity<unit<dimension::system_clock_t,
+                                 decltype(type::make_prefix<Period::num, Period::den>{})>,
+                            ValueType>&& rhs) -> std::chrono::duration<ValueType, Period>
     {
         return std::chrono::duration<ValueType, Period>{std::move(rhs._value)};
     }
 };
 template <class Period, class ValueType>
-struct convert<
-    quantity<unit<dimension::steady_clock_t, type::make_prefix<Period::num, Period::den>>,
-             ValueType>,
-    std::chrono::duration<ValueType, Period>>
+struct convert<quantity<unit<dimension::steady_clock_t,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
+                        ValueType>,
+               std::chrono::duration<ValueType, Period>>
 {
     constexpr auto operator()(
-        const quantity<
-            unit<dimension::steady_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>& rhs) -> std::chrono::duration<ValueType, Period>
+        const quantity<unit<dimension::steady_clock_t,
+                            decltype(type::make_prefix<Period::num, Period::den>{})>,
+                       ValueType>& rhs) -> std::chrono::duration<ValueType, Period>
     {
         return std::chrono::duration<ValueType, Period>{rhs._value};
     }
-    constexpr auto operator()(
-        quantity<
-            unit<dimension::steady_clock_t, type::make_prefix<Period::num, Period::den>>,
-            ValueType>&& rhs) -> std::chrono::duration<ValueType, Period>
+    constexpr auto
+        operator()(quantity<unit<dimension::steady_clock_t,
+                                 decltype(type::make_prefix<Period::num, Period::den>{})>,
+                            ValueType>&& rhs) -> std::chrono::duration<ValueType, Period>
     {
         return std::chrono::duration<ValueType, Period>{std::move(rhs._value)};
     }
 };
 template <class Period, class ValueType>
 struct convert<quantity<unit<dimension::high_resolution_clock_t,
-                             type::make_prefix<Period::num, Period::den>>,
+                             decltype(type::make_prefix<Period::num, Period::den>{})>,
                         ValueType>,
                std::chrono::duration<ValueType, Period>>
 {
-    constexpr auto
-        operator()(const quantity<unit<dimension::high_resolution_clock_t,
-                                       type::make_prefix<Period::num, Period::den>>,
-                                  ValueType>& rhs)
-            -> std::chrono::duration<ValueType, Period>
+    constexpr auto operator()(
+        const quantity<unit<dimension::high_resolution_clock_t,
+                            decltype(type::make_prefix<Period::num, Period::den>{})>,
+                       ValueType>& rhs) -> std::chrono::duration<ValueType, Period>
     {
         return std::chrono::duration<ValueType, Period>{rhs._value};
     }
-    constexpr auto operator()(quantity<unit<dimension::high_resolution_clock_t,
-                                            type::make_prefix<Period::num, Period::den>>,
-                                       ValueType>&& rhs)
-        -> std::chrono::duration<ValueType, Period>
+    constexpr auto
+        operator()(quantity<unit<dimension::high_resolution_clock_t,
+                                 decltype(type::make_prefix<Period::num, Period::den>{})>,
+                            ValueType>&& rhs) -> std::chrono::duration<ValueType, Period>
     {
         return std::chrono::duration<ValueType, Period>{std::move(rhs._value)};
     }
 };
 // std::chrono::time_point to quantity_point
 template <class Clock, class Period, class ValueType>
-struct convert<std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>,
-               quantity_point<unit<get_clock_dimension<Clock>,
-                                   type::make_prefix<Period::num, Period::den>>,
-                              ValueType>>
+struct convert<
+    std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>,
+    quantity_point<unit<get_clock_dimension<Clock>,
+                        decltype(type::make_prefix<Period::num, Period::den>{})>,
+                   ValueType>>
 {
     constexpr auto operator()(
         const std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>&
             rhs)
-        -> quantity_point<
-            unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
-            ValueType>
+        -> quantity_point<unit<get_clock_dimension<Clock>,
+                               decltype(type::make_prefix<Period::num, Period::den>{})>,
+                          ValueType>
     {
         return quantity_point<
-            unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
+            unit<get_clock_dimension<Clock>,
+                 decltype(type::make_prefix<Period::num, Period::den>{})>,
             ValueType>{rhs.time_since_epoch().count()};
     }
     constexpr auto operator()(
         std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>&& rhs)
-        -> quantity_point<
-            unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
-            ValueType>
+        -> quantity_point<unit<get_clock_dimension<Clock>,
+                               decltype(type::make_prefix<Period::num, Period::den>{})>,
+                          ValueType>
     {
         return quantity_point<
-            unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
+            unit<get_clock_dimension<Clock>,
+                 decltype(type::make_prefix<Period::num, Period::den>{})>,
             ValueType>{rhs.time_since_epoch().count()};
     }
 };
 // quantity_point to std::chrono::time_point
 template <class Clock, class Period, class ValueType>
-struct convert<quantity_point<unit<get_clock_dimension<Clock>,
-                                   type::make_prefix<Period::num, Period::den>>,
-                              ValueType>,
-               std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>>
+struct convert<
+    quantity_point<unit<get_clock_dimension<Clock>,
+                        decltype(type::make_prefix<Period::num, Period::den>{})>,
+                   ValueType>,
+    std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>>
 {
-    constexpr auto operator()(
-        const quantity_point<
-            unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
-            ValueType>& rhs)
-        -> std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>
+    constexpr auto
+        operator()(const quantity_point<
+                   unit<get_clock_dimension<Clock>,
+                        decltype(type::make_prefix<Period::num, Period::den>{})>,
+                   ValueType>& rhs)
+            -> std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>
     {
         return std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>{
             std::chrono::duration<ValueType, Period>{rhs.value()}};
     }
     constexpr auto operator()(
-        quantity_point<
-            unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
-            ValueType>&& rhs)
+        quantity_point<unit<get_clock_dimension<Clock>,
+                            decltype(type::make_prefix<Period::num, Period::den>{})>,
+                       ValueType>&& rhs)
         -> std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>
     {
         return std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>{
@@ -558,17 +566,18 @@ struct convert<quantity<unit<dimension::high_resolution_clock_t, Prefix>, ValueT
 #pragma region now function
 template <class Clock,
           class Unit      = unit<get_clock_dimension<Clock>,
-                            type::make_prefix<Clock::duration::period::num,
-                                              Clock::duration::period::den>>,
+                            decltype(type::make_prefix<Clock::duration::period::num,
+                                                       Clock::duration::period::den>{})>,
           class ValueType = Precision>
 constexpr inline auto now() noexcept -> quantity_point<Unit, ValueType>
 {
     const auto chrono_now = std::chrono::time_point_cast<
         std::chrono::duration<ValueType, typename Clock::duration::period>>(Clock::now());
-    const auto benri_now = quantity_point<
-        unit<get_clock_dimension<Clock>, type::make_prefix<Clock::duration::period::num,
-                                                           Clock::duration::period::den>>,
-        ValueType>{chrono_now};
+    const auto benri_now =
+        quantity_point<unit<get_clock_dimension<Clock>,
+                            decltype(type::make_prefix<Clock::duration::period::num,
+                                                       Clock::duration::period::den>{})>,
+                       ValueType>{chrono_now};
     return simple_cast<Unit>(benri_now);
 }
 #pragma endregion
@@ -578,60 +587,64 @@ constexpr inline auto now() noexcept -> quantity_point<Unit, ValueType>
 // with the unit of std::chrono::time_point.
 template <class Clock, class Period, class ValueType>
 [[nodiscard]] constexpr inline auto operator+(
-    const quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-                   ValueType>& lhs,
+    const quantity<
+        unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,
+        ValueType>& lhs,
     const std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>&
         rhs) noexcept
-    -> quantity_point<
-        unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
-        ValueType>
+    -> quantity_point<unit<get_clock_dimension<Clock>,
+                           decltype(type::make_prefix<Period::num, Period::den>{})>,
+                      ValueType>
 {
     return lhs
            + quantity_point<unit<get_clock_dimension<Clock>,
-                                 type::make_prefix<Period::num, Period::den>>,
+                                 decltype(type::make_prefix<Period::num, Period::den>{})>,
                             ValueType>{rhs};
 }
 template <class Clock, class Period, class ValueType>
 [[nodiscard]] constexpr inline auto operator+(
     const std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>& lhs,
-    const quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-                   ValueType>& rhs) noexcept
-    -> quantity_point<
-        unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
-        ValueType>
+    const quantity<
+        unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,
+        ValueType>& rhs) noexcept
+    -> quantity_point<unit<get_clock_dimension<Clock>,
+                           decltype(type::make_prefix<Period::num, Period::den>{})>,
+                      ValueType>
 {
     return quantity_point<unit<get_clock_dimension<Clock>,
-                               type::make_prefix<Period::num, Period::den>>,
+                               decltype(type::make_prefix<Period::num, Period::den>{})>,
                           ValueType>{lhs}
            + rhs;
 }
 
 template <class Clock, class Period, class ValueType>
 [[nodiscard]] constexpr inline auto operator-(
-    const quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-                   ValueType>& lhs,
+    const quantity<
+        unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,
+        ValueType>& lhs,
     const std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>&
         rhs) noexcept
-    -> quantity_point<
-        unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
-        ValueType>
+    -> quantity_point<unit<get_clock_dimension<Clock>,
+                           decltype(type::make_prefix<Period::num, Period::den>{})>,
+                      ValueType>
 {
     return lhs
            - quantity_point<unit<get_clock_dimension<Clock>,
-                                 type::make_prefix<Period::num, Period::den>>,
+                                 decltype(type::make_prefix<Period::num, Period::den>{})>,
                             ValueType>{rhs};
 }
 template <class Clock, class Period, class ValueType>
 [[nodiscard]] constexpr inline auto operator-(
     const std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>& lhs,
-    const quantity<unit<dimension::time_t, type::make_prefix<Period::num, Period::den>>,
-                   ValueType>& rhs) noexcept
-    -> quantity_point<
-        unit<get_clock_dimension<Clock>, type::make_prefix<Period::num, Period::den>>,
-        ValueType>
+    const quantity<
+        unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,
+        ValueType>& rhs) noexcept
+    -> quantity_point<unit<get_clock_dimension<Clock>,
+                           decltype(type::make_prefix<Period::num, Period::den>{})>,
+                      ValueType>
 {
     return quantity_point<unit<get_clock_dimension<Clock>,
-                               type::make_prefix<Period::num, Period::den>>,
+                               decltype(type::make_prefix<Period::num, Period::den>{})>,
                           ValueType>{lhs}
            - rhs;
 }
