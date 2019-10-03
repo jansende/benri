@@ -1,6 +1,14 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v2.0.2 - Patch
+- Older MSVC versions had problems compiling *benri* due to template specialization
+  instantiation issues. (For a proper resolution MSVC would have needed to expand certain
+  template but did not.)
+- Fixed by adding `decltype(T{})` inside the specializations.
+- Made the `is_convertible_into` more general. (It now removes `const` and `volatile`
+  before type comparison.)
+
 ## v2.0.1 - Second release
 This is the second full release of *benri*. The library was improved by adding `<chrono>`
 support, fixing bugs and implementing more unit tests. Besides quality of life updates,
