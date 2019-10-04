@@ -1305,7 +1305,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, typename si::degree_kelvin_t::prefix>{});
         return quantity_point<si::degree_kelvin_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value() * factor)};
@@ -1316,7 +1316,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, typename si::degree_kelvin_t::prefix>{});
         return quantity_point<si::degree_kelvin_t, ResultValueType>{rhs.value() * factor};
     }
@@ -1406,6 +1406,27 @@ template <class ResultValueType>
 struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultValueType>,
                       void>
 {
+    // From rankine to celsius
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() / static_cast<ArgumentValueType>(prefix::rankine::value)
+                + static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            rhs.value() / static_cast<ResultValueType>(prefix::rankine::value)
+            + static_cast<ResultValueType>(prefix::absolute_zero::value)};
+    }
     // From kelvin to celsius
     template <class ArgumentValueType>
     [[nodiscard]] constexpr inline auto operator()(
@@ -1453,7 +1474,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix,
                                typename si::temperature::degree_celsius_t::prefix>{});
         return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
@@ -1465,7 +1486,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix,
                                typename si::temperature::degree_celsius_t::prefix>{});
         return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
@@ -1615,7 +1636,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
     {
-        constexpr auto factor = expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix,
                                typename si::temperature::degree_rankine_t::prefix>{});
         return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
@@ -1627,7 +1648,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
     {
-        constexpr auto factor = expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix,
                                typename si::temperature::degree_rankine_t::prefix>{});
         return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
@@ -1798,7 +1819,7 @@ struct unit_cast_impl<
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
     {
-        constexpr auto factor = expand_prefix_list<ArgumentValueType>(
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix,
                                typename si::temperature::degree_fahrenheit_t::prefix>{});
         return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
@@ -1810,7 +1831,7 @@ struct unit_cast_impl<
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
     {
-        constexpr auto factor = expand_prefix_list<ResultValueType>(
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix,
                                typename si::temperature::degree_fahrenheit_t::prefix>{});
         return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
@@ -1924,7 +1945,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -1937,7 +1958,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
@@ -1968,7 +1989,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -1981,7 +2002,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
@@ -2012,7 +2033,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -2025,7 +2046,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
@@ -2074,7 +2095,7 @@ struct unit_cast_impl<
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -2086,7 +2107,7 @@ struct unit_cast_impl<
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
@@ -2114,7 +2135,7 @@ struct unit_cast_impl<
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -2126,7 +2147,7 @@ struct unit_cast_impl<
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
@@ -2154,7 +2175,7 @@ struct unit_cast_impl<
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -2166,7 +2187,7 @@ struct unit_cast_impl<
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
@@ -2214,7 +2235,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -2227,7 +2248,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
@@ -2258,7 +2279,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -2271,7 +2292,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
@@ -2302,7 +2323,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+        const auto factor = runtime_expand_prefix_list<ArgumentValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{
@@ -2315,7 +2336,7 @@ struct unit_cast_impl<
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                     ResultValueType>
     {
-        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+        const auto factor = runtime_expand_prefix_list<ResultValueType>(
             type::divide_lists<ArgumentPrefix, ResultPrefix>{});
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{rhs.value() * factor};
