@@ -1,6 +1,10 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v2.1.1 - Patch
+- Fixed the `unit_cast` not casting temperatures correctly.
+- Added unit tests to prevent this from happening in the future.
+
 ## v2.1.0 - Made `simple_cast` and `unit_cast` more versatile
 - Changed `simple_cast` and `unit_cast` both from a function to a functor.
 - Both functions are now more versatile than before. The following signatures are provided:
