@@ -28,7 +28,7 @@ auto equivalent_dose(benri::quantity<benri::si::gray_t, T> absorbed_dose,
                      radiation_type                        radiation)
 {
     using namespace benri::casts;
-    return absorbed_dose * value_type_cast<T>(weighting_factor(radiation));
+    return absorbed_dose * simple_cast<T>(weighting_factor(radiation));
 }
 
 int main()

@@ -1,6 +1,39 @@
 # Changes
 **benri** uses [Semantic Versioning](https://semver.org/) to index its versions.
 
+## v2.1.0 - Made `simple_cast` and `unit_cast` more versatile
+- Changed `simple_cast` and `unit_cast` both from a function to a functor.
+- Both functions are now more versatile than before. The following signatures are provided:
+  + `simple_cast<NewQuantity>(Quantity)` converts `Quantity` to `NewQuantity`.
+  + `simple_cast<NewQuantityPoint>(QuantityPoint)` converts `Quantity` to
+    `NewQuantityPoint`.
+  + `simple_cast<Unit>(Quantity)` converts the unit of `Quantity` to `Unit` without
+    changing the `value_type`.
+  + `simple_cast<Unit>(QuantityPoint)` converts the unit of `QuantityPoint` to `Unit`
+    without changing the `value_type`.
+  + `simple_cast<ValueType>(Quantity)` converts the `value_type` of `Quantity` to
+    `ValueType` without changing the unit.
+  + `simple_cast<ValueType>(QuantityPoint)` converts the `value_type` of `QuantityPoint`
+    to `ValueType` without changing the unit.
+  + `simple_cast<NewQuantity, ValueType>(Quantity)` converts `Quantity` to `unit_type` of
+    `NewQuantity` and a `value_type` of `ValueType`.
+  + `simple_cast<NewQuantityPoint, ValueType>(QuantityPoint)` converts `QuantityPoint` to
+    `unit_type` of `NewQuantityPoint` and a `value_type` of `ValueType`.
+  + `simple_cast<ValueType, NewQuantity>(Quantity)` converts `Quantity` to `unit_type` of
+    `NewQuantity` and a `value_type` of `ValueType`.
+  + `simple_cast<ValueType, NewQuantityPoint>(QuantityPoint)` converts `QuantityPoint` to
+    `unit_type` of `NewQuantityPoint` and a `value_type` of `ValueType`.
+  + `simple_cast<Unit, ValueType>(Quantity)` converts the unit of `Quantity` to `Unit` and
+    the `value_type` to `ValueType`.
+  + `simple_cast<Unit, ValueType>(QuantityPoint)` converts the unit of `QuantityPoint` to
+    `Unit` and the `value_type` to `ValueType`.
+  + `simple_cast<ValueType, Unit>(Quantity)` converts the unit of `Quantity` to `Unit` and
+    the `value_type` to `ValueType`.
+  + `simple_cast<ValueType, Unit>(QuantityPoint)` converts the unit of `QuantityPoint` to
+    `Unit` and the `value_type` to `ValueType`.
+- Deprecated `value_type_cast` because the same functionality is now provided by
+  `simple_cast`.
+
 ## v2.0.2 - Patch
 - Older MSVC versions had problems compiling *benri* due to template specialization
   instantiation issues. (For a proper resolution MSVC would have needed to expand certain

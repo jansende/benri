@@ -1,4 +1,5 @@
 #pragma once
+#include <benri/casts.h>
 #include <benri/quantity.h>
 #include <benri/quantity_point.h>
 #include <benri/si/base.h>
@@ -106,367 +107,2252 @@ struct convert<quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, Va
     }
 };
 #pragma endregion
-#pragma region simple_cast / unit_cast overloads
-// conversion overload for quantity points (we need an actual overload, because
-// partial function template specialization is not allowed)
-
-// celsius to kelvin
-template <class ResultUnit, class ValueType>
-constexpr auto
-    simple_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType>& rhs)
-        -> std::enable_if_t<std::is_same<ResultUnit, si::degree_kelvin_t>::value,
-                            quantity_point<si::degree_kelvin_t, ValueType>>
+#pragma region simple_cast
+// quantity_point
+template <class ResultValueType>
+struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void>
 {
-    return quantity_point<si::degree_kelvin_t, ValueType>{
-        rhs.value() - static_cast<ValueType>(prefix::absolute_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto
-    unit_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType>& rhs)
-        -> std::enable_if_t<std::is_same<ResultUnit, si::degree_kelvin_t>::value,
-                            quantity_point<si::degree_kelvin_t, ValueType>>
-{
-    return simple_cast<si::degree_kelvin_t>(rhs);
-}
-// kelvin to celsius
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<si::degree_kelvin_t, ValueType>& rhs)
-    -> std::enable_if_t<
-        std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
-        quantity_point<si::temperature::degree_celsius_t, ValueType>>
-{
-    return quantity_point<si::temperature::degree_celsius_t, ValueType>{
-        rhs.value() + static_cast<ValueType>(prefix::absolute_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<si::degree_kelvin_t, ValueType>& rhs)
-    -> std::enable_if_t<
-        std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
-        quantity_point<si::temperature::degree_celsius_t, ValueType>>
-{
-    return simple_cast<si::temperature::degree_celsius_t>(rhs);
-}
-// celsius to rankine
-template <class ResultUnit, class ValueType>
-constexpr auto
-    simple_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType>& rhs)
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value()
+                - static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
+        const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            rhs.value() - static_cast<ResultValueType>(prefix::absolute_zero::value)};
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>&
+            rhs) const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() / static_cast<ArgumentValueType>(prefix::rankine::value)
+                - static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value)
+                      / static_cast<ArgumentValueType>(prefix::rankine::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
+        const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            rhs.value() / static_cast<ResultValueType>(prefix::rankine::value)
+            - static_cast<ResultValueType>(prefix::fahrenheit_zero::value)
+                  / static_cast<ResultValueType>(prefix::rankine::value)};
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<
+            ArgumentValueType,
+            type::divide_lists<ArgumentPrefix, typename si::degree_kelvin_t::prefix>>;
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ResultValueType>& rhs) const noexcept
+        -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<
+            ResultValueType,
+            type::divide_lists<ArgumentPrefix, typename si::degree_kelvin_t::prefix>>;
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
+        noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to kelvin
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value,
-            quantity_point<si::temperature::degree_rankine_t, ValueType>>
+            type::detect_if<Other, is_convertible_into,
+                            quantity_point<si::degree_kelvin_t, ResultValueType>>,
+            quantity_point<si::degree_kelvin_t, ResultValueType>>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{rhs};
+    }
+};
+template <>
+struct simple_cast_impl<si::degree_kelvin_t, void>
 {
-    return quantity_point<si::temperature::degree_rankine_t, ValueType>{
-        rhs.value() * static_cast<ValueType>(prefix::rankine::value)
-        - static_cast<ValueType>(prefix::absolute_zero::value)
-              * static_cast<ValueType>(prefix::rankine::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto
-    unit_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType>& rhs)
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
+        noexcept -> quantity<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return simple_cast_impl<quantity<si::degree_kelvin_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return simple_cast_impl<quantity_point<si::degree_kelvin_t, ArgumentValueType>,
+                                void>{}(rhs);
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return simple_cast_impl<quantity<si::degree_kelvin_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>&
+            rhs) const noexcept -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return simple_cast_impl<quantity_point<si::degree_kelvin_t, ArgumentValueType>,
+                                void>{}(rhs);
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return simple_cast_impl<quantity<si::degree_kelvin_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return simple_cast_impl<quantity_point<si::degree_kelvin_t, ArgumentValueType>,
+                                void>{}(rhs);
+    }
+};
+template <class ResultValueType>
+struct simple_cast_impl<
+    quantity_point<si::temperature::degree_celsius_t, ResultValueType>, void>
+{
+    // From rankine to celsius
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() / static_cast<ArgumentValueType>(prefix::rankine::value)
+                + static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            rhs.value() / static_cast<ResultValueType>(prefix::rankine::value)
+            + static_cast<ResultValueType>(prefix::absolute_zero::value)};
+    }
+    // From kelvin to celsius
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value()
+                + static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
+        noexcept -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            rhs.value() + static_cast<ResultValueType>(prefix::absolute_zero::value)};
+    }
+    // From fahrenheit to celsius
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                (rhs.value()
+                 - static_cast<ArgumentValueType>(prefix::freezing_point::value))
+                / static_cast<ArgumentValueType>(prefix::rankine::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            (rhs.value() - static_cast<ResultValueType>(prefix::freezing_point::value))
+            / static_cast<ResultValueType>(prefix::rankine::value)};
+    }
+    // From celsius to celsius
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<
+            ArgumentValueType,
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_celsius_t::prefix>>;
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ResultValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<
+            ResultValueType,
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_celsius_t::prefix>>;
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to celsius
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value,
-            quantity_point<si::temperature::degree_rankine_t, ValueType>>
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity_point<si::temperature::degree_celsius_t, ResultValueType>>,
+            quantity_point<si::temperature::degree_celsius_t, ResultValueType>>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{rhs};
+    }
+};
+template <>
+struct simple_cast_impl<si::temperature::degree_celsius_t, void>
 {
-    return simple_cast<si::temperature::degree_rankine_t>(rhs);
-}
-// rankine to celsius
-template <class ResultUnit, class ValueType>
-constexpr auto
-    simple_cast(const quantity_point<si::temperature::degree_rankine_t, ValueType>& rhs)
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
+        noexcept -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+};
+template <class ResultValueType>
+struct simple_cast_impl<
+    quantity_point<si::temperature::degree_rankine_t, ResultValueType>, void>
+{
+    // From celsius to rankine
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() * static_cast<ArgumentValueType>(prefix::rankine::value)
+                - static_cast<ArgumentValueType>(prefix::absolute_zero::value)
+                      * static_cast<ArgumentValueType>(prefix::rankine::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            rhs.value() * static_cast<ResultValueType>(prefix::rankine::value)
+            - static_cast<ResultValueType>(prefix::absolute_zero::value)
+                  * static_cast<ResultValueType>(prefix::rankine::value)};
+    }
+    // From fahrenheit to rankine
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value()
+                - static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            rhs.value() - static_cast<ResultValueType>(prefix::fahrenheit_zero::value)};
+    }
+    // From rankine to rankine
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<
+            ArgumentValueType,
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_rankine_t::prefix>>;
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ResultValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<
+            ResultValueType,
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_rankine_t::prefix>>;
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to rankine
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
-            quantity_point<si::temperature::degree_celsius_t, ValueType>>
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity_point<si::temperature::degree_rankine_t, ResultValueType>>,
+            quantity_point<si::temperature::degree_rankine_t, ResultValueType>>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{rhs};
+    }
+};
+template <>
+struct simple_cast_impl<si::temperature::degree_rankine_t, void>
 {
-    return quantity_point<si::temperature::degree_celsius_t, ValueType>{
-        rhs.value() / static_cast<ValueType>(prefix::rankine::value)
-        + static_cast<ValueType>(prefix::absolute_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto
-    unit_cast(const quantity_point<si::temperature::degree_rankine_t, ValueType>& rhs)
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
+        noexcept -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+};
+template <class ResultValueType>
+struct simple_cast_impl<
+    quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>, void>
+{
+    // From kelvin to fahrenheit
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() * static_cast<ArgumentValueType>(prefix::rankine::value)
+                + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
+        noexcept -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            rhs.value() * static_cast<ResultValueType>(prefix::rankine::value)
+            + static_cast<ResultValueType>(prefix::fahrenheit_zero::value)};
+    }
+    // From celsius to fahrenheit
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() * static_cast<ArgumentValueType>(prefix::rankine::value)
+                + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value)
+                - static_cast<ArgumentValueType>(prefix::rankine::value)
+                      * static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            rhs.value() * static_cast<ResultValueType>(prefix::rankine::value)
+            + static_cast<ResultValueType>(prefix::fahrenheit_zero::value)
+            - static_cast<ResultValueType>(prefix::rankine::value)
+                  * static_cast<ResultValueType>(prefix::absolute_zero::value)};
+    }
+    // From rankine to fahrenheit
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value()
+                + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            rhs.value() + static_cast<ResultValueType>(prefix::fahrenheit_zero::value)};
+    }
+    // From fahrenheit to fahrenheit
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<
+            ArgumentValueType,
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_fahrenheit_t::prefix>>;
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ResultValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<
+            ResultValueType,
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_fahrenheit_t::prefix>>;
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to fahrenheit
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
-            quantity_point<si::temperature::degree_celsius_t, ValueType>>
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>>,
+            quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{rhs};
+    }
+};
+template <>
+struct simple_cast_impl<si::temperature::degree_fahrenheit_t, void>
 {
-    return simple_cast<si::temperature::degree_celsius_t>(rhs);
-}
-// fahrenheit to kelvin
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(
-    const quantity_point<si::temperature::degree_fahrenheit_t, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<ResultUnit, si::degree_kelvin_t>::value,
-                        quantity_point<si::degree_kelvin_t, ValueType>>
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
+        noexcept -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>,
+            void>{}(rhs);
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>,
+            void>{}(rhs);
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return simple_cast_impl<
+            quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>,
+            void>{}(rhs);
+    }
+};
+// quantity
+template <class ResultPrefix, class ResultValueType>
+struct simple_cast_impl<
+    quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>, ResultValueType>,
+    void>
 {
-    return quantity_point<si::degree_kelvin_t, ValueType>{
-        rhs.value() / static_cast<ValueType>(prefix::rankine::value)
-        - static_cast<ValueType>(prefix::fahrenheit_zero::value)
-              / static_cast<ValueType>(prefix::rankine::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto
-    unit_cast(const quantity_point<si::temperature::degree_fahrenheit_t, ValueType>& rhs)
-        -> std::enable_if_t<std::is_same<ResultUnit, si::degree_kelvin_t>::value,
-                            quantity_point<si::degree_kelvin_t, ValueType>>
-{
-    return simple_cast<si::degree_kelvin_t>(rhs);
-}
-// kelvin to fahrenheit
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(const quantity_point<si::degree_kelvin_t, ValueType>& rhs)
-    -> std::enable_if_t<
-        std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
-        quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
-{
-    return quantity_point<si::temperature::degree_fahrenheit_t, ValueType>{
-        rhs.value() * static_cast<ValueType>(prefix::rankine::value)
-        + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto unit_cast(const quantity_point<si::degree_kelvin_t, ValueType>& rhs)
-    -> std::enable_if_t<
-        std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
-        quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
-{
-    return simple_cast<si::temperature::degree_fahrenheit_t>(rhs);
-}
-// fahrenheit to celsius
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(
-    const quantity_point<si::temperature::degree_fahrenheit_t, ValueType>& rhs)
-    -> std::enable_if_t<
-        std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
-        quantity_point<si::temperature::degree_celsius_t, ValueType>>
-{
-    return quantity_point<si::temperature::degree_celsius_t, ValueType>{
-        (rhs.value() - static_cast<ValueType>(prefix::freezing_point::value))
-        / static_cast<ValueType>(prefix::rankine::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto
-    unit_cast(const quantity_point<si::temperature::degree_fahrenheit_t, ValueType>& rhs)
+    // From thermodynamic_temperature to thermodynamic_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From celsius_temperature to thermodynamic_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From fahrenheit_temperature to thermodynamic_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to thermodynamic_temperature
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_celsius_t>::value,
-            quantity_point<si::temperature::degree_celsius_t, ValueType>>
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                         ResultValueType>>,
+            quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                     ResultValueType>>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs};
+    }
+};
+template <class ResultPrefix, class ResultValueType>
+struct simple_cast_impl<
+    quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>, void>
 {
-    return simple_cast<si::temperature::degree_celsius_t>(rhs);
-}
-// celsius to fahrenheit
-template <class ResultUnit, class ValueType>
-constexpr auto
-    simple_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType>& rhs)
+    // From thermodynamic_temperature to celsius_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return rhs;
+    }
+    // From celsius_temperature to celsius_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return rhs;
+    }
+    // From fahrenheit_temperature to celsius_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to celsius_temperature
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
-            quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
+            type::detect_if<Other, is_convertible_into,
+                            quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                     ResultValueType>>,
+            quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                     ResultValueType>>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs};
+    }
+};
+template <class ResultPrefix, class ResultValueType>
+struct simple_cast_impl<
+    quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>, ResultValueType>,
+    void>
 {
-    return quantity_point<si::temperature::degree_fahrenheit_t, ValueType>{
-        rhs.value() * static_cast<ValueType>(prefix::rankine::value)
-        + static_cast<ValueType>(prefix::fahrenheit_zero::value)
-        - static_cast<ValueType>(prefix::rankine::value)
-              * static_cast<ValueType>(prefix::absolute_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto
-    unit_cast(const quantity_point<si::temperature::degree_celsius_t, ValueType>& rhs)
+    // From thermodynamic_temperature to fahrenheit_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From celsius_temperature to fahrenheit_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From fahrenheit_temperature to fahrenheit_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ArgumentValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor =
+            expand_prefix_list<ResultValueType,
+                               type::divide_lists<ArgumentPrefix, ResultPrefix>>;
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to fahrenheit_temperature
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
-            quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
-{
-    return simple_cast<si::temperature::degree_fahrenheit_t>(rhs);
-}
-// fahrenheit to rankine
-template <class ResultUnit, class ValueType>
-constexpr auto simple_cast(
-    const quantity_point<si::temperature::degree_fahrenheit_t, ValueType>& rhs)
-    -> std::enable_if_t<
-        std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value,
-        quantity_point<si::temperature::degree_rankine_t, ValueType>>
-{
-    return quantity_point<si::temperature::degree_rankine_t, ValueType>{
-        rhs.value() - static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto
-    unit_cast(const quantity_point<si::temperature::degree_fahrenheit_t, ValueType>& rhs)
-        -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_rankine_t>::value,
-            quantity_point<si::temperature::degree_rankine_t, ValueType>>
-{
-    return simple_cast<si::temperature::degree_rankine_t>(rhs);
-}
-// rankine to fahrenheit
-template <class ResultUnit, class ValueType>
-constexpr auto
-    simple_cast(const quantity_point<si::temperature::degree_rankine_t, ValueType>& rhs)
-        -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
-            quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
-{
-    return quantity_point<si::temperature::degree_fahrenheit_t, ValueType>{
-        rhs.value() + static_cast<ValueType>(prefix::fahrenheit_zero::value)};
-}
-template <class ResultUnit, class ValueType>
-constexpr auto
-    unit_cast(const quantity_point<si::temperature::degree_rankine_t, ValueType>& rhs)
-        -> std::enable_if_t<
-            std::is_same<ResultUnit, si::temperature::degree_fahrenheit_t>::value,
-            quantity_point<si::temperature::degree_fahrenheit_t, ValueType>>
-{
-    return simple_cast<si::temperature::degree_fahrenheit_t>(rhs);
-}
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                         ResultValueType>>,
+            quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                     ResultValueType>>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs};
+    }
+};
 #pragma endregion
-#pragma region simple_cast / unit_cast overloads
-// conversion overload for quantities (we need an actual overload, because
-// partial function template specialization is not allowed)
-
-// celsius to kelvin
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto simple_cast(
-    const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::thermodynamic_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+#pragma region unit_cast
+// quantity_point
+template <class ResultValueType>
+struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * expand_prefix_list<ValueType,
-                             type::divide_lists<Prefix, typename ResultUnit::prefix>>};
-}
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto unit_cast(
-    const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::thermodynamic_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value()
+                - static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
+        const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            rhs.value() - static_cast<ResultValueType>(prefix::absolute_zero::value)};
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>&
+            rhs) const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() / static_cast<ArgumentValueType>(prefix::rankine::value)
+                - static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value)
+                      / static_cast<ArgumentValueType>(prefix::rankine::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
+        const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            rhs.value() / static_cast<ResultValueType>(prefix::rankine::value)
+            - static_cast<ResultValueType>(prefix::fahrenheit_zero::value)
+                  / static_cast<ResultValueType>(prefix::rankine::value)};
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, typename si::degree_kelvin_t::prefix>{});
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ResultValueType>& rhs) const noexcept
+        -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, typename si::degree_kelvin_t::prefix>{});
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
+        noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to kelvin
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+        -> std::enable_if_t<
+            type::detect_if<Other, is_convertible_into,
+                            quantity_point<si::degree_kelvin_t, ResultValueType>>,
+            quantity_point<si::degree_kelvin_t, ResultValueType>>
+    {
+        return quantity_point<si::degree_kelvin_t, ResultValueType>{rhs};
+    }
+};
+template <>
+struct unit_cast_impl<si::degree_kelvin_t, void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * runtime_expand_prefix_list<ValueType>(
-            type::divide_lists<Prefix, typename ResultUnit::prefix>{})};
-}
-// kelvin to celsius
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto simple_cast(
-    const quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::celsius_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
+        noexcept -> quantity<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return unit_cast_impl<quantity<si::degree_kelvin_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return unit_cast_impl<quantity_point<si::degree_kelvin_t, ArgumentValueType>,
+                              void>{}(rhs);
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return unit_cast_impl<quantity<si::degree_kelvin_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>&
+            rhs) const noexcept -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return unit_cast_impl<quantity_point<si::degree_kelvin_t, ArgumentValueType>,
+                              void>{}(rhs);
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return unit_cast_impl<quantity<si::degree_kelvin_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
+    {
+        return unit_cast_impl<quantity_point<si::degree_kelvin_t, ArgumentValueType>,
+                              void>{}(rhs);
+    }
+};
+template <class ResultValueType>
+struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultValueType>,
+                      void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * expand_prefix_list<ValueType,
-                             type::divide_lists<Prefix, typename ResultUnit::prefix>>};
-}
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto unit_cast(
-    const quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::celsius_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From kelvin to celsius
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value()
+                + static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
+        noexcept -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            rhs.value() + static_cast<ResultValueType>(prefix::absolute_zero::value)};
+    }
+    // From fahrenheit to celsius
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                (rhs.value()
+                 - static_cast<ArgumentValueType>(prefix::freezing_point::value))
+                / static_cast<ArgumentValueType>(prefix::rankine::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            (rhs.value() - static_cast<ResultValueType>(prefix::freezing_point::value))
+            / static_cast<ResultValueType>(prefix::rankine::value)};
+    }
+    // From celsius to celsius
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_celsius_t::prefix>{});
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ResultValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_celsius_t::prefix>{});
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to celsius
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+        -> std::enable_if_t<
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity_point<si::temperature::degree_celsius_t, ResultValueType>>,
+            quantity_point<si::temperature::degree_celsius_t, ResultValueType>>
+    {
+        return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{rhs};
+    }
+};
+template <>
+struct unit_cast_impl<si::temperature::degree_celsius_t, void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * runtime_expand_prefix_list<ValueType>(
-            type::divide_lists<Prefix, typename ResultUnit::prefix>{})};
-}
-// fahrenheit to kelvin
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto simple_cast(
-    const quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::thermodynamic_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
+        noexcept -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+};
+template <class ResultValueType>
+struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultValueType>,
+                      void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * expand_prefix_list<ValueType,
-                             type::divide_lists<Prefix, typename ResultUnit::prefix>>};
-}
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto unit_cast(
-    const quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::thermodynamic_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From celsius to rankine
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() * static_cast<ArgumentValueType>(prefix::rankine::value)
+                - static_cast<ArgumentValueType>(prefix::absolute_zero::value)
+                      * static_cast<ArgumentValueType>(prefix::rankine::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            rhs.value() * static_cast<ResultValueType>(prefix::rankine::value)
+            - static_cast<ResultValueType>(prefix::absolute_zero::value)
+                  * static_cast<ResultValueType>(prefix::rankine::value)};
+    }
+    // From fahrenheit to rankine
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value()
+                - static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            rhs.value() - static_cast<ResultValueType>(prefix::fahrenheit_zero::value)};
+    }
+    // From rankine to rankine
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_rankine_t::prefix>{});
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ResultValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_rankine_t::prefix>{});
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to rankine
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+        -> std::enable_if_t<
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity_point<si::temperature::degree_rankine_t, ResultValueType>>,
+            quantity_point<si::temperature::degree_rankine_t, ResultValueType>>
+    {
+        return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{rhs};
+    }
+};
+template <>
+struct unit_cast_impl<si::temperature::degree_rankine_t, void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * runtime_expand_prefix_list<ValueType>(
-            type::divide_lists<Prefix, typename ResultUnit::prefix>{})};
-}
-// kelvin to fahrenheit
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto simple_cast(
-    const quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::fahrenheit_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
+        noexcept -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
+        const noexcept -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
+    }
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+};
+template <class ResultValueType>
+struct unit_cast_impl<
+    quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>, void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * expand_prefix_list<ValueType,
-                             type::divide_lists<Prefix, typename ResultUnit::prefix>>};
-}
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto unit_cast(
-    const quantity<unit<dimension::thermodynamic_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::fahrenheit_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From kelvin to fahrenheit
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() * static_cast<ArgumentValueType>(prefix::rankine::value)
+                + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
+        noexcept -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            rhs.value() * static_cast<ResultValueType>(prefix::rankine::value)
+            + static_cast<ResultValueType>(prefix::fahrenheit_zero::value)};
+    }
+    // From celsius to fahrenheit
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value() * static_cast<ArgumentValueType>(prefix::rankine::value)
+                + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value)
+                - static_cast<ArgumentValueType>(prefix::rankine::value)
+                      * static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            rhs.value() * static_cast<ResultValueType>(prefix::rankine::value)
+            + static_cast<ResultValueType>(prefix::fahrenheit_zero::value)
+            - static_cast<ResultValueType>(prefix::rankine::value)
+                  * static_cast<ResultValueType>(prefix::absolute_zero::value)};
+    }
+    // From rankine to fahrenheit
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(
+                rhs.value()
+                + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            rhs.value() + static_cast<ResultValueType>(prefix::fahrenheit_zero::value)};
+    }
+    // From fahrenheit to fahrenheit
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_fahrenheit_t::prefix>{});
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ResultValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        constexpr auto factor = expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix,
+                               typename si::temperature::degree_fahrenheit_t::prefix>{});
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
+            static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to fahrenheit
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+        -> std::enable_if_t<
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>>,
+            quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>>
+    {
+        return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{rhs};
+    }
+};
+template <>
+struct unit_cast_impl<si::temperature::degree_fahrenheit_t, void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * runtime_expand_prefix_list<ValueType>(
-            type::divide_lists<Prefix, typename ResultUnit::prefix>{})};
-}
-// fahrenheit to celsius
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto simple_cast(
-    const quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::celsius_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From celsius to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
+        noexcept -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>,
+            void>{}(rhs);
+    }
+    // From fahrenheit to kelvin
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
+        const noexcept
+        -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
+                                        ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>,
+            void>{}(rhs);
+    }
+    // From kelvin to kelvin
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>, void>{}(
+            rhs);
+    }
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                             ArgumentValueType>& rhs) const noexcept
+        -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
+    {
+        return unit_cast_impl<
+            quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>,
+            void>{}(rhs);
+    }
+};
+// quantity
+template <class ResultPrefix, class ResultValueType>
+struct unit_cast_impl<
+    quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>, ResultValueType>,
+    void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * expand_prefix_list<ValueType,
-                             type::divide_lists<Prefix, typename ResultUnit::prefix>>};
-}
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto unit_cast(
-    const quantity<unit<dimension::fahrenheit_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::celsius_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From thermodynamic_temperature to thermodynamic_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From celsius_temperature to thermodynamic_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From fahrenheit_temperature to thermodynamic_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to thermodynamic_temperature
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+        -> std::enable_if_t<
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                         ResultValueType>>,
+            quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                     ResultValueType>>
+    {
+        return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs};
+    }
+};
+template <class ResultPrefix, class ResultValueType>
+struct unit_cast_impl<
+    quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>, void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * runtime_expand_prefix_list<ValueType>(
-            type::divide_lists<Prefix, typename ResultUnit::prefix>{})};
-}
-// celsius to fahrenheit
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto simple_cast(
-    const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::fahrenheit_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
+    // From thermodynamic_temperature to celsius_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return rhs;
+    }
+    // From celsius_temperature to celsius_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return rhs;
+    }
+    // From fahrenheit_temperature to celsius_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to celsius_temperature
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+        -> std::enable_if_t<
+            type::detect_if<Other, is_convertible_into,
+                            quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                     ResultValueType>>,
+            quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                     ResultValueType>>
+    {
+        return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs};
+    }
+};
+template <class ResultPrefix, class ResultValueType>
+struct unit_cast_impl<
+    quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>, ResultValueType>,
+    void>
 {
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * expand_prefix_list<ValueType,
-                             type::divide_lists<Prefix, typename ResultUnit::prefix>>};
-}
-template <class ResultUnit, class Prefix, class ValueType>
-constexpr auto unit_cast(
-    const quantity<unit<dimension::celsius_temperature_t, Prefix>, ValueType>& rhs)
-    -> std::enable_if_t<std::is_same<typename ResultUnit::dimension,
-                                     dimension::fahrenheit_temperature_t>::value,
-                        quantity<ResultUnit, ValueType>>
-{
-    return quantity<ResultUnit, ValueType>{
-        rhs.value()
-        * runtime_expand_prefix_list<ValueType>(
-            type::divide_lists<Prefix, typename ResultUnit::prefix>{})};
-}
+    // From thermodynamic_temperature to fahrenheit_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From celsius_temperature to fahrenheit_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From fahrenheit_temperature to fahrenheit_temperature
+    template <class ArgumentPrefix, class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ArgumentValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{
+            static_cast<ResultValueType>(rhs.value() * factor)};
+    }
+    template <class ArgumentPrefix>
+    [[nodiscard]] constexpr inline auto operator()(
+        const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
+                       ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        constexpr auto factor = runtime_expand_prefix_list<ResultValueType>(
+            type::divide_lists<ArgumentPrefix, ResultPrefix>{});
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs.value() * factor};
+    }
+    template <class ArgumentValueType>
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ArgumentValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{static_cast<ResultValueType>(rhs.value())};
+    }
+    [[nodiscard]] constexpr inline auto
+        operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                                  ResultValueType>& rhs) const noexcept
+        -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                    ResultValueType>
+    {
+        return rhs;
+    }
+    // From Other to fahrenheit_temperature
+    template <class Other>
+    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+        -> std::enable_if_t<
+            type::detect_if<
+                Other, is_convertible_into,
+                quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                         ResultValueType>>,
+            quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                     ResultValueType>>
+    {
+        return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
+                        ResultValueType>{rhs};
+    }
+};
 #pragma endregion
 #pragma region helper function
 template <class Unit, class ValueType>
