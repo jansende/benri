@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <benri/casts.h>
 #include <benri/impl/type/list.h>
 #include <benri/impl/unit.h>
 #include <benri/quantity.h>

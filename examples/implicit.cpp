@@ -11,6 +11,5 @@ int main()
     // does not compile
     // std::cout << sin(integer_value).value() << '\n' << std::flush;
     // compiles
-    std::cout << sin(value_type_cast<double>(integer_value)).value() << '\n'
-              << std::flush;
+    std::cout << sin(simple_cast<double>(integer_value)).value() << '\n' << std::flush;
 }

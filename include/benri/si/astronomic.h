@@ -1,4 +1,5 @@
 #pragma once
+#include <benri/casts.h>
 #include <benri/quantity.h>
 #include <benri/si/base.h>
 #include <benri/si/dimensions.h>

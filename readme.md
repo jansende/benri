@@ -362,12 +362,13 @@ constexpr auto ratio  = 4_joule / 5_joule; //Works fine.
 ```
 
 ## Unit conversions and casts
-*benri* provides two functions for converting units `simple_cast` and `unit_cast`. Both
-can be used to convert units into another. `simple_cast` is always done at compile time
-and can be used for most conversions. However, due to restrictions in compile time math,
-if the conversion factor contains a root, `unit_cast` has to be used. It calculates the
-correct factor at runtime. Fortunately in most cases, when optimizations are used,
-`unit_cast` results in the same assembly as if a `simple_cast` were possible.
+*benri* provides two functions for converting units and/or `value_type`s called
+`simple_cast` and `unit_cast`. Both can be used to convert units into another. `simple_cast`
+is always done at compile time and can be used for most conversions. However, due to
+restrictions in compile time math, if the conversion factor contains a root, `unit_cast`
+has to be used. It calculates the correct factor at runtime. Fortunately in most cases,
+when optimizations are used, `unit_cast` results in the same assembly as if a `simple_cast`
+were possible.
 
 ```c++
 constexpr auto length = simple_cast<metre_t>(10_centi * metre); //Evaluated at compile
@@ -377,16 +378,11 @@ constexpr auto length = simple_cast<metre_t>(10_centi * metre); //Evaluated at c
 
 constexpr auto length =   unit_cast<metre_t>(10_centi * metre); //Does not compile.
           auto length =   unit_cast<metre_t>(10_centi * metre); //Evaluated at runtime.
-```
 
-*benri* provides the `value_type_cast` function for changing the `value_type` of a
-quantity:
-
-```c++
 auto speed = 5_centi * metre / second; //The standard is to save values as a double
                                        //internally.
-auto speed = value_type_cast<float>(5_centi * metre / second); //However, we only have
-                                                               //space for a float.
+auto speed = simple_cast<float>(5_centi * metre / second); //However, we only have
+                                                           //space for a float.
 ```
 
 *benri* provides the `remove_prefix` function for generating base unit quantities:
@@ -791,23 +787,21 @@ to change at any time!
   quantities of the same unit. Additional checks for possible math and comparison
   functionality between quantities of different units are provided as well.
 - Provides shortcuts `square`, `cubic` and `quartic` for multiplying units.
-- Provides function `value_type_cast` for changing the `value_type` of a `quantity`.
-- Provides function `simple_cast` for converting a `quantity` to another unit at compile
-  time.
-- Provides function `unit_cast` for converting a `quantity` to another unit at runtime.
-- Provides function `remove_prefix` for converting a `quantity` to its base unit.
-- Provides ADL helper namespace `casts`.
 
 #### `benri/quantity_point.h`
 - Provides container `quantity_point` for storing a value of `value_type` with its
   associated unit `unit`. Container provides a restricted set of the `quantity` math and
   comparison functionality to achieve affine behaviour.
-- Provides function `value_type_cast` for changing the `value_type` of a `quantity_point`.
-- Provides function `simple_cast` for converting a `quantity_point` to another unit at
-  compile time.
-- Provides function `unit_cast` for converting a `quantity_point` to another unit at
-  runtime.
-- Provides function `remove_prefix` for converting a `quantity_point` to its base unit.
+
+#### `benri/casts.h`
+- Provides function `simple_cast` for converting a `quantity` or `quantity_point` to
+  another unit and/or `value_type` at compile time.
+- Provides function `unit_cast` for converting a `quantity` or `quantity_point` to
+  another unit and/or `value_type` at runtime time. While `simple_cast` can only work on
+  conversions containing no roots, `unit_cast` drop this restriction by doing converstion
+  at runtime.
+- Provides function `remove_prefix` for converting a `quantity` or `quantity_point` to its
+  base unit.
 - Provides ADL helper namespace `casts`.
 
 ## The `unit` type
