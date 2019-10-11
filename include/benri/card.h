@@ -150,33 +150,33 @@ using solar_mass_square_astronomical_unit_square_centimetre_per_cubic_year_gram_
 //---constants
 template <class T>
 constexpr auto gravitational_constant =
-    value_type_cast<T>(simple_cast<cubic_astronomical_unit_per_square_year_solar_mass_t>(
+    simple_cast<T>(simple_cast<cubic_astronomical_unit_per_square_year_solar_mass_t>(
         constant::gravitational_constant));
 template <class T>
-constexpr auto gravitational_constant_variant1 = value_type_cast<T>(
+constexpr auto gravitational_constant_variant1 = simple_cast<T>(
     simple_cast<square_astronomical_unit_centimetre_per_square_year_gram_t>(
         constant::gravitational_constant));
 template <class T>
-constexpr auto gravitational_constant_variant2 = value_type_cast<T>(
+constexpr auto gravitational_constant_variant2 = simple_cast<T>(
     simple_cast<astronomical_unit_square_centimetre_per_square_year_solar_mass_t>(
         constant::gravitational_constant));
 template <class T>
-constexpr auto gravitational_constant_variant3 = value_type_cast<T>(
+constexpr auto gravitational_constant_variant3 = simple_cast<T>(
     simple_cast<astronomical_unit_square_centimetre_per_square_year_gram_t>(
         constant::gravitational_constant));
 template <class T>
-constexpr auto speed_of_light = value_type_cast<T>(
+constexpr auto speed_of_light = simple_cast<T>(
     simple_cast<astronomical_unit_per_year_t>(constant::speed_of_light));
 template <class T>
-constexpr auto pi_constant = value_type_cast<T>(constant::pi);
+constexpr auto pi_constant = simple_cast<T>(constant::pi);
 template <class T>
-constexpr auto two_pi_constant = value_type_cast<T>(constant::two_pi);
+constexpr auto two_pi_constant = simple_cast<T>(constant::two_pi);
 template <class T>
 constexpr auto pi_variant =
-    quantity<radian_t, T>{value_type_cast<T>(constant::pi).value()};
+    quantity<radian_t, T>{simple_cast<T>(constant::pi).value()};
 template <class T>
 constexpr auto two_pi_variant =
-    quantity<radian_t, T>{value_type_cast<T>(constant::two_pi).value()};
+    quantity<radian_t, T>{simple_cast<T>(constant::two_pi).value()};
 } // namespace si
 
 #define implement_stream_operator(NAME, SYMBOL)                              \
