@@ -22,9 +22,9 @@ struct HighResT
 }; // std::chrono::high_resolution_clock
 #pragma endregion
 #pragma region base dimensions
-create_and_register_dimension(system_clock, helper<SystemT>);
-create_and_register_dimension(steady_clock, helper<SteadyT>);
-create_and_register_dimension(high_resolution_clock, helper<HighResT>);
+using system_clock_t          = make_dimension<helper<SystemT>>;
+using steady_clock_t          = make_dimension<helper<SteadyT>>;
+using high_resolution_clock_t = make_dimension<helper<HighResT>>;
 #pragma endregion
 } // namespace dimension
 namespace si

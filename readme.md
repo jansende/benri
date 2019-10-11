@@ -532,7 +532,7 @@ with the already existing ones. This is achieved through macros.
 #include <benri/si/si.h>
 #include <benri/si/macros.h>
 
-//Add a pirate (pir) and a ninja (nin) bas dimension.
+//Add a pirate (pir) and a ninja (nin) base dimension.
 struct pir
 {
     //The name values need to be provided because benri internally sorts the dimensions by
@@ -545,12 +545,14 @@ struct nin
 };
 //Dimensions can be generated using macros.
 using benri::dimension::helper;
-//Singular dimensions.
-create_and_register_dimension(pirate, helper<pir>);
-create_and_register_dimension(ninja, helper<nin>);
-//Compound dimensions.
-create_and_register_dimension(woodleg, helper<pir>, helper<benri::dimension::L>); //pirate*length
-create_and_register_dimension(pirate_ninja, helper<pir>, helper<nin>); //pirate*ninja
+// Singular dimensions.
+using pirate_t = benri::make_dimension<helper<pir>>;
+using ninja_t  = benri::make_dimension<helper<nin>>;
+// Compound dimensions.
+using woodleg_t      = benri::make_dimension<helper<pir>,
+                                        helper<benri::dimension::L>>; // pirate*length
+using pirate_ninja_t = benri::make_dimension<helper<pir>,
+                                             helper<nin>>; // pirate*ninja
 
 //Units can be generated using macros as well.
 implement_unit(jack_sparrow, pirate_t, benri::prefix::one_t);

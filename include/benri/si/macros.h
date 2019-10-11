@@ -1,4 +1,5 @@
 #pragma once
+#include <benri/impl/helpers.h>
 
 #define fix(...) __VA_ARGS__
 
@@ -75,4 +76,4 @@
         benri::expand_prefix_list<benri::Precision, VALUE>};
 
 #define create_and_register_dimension(NAME, ...) \
-    using NAME##_t = benri::type::sort<benri::type::list<__VA_ARGS__>>;
+    using NAME##_t = benri::make_dimension<__VA_ARGS__>;
