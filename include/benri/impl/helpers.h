@@ -7,4 +7,6 @@ namespace benri
 {
 template <class... Dims>
 using make_dimension = type::sort<type::list<Dims...>>;
-}
+template <class Dimension, class Prefix = type::list<>>
+using make_unit = unit<type::sort<Dimension>, type::sort<Prefix>>;
+} // namespace benri
