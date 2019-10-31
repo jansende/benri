@@ -1,5 +1,7 @@
 #pragma once
 #include <benri/impl/meta/algorithm.h>
+#include <iostream>
+#include <string>
 
 namespace benri
 {
@@ -18,6 +20,16 @@ struct static_string
     constexpr const char* c_str() const { return data; }
     const size_t          m_size;
     const char*           data = nullptr;
+
+    friend auto operator<<(std::ostream& os, const static_string& str) -> std::ostream&
+    {
+        os << static_cast<std::string>(str);
+        return os;
+    }
+    operator std::string() const noexcept
+    {
+        return std::string{this->c_str(), this->size()};
+    }
 };
 // Custom constexpr version of std::strcmp because the standard is not there
 // yet.
