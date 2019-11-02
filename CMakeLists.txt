@@ -32,6 +32,9 @@ endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     #disable unknown pragma warnings (msvc complains about gcc/clang pragmas)
     target_compile_options(benri INTERFACE /wd4068)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    #disable clang complaining about gcc warnings
+    target_compile_options(benri INTERFACE -Wno-unknown-warning-option)
 endif()
 
 #add unit tests

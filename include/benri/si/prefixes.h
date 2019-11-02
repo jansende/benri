@@ -6,8 +6,8 @@
 #pragma warning(push)
 #pragma warning(disable : 4305) // Fix msvc warnings. It is expected that we lose
                                 // floating-point precision for some of the constants.
-#pragma GCC diagnostic push     // Fix gcc/clang warnings as well.
-#pragma GCC diagnostic ignored "-Wimplicit-float-conversion"
+#pragma clang diagnostic push   // Fix clang warnings as well.
+#pragma clang diagnostic ignored "-Wimplicit-float-conversion"
 namespace benri
 {
 namespace prefix
@@ -443,5 +443,5 @@ using sakura_t = type::sorted_list<pre<sakura>>;
 #pragma endregion
 } // namespace prefix
 } // namespace benri
-#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 #pragma warning(pop)

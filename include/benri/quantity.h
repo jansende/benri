@@ -47,21 +47,24 @@ class quantity
     using value_type = ValueType;
     using unit_type  = Unit;
 
+#pragma GCC diagnostic push   // Fix gcc warning that the operators were not declared before.
+#pragma GCC diagnostic ignored "-Wnon-template-friend"
     friend constexpr auto
-        operator+(const quantity<unit_type, value_type>&       lhs,
+        operator+(const quantity&                              lhs,
                   const quantity_point<unit_type, value_type>& rhs) noexcept
         -> quantity_point<unit_type, value_type>;
     friend constexpr auto operator+(const quantity_point<unit_type, value_type>& lhs,
-                                    const quantity<unit_type, value_type>& rhs) noexcept
+                                    const quantity& rhs) noexcept
         -> quantity_point<unit_type, value_type>;
 
     friend constexpr auto
-        operator-(const quantity<unit_type, value_type>&       lhs,
+        operator-(const quantity&                              lhs,
                   const quantity_point<unit_type, value_type>& rhs) noexcept
         -> quantity_point<unit_type, value_type>;
     friend constexpr auto operator-(const quantity_point<unit_type, value_type>& lhs,
-                                    const quantity<unit_type, value_type>& rhs) noexcept
+                                    const quantity& rhs) noexcept
         -> quantity_point<unit_type, value_type>;
+#pragma GCC diagnostic pop
 
   private:
     value_type _value;
