@@ -1,4 +1,5 @@
 #pragma once
+#include <benri/impl/config.h>
 #include <benri/impl/dimension.h>
 #include <benri/impl/type/list.h>
 #include <benri/impl/type/sort.h>
