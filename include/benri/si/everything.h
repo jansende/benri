@@ -17,15 +17,16 @@ namespace si
 #pragma region constants
 namespace constant
 {
-create_constant(sakura, prefix::sakura_t,
-                typename decltype(centi * metre / second)::unit_type);
+constexpr auto sakura =
+    make_constant<typename decltype(centi * metre / second)::unit_type, prefix::sakura_t>;
 } // namespace constant
 #pragma endregion
 #pragma region symbols
 namespace symbol
 {
-create_symbol(sakura, dimension::velocity_t,
-              fix(type::multiply_lists<prefix::centi_t, prefix::sakura_t>));
+constexpr auto sakura =
+    make_symbol<dimension::velocity_t,
+                type::multiply_lists<prefix::centi_t, prefix::sakura_t>>;
 } // namespace symbol
 #pragma endregion
 } // namespace si

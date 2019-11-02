@@ -32,23 +32,27 @@ namespace si
 #pragma region constants
 namespace constant
 {
-create_constant_point(system_epoch, prefix::zero_t,
-                      fix(unit<dimension::system_clock_t, prefix::second_t>));
-create_constant_point(steady_epoch, prefix::zero_t,
-                      fix(unit<dimension::steady_clock_t, prefix::second_t>));
-create_constant_point(high_resolution_epoch, prefix::zero_t,
-                      fix(unit<dimension::high_resolution_clock_t, prefix::second_t>));
+constexpr auto system_epoch =
+    make_constant_point<make_unit<dimension::system_clock_t, prefix::second_t>,
+                        prefix::zero_t>;
+constexpr auto steady_epoch =
+    make_constant_point<make_unit<dimension::steady_clock_t, prefix::second_t>,
+                        prefix::zero_t>;
+constexpr auto high_resolution_epoch =
+    make_constant_point<make_unit<dimension::high_resolution_clock_t, prefix::second_t>,
+                        prefix::zero_t>;
 } // namespace constant
 #pragma endregion
 #pragma region symbols
 namespace symbol
 {
-create_symbol_point(system_epoch, dimension::system_clock_t, prefix::second_t,
-                    prefix::zero_t);
-create_symbol_point(steady_epoch, dimension::steady_clock_t, prefix::second_t,
-                    prefix::zero_t);
-create_symbol_point(high_resolution_epoch, dimension::high_resolution_clock_t,
-                    prefix::second_t, prefix::zero_t);
+constexpr auto system_epoch =
+    make_symbol_point<dimension::system_clock_t, prefix::second_t, prefix::zero_t>;
+constexpr auto steady_epoch =
+    make_symbol_point<dimension::steady_clock_t, prefix::second_t, prefix::zero_t>;
+constexpr auto high_resolution_epoch =
+    make_symbol_point<dimension::high_resolution_clock_t, prefix::second_t,
+                      prefix::zero_t>;
 } // namespace symbol
 #pragma endregion
 #pragma region units

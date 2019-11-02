@@ -50,12 +50,13 @@ implement_unit(jansky, dimension::surface_tension_t,
 namespace constant
 {
 #pragma region astronomical constants
-create_constant(solar_luminosity, prefix::solar_luminosity_t,
-                typename decltype(kilogram * square(metre) * steradian
-                                  / cubic(second))::unit_type);
-create_constant(solar_mass, prefix::solar_mass_t, kilogram_t);
-create_constant(jupiter_mass, prefix::jupiter_mass_t, kilogram_t);
-create_constant(earth_mass, prefix::earth_mass_t, kilogram_t);
+constexpr auto              solar_luminosity =
+    make_constant<typename decltype(kilogram * square(metre) * steradian
+                                    / cubic(second))::unit_type,
+                  prefix::solar_luminosity_t>;
+constexpr auto solar_mass   = make_constant<kilogram_t, prefix::solar_mass_t>;
+constexpr auto jupiter_mass = make_constant<kilogram_t, prefix::jupiter_mass_t>;
+constexpr auto earth_mass   = make_constant<kilogram_t, prefix::earth_mass_t>;
 #pragma endregion
 } // namespace constant
 #pragma endregion
@@ -63,10 +64,11 @@ create_constant(earth_mass, prefix::earth_mass_t, kilogram_t);
 namespace symbol
 {
 #pragma region astronomical constants
-create_symbol(solar_luminosity, dimension::luminosity_t, prefix::solar_luminosity_t);
-create_symbol(solar_mass, dimension::mass_t, prefix::solar_mass_t);
-create_symbol(jupiter_mass, dimension::mass_t, prefix::jupiter_mass_t);
-create_symbol(earth_mass, dimension::mass_t, prefix::earth_mass_t);
+constexpr auto              solar_luminosity =
+    make_symbol<dimension::luminosity_t, prefix::solar_luminosity_t>;
+constexpr auto solar_mass   = make_symbol<dimension::mass_t, prefix::solar_mass_t>;
+constexpr auto jupiter_mass = make_symbol<dimension::mass_t, prefix::jupiter_mass_t>;
+constexpr auto earth_mass   = make_symbol<dimension::mass_t, prefix::earth_mass_t>;
 #pragma endregion
 } // namespace symbol
 #pragma endregion

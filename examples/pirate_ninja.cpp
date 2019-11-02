@@ -29,9 +29,11 @@ implement_unit(jack_sparrow, pirate_t, benri::prefix::one_t);
 implement_unit(hanzo, ninja_t, benri::prefix::one_t);
 implement_unit(blackbeard, woodleg_t, benri::prefix::one_t);
 
-// So can constants.
-create_constant(kaido, benri::prefix::hecto_t,
-                typename decltype(jack_sparrow * hanzo)::unit_type);
+// Constants can be generated using the make_constant helper, which takes the unit and the
+// value of the constant (as a type list).
+constexpr auto kaido =
+    benri::make_constant<typename decltype(jack_sparrow * hanzo)::unit_type,
+                         benri::prefix::hecto_t>;
 
 int main()
 {
