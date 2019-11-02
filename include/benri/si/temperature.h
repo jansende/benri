@@ -114,7 +114,7 @@ struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, vo
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -123,7 +123,7 @@ struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, vo
                 rhs.value()
                 - static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
         const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -132,7 +132,7 @@ struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, vo
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>&
             rhs) const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -142,7 +142,7 @@ struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, vo
                 - static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value)
                       / static_cast<ArgumentValueType>(prefix::rankine::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
         const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -153,7 +153,7 @@ struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, vo
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ResultValueType>
@@ -165,7 +165,7 @@ struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, vo
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ResultValueType>
@@ -176,14 +176,14 @@ struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, vo
         return quantity_point<si::degree_kelvin_t, ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
         return quantity_point<si::degree_kelvin_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
         noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -191,7 +191,7 @@ struct simple_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, vo
     }
     // From Other to kelvin
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<Other, is_convertible_into,
                             quantity_point<si::degree_kelvin_t, ResultValueType>>,
@@ -205,7 +205,7 @@ struct simple_cast_impl<si::degree_kelvin_t, void>
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
         noexcept -> quantity<si::degree_kelvin_t, ArgumentValueType>
     {
@@ -213,7 +213,7 @@ struct simple_cast_impl<si::degree_kelvin_t, void>
             rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
     {
@@ -222,7 +222,7 @@ struct simple_cast_impl<si::degree_kelvin_t, void>
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
         const noexcept -> quantity<si::degree_kelvin_t, ArgumentValueType>
     {
@@ -230,7 +230,7 @@ struct simple_cast_impl<si::degree_kelvin_t, void>
             rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>&
             rhs) const noexcept -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
     {
@@ -239,7 +239,7 @@ struct simple_cast_impl<si::degree_kelvin_t, void>
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<si::degree_kelvin_t, ArgumentValueType>
@@ -248,7 +248,7 @@ struct simple_cast_impl<si::degree_kelvin_t, void>
             rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
@@ -263,7 +263,7 @@ struct simple_cast_impl<
 {
     // From rankine to celsius
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -273,7 +273,7 @@ struct simple_cast_impl<
                 rhs.value() / static_cast<ArgumentValueType>(prefix::rankine::value)
                 + static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -284,7 +284,7 @@ struct simple_cast_impl<
     }
     // From kelvin to celsius
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
     {
@@ -293,7 +293,7 @@ struct simple_cast_impl<
                 rhs.value()
                 + static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
         noexcept -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
     {
@@ -302,7 +302,7 @@ struct simple_cast_impl<
     }
     // From fahrenheit to celsius
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -313,7 +313,7 @@ struct simple_cast_impl<
                  - static_cast<ArgumentValueType>(prefix::freezing_point::value))
                 / static_cast<ArgumentValueType>(prefix::rankine::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -324,7 +324,7 @@ struct simple_cast_impl<
     }
     // From celsius to celsius
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -337,7 +337,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -350,7 +350,7 @@ struct simple_cast_impl<
             rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -358,7 +358,7 @@ struct simple_cast_impl<
         return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -367,7 +367,7 @@ struct simple_cast_impl<
     }
     // From Other to celsius
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -382,7 +382,7 @@ struct simple_cast_impl<si::temperature::degree_celsius_t, void>
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
         noexcept -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
     {
@@ -390,7 +390,7 @@ struct simple_cast_impl<si::temperature::degree_celsius_t, void>
             quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
@@ -401,7 +401,7 @@ struct simple_cast_impl<si::temperature::degree_celsius_t, void>
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
         const noexcept -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
     {
@@ -409,7 +409,7 @@ struct simple_cast_impl<si::temperature::degree_celsius_t, void>
             quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
@@ -420,7 +420,7 @@ struct simple_cast_impl<si::temperature::degree_celsius_t, void>
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
@@ -429,7 +429,7 @@ struct simple_cast_impl<si::temperature::degree_celsius_t, void>
             quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
@@ -445,7 +445,7 @@ struct simple_cast_impl<
 {
     // From celsius to rankine
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -456,7 +456,7 @@ struct simple_cast_impl<
                 - static_cast<ArgumentValueType>(prefix::absolute_zero::value)
                       * static_cast<ArgumentValueType>(prefix::rankine::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -468,7 +468,7 @@ struct simple_cast_impl<
     }
     // From fahrenheit to rankine
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -478,7 +478,7 @@ struct simple_cast_impl<
                 rhs.value()
                 - static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -488,7 +488,7 @@ struct simple_cast_impl<
     }
     // From rankine to rankine
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -501,7 +501,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -514,7 +514,7 @@ struct simple_cast_impl<
             rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -522,7 +522,7 @@ struct simple_cast_impl<
         return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -531,7 +531,7 @@ struct simple_cast_impl<
     }
     // From Other to rankine
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -546,7 +546,7 @@ struct simple_cast_impl<si::temperature::degree_rankine_t, void>
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
         noexcept -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
     {
@@ -554,7 +554,7 @@ struct simple_cast_impl<si::temperature::degree_rankine_t, void>
             quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
@@ -565,7 +565,7 @@ struct simple_cast_impl<si::temperature::degree_rankine_t, void>
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
         const noexcept -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
     {
@@ -573,7 +573,7 @@ struct simple_cast_impl<si::temperature::degree_rankine_t, void>
             quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
@@ -584,7 +584,7 @@ struct simple_cast_impl<si::temperature::degree_rankine_t, void>
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
@@ -593,7 +593,7 @@ struct simple_cast_impl<si::temperature::degree_rankine_t, void>
             quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
@@ -609,7 +609,7 @@ struct simple_cast_impl<
 {
     // From kelvin to fahrenheit
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
     {
@@ -618,7 +618,7 @@ struct simple_cast_impl<
                 rhs.value() * static_cast<ArgumentValueType>(prefix::rankine::value)
                 + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
         noexcept -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
     {
@@ -628,7 +628,7 @@ struct simple_cast_impl<
     }
     // From celsius to fahrenheit
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -640,7 +640,7 @@ struct simple_cast_impl<
                 - static_cast<ArgumentValueType>(prefix::rankine::value)
                       * static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -653,7 +653,7 @@ struct simple_cast_impl<
     }
     // From rankine to fahrenheit
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -663,7 +663,7 @@ struct simple_cast_impl<
                 rhs.value()
                 + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -673,7 +673,7 @@ struct simple_cast_impl<
     }
     // From fahrenheit to fahrenheit
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -686,7 +686,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -699,7 +699,7 @@ struct simple_cast_impl<
             rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -707,7 +707,7 @@ struct simple_cast_impl<
         return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -716,7 +716,7 @@ struct simple_cast_impl<
     }
     // From Other to fahrenheit
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -731,7 +731,7 @@ struct simple_cast_impl<si::temperature::degree_fahrenheit_t, void>
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
         noexcept -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
     {
@@ -740,7 +740,7 @@ struct simple_cast_impl<si::temperature::degree_fahrenheit_t, void>
             rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -751,7 +751,7 @@ struct simple_cast_impl<si::temperature::degree_fahrenheit_t, void>
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -761,7 +761,7 @@ struct simple_cast_impl<si::temperature::degree_fahrenheit_t, void>
             rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -772,7 +772,7 @@ struct simple_cast_impl<si::temperature::degree_fahrenheit_t, void>
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -782,7 +782,7 @@ struct simple_cast_impl<si::temperature::degree_fahrenheit_t, void>
             rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -800,7 +800,7 @@ struct simple_cast_impl<
 {
     // From thermodynamic_temperature to thermodynamic_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -814,7 +814,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -827,7 +827,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -836,7 +836,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -846,7 +846,7 @@ struct simple_cast_impl<
     }
     // From celsius_temperature to thermodynamic_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -860,7 +860,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -873,7 +873,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -882,7 +882,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -892,7 +892,7 @@ struct simple_cast_impl<
     }
     // From fahrenheit_temperature to thermodynamic_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -906,7 +906,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -919,7 +919,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -928,7 +928,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -938,7 +938,7 @@ struct simple_cast_impl<
     }
     // From Other to thermodynamic_temperature
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -957,7 +957,7 @@ struct simple_cast_impl<
 {
     // From thermodynamic_temperature to celsius_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -970,7 +970,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -982,7 +982,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -990,7 +990,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -999,7 +999,7 @@ struct simple_cast_impl<
     }
     // From celsius_temperature to celsius_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -1012,7 +1012,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -1024,7 +1024,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -1032,7 +1032,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -1041,7 +1041,7 @@ struct simple_cast_impl<
     }
     // From fahrenheit_temperature to celsius_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -1054,7 +1054,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -1066,7 +1066,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -1074,7 +1074,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -1083,7 +1083,7 @@ struct simple_cast_impl<
     }
     // From Other to celsius_temperature
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<Other, is_convertible_into,
                             quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
@@ -1102,7 +1102,7 @@ struct simple_cast_impl<
 {
     // From thermodynamic_temperature to fahrenheit_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1116,7 +1116,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1129,7 +1129,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1138,7 +1138,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1148,7 +1148,7 @@ struct simple_cast_impl<
     }
     // From celsius_temperature to fahrenheit_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1162,7 +1162,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1175,7 +1175,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1184,7 +1184,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1194,7 +1194,7 @@ struct simple_cast_impl<
     }
     // From fahrenheit_temperature to fahrenheit_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1208,7 +1208,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1221,7 +1221,7 @@ struct simple_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1230,7 +1230,7 @@ struct simple_cast_impl<
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -1240,7 +1240,7 @@ struct simple_cast_impl<
     }
     // From Other to fahrenheit_temperature
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -1261,7 +1261,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -1270,7 +1270,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
                 rhs.value()
                 - static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
         const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -1279,7 +1279,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>&
             rhs) const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -1289,7 +1289,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
                 - static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value)
                       / static_cast<ArgumentValueType>(prefix::rankine::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
         const noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -1300,7 +1300,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ResultValueType>
@@ -1311,7 +1311,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ResultValueType>
@@ -1321,14 +1321,14 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
         return quantity_point<si::degree_kelvin_t, ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
         return quantity_point<si::degree_kelvin_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
         noexcept -> quantity_point<si::degree_kelvin_t, ResultValueType>
     {
@@ -1336,7 +1336,7 @@ struct unit_cast_impl<quantity_point<si::degree_kelvin_t, ResultValueType>, void
     }
     // From Other to kelvin
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<Other, is_convertible_into,
                             quantity_point<si::degree_kelvin_t, ResultValueType>>,
@@ -1350,7 +1350,7 @@ struct unit_cast_impl<si::degree_kelvin_t, void>
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
         noexcept -> quantity<si::degree_kelvin_t, ArgumentValueType>
     {
@@ -1358,7 +1358,7 @@ struct unit_cast_impl<si::degree_kelvin_t, void>
             rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
     {
@@ -1367,7 +1367,7 @@ struct unit_cast_impl<si::degree_kelvin_t, void>
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
         const noexcept -> quantity<si::degree_kelvin_t, ArgumentValueType>
     {
@@ -1375,7 +1375,7 @@ struct unit_cast_impl<si::degree_kelvin_t, void>
             rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>&
             rhs) const noexcept -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
     {
@@ -1384,7 +1384,7 @@ struct unit_cast_impl<si::degree_kelvin_t, void>
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<si::degree_kelvin_t, ArgumentValueType>
@@ -1393,7 +1393,7 @@ struct unit_cast_impl<si::degree_kelvin_t, void>
             rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::degree_kelvin_t, ArgumentValueType>
@@ -1408,7 +1408,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
 {
     // From rankine to celsius
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -1418,7 +1418,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
                 rhs.value() / static_cast<ArgumentValueType>(prefix::rankine::value)
                 + static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -1429,7 +1429,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
     }
     // From kelvin to celsius
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
     {
@@ -1438,7 +1438,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
                 rhs.value()
                 + static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
         noexcept -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
     {
@@ -1447,7 +1447,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
     }
     // From fahrenheit to celsius
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -1458,7 +1458,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
                  - static_cast<ArgumentValueType>(prefix::freezing_point::value))
                 / static_cast<ArgumentValueType>(prefix::rankine::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -1469,7 +1469,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
     }
     // From celsius to celsius
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -1481,7 +1481,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -1493,7 +1493,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
             rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -1501,7 +1501,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
         return quantity_point<si::temperature::degree_celsius_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ResultValueType>
@@ -1510,7 +1510,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_celsius_t, ResultVa
     }
     // From Other to celsius
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -1525,7 +1525,7 @@ struct unit_cast_impl<si::temperature::degree_celsius_t, void>
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
         noexcept -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
     {
@@ -1533,7 +1533,7 @@ struct unit_cast_impl<si::temperature::degree_celsius_t, void>
             quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
@@ -1544,7 +1544,7 @@ struct unit_cast_impl<si::temperature::degree_celsius_t, void>
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
         const noexcept -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
     {
@@ -1552,7 +1552,7 @@ struct unit_cast_impl<si::temperature::degree_celsius_t, void>
             quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
@@ -1563,7 +1563,7 @@ struct unit_cast_impl<si::temperature::degree_celsius_t, void>
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<si::temperature::degree_celsius_t, ArgumentValueType>
@@ -1572,7 +1572,7 @@ struct unit_cast_impl<si::temperature::degree_celsius_t, void>
             quantity<si::temperature::degree_celsius_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>
@@ -1588,7 +1588,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
 {
     // From celsius to rankine
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -1599,7 +1599,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
                 - static_cast<ArgumentValueType>(prefix::absolute_zero::value)
                       * static_cast<ArgumentValueType>(prefix::rankine::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -1611,7 +1611,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
     }
     // From fahrenheit to rankine
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -1621,7 +1621,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
                 rhs.value()
                 - static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -1631,7 +1631,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
     }
     // From rankine to rankine
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -1643,7 +1643,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -1655,7 +1655,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
             rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -1663,7 +1663,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
         return quantity_point<si::temperature::degree_rankine_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ResultValueType>
@@ -1672,7 +1672,7 @@ struct unit_cast_impl<quantity_point<si::temperature::degree_rankine_t, ResultVa
     }
     // From Other to rankine
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -1687,7 +1687,7 @@ struct unit_cast_impl<si::temperature::degree_rankine_t, void>
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
         noexcept -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
     {
@@ -1695,7 +1695,7 @@ struct unit_cast_impl<si::temperature::degree_rankine_t, void>
             quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
@@ -1706,7 +1706,7 @@ struct unit_cast_impl<si::temperature::degree_rankine_t, void>
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
         const noexcept -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
     {
@@ -1714,7 +1714,7 @@ struct unit_cast_impl<si::temperature::degree_rankine_t, void>
             quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
@@ -1725,7 +1725,7 @@ struct unit_cast_impl<si::temperature::degree_rankine_t, void>
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<si::temperature::degree_rankine_t, ArgumentValueType>
@@ -1734,7 +1734,7 @@ struct unit_cast_impl<si::temperature::degree_rankine_t, void>
             quantity<si::temperature::degree_rankine_t, ArgumentValueType>, void>{}(rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>
@@ -1750,7 +1750,7 @@ struct unit_cast_impl<
 {
     // From kelvin to fahrenheit
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::degree_kelvin_t, ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
     {
@@ -1759,7 +1759,7 @@ struct unit_cast_impl<
                 rhs.value() * static_cast<ArgumentValueType>(prefix::rankine::value)
                 + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::degree_kelvin_t, ResultValueType>& rhs) const
         noexcept -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
     {
@@ -1769,7 +1769,7 @@ struct unit_cast_impl<
     }
     // From celsius to fahrenheit
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -1781,7 +1781,7 @@ struct unit_cast_impl<
                 - static_cast<ArgumentValueType>(prefix::rankine::value)
                       * static_cast<ArgumentValueType>(prefix::absolute_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -1794,7 +1794,7 @@ struct unit_cast_impl<
     }
     // From rankine to fahrenheit
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -1804,7 +1804,7 @@ struct unit_cast_impl<
                 rhs.value()
                 + static_cast<ArgumentValueType>(prefix::fahrenheit_zero::value))};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_rankine_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -1814,7 +1814,7 @@ struct unit_cast_impl<
     }
     // From fahrenheit to fahrenheit
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -1826,7 +1826,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ResultValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -1838,7 +1838,7 @@ struct unit_cast_impl<
             rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -1846,7 +1846,7 @@ struct unit_cast_impl<
         return quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ResultValueType>
@@ -1855,7 +1855,7 @@ struct unit_cast_impl<
     }
     // From Other to fahrenheit
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -1870,7 +1870,7 @@ struct unit_cast_impl<si::temperature::degree_fahrenheit_t, void>
 {
     // From celsius to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_celsius_t, ArgumentValueType>& rhs) const
         noexcept -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
     {
@@ -1879,7 +1879,7 @@ struct unit_cast_impl<si::temperature::degree_fahrenheit_t, void>
             rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<si::temperature::degree_celsius_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -1890,7 +1890,7 @@ struct unit_cast_impl<si::temperature::degree_fahrenheit_t, void>
     }
     // From fahrenheit to kelvin
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>& rhs)
         const noexcept
         -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -1900,7 +1900,7 @@ struct unit_cast_impl<si::temperature::degree_fahrenheit_t, void>
             rhs);
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<si::temperature::degree_fahrenheit_t,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -1911,7 +1911,7 @@ struct unit_cast_impl<si::temperature::degree_fahrenheit_t, void>
     }
     // From kelvin to kelvin
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -1921,7 +1921,7 @@ struct unit_cast_impl<si::temperature::degree_fahrenheit_t, void>
             rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                              ArgumentValueType>& rhs) const noexcept
         -> quantity_point<si::temperature::degree_fahrenheit_t, ArgumentValueType>
@@ -1939,7 +1939,7 @@ struct unit_cast_impl<
 {
     // From thermodynamic_temperature to thermodynamic_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -1952,7 +1952,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -1964,7 +1964,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -1973,7 +1973,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -1983,7 +1983,7 @@ struct unit_cast_impl<
     }
     // From celsius_temperature to thermodynamic_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -1996,7 +1996,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -2008,7 +2008,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -2017,7 +2017,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -2027,7 +2027,7 @@ struct unit_cast_impl<
     }
     // From fahrenheit_temperature to thermodynamic_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -2040,7 +2040,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -2052,7 +2052,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -2061,7 +2061,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
@@ -2071,7 +2071,7 @@ struct unit_cast_impl<
     }
     // From Other to thermodynamic_temperature
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -2090,7 +2090,7 @@ struct unit_cast_impl<
 {
     // From thermodynamic_temperature to celsius_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2102,7 +2102,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2113,7 +2113,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2121,7 +2121,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2130,7 +2130,7 @@ struct unit_cast_impl<
     }
     // From celsius_temperature to celsius_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2142,7 +2142,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2153,7 +2153,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2161,7 +2161,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2170,7 +2170,7 @@ struct unit_cast_impl<
     }
     // From fahrenheit_temperature to celsius_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2182,7 +2182,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2193,7 +2193,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2201,7 +2201,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::celsius_temperature_t, ResultPrefix>, ResultValueType>
@@ -2210,7 +2210,7 @@ struct unit_cast_impl<
     }
     // From Other to celsius_temperature
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<Other, is_convertible_into,
                             quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
@@ -2229,7 +2229,7 @@ struct unit_cast_impl<
 {
     // From thermodynamic_temperature to fahrenheit_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2242,7 +2242,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2254,7 +2254,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2263,7 +2263,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::thermodynamic_temperature_t, ResultPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2273,7 +2273,7 @@ struct unit_cast_impl<
     }
     // From celsius_temperature to fahrenheit_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2286,7 +2286,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ArgumentPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2298,7 +2298,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2307,7 +2307,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::celsius_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2317,7 +2317,7 @@ struct unit_cast_impl<
     }
     // From fahrenheit_temperature to fahrenheit_temperature
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2330,7 +2330,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<dimension::fahrenheit_temperature_t, ArgumentPrefix>,
                        ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2342,7 +2342,7 @@ struct unit_cast_impl<
                         ResultValueType>{rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ArgumentValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2351,7 +2351,7 @@ struct unit_cast_impl<
         return quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                         ResultValueType>{static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
                                   ResultValueType>& rhs) const noexcept
         -> quantity<unit<dimension::fahrenheit_temperature_t, ResultPrefix>,
@@ -2361,7 +2361,7 @@ struct unit_cast_impl<
     }
     // From Other to fahrenheit_temperature
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,

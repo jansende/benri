@@ -573,7 +573,7 @@ template <class Clock,
                             decltype(type::make_prefix<Clock::duration::period::num,
                                                        Clock::duration::period::den>{})>,
           class ValueType = Precision>
-constexpr inline auto now() noexcept -> quantity_point<Unit, ValueType>
+constexpr auto now() noexcept -> quantity_point<Unit, ValueType>
 {
     const auto chrono_now = std::chrono::time_point_cast<
         std::chrono::duration<ValueType, typename Clock::duration::period>>(Clock::now());
@@ -590,7 +590,7 @@ constexpr inline auto now() noexcept -> quantity_point<Unit, ValueType>
 // compiler can now understand that we actually want to convert both to a quantity_point
 // with the unit of std::chrono::time_point.
 template <class Clock, class Period, class ValueType>
-[[nodiscard]] constexpr inline auto operator+(
+[[nodiscard]] constexpr auto operator+(
     const quantity<
         unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,
         ValueType>& lhs,
@@ -606,7 +606,7 @@ template <class Clock, class Period, class ValueType>
                             ValueType>{rhs};
 }
 template <class Clock, class Period, class ValueType>
-[[nodiscard]] constexpr inline auto operator+(
+[[nodiscard]] constexpr auto operator+(
     const std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>& lhs,
     const quantity<
         unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,
@@ -622,7 +622,7 @@ template <class Clock, class Period, class ValueType>
 }
 
 template <class Clock, class Period, class ValueType>
-[[nodiscard]] constexpr inline auto operator-(
+[[nodiscard]] constexpr auto operator-(
     const quantity<
         unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,
         ValueType>& lhs,
@@ -638,7 +638,7 @@ template <class Clock, class Period, class ValueType>
                             ValueType>{rhs};
 }
 template <class Clock, class Period, class ValueType>
-[[nodiscard]] constexpr inline auto operator-(
+[[nodiscard]] constexpr auto operator-(
     const std::chrono::time_point<Clock, std::chrono::duration<ValueType, Period>>& lhs,
     const quantity<
         unit<dimension::time_t, decltype(type::make_prefix<Period::num, Period::den>{})>,

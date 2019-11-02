@@ -29,16 +29,16 @@ class quantity_point
     value_type _value;
 
   public:
-    [[nodiscard]] constexpr inline auto value() const noexcept { return _value; }
+    [[nodiscard]] constexpr auto value() const noexcept { return _value; }
 #pragma region rule of three
     // default constructor
-    constexpr inline quantity_point() noexcept = default;
+    constexpr quantity_point() noexcept = default;
     // value constructor
-    explicit constexpr inline quantity_point(value_type value) noexcept : _value(value) {}
+    explicit constexpr quantity_point(value_type value) noexcept : _value(value) {}
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    constexpr inline quantity_point(const Other& rhs) noexcept :
+    constexpr quantity_point(const Other& rhs) noexcept :
         quantity_point(
             convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(rhs))
     {
@@ -46,7 +46,7 @@ class quantity_point
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    constexpr inline quantity_point(Other&& rhs) noexcept :
+    constexpr quantity_point(Other&& rhs) noexcept :
         quantity_point(std::move(
             convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(
                 std::move(rhs))))
@@ -54,29 +54,29 @@ class quantity_point
     }
 
     // copy constructor
-    constexpr inline quantity_point(const quantity_point&) noexcept = default;
+    constexpr quantity_point(const quantity_point&) noexcept = default;
     // move constructor
-    constexpr inline quantity_point(quantity_point&&) noexcept = default;
+    constexpr quantity_point(quantity_point&&) noexcept = default;
     // default destructor
     inline ~quantity_point() noexcept = default;
     // copy assignment
-    constexpr inline quantity_point& operator=(const quantity_point&) noexcept = default;
+    constexpr quantity_point& operator=(const quantity_point&) noexcept = default;
     // move assignment
-    constexpr inline quantity_point& operator=(quantity_point&&) noexcept = default;
+    constexpr quantity_point& operator=(quantity_point&&) noexcept = default;
 #pragma endregion
 #pragma region math declarations / a bit implementation
 #pragma region unary operators
-    [[nodiscard]] constexpr inline auto operator+() const noexcept
+    [[nodiscard]] constexpr auto operator+() const noexcept
     {
         return quantity_point{_value};
     }
-    [[nodiscard]] constexpr inline auto operator-() const noexcept
+    [[nodiscard]] constexpr auto operator-() const noexcept
     {
         return quantity_point{value_type{-1} * _value};
     }
 #pragma endregion
 #pragma region addition
-    constexpr inline auto operator+=(const quantity<unit_type, value_type>& rhs) noexcept
+    constexpr auto operator+=(const quantity<unit_type, value_type>& rhs) noexcept
     {
         this->_value += rhs._value;
         return *this;
@@ -86,13 +86,13 @@ class quantity_point
         typename = std::enable_if_t<
             type::detect_if<Other, is_convertible_into, quantity<unit_type, value_type>>,
             Dummy>>
-    constexpr inline auto operator+=(const Other& rhs) noexcept
+    constexpr auto operator+=(const Other& rhs) noexcept
     {
         return *this += convert<std::remove_cv_t<Other>,
                                 std::remove_cv_t<quantity<unit_type, value_type>>>{}(rhs);
     }
 
-    [[nodiscard]] friend constexpr inline auto
+    [[nodiscard]] friend constexpr auto
         operator+(const quantity<unit_type, value_type>& lhs,
                   const quantity_point&                  rhs) noexcept -> quantity_point
     {
@@ -103,14 +103,15 @@ class quantity_point
         typename = std::enable_if_t<
             type::detect_if<Other, is_convertible_into, quantity<unit_type, value_type>>,
             Dummy>>
-    [[nodiscard]] friend constexpr inline auto
-        operator+(const Other& lhs, const quantity_point& rhs) noexcept -> quantity_point
+    [[nodiscard]] friend constexpr auto operator+(const Other&          lhs,
+                                                  const quantity_point& rhs) noexcept
+        -> quantity_point
     {
         return convert<std::remove_cv_t<Other>,
                        std::remove_cv_t<quantity<unit_type, value_type>>>{}(lhs)
                + rhs;
     }
-    [[nodiscard]] friend constexpr inline auto
+    [[nodiscard]] friend constexpr auto
         operator+(const quantity_point&                  lhs,
                   const quantity<unit_type, value_type>& rhs) noexcept -> quantity_point
     {
@@ -121,8 +122,8 @@ class quantity_point
         typename = std::enable_if_t<
             type::detect_if<Other, is_convertible_into, quantity<unit_type, value_type>>,
             Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator+(const quantity_point& lhs,
-                                                         const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator+(const quantity_point& lhs,
+                                                  const Other&          rhs) noexcept
         -> quantity_point
     {
         return lhs
@@ -130,7 +131,7 @@ class quantity_point
                          std::remove_cv_t<quantity<unit_type, value_type>>>{}(rhs);
     }
 
-    constexpr inline auto operator-=(const quantity<unit_type, value_type>& rhs) noexcept
+    constexpr auto operator-=(const quantity<unit_type, value_type>& rhs) noexcept
     {
         this->_value -= rhs._value;
         return *this;
@@ -140,28 +141,28 @@ class quantity_point
         typename = std::enable_if_t<
             type::detect_if<Other, is_convertible_into, quantity<unit_type, value_type>>,
             Dummy>>
-    constexpr inline auto operator-=(const Other& rhs) noexcept
+    constexpr auto operator-=(const Other& rhs) noexcept
     {
         return *this -= convert<std::remove_cv_t<Other>,
                                 std::remove_cv_t<quantity<unit_type, value_type>>>{}(rhs);
     }
 
-    [[nodiscard]] friend constexpr inline auto
-        operator-(const quantity_point& lhs, const quantity_point& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator-(const quantity_point& lhs,
+                                                  const quantity_point& rhs) noexcept
     {
         return quantity<unit_type, value_type>{lhs._value - rhs._value};
     }
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator-(const quantity_point& lhs,
-                                                         const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator-(const quantity_point& lhs,
+                                                  const Other&          rhs) noexcept
     {
         return lhs
                - convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(
                    rhs);
     }
-    [[nodiscard]] friend constexpr inline auto
+    [[nodiscard]] friend constexpr auto
         operator-(const quantity<unit_type, value_type>& lhs,
                   const quantity_point&                  rhs) noexcept -> quantity_point
     {
@@ -172,13 +173,14 @@ class quantity_point
         typename = std::enable_if_t<
             type::detect_if<Other, is_convertible_into, quantity<unit_type, value_type>>,
             Dummy>>
-    [[nodiscard]] friend constexpr inline auto
-        operator-(const Other& lhs, const quantity_point& rhs) noexcept -> quantity_point
+    [[nodiscard]] friend constexpr auto operator-(const Other&          lhs,
+                                                  const quantity_point& rhs) noexcept
+        -> quantity_point
     {
         return convert<std::remove_cv_t<Other>,
                        std::remove_cv_t<quantity<unit_type, value_type>>>{}(lhs)-rhs;
     }
-    [[nodiscard]] friend constexpr inline auto
+    [[nodiscard]] friend constexpr auto
         operator-(const quantity_point&                  lhs,
                   const quantity<unit_type, value_type>& rhs) noexcept -> quantity_point
     {
@@ -189,8 +191,8 @@ class quantity_point
         typename = std::enable_if_t<
             type::detect_if<Other, is_convertible_into, quantity<unit_type, value_type>>,
             Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator-(const quantity_point& lhs,
-                                                         const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator-(const quantity_point& lhs,
+                                                  const Other&          rhs) noexcept
         -> quantity_point
     {
         return lhs
@@ -199,89 +201,89 @@ class quantity_point
     }
 #pragma endregion
 #pragma region comparisons
-    [[nodiscard]] friend constexpr inline auto
-        operator==(const quantity_point& lhs, const quantity_point& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator==(const quantity_point& lhs,
+                                                   const quantity_point& rhs) noexcept
     {
         return lhs._value == rhs._value;
     }
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator==(const quantity_point& lhs,
-                                                          const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator==(const quantity_point& lhs,
+                                                   const Other&          rhs) noexcept
     {
         return lhs
                == convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(
                    rhs);
     }
-    [[nodiscard]] friend constexpr inline auto
-        operator!=(const quantity_point& lhs, const quantity_point& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator!=(const quantity_point& lhs,
+                                                   const quantity_point& rhs) noexcept
     {
         return !(lhs == rhs);
     }
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator!=(const quantity_point& lhs,
-                                                          const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator!=(const quantity_point& lhs,
+                                                   const Other&          rhs) noexcept
     {
         return lhs
                != convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(
                    rhs);
     }
-    [[nodiscard]] friend constexpr inline auto
-        operator<(const quantity_point& lhs, const quantity_point& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator<(const quantity_point& lhs,
+                                                  const quantity_point& rhs) noexcept
     {
         return lhs._value < rhs._value;
     }
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator<(const quantity_point& lhs,
-                                                         const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator<(const quantity_point& lhs,
+                                                  const Other&          rhs) noexcept
     {
         return lhs < convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(
                    rhs);
     }
-    [[nodiscard]] friend constexpr inline auto
-        operator>(const quantity_point& lhs, const quantity_point& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator>(const quantity_point& lhs,
+                                                  const quantity_point& rhs) noexcept
     {
         return rhs < lhs;
     }
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator>(const quantity_point& lhs,
-                                                         const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator>(const quantity_point& lhs,
+                                                  const Other&          rhs) noexcept
     {
         return lhs > convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(
                    rhs);
     }
-    [[nodiscard]] friend constexpr inline auto
-        operator<=(const quantity_point& lhs, const quantity_point& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator<=(const quantity_point& lhs,
+                                                   const quantity_point& rhs) noexcept
     {
         return !(rhs < lhs);
     }
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator<=(const quantity_point& lhs,
-                                                          const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator<=(const quantity_point& lhs,
+                                                   const Other&          rhs) noexcept
     {
         return lhs
                <= convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(
                    rhs);
     }
-    [[nodiscard]] friend constexpr inline auto
-        operator>=(const quantity_point& lhs, const quantity_point& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator>=(const quantity_point& lhs,
+                                                   const quantity_point& rhs) noexcept
     {
         return !(lhs < rhs);
     }
     template <class Other, class Dummy = void,
               typename = std::enable_if_t<
                   type::detect_if<Other, is_convertible_into, quantity_point>, Dummy>>
-    [[nodiscard]] friend constexpr inline auto operator>=(const quantity_point& lhs,
-                                                          const Other& rhs) noexcept
+    [[nodiscard]] friend constexpr auto operator>=(const quantity_point& lhs,
+                                                   const Other&          rhs) noexcept
     {
         return lhs
                >= convert<std::remove_cv_t<Other>, std::remove_cv_t<quantity_point>>{}(

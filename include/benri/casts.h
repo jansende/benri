@@ -14,7 +14,7 @@ class quantity;
 // The value_type_cast function lets you cast the value_type of a quantity/quantity_point
 // to another value_type.
 template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] [[deprecated]] constexpr inline auto
+[[nodiscard]] [[deprecated]] constexpr auto
     value_type_cast(const quantity<ArgumentUnit, ArgumentValueType>& rhs) noexcept
     -> quantity<ArgumentUnit, ResultValueType>
 {
@@ -22,7 +22,7 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
         static_cast<ResultValueType>(rhs.value())};
 }
 template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] [[deprecated]] constexpr inline auto
+[[nodiscard]] [[deprecated]] constexpr auto
     value_type_cast(const quantity_point<ArgumentUnit, ArgumentValueType>& rhs) noexcept
     -> quantity<ArgumentUnit, ResultValueType>
 {
@@ -39,7 +39,7 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
 // tation. Furthermore, you can provide a ResultValueType for the function, in the case
 // that the transformation would lead to conversion errors.
 template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto
+[[nodiscard]] constexpr auto
     remove_prefix(const quantity<ArgumentUnit, ArgumentValueType>& rhs) noexcept
     -> quantity<drop_unit_prefix<ArgumentUnit>, ResultValueType>
 {
@@ -49,13 +49,13 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
         static_cast<ResultValueType>(rhs.value()) * factor};
 }
 template <class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto
+[[nodiscard]] constexpr auto
     remove_prefix(const quantity<ArgumentUnit, ArgumentValueType>& rhs) noexcept
 {
     return remove_prefix<ArgumentValueType>(rhs);
 }
 template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto
+[[nodiscard]] constexpr auto
     remove_prefix(const quantity_point<ArgumentUnit, ArgumentValueType>& rhs) noexcept
     -> quantity_point<drop_unit_prefix<ArgumentUnit>, ResultValueType>
 {
@@ -65,7 +65,7 @@ template <class ResultValueType, class ArgumentUnit, class ArgumentValueType>
         static_cast<ResultValueType>(rhs.value()) * factor};
 }
 template <class ArgumentUnit, class ArgumentValueType>
-[[nodiscard]] constexpr inline auto
+[[nodiscard]] constexpr auto
     remove_prefix(const quantity_point<ArgumentUnit, ArgumentValueType>& rhs) noexcept
 {
     return remove_prefix<ArgumentValueType>(rhs);
@@ -88,7 +88,7 @@ struct simple_cast_impl<quantity<unit<ResultDimension, ResultPrefix>, ResultValu
 {
     // From quantity to quantity
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ArgumentPrefix>, ArgumentValueType>& rhs)
         const noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>
     {
@@ -99,7 +99,7 @@ struct simple_cast_impl<quantity<unit<ResultDimension, ResultPrefix>, ResultValu
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ArgumentPrefix>, ResultValueType>& rhs) const
         noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>
     {
@@ -110,14 +110,14 @@ struct simple_cast_impl<quantity<unit<ResultDimension, ResultPrefix>, ResultValu
                                                                               * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ResultPrefix>, ArgumentValueType>& rhs) const
         noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>
     {
         return quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>& rhs) const
         noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>
     {
@@ -125,7 +125,7 @@ struct simple_cast_impl<quantity<unit<ResultDimension, ResultPrefix>, ResultValu
     }
     // From Other to quantity
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -141,7 +141,7 @@ struct simple_cast_impl<
 {
     // From quantity_point to quantity_point
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<unit<ResultDimension, ArgumentPrefix>,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>
@@ -153,7 +153,7 @@ struct simple_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<ResultDimension, ArgumentPrefix>, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>
@@ -165,7 +165,7 @@ struct simple_cast_impl<
             rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<ResultDimension, ResultPrefix>, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>
@@ -173,7 +173,7 @@ struct simple_cast_impl<
         return quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>
@@ -182,7 +182,7 @@ struct simple_cast_impl<
     }
     // From Other to quantity_point
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -243,7 +243,7 @@ template <class ResultDimension, class ResultPrefix>
 struct simple_cast_impl<unit<ResultDimension, ResultPrefix>, void>
 {
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ArgumentPrefix>, ArgumentValueType>& rhs)
         const noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ArgumentValueType>
     {
@@ -252,7 +252,7 @@ struct simple_cast_impl<unit<ResultDimension, ResultPrefix>, void>
             rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<unit<ResultDimension, ArgumentPrefix>,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ArgumentValueType>
@@ -266,7 +266,7 @@ template <class ResultValueType>
 struct simple_cast_impl<ResultValueType, void>
 {
     template <class ArgumentDimension, class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ArgumentDimension, ArgumentPrefix>, ArgumentValueType>& rhs)
         const noexcept
         -> quantity<unit<ArgumentDimension, ArgumentPrefix>, ResultValueType>
@@ -276,7 +276,7 @@ struct simple_cast_impl<ResultValueType, void>
             rhs);
     }
     template <class ArgumentDimension, class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<unit<ArgumentDimension, ArgumentPrefix>,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<unit<ArgumentDimension, ArgumentPrefix>, ArgumentValueType>
@@ -310,7 +310,7 @@ struct unit_cast_impl<quantity<unit<ResultDimension, ResultPrefix>, ResultValueT
 {
     // From quantity to quantity
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ArgumentPrefix>, ArgumentValueType>& rhs)
         const noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>
     {
@@ -320,7 +320,7 @@ struct unit_cast_impl<quantity<unit<ResultDimension, ResultPrefix>, ResultValueT
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ArgumentPrefix>, ResultValueType>& rhs) const
         noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>
     {
@@ -330,14 +330,14 @@ struct unit_cast_impl<quantity<unit<ResultDimension, ResultPrefix>, ResultValueT
                                                                               * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ResultPrefix>, ArgumentValueType>& rhs) const
         noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>
     {
         return quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>& rhs) const
         noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ResultValueType>
     {
@@ -345,7 +345,7 @@ struct unit_cast_impl<quantity<unit<ResultDimension, ResultPrefix>, ResultValueT
     }
     // From Other to quantity
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -361,7 +361,7 @@ struct unit_cast_impl<
 {
     // From quantity_point to quantity_point
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<unit<ResultDimension, ArgumentPrefix>,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>
@@ -372,7 +372,7 @@ struct unit_cast_impl<
             static_cast<ResultValueType>(rhs.value() * factor)};
     }
     template <class ArgumentPrefix>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<ResultDimension, ArgumentPrefix>, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>
@@ -383,7 +383,7 @@ struct unit_cast_impl<
             rhs.value() * factor};
     }
     template <class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<ResultDimension, ResultPrefix>, ArgumentValueType>& rhs)
         const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>
@@ -391,7 +391,7 @@ struct unit_cast_impl<
         return quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>{
             static_cast<ResultValueType>(rhs.value())};
     }
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>& rhs)
         const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ResultValueType>
@@ -400,7 +400,7 @@ struct unit_cast_impl<
     }
     // From Other to quantity_point
     template <class Other>
-    [[nodiscard]] constexpr inline auto operator()(const Other& rhs) const noexcept
+    [[nodiscard]] constexpr auto operator()(const Other& rhs) const noexcept
         -> std::enable_if_t<
             type::detect_if<
                 Other, is_convertible_into,
@@ -460,7 +460,7 @@ template <class ResultDimension, class ResultPrefix>
 struct unit_cast_impl<unit<ResultDimension, ResultPrefix>, void>
 {
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ResultDimension, ArgumentPrefix>, ArgumentValueType>& rhs)
         const noexcept -> quantity<unit<ResultDimension, ResultPrefix>, ArgumentValueType>
     {
@@ -469,7 +469,7 @@ struct unit_cast_impl<unit<ResultDimension, ResultPrefix>, void>
             rhs);
     }
     template <class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<unit<ResultDimension, ArgumentPrefix>,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<unit<ResultDimension, ResultPrefix>, ArgumentValueType>
@@ -483,7 +483,7 @@ template <class ResultValueType>
 struct unit_cast_impl<ResultValueType, void>
 {
     template <class ArgumentDimension, class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto operator()(
+    [[nodiscard]] constexpr auto operator()(
         const quantity<unit<ArgumentDimension, ArgumentPrefix>, ArgumentValueType>& rhs)
         const noexcept
         -> quantity<unit<ArgumentDimension, ArgumentPrefix>, ResultValueType>
@@ -493,7 +493,7 @@ struct unit_cast_impl<ResultValueType, void>
             rhs);
     }
     template <class ArgumentDimension, class ArgumentPrefix, class ArgumentValueType>
-    [[nodiscard]] constexpr inline auto
+    [[nodiscard]] constexpr auto
         operator()(const quantity_point<unit<ArgumentDimension, ArgumentPrefix>,
                                         ArgumentValueType>& rhs) const noexcept
         -> quantity_point<unit<ArgumentDimension, ArgumentPrefix>, ArgumentValueType>

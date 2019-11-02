@@ -3,53 +3,53 @@
 
 #define fix(...) __VA_ARGS__
 
-#define implement_unit(NAME, DIMENSION, PREFIX)                                        \
-    using NAME##_t = benri::make_unit<DIMENSION, PREFIX>;                              \
-    [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept \
-    {                                                                                  \
-        return benri::make_quantity<NAME##_t, benri::Precision>(value);                \
-    }                                                                                  \
-    [[nodiscard]] constexpr inline auto operator"" _##NAME(                            \
-        unsigned long long int value) noexcept                                         \
-    {                                                                                  \
-        return benri::make_quantity<NAME##_t, benri::Precision>(value);                \
-    }                                                                                  \
+#define implement_unit(NAME, DIMENSION, PREFIX)                                 \
+    using NAME##_t = benri::make_unit<DIMENSION, PREFIX>;                       \
+    [[nodiscard]] constexpr auto operator"" _##NAME(long double value) noexcept \
+    {                                                                           \
+        return benri::make_quantity<NAME##_t, benri::Precision>(value);         \
+    }                                                                           \
+    [[nodiscard]] constexpr auto operator"" _##NAME(                            \
+        unsigned long long int value) noexcept                                  \
+    {                                                                           \
+        return benri::make_quantity<NAME##_t, benri::Precision>(value);         \
+    }                                                                           \
     constexpr auto NAME = benri::make_quantity<NAME##_t, benri::Precision>(1);
-#define implement_unit_point(NAME, DIMENSION, PREFIX)                                  \
-    using NAME##_t = benri::make_unit<DIMENSION, PREFIX>;                              \
-    [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept \
-    {                                                                                  \
-        return benri::make_quantity_point<NAME##_t, benri::Precision>(value);          \
-    }                                                                                  \
-    [[nodiscard]] constexpr inline auto operator"" _##NAME(                            \
-        unsigned long long int value) noexcept                                         \
-    {                                                                                  \
-        return benri::make_quantity_point<NAME##_t, benri::Precision>(value);          \
-    }                                                                                  \
+#define implement_unit_point(NAME, DIMENSION, PREFIX)                           \
+    using NAME##_t = benri::make_unit<DIMENSION, PREFIX>;                       \
+    [[nodiscard]] constexpr auto operator"" _##NAME(long double value) noexcept \
+    {                                                                           \
+        return benri::make_quantity_point<NAME##_t, benri::Precision>(value);   \
+    }                                                                           \
+    [[nodiscard]] constexpr auto operator"" _##NAME(                            \
+        unsigned long long int value) noexcept                                  \
+    {                                                                           \
+        return benri::make_quantity_point<NAME##_t, benri::Precision>(value);   \
+    }                                                                           \
     constexpr auto NAME = benri::make_quantity_point<NAME##_t, benri::Precision>(1);
 
-#define link_unit(NAME, ALIAS)                                                         \
-    using NAME##_t = ALIAS##_t;                                                        \
-    [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept \
-    {                                                                                  \
-        return benri::make_quantity<NAME##_t, benri::Precision>(value);                \
-    }                                                                                  \
-    [[nodiscard]] constexpr inline auto operator"" _##NAME(                            \
-        unsigned long long int value) noexcept                                         \
-    {                                                                                  \
-        return benri::make_quantity<NAME##_t, benri::Precision>(value);                \
-    }                                                                                  \
+#define link_unit(NAME, ALIAS)                                                  \
+    using NAME##_t = ALIAS##_t;                                                 \
+    [[nodiscard]] constexpr auto operator"" _##NAME(long double value) noexcept \
+    {                                                                           \
+        return benri::make_quantity<NAME##_t, benri::Precision>(value);         \
+    }                                                                           \
+    [[nodiscard]] constexpr auto operator"" _##NAME(                            \
+        unsigned long long int value) noexcept                                  \
+    {                                                                           \
+        return benri::make_quantity<NAME##_t, benri::Precision>(value);         \
+    }                                                                           \
     constexpr auto NAME = ALIAS;
-#define link_unit_point(NAME, ALIAS)                                                   \
-    using NAME##_t = ALIAS##_t;                                                        \
-    [[nodiscard]] constexpr inline auto operator"" _##NAME(long double value) noexcept \
-    {                                                                                  \
-        return benri::make_quantity_point<NAME##_t, benri::Precision>(value);          \
-    }                                                                                  \
-    [[nodiscard]] constexpr inline auto operator"" _##NAME(                            \
-        unsigned long long int value) noexcept                                         \
-    {                                                                                  \
-        return benri::make_quantity_point<NAME##_t, benri::Precision>(value);          \
+#define link_unit_point(NAME, ALIAS)                                            \
+    using NAME##_t = ALIAS##_t;                                                 \
+    [[nodiscard]] constexpr auto operator"" _##NAME(long double value) noexcept \
+    {                                                                           \
+        return benri::make_quantity_point<NAME##_t, benri::Precision>(value);   \
+    }                                                                           \
+    [[nodiscard]] constexpr auto operator"" _##NAME(                            \
+        unsigned long long int value) noexcept                                  \
+    {                                                                           \
+        return benri::make_quantity_point<NAME##_t, benri::Precision>(value);   \
     }
 
 #define create_symbol(NAME, DIMENSION, PREFIX)                            \
