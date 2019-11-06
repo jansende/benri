@@ -55,6 +55,7 @@ using one_per_kilo_year_t = divide_units<one_t, kilo_year_t>;
 using one_per_mega_year_t = divide_units<one_t, mega_year_t>;
 using one_per_giga_year_t = divide_units<one_t, giga_year_t>;
 //---velocity
+using metre_per_second_t           = divide_units<metre_t, second_t>;
 using kilometre_per_second_t       = divide_units<kilometre_t, second_t>;
 using astronomical_unit_per_year_t = divide_units<astronomical_unit_t, year_t>;
 //---angular velocity
@@ -403,6 +404,11 @@ struct symbol_impl<si::one_per_giga_year_t>
     static constexpr auto name = meta::static_string{"Gyr^-1"};
 };
 //---velocity
+template <>
+struct symbol_impl<si::metre_per_second_t>
+{
+    static constexpr auto name = meta::static_string{"m s^-1"};
+};
 template <>
 struct symbol_impl<si::kilometre_per_second_t>
 {
