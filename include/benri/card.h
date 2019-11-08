@@ -197,9 +197,9 @@ auto operator<<(std::ostream& os, const std::vector<quantity<Unit, T>>& obj)
     -> std::ostream&
 {
     os << "[";
-    for (auto index = size_t{0}; index < obj.size() - 1; ++index)
+    for (auto index = size_t{0}; index + 1 < obj.size(); ++index)
         os << obj[index].value() << ", ";
-    if (obj.size() > size_t{1})
+    if (obj.size() >= size_t{1})
         os << obj[obj.size() - 1].value();
     os << "]" << symbol<Unit>;
     return os;
