@@ -224,7 +224,7 @@ constexpr auto prime_factors_to_integer_sequence(std::integer_sequence<size_t, I
 {
     return std::integer_sequence<intmax_t, prime_factors_impl<sizeof...(Index)>(
                                                number)[Index]...>{};
-};
+}
 template <intmax_t number>
 using prime_factors = decltype(prime_factors_to_integer_sequence<number>(
     std::make_index_sequence<number_of_prime_factors<number>>{}));

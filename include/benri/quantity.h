@@ -47,6 +47,8 @@ class quantity
     using value_type = ValueType;
     using unit_type  = Unit;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnon-template-friend"
     friend constexpr inline auto
         operator+(const quantity<unit_type, value_type>&       lhs,
                   const quantity_point<unit_type, value_type>& rhs) noexcept
@@ -64,6 +66,7 @@ class quantity
         operator-(const quantity_point<unit_type, value_type>& lhs,
                   const quantity<unit_type, value_type>&       rhs) noexcept
         -> quantity_point<unit_type, value_type>;
+#pragma GCC diagnostic pop
 
   private:
     value_type _value;

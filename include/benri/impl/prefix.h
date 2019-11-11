@@ -45,7 +45,7 @@ constexpr auto runtime_expand_prefix_impl()
     // Value store in ::value attribute.
     return std::pow(T(Prefix::type::value),
                     T(Prefix::power::num) / T(Prefix::power::den));
-};
+}
 template <class T, class Prefix>
 constexpr auto runtime_expand_prefix_impl()
     -> std::enable_if_t<type::detect_if<typename Prefix::type, type::is_std_ratio>, T>
@@ -53,7 +53,7 @@ constexpr auto runtime_expand_prefix_impl()
     // Value stored in std::ratio.
     return std::pow(T(Prefix::type::num) / T(Prefix::type::den),
                     T(Prefix::power::num) / T(Prefix::power::den));
-};
+}
 template <class T, class Prefix>
 constexpr auto runtime_expand_prefix()
 {
@@ -61,7 +61,7 @@ constexpr auto runtime_expand_prefix()
                   "runtime_expand_prefix takes a value type and an prefix, but "
                   "your Prefix is not an prefix.");
     return runtime_expand_prefix_impl<T, Prefix>();
-};
+}
 // Function for expanding a list of prefixes.
 template <class ValueType, class... Elements>
 constexpr auto expand_prefix_list_impl(type::sorted_list<Elements...>)
@@ -112,6 +112,6 @@ constexpr auto runtime_expand_prefix_list(type::sorted_list<Elements...>)
         meta::array<ValueType, sizeof...(Elements)>{
             runtime_expand_prefix<ValueType, Elements>()...},
         ValueType{1}, std::multiplies<ValueType>());
-};
+}
 #pragma endregion
 } // namespace benri
