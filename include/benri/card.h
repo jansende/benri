@@ -148,35 +148,6 @@ using solar_mass_square_astronomical_unit_square_centimetre_per_cubic_year_gram_
     divide_units<
         multiply_units<solar_mass_t, pow_unit<astronomical_unit_t, std::ratio<2>>>,
         multiply_units<pow_unit<year_t, std::ratio<3>>, gram_t>>;
-//---constants
-template <class T>
-constexpr auto gravitational_constant =
-    simple_cast<T>(simple_cast<cubic_astronomical_unit_per_square_year_solar_mass_t>(
-        constant::gravitational_constant));
-template <class T>
-constexpr auto gravitational_constant_variant1 = simple_cast<T>(
-    simple_cast<square_astronomical_unit_centimetre_per_square_year_gram_t>(
-        constant::gravitational_constant));
-template <class T>
-constexpr auto gravitational_constant_variant2 = simple_cast<T>(
-    simple_cast<astronomical_unit_square_centimetre_per_square_year_solar_mass_t>(
-        constant::gravitational_constant));
-template <class T>
-constexpr auto gravitational_constant_variant3 = simple_cast<T>(
-    simple_cast<astronomical_unit_square_centimetre_per_square_year_gram_t>(
-        constant::gravitational_constant));
-template <class T>
-constexpr auto speed_of_light =
-    simple_cast<T>(simple_cast<astronomical_unit_per_year_t>(constant::speed_of_light));
-template <class T>
-constexpr auto pi_constant = simple_cast<T>(constant::pi);
-template <class T>
-constexpr auto two_pi_constant = simple_cast<T>(constant::two_pi);
-template <class T>
-constexpr auto pi_variant = quantity<radian_t, T>{simple_cast<T>(constant::pi).value()};
-template <class T>
-constexpr auto two_pi_variant =
-    quantity<radian_t, T>{simple_cast<T>(constant::two_pi).value()};
 } // namespace si
 template <class Unit>
 struct symbol_impl
