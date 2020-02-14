@@ -148,6 +148,46 @@ using solar_mass_square_astronomical_unit_square_centimetre_per_cubic_year_gram_
     divide_units<
         multiply_units<solar_mass_t, pow_unit<astronomical_unit_t, std::ratio<2>>>,
         multiply_units<pow_unit<year_t, std::ratio<3>>, gram_t>>;
+
+[[nodiscard]] constexpr inline auto operator"" _lemmy(long double value) noexcept
+{
+    return benri::quantity<lemmy_t, benri::Precision>{
+        static_cast<benri::Precision>(value)};
+}
+[[nodiscard]] constexpr inline auto
+    operator"" _lemmy(unsigned long long int value) noexcept
+{
+    return benri::quantity<lemmy_t, benri::Precision>{
+        static_cast<benri::Precision>(value)};
+}
+constexpr auto lemmy =
+    benri::quantity<lemmy_t, benri::Precision>{static_cast<benri::Precision>(1)};
+[[nodiscard]] constexpr inline auto operator"" _centimetre(long double value) noexcept
+{
+    return benri::quantity<centimetre_t, benri::Precision>{
+        static_cast<benri::Precision>(value)};
+}
+[[nodiscard]] constexpr inline auto
+    operator"" _centimetre(unsigned long long int value) noexcept
+{
+    return benri::quantity<centimetre_t, benri::Precision>{
+        static_cast<benri::Precision>(value)};
+}
+constexpr auto centimetre =
+    benri::quantity<centimetre_t, benri::Precision>{static_cast<benri::Precision>(1)};
+[[nodiscard]] constexpr inline auto operator"" _kilometre(long double value) noexcept
+{
+    return benri::quantity<kilometre_t, benri::Precision>{
+        static_cast<benri::Precision>(value)};
+}
+[[nodiscard]] constexpr inline auto
+    operator"" _kilometre(unsigned long long int value) noexcept
+{
+    return benri::quantity<kilometre_t, benri::Precision>{
+        static_cast<benri::Precision>(value)};
+}
+constexpr auto kilometre =
+    benri::quantity<kilometre_t, benri::Precision>{static_cast<benri::Precision>(1)};
 } // namespace si
 template <class Unit>
 struct symbol_impl
